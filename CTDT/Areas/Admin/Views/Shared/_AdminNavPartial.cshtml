@@ -1,0 +1,102 @@
+﻿<style>
+    .side-nav-menu .nav-item .title {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+</style>
+<div class="side-nav">
+    <div class="side-nav-inner">
+        <ul class="side-nav-menu scrollable">
+            <!-- Phiếu khảo sát menu -->
+            <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="javascript:void(0);">
+                    <span class="icon-holder">
+                        <i class="fas fa-clipboard-list"></i>
+                    </span>
+                    <span class="title">Phiếu khảo sát</span>
+                    <span class="arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/Admin/PhieuKhaoSat/Index">Danh sách phiếu khảo sát</a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Chức năng người dùng Menu -->
+            <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="javascript:void(0);">
+                    <span class="icon-holder">
+                        <i class="fas fa-users-cog"></i>
+                    </span>
+                    <span class="title">Quản lý chức năng người dùng</span>
+                    <span class="arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/Admin/Khoa/ViewKhoa">Danh sách Khoa</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/CTDT/ViewCTDT">Danh sách Chương trình đào tạo</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/Lop/ViewLop">Danh sách Lớp</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/SinhVien/ViewSinhVien">Danh sách Sinh viên</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/CBVC/ViewCBVC">Danh sách CBVC</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/DoiTuongKhaoSat/ViewDoiTuongKhaoSat">Danh sách Đối tượng khảo sát</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/ImportData/Index">Import danh sách</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/test/Index">Test</a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Quản lý thống kê -->
+            <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="javascript:void(0);">
+                    <span class="icon-holder">
+                        <i class="fas fa-chart-area"></i>
+                    </span>
+                    <span class="title">Giám sát </span>
+                    <span class="arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/Admin/ThongKeKhaoSat/ThongKeDoiTuongKhaoSat">Giám sát tỷ lệ tham gia khảo sát</a>
+                    </li>
+                    <li>
+                        <a href="/Admin/ThongKeKhaoSat/ThongKeKetQuaKhaoSat">Giám sát tỷ lệ kết quả khảo sát</a>
+                    </li>
+                    @*<li>
+                            <a href="/Admin/ThongKeKhaoSat/ThongKeKetQuaKhaoSat">Giám sát việc nộp báo cáo khảo sát và cải tiến</a>
+                        </li>*@
+                    <li>
+                        <a href="/Admin/BaoCaoTongHop/Index">Báo cáo tổng hợp</a>
+                    </li>
+                </ul>
+            </li>
+            <!-- Phân quyền tài khoản -->
+            <li class="nav-item dropdown">
+                <a href="/Admin/NguoiDung/ViewUser">
+                    <span class="icon-holder">
+                        <i class="fas fa-user-shield"></i>
+                    </span>
+                    <span class="title">Phân quyền tài khoản</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

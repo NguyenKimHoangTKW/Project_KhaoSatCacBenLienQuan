@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "Thống kê tần xuất câu hỏi - TDMU";
+    Layout = "~/Areas/CTDT/Views/Shared/_CTDTLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Kết quả khảo sát</a>
+                </li>
+                @*<li class="nav-item">
+                    <a class="nav-link" id="check-tab" data-toggle="tab" href="#check" role="tab" aria-controls="check" aria-selected="false">Thống kê theo yêu cầu</a>
+                </li>*@
+            </ul>
+            <div class="tab-content m-t-15" id="myTabContent">
+                <!-- Thống kê kết quả khảo sát -->
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="page-header no-gutters">
+                        <h2 class="text-uppercase">Kết quả khảo sát</h2>
+                        <hr />
+                        <fieldset class="border rounded-3 p-3">
+                            <legend class="float-none w-auto px-3">Chức năng</legend>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo năm học</label>
+                                    <select class="form-control select2" id="year">
+                                        @foreach (var item in ViewBag.Year)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo phiếu khảo sát</label>
+                                    <select class="form-control select2" id="surveyid">
+                                        <!---->
+                                    </select>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="text">
+                                        <button class="btn btn-success m-r-5" id="exportExcel">Xuất Excel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="m-t-25">
+                        <div class="table-responsive" id="ThongKeTyLeSurvey">
+                            <!--Thống kê tỷ lệ-->
+                        </div>
+                        <div class="accordion" id="accordion-default" style="display:none">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">
+                                        <a class="collapsed" data-toggle="collapse" href="#collapseTwoDefault">
+                                            <span>Xem chi tiết tần xuất</span>
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwoDefault" class="collapse" data-parent="#accordion-default">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="Tylecauhoi-tab" data-toggle="tab" href="#Tylecauhoi" role="tab" aria-controls="Tylecauhoi" aria-selected="true">Tỷ lệ tần xuất câu hỏi</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="Ykienkhac-tab" data-toggle="tab" href="#Ykienkhac" role="tab" aria-controls="Ykienkhac" aria-selected="false">Ý kiến khác</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content m-t-15" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="Tylecauhoi" role="tabpanel" aria-labelledby="Tylecauhoi-tab">
+                                                <div class="table-responsive" id="surveyContainerSingle">
+                                                    <!--Câu hỏi một lựa chọn-->
+                                                </div>
+                                                <div class="table-responsive" id="surveyContainer">
+                                                    <!--Câu hỏi nhiều lựa chọn-->
+                                                </div>
+                                                <div class="table-responsive" id="Cauhoi5MucContainer">
+                                                    <p id="TitleSurvey" style="font-weight:bold; font-size:20px; color:black; display:none">Tổng hợp tỷ lệ tần xuất 5 mức</p>
+                                                    <table class="table table-bordered" id="showalldata" style="display:none">
+                                                        <thead style="color:black; text-align:center; font-weight:bold" id="showhead">
+                                                            <!---->
+                                                        </thead>
+                                                        <tbody id="showdata">
+                                                        </tbody>
+                                                        <tfoot id="showfoot" style="color:black;font-weight:bold;font-size:15px">
+                                                            <!---->
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <div class="tab-pane fade" id="Ykienkhac" role="tabpanel" aria-labelledby="Ykienkhac-tab">
+                                                <div class="table-responsive" id="YkienkhacSurvey">
+                                                    <!--Ý kiến khác-->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- End Thống kê -->
+                <!-- Thống kê theo lựa chọn -->
+                <div class="tab-pane fade show" id="check" role="tabpanel" aria-labelledby="check-tab">
+                    <div class="page-header no-gutters">
+                        <div class="col-lg-12">
+                            <div class="mb-4" style="border: 1px solid #9caab9; padding: 15px; border-radius: 8px; background-color: #fcfcfc;">
+                                <p style="font-weight:bold;font-size:25px;text-align:center;color:black">KẾT QUẢ KHẢO SÁT VÀ THỐNG KÊ</p>
+                                <div class="row items-push">
+                                    <div class="col-6">
+                                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo năm học</label>
+                                        <select class="form-control select2" id="yearGiamSat">
+                                            @foreach (var item in ViewBag.Year)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="text">
+                                            <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Xuất excel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <canvas class="chart" id="bar-chart" style="height: 300px;"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <canvas class="chart" id="line-chart" style="height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- End thống kê -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scriptsCTDT {
+    <script src="~/Areas/CTDT/Scripts/ThongKeTanXuatCauHoi.js"></script>
+}

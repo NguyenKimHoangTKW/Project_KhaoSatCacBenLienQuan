@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Trung tâm Đảm Bảo Chất Lượng - Trường Đại Học Thủ Dầu Một";
+}
+<section class="ftco-section bg-light">
+    <input type="hidden" id="id" value="@ViewBag.id"/>
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center">
+                <h2 class="mb-4" style="font-weight: bold;">HỆ ĐÀO TẠO @ViewBag.Name</h2>
+            </div>
+        </div>
+        <div class="row d-flex" id="showdata">
+            <!--showdata-->
+        </div>
+    </div>
+</section>
+@section scripts{
+    @Scripts.Render("~/bundles/User/Phieukhaosat")
+}

@@ -1,0 +1,109 @@
+﻿body {
+    font-family: Helvetica;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    background-image: url(/Style/Background.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* This will fix the background image */
+    background-size: cover; /* Optional: This ensures the background image covers the whole page */
+}
+p {
+    font-size: 15px;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: auto;
+}
+
+h2, h3 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 26px;
+}
+
+h4 {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #5a2eff;
+    font-size: 21px;
+}
+span{
+}
+
+input::placeholder, textarea::placeholder {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-style: italic;
+}
+
+label {
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.input-bottom-border {
+    border: none;
+    border-bottom: 1px solid #000000;
+    border-radius: 0;
+    padding: 8px 0;
+    margin: 0;
+    width: 100%;
+}
+
+    .input-bottom-border:focus {
+        outline: none;
+        box-shadow: none;
+        border-bottom-color: #0056b3;
+    }
+
+/* Điều chỉnh phần tử radio để nằm bên trái */
+.horizontal-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start; /* Căn chỉnh các phần tử bên trái */
+}
+
+    .horizontal-group .form-check {
+        margin-right: 15px; /* Khoảng cách giữa các phần tử */
+    }
+
+@media (max-width: 768px) {
+    .horizontal-group {
+        flex-direction: column; /* Chuyển hướng thành dọc khi độ phân giải nhỏ */
+        align-items: flex-start;
+    }
+
+    .form-check {
+        margin-right: 0; /* Bỏ khoảng cách phải khi nằm dọc */
+        margin-bottom: 10px; /* Thêm khoảng cách dưới khi nằm dọc */
+    }
+    h2 {
+        text-align:left;
+    }
+}
+#scrollToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #5f00ff; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 100%; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+    width: 60px;
+}

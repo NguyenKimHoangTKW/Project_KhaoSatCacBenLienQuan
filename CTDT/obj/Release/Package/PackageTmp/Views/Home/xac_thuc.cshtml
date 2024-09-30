@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Xác thực ngoài người học - TDMU";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="ftco-section">
+    <div class="row justify-content-center mb-5 pb-3">
+        <div class="col-md-7 heading-section text-center">
+            <h2 class="mb-4" style="font-weight:bold;">XÁC THỰC</h2>
+        </div>
+
+    </div>
+
+    <input type="hidden" id="hiddenId" value="@ViewBag.id" />
+    <div class="container" id="showdata" style="box-shadow: 0px 3px 66px -24px rgba(0, 0, 0, 0.2); border: 1px solid #e9ecef; border-radius: 10px; ">
+        <!--Show data-->
+    </div>
+</section>
+@section scripts{
+    @Scripts.Render("~/xac_thuc/js")
+}

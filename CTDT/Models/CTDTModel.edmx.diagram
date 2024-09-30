@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4bde84ba2e194664bf55980208618204" Name="Diagram1">
+        <EntityTypeShape EntityType="dbSurveyModel.answer_response" Width="1.5" PointX="5.25" PointY="8.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.CanBoVienChuc" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="dbSurveyModel.ChucVu" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="dbSurveyModel.ctdt" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="dbSurveyModel.DonVi" Width="1.5" PointX="0.75" PointY="25.625" />
+        <EntityTypeShape EntityType="dbSurveyModel.group_mon_hoc" Width="1.5" PointX="0.75" PointY="14.5" />
+        <EntityTypeShape EntityType="dbSurveyModel.hedaotao" Width="1.5" PointX="1.5" PointY="20" />
+        <EntityTypeShape EntityType="dbSurveyModel.hoc_ky" Width="1.5" PointX="3" PointY="30" />
+        <EntityTypeShape EntityType="dbSurveyModel.hoc_phan" Width="1.5" PointX="0.75" PointY="17.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.khoa" Width="1.5" PointX="1.5" PointY="22.625" />
+        <EntityTypeShape EntityType="dbSurveyModel.LoaiKhaoSat" Width="1.5" PointX="5.75" PointY="5" />
+        <EntityTypeShape EntityType="dbSurveyModel.lop" Width="1.5" PointX="0.75" PointY="33.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.mon_hoc" Width="1.5" PointX="3" PointY="15.375" />
+        <EntityTypeShape EntityType="dbSurveyModel.NamHoc" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="dbSurveyModel.sinhvien" Width="1.5" PointX="3" PointY="32.625" />
+        <EntityTypeShape EntityType="dbSurveyModel.survey" Width="1.5" PointX="8" PointY="8.375" />
+        <EntityTypeShape EntityType="dbSurveyModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="2.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.typeusers" Width="1.5" PointX="3.5" PointY="27.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.users" Width="1.5" PointX="5.75" PointY="25.75" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_CanBoVienChuc" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_DonVi" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_hoc_ky" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_mon_hoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_NamHoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_sinhvien" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_survey" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_users" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_ChucVu" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_DonVi" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_NamHoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_ctdt_hedaotao" />
+        <AssociationConnector Association="dbSurveyModel.FK_ctdt_khoa" />
+        <AssociationConnector Association="dbSurveyModel.FK_lop_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_users_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_users_DonVi" />
+        <AssociationConnector Association="dbSurveyModel.FK_mon_hoc_group_mon_hoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_hedaotao" />
+        <AssociationConnector Association="dbSurveyModel.FK_mon_hoc_hoc_phan" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_LoaiKhaoSat" />
+        <AssociationConnector Association="dbSurveyModel.FK_sinhvien_lop" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_NamHoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_users" />
+        <AssociationConnector Association="dbSurveyModel.FK_users_typeusers" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

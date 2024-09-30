@@ -1,0 +1,215 @@
+﻿@{
+    ViewBag.Title = "Danh sách chương trình đào tạo - TDMU";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh sách chương trình đào tạo</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <span class="breadcrumb-item active">Danh sách CTĐT</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <h2 class="text-uppercase">Kết quả khảo sát</h2>
+                <hr />
+                <fieldset class="border rounded-3 p-3">
+                    <legend class="float-none w-auto px-3">Chức năng</legend>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo năm học</label>
+                            <select class="form-control select2" id="FilterHDT">
+                                <option value="">Tất cả</option>
+                                @foreach (var item in ViewBag.HDT)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo khoa</label>
+                            <select class="form-control select2" id="FilterKhoa">
+                                <option value="">Tất cả</option>
+                                @foreach (var item in ViewBag.KhoaList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo khoa</label>
+                            <select class="form-control select2" id="FiterCTDT">
+                                <option value="">Tất cả</option>
+                                @foreach (var item in ViewBag.CTDTList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-info" id="btnFilter" style="margin-top: 10px;">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- Modal Import Excel -->
+            <div class="modal fade" id="importExcelModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import CTĐT từ Excel</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="importExcelForm" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="excelFile">Chọn file Excel</label>
+                                    <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+                                </div>
+                                <button type="submit" class="btn btn-success btn-tone m-r-5">Upload</button>
+                                <a href="~/DataExport/Mau/MauUploadCBVC.xlsx" download>
+                                    <button type="button" class="btn btn-info btn-tone m-r-5">Tải file mẫu</button>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal Import Excel -->
+            <!--Modal Thêm mới CTDT-->
+            <div class="modal fade" id="bd-example-modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Thêm mới CTĐT</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation" method="post" action="/CTDT/Add">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Mã CTĐT *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="ma_ctdt" placeholder="Nhập tên mã CTĐT ... *">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label">Tên CTĐT *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="ten_ctdt" id="ten_ctdt" placeholder="Nhập tên CTĐT ... *">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn Khoa *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="MaKhoa" name="id_khoa" class="form-control select2">
+                                            <option value="">-- Chọn Khoa --</option>
+                                            @foreach (var item in ViewBag.KhoaList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn Hệ đào tạo *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="MaHDT" name="id_khoa" class="form-control select2">
+                                            <option value="">-- Chọn HĐT --</option>
+                                            @foreach (var item in ViewBag.HDT)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal Thêm mới CTDT-->
+            <!-- Modal Sửa CTDT -->
+            <div class="modal fade" id="ModalEditCTDT">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Sửa đổi CTDT</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation" method="post" action="/CTDT/Edit">
+                                <input type="hidden" id="Edit_MaCTDT" name="Edit_MaCTDT" />
+                                <input type="hidden" id="change_Ngay_Tao" name="change_Ngay_Tao" />
+                                <input type="hidden" id="change_Ngay_Cap_Nhat" name="change_Ngay_Cap_Nhat" />
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tên CTĐT *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="Edit_TenCTDT" name="Edit_TenCTDT">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn Khoa *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="Edit_Ma_Khoa" name="Edit_Ma_Khoa" class="form-control select2">
+                                            @foreach (var item in ViewBag.KhoaList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn HĐT *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="Edit_HDT" class="form-control select2">
+                                            @foreach (var item in ViewBag.HDT)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveChange">Thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal Sửa CTDT -->
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="ctdtTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">ID CTĐT</th>
+                                <th scope="col">Mã CTĐT</th>
+                                <th scope="col">Tên Khoa/Viện</th>
+                                <th scope="col">Tên CTĐT</th>
+                                <th scope="col">Hệ đào tạo</th>
+                                <th scope="col">Ngày Cập Nhật</th>
+                                <th scope="col">Ngày Tạo</th>
+                                <th scope="col">Chức năng</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/ChuongTrinhDaoTao.js"></script>
+}

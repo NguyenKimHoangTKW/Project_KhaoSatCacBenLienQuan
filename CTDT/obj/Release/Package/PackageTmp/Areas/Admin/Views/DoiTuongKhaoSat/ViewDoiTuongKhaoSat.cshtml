@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Đối tượng khảo sát - TDMU";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh sách Đối tượng khảo sát</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <span class="breadcrumb-item active">Danh sách Đối tượng khảo sát</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <div class="col-lg-12">
+                    <div class="mb-4" style="border: 1px solid #9caab9; padding: 15px; border-radius: 8px; background-color: #fcfcfc;">
+                        <p style="font-weight:bold;font-size:25px;text-align:center;color:black">DANH SÁCH ĐỐI TƯỢNG KHẢO SÁT</p>
+                        <div class="row items-push">
+                            <div class="col-4">
+                                <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo từ khóa</label>
+                                <input type="text" class="form-control" name="keywordSearch" id="searchInput" placeholder="Nhập từ khóa muốn tìm kiếm ...">
+                            </div>
+
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <button type="submit" id="btnFilter" name="btnFilter" onclick="Filter()" class="btn btn-primary btn-tone m-r-5">Tìm kiếm</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <button class="btn btn-primary m-r-5" data-toggle="modal" data-target="#ModalAddNew">Thêm mới</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--Modal Thêm mới-->
+            <div class="modal fade" id="ModalAddNew">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Thêm mới</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tên Đối tượng khảo sát *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="tenDTKS" placeholder="Nhập tên Đối tượng khảo sát ... *">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave" onclick="AddNew()">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal Thêm mới-->
+            <!-- Modal Sửa -->
+            <div class="modal fade" id="ModalEdit">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Thay đổi</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <input type="hidden" id="Edit_id" />
+                                    <label class="col-sm-2 col-form-label control-label">Tên ĐTKS *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="EditTenDTKS">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveChange">Thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal Sửa -->
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead id="thead">
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">Mã ĐTKS</th>
+                                <th scope="col">Tên ĐTKS</th>
+                                <th scope="col">Ngày Tạo</th>
+                                <th scope="col">Ngày Cập Nhật</th>
+                                <th scope="col">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="showdata">
+                            <!--Showdata-->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="pagination" class="m-t-15 pagination-right">
+                    <!-- Pagination buttons will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/DoiTuongKhaoSat.js"></script>
+    }

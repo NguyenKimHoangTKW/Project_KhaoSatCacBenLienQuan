@@ -1,0 +1,239 @@
+﻿@{
+    ViewBag.Title = "Danh sách tài khoản - TDMU";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh Sách Tài Khoản</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <span class="breadcrumb-item active">Danh sách Tài khoản</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <h2 class="text-uppercase">Kết quả khảo sát</h2>
+                <hr />
+                <fieldset class="border rounded-3 p-3">
+                    <legend class="float-none w-auto px-3">Chức năng</legend>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo chương trình đào tạo</label>
+                            <select class="form-control select2" id="FiterCTDT">
+                                <option value="">Tất cả</option>
+                                @foreach (var item in ViewBag.CTDTList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo đơn vị</label>
+                            <select class="form-control select2" id="FilterDonVi">
+                                <option value="">Tất cả</option>
+                                @foreach (var item in ViewBag.DonVilist)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo chức vụ tài khoản</label>
+                            <select class="form-control select2" id="FilterTrangThai">
+                                <option value="">Tất cả</option>
+                                @foreach (var item in ViewBag.TypeUserList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button type="submit" id="btnFilter" name="btnFilter" class="btn btn-primary btn-tone m-r-5">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-12 d-flex">
+                            <button class="btn btn-primary m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Thêm mới</button>
+                            <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#importExcelModal">Import từ Excel</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div>
+            </div>
+            <!-- Modal Import Excel -->
+            <div class="modal fade" id="importExcelModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import tài khoản từ Excel</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="importExcelForm" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="excelFile">Chọn file Excel</label>
+                                    <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+                                </div>
+                                <button type="submit" class="btn btn-success btn-tone m-r-5">Upload</button>
+                                <a href="~/DataExport/Mau/MauUploadUser.xlsx" download>
+                                    <button type="button" class="btn btn-info btn-tone m-r-5">Tải file mẫu</button>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal Import Excel -->
+            <!-- Modal Thêm mới User -->
+            <div class="modal fade" id="bd-example-modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Thêm mới Người dùng</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="Email" required>
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chức vụ *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="ChucVu" name="ChucVu" class="form-control select2" required>
+                                            @foreach (var typeUser in ViewBag.TypeUserList)
+                                            {
+                                                <option value="@typeUser.Value">@typeUser.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-10" id="ctdtContainer" style="margin-top: 10px; display: none;">
+                                        <label class="col-sm-2 col-form-label control-label">CTĐT *</label>
+                                        <select id="CTDT" name="CTDT" class="form-control select2" style="margin-left: 130px; margin-top: -34px;">
+                                            @foreach (var ctdt in ViewBag.CTDTList)
+                                            {
+                                                <option value="@ctdt.Value">@ctdt.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-10" id="donviContainer" style="margin-top: 10px; display: none;">
+                                        <label class="col-sm-2 col-form-label control-label">Đơn vị *</label>
+                                        <select id="DonVi" class="form-control select2" style="margin-left: 130px; margin-top: -34px;">
+                                            @foreach (var ctdt in ViewBag.DonVilist)
+                                            {
+                                                <option value="@ctdt.Value">@ctdt.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal Thêm mới User -->
+            <!-- Modal Sửa User -->
+            <div class="modal fade" id="ModalEditLop">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Sửa đổi Người dùng</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <input type="hidden" id="Edit_ID" />
+                                    <input type="hidden" id="Edit_TenNguoiDung" />
+                                    <input type="hidden" id="change_Ngay_Tao" name="change_Ngay_Tao" />
+                                    <label class="col-sm-2 col-form-label control-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="Edit_Email" readonly>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chức vụ *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="Edit_ChucVu" name="Edit_ChucVu" class="form-control select2">
+                                            @foreach (var typeUser in ViewBag.TypeUserList)
+                                            {
+                                                <option value="@typeUser.Value">@typeUser.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-10" id="ctdtContainer" style="margin-top: 10px; display: none;">
+                                        <label class="col-sm-2 col-form-label control-label">CTĐT *</label>
+                                        <select id="Edit_CTDT" name="Edit_CTDT" class="form-control select2" style=" margin-left: 130px; margin-top: -34px;">
+                                            @foreach (var ctdt in ViewBag.CTDTList)
+                                            {
+                                                <option value="@ctdt.Value">@ctdt.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-10" id="donviContainer" style="margin-top: 10px; display: none;">
+                                        <label class="col-sm-2 col-form-label control-label">Đơn vị *</label>
+                                        <select id="Edit_Donvi" class="form-control select2" style=" margin-left: 130px; margin-top: -34px;">
+                                            @foreach (var ctdt in ViewBag.DonVilist)
+                                            {
+                                                <option value="@ctdt.Value">@ctdt.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveChange">Thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal Sửa User -->
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">ID User</th>
+                                <th scope="col">Tên người dùng</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Chức vụ</th>
+                                <th scope="col">CTĐT</th>
+                                <th scope="col">Đơn vị</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Ngày cập nhật</th>
+                                <th scope="col">Chức năng</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/PhanQuyen/DanhSachTaiKhoan.js"></script>
+}

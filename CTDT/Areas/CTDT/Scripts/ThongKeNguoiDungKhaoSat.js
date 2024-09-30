@@ -1,0 +1,161 @@
+﻿var currentPage = 1;
+var totalPages = 0;
+
+$(document).ready(function () {
+    LoadChartSurvey();
+    $(document).on("change", "#Year", function () {
+        LoadChartSurvey();
+    });
+});
+
+function showLoading() {
+    Swal.fire({
+        title: 'Loading...',
+        text: 'Đang tải dữ liệu, vui lòng chờ trong giây lát!',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+function hideLoading() {
+    Swal.close();
+}
+async function LoadChartSurvey() {
+    var year = $("#Year").val();
+    const res = await $.ajax({
+        url: '/CTDT/ThongKeKhaoSat/load_charts_nguoi_hoc',
+        type: 'POST',
+        data: { year: year },
+    });
+    $('#survey-list').empty();
+    if (res.data.AllSurvey && res.data.AllSurvey.length > 0) {
+        res.data.AllSurvey.sort((a, b) => {
+            let idA = (typeof a.NameSurvey === 'string') ? a.NameSurvey.split(".")[0] : '';
+            let idB = (typeof b.NameSurvey === 'string') ? b.NameSurvey.split(".")[0] : '';
+            return idA.localeCompare(idB, undefined, { numeric: true });
+        });
+
+        res.data.AllSurvey.forEach(function (survey) {
+            const MaPhieu = survey.NameSurvey.split(".")[0].toUpperCase();
+            const TieuDePhieu = survey.NameSurvey.split(".")[1];
+            const surveyData = res.data.ChartSurvey.find(chil => chil.IDPhieu === survey.IDSurvey);
+            const SurveyBySubject = survey.HocKy != null ? MaPhieu + " - " + (survey.HocKy ?? MaPhieu) : MaPhieu;
+            const card = `
+                        <div class="card survey-card">
+                            <div class="card-body">
+                                <div style="align-items: center;">
+                                    <p style="color:#5029ff;font-weight:bold; position: absolute; top: 0; left: 20px;">${SurveyBySubject}</p>
+                                    <a href="" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-maphieu="${survey.IDSurvey}">Xem chi tiết</a>
+                                    <hr/>
+                                    <p style="color:black;font-weight:bold">${TieuDePhieu}</p>
+                                    <hr/>
+                                </div>
+                                <canvas class="chart" id="donut-chart-${survey.IDSurvey}"></canvas>
+                                <p id="surveyedInfo-${survey.IDSurvey}" style="margin: 0; color: red;"></p>
+                                <hr />
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-weight:bold">
+                                    <p style="margin: 0; color: black;">${surveyData ? "Tổng phiếu: " + surveyData.TongKhaoSat : ''}</p>
+                                    <p style="margin: 0; color:#ebb000;">${surveyData ? "Đã thu về: " + surveyData.TongPhieuDaTraLoi : ''}</p>
+                                    <p style="margin: 0; color:#5029ff;">${surveyData ? "Chưa thu về: " + surveyData.TongPhieuChuaTraLoi : ''}</p>
+                                </div>
+                            </div>
+                        </div>`;
+
+            $('#survey-list').append(card);
+
+            const datas = surveyData ? [surveyData.TongPhieuChuaTraLoi, surveyData.TongPhieuDaTraLoi] : [1, 0];
+            const colors = surveyData ? ['#007bff', '#ffc107'] : ['#d3d3d3', '#d3d3d3'];
+
+            const donutCtx = document.getElementById(`donut-chart-${survey.IDSurvey}`).getContext('2d');
+            const donutData = {
+                labels: ['Số phiếu chưa trả lời', 'Số phiếu đã thu'],
+                datasets: [{
+                    fill: true,
+                    backgroundColor: colors,
+                    pointBackgroundColor: colors,
+                    data: datas
+                }]
+            };
+
+            new Chart(donutCtx, {
+                type: 'doughnut',
+                data: donutData,
+                options: {
+                    maintainAspectRatio: false,
+                    hover: { mode: null },
+                    cutoutPercentage: 45
+                }
+            });
+        });
+
+    } else {
+        const card = `
+                    <div class="alert alert-info" style="width: 100%;">
+                        <div class="d-flex justify-content-start">
+                            <span class="alert-icon m-r-20 font-size-30">
+                                <i class="anticon anticon-close-circle"></i>
+                            </span>
+                            <div>
+                                <h5 class="alert-heading">Opps...</h5>
+                                <p>Không có dữ liệu phiếu khảo sát cho năm học này !</p>
+                            </div>
+                        </div>
+                    </div>`;
+        $('#survey-list').append(card);
+        $('.chart').hide();
+    }
+}
+$(document).on("click", "#maphieu", function () {
+    var maphieu = $(this).data("maphieu");
+    $('#surveyModal').modal('show');
+    load_nguoi_hoc(maphieu);
+})
+$('#surveyModal').on('shown.bs.modal', function () {
+    $('#data-table-section').show();
+});
+async function load_nguoi_hoc(id) {
+    const res = await $.ajax({
+        url: '/CTDT/ThongKeKhaoSat/load_nguoi_hoc',
+        type: 'POST',
+        data: {
+            surveyid: id
+        }
+    });
+
+    if (res && res.data.length > 0) {
+        var body = $("#load_data");
+        var html = "";
+        body.empty();
+        res.data.forEach(function (items, index) {
+            if (items.is_nguoi_hoc) {
+                html += "<thead>";
+                html += "<tr>";
+                html += "<th>Số Thứ Tự</th>";
+                html += "<th>Họ và Tên</th>";
+                html += "<th>Mã Người Học</th>";
+                html += "<th>Lớp</th>";
+                html += "<th>Tình Trạng Khảo Sát</th>";
+                html += "</tr>";
+                html += "</thead>";
+                html += "<tbody>";
+                items.nguoi_hoc.forEach(function (nguoiHoc, subIndex) {
+                    html += "<tr>";
+                    html += `<td>${subIndex + 1}</td>`;
+                    html += `<td>${nguoiHoc.ho_ten}</td>`;
+                    html += `<td>${nguoiHoc.ma_nguoi_hoc}</td>`;
+                    html += `<td>${nguoiHoc.lop}</td>`;
+                    html += `<td>${nguoiHoc.tinh_trang_khao_sat}</td>`;
+                    html += "</tr>";
+                });
+                html += "</tbody>";
+            }
+
+        });
+
+        body.html(html);
+    } else {
+        $("#load_data").html("<tr><td colspan='5'>No data available</td></tr>");
+    }
+}

@@ -1,0 +1,1640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dbSurveyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="answer_response">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="surveyID" Type="int" Nullable="false" />
+          <Property Name="id_donvi" Type="int" />
+          <Property Name="id_CBVC" Type="int" />
+          <Property Name="id_hk" Type="int" />
+          <Property Name="id_users" Type="int" />
+          <Property Name="id_mh" Type="int" />
+          <Property Name="id_sv" Type="int" />
+          <Property Name="id_ctdt" Type="int" />
+          <Property Name="json_answer" Type="nvarchar(max)" />
+          <Property Name="time" Type="int" />
+          <Property Name="id_namhoc" Type="int" />
+        </EntityType>
+        <EntityType Name="CanBoVienChuc">
+          <Key>
+            <PropertyRef Name="id_CBVC" />
+          </Key>
+          <Property Name="id_CBVC" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaCBVC" Type="nvarchar" MaxLength="50" />
+          <Property Name="TenCBVC" Type="nvarchar" MaxLength="50" />
+          <Property Name="NgaySinh" Type="date" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_donvi" Type="int" />
+          <Property Name="id_chucvu" Type="int" />
+          <Property Name="id_chuongtrinhdaotao" Type="int" />
+          <Property Name="id_namhoc" Type="int" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="ChucVu">
+          <Key>
+            <PropertyRef Name="id_chucvu" />
+          </Key>
+          <Property Name="id_chucvu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_chucvu" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="ctdt">
+          <Key>
+            <PropertyRef Name="id_ctdt" />
+          </Key>
+          <Property Name="id_ctdt" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ma_ctdt" Type="nvarchar" MaxLength="10" />
+          <Property Name="id_khoa" Type="int" Nullable="false" />
+          <Property Name="ten_ctdt" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_hdt" Type="int" />
+          <Property Name="ngaycapnhat" Type="int" Nullable="false" />
+          <Property Name="ngaytao" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DonVi">
+          <Key>
+            <PropertyRef Name="id_donvi" />
+          </Key>
+          <Property Name="id_donvi" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ma_donvi" Type="nvarchar" MaxLength="10" />
+          <Property Name="name_donvi" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="group_mon_hoc">
+          <Key>
+            <PropertyRef Name="id_group_mh" />
+          </Key>
+          <Property Name="id_group_mh" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ten_group_mh" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ngay_tao" Type="int" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hedaotao">
+          <Key>
+            <PropertyRef Name="id_hedaotao" />
+          </Key>
+          <Property Name="id_hedaotao" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ten_hedaotao" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hoc_ky">
+          <Key>
+            <PropertyRef Name="id_hk" />
+          </Key>
+          <Property Name="id_hk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ten_hk" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ngay_tao" Type="int" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hoc_phan">
+          <Key>
+            <PropertyRef Name="id_hoc_phan" />
+          </Key>
+          <Property Name="id_hoc_phan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ten_hoc_phan" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ngay_tao" Type="int" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="khoa">
+          <Key>
+            <PropertyRef Name="id_khoa" />
+          </Key>
+          <Property Name="id_khoa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ma_khoa" Type="nvarchar" MaxLength="10" />
+          <Property Name="ten_khoa" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ngaycapnhat" Type="int" Nullable="false" />
+          <Property Name="ngaytao" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoaiKhaoSat">
+          <Key>
+            <PropertyRef Name="id_loaikhaosat" />
+          </Key>
+          <Property Name="id_loaikhaosat" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_loaikhaosat" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TimeMake" Type="int" />
+          <Property Name="TimeUpdate" Type="int" />
+        </EntityType>
+        <EntityType Name="lop">
+          <Key>
+            <PropertyRef Name="id_lop" />
+          </Key>
+          <Property Name="id_lop" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_ctdt" Type="int" Nullable="false" />
+          <Property Name="ma_lop" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ngaycapnhat" Type="int" Nullable="false" />
+          <Property Name="ngaytao" Type="int" Nullable="false" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="mon_hoc">
+          <Key>
+            <PropertyRef Name="id_mon_hoc" />
+          </Key>
+          <Property Name="id_mon_hoc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ma_mon_hoc" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ten_mon_hoc" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="id_hoc_phan" Type="int" Nullable="false" />
+          <Property Name="id_group_mh" Type="int" Nullable="false" />
+          <Property Name="ngay_tao" Type="int" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NamHoc">
+          <Key>
+            <PropertyRef Name="id_namhoc" />
+          </Key>
+          <Property Name="id_namhoc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ten_namhoc" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="sinhvien">
+          <Key>
+            <PropertyRef Name="id_sv" />
+          </Key>
+          <Property Name="id_sv" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_lop" Type="int" Nullable="false" />
+          <Property Name="ma_sv" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="hovaten" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ngaysinh" Type="date" />
+          <Property Name="sodienthoai" Type="nvarchar" MaxLength="15" />
+          <Property Name="diachi" Type="nvarchar" MaxLength="200" />
+          <Property Name="phai" Type="nvarchar" MaxLength="50" />
+          <Property Name="namtotnghiep" Type="text" />
+          <Property Name="ngaycapnhat" Type="int" />
+          <Property Name="ngaytao" Type="int" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="survey">
+          <Key>
+            <PropertyRef Name="surveyID" />
+          </Key>
+          <Property Name="surveyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_hedaotao" Type="int" Nullable="false" />
+          <Property Name="surveyData" Type="nvarchar(max)" />
+          <Property Name="surveyTitle" Type="nvarchar(max)" />
+          <Property Name="surveyDescription" Type="nvarchar(max)" />
+          <Property Name="surveyTimeStart" Type="int" />
+          <Property Name="surveyTimeEnd" Type="int" />
+          <Property Name="surveyTimeMake" Type="int" />
+          <Property Name="surveyTimeUpdate" Type="int" />
+          <Property Name="surveyStatus" Type="bit" />
+          <Property Name="id_loaikhaosat" Type="int" Nullable="false" />
+          <Property Name="creator" Type="int" />
+          <Property Name="id_namhoc" Type="int" />
+          <Property Name="key_class" Type="nvarchar(max)" />
+          <Property Name="doi_tuong_dat_biet" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="typeusers">
+          <Key>
+            <PropertyRef Name="id_typeusers" />
+          </Key>
+          <Property Name="id_typeusers" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_typeusers" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="chuc_nang" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id_users" />
+          </Key>
+          <Property Name="id_users" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="nvarchar(max)" />
+          <Property Name="lastName" Type="nvarchar(max)" />
+          <Property Name="email" Type="nvarchar(max)" />
+          <Property Name="username" Type="nvarchar(max)" />
+          <Property Name="password" Type="nvarchar(max)" />
+          <Property Name="id_typeusers" Type="int" />
+          <Property Name="ngaycapnhat" Type="int" />
+          <Property Name="ngaytao" Type="int" />
+          <Property Name="id_donvi" Type="int" />
+          <Property Name="id_ctdt" Type="int" />
+          <Property Name="id_hdt" Type="int" />
+          <Property Name="set_phan_quyen" Type="nvarchar(max)" />
+          <Property Name="avatarUrl" Type="nvarchar(max)" />
+          <Property Name="status" Type="tinyint" />
+        </EntityType>
+        <Association Name="FK_answer_response_CanBoVienChuc">
+          <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CanBoVienChuc">
+              <PropertyRef Name="id_CBVC" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_CBVC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_ctdt">
+          <End Role="ctdt" Type="Self.ctdt" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_ctdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_DonVi">
+          <End Role="DonVi" Type="Self.DonVi" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonVi">
+              <PropertyRef Name="id_donvi" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_donvi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_hoc_ky">
+          <End Role="hoc_ky" Type="Self.hoc_ky" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hoc_ky">
+              <PropertyRef Name="id_hk" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_hk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_mon_hoc">
+          <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mon_hoc">
+              <PropertyRef Name="id_mon_hoc" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_mh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_NamHoc">
+          <End Role="NamHoc" Type="Self.NamHoc" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NamHoc">
+              <PropertyRef Name="id_namhoc" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_namhoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_sinhvien">
+          <End Role="sinhvien" Type="Self.sinhvien" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sinhvien">
+              <PropertyRef Name="id_sv" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_sv" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_survey">
+          <End Role="survey" Type="Self.survey" Multiplicity="1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="survey">
+              <PropertyRef Name="surveyID" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="surveyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_users">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_users" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_users" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_ChucVu">
+          <End Role="ChucVu" Type="Self.ChucVu" Multiplicity="0..1" />
+          <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChucVu">
+              <PropertyRef Name="id_chucvu" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_chucvu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_ctdt">
+          <End Role="ctdt" Type="Self.ctdt" Multiplicity="0..1" />
+          <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_chuongtrinhdaotao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_DonVi">
+          <End Role="DonVi" Type="Self.DonVi" Multiplicity="0..1" />
+          <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonVi">
+              <PropertyRef Name="id_donvi" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_donvi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_NamHoc">
+          <End Role="NamHoc" Type="Self.NamHoc" Multiplicity="0..1" />
+          <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NamHoc">
+              <PropertyRef Name="id_namhoc" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_namhoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ctdt_hedaotao">
+          <End Role="hedaotao" Type="Self.hedaotao" Multiplicity="0..1" />
+          <End Role="ctdt" Type="Self.ctdt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hedaotao">
+              <PropertyRef Name="id_hedaotao" />
+            </Principal>
+            <Dependent Role="ctdt">
+              <PropertyRef Name="id_hdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ctdt_khoa">
+          <End Role="khoa" Type="Self.khoa" Multiplicity="1" />
+          <End Role="ctdt" Type="Self.ctdt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="khoa">
+              <PropertyRef Name="id_khoa" />
+            </Principal>
+            <Dependent Role="ctdt">
+              <PropertyRef Name="id_khoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_lop_ctdt">
+          <End Role="ctdt" Type="Self.ctdt" Multiplicity="1" />
+          <End Role="lop" Type="Self.lop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="lop">
+              <PropertyRef Name="id_ctdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mon_hoc_group_mon_hoc">
+          <End Role="group_mon_hoc" Type="Self.group_mon_hoc" Multiplicity="1" />
+          <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group_mon_hoc">
+              <PropertyRef Name="id_group_mh" />
+            </Principal>
+            <Dependent Role="mon_hoc">
+              <PropertyRef Name="id_group_mh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mon_hoc_hoc_phan">
+          <End Role="hoc_phan" Type="Self.hoc_phan" Multiplicity="1" />
+          <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hoc_phan">
+              <PropertyRef Name="id_hoc_phan" />
+            </Principal>
+            <Dependent Role="mon_hoc">
+              <PropertyRef Name="id_hoc_phan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sinhvien_lop">
+          <End Role="lop" Type="Self.lop" Multiplicity="1" />
+          <End Role="sinhvien" Type="Self.sinhvien" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lop">
+              <PropertyRef Name="id_lop" />
+            </Principal>
+            <Dependent Role="sinhvien">
+              <PropertyRef Name="id_lop" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_hedaotao">
+          <End Role="hedaotao" Type="Self.hedaotao" Multiplicity="1" />
+          <End Role="survey" Type="Self.survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hedaotao">
+              <PropertyRef Name="id_hedaotao" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="id_hedaotao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_LoaiKhaoSat">
+          <End Role="LoaiKhaoSat" Type="Self.LoaiKhaoSat" Multiplicity="1" />
+          <End Role="survey" Type="Self.survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoaiKhaoSat">
+              <PropertyRef Name="id_loaikhaosat" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="id_loaikhaosat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_NamHoc">
+          <End Role="NamHoc" Type="Self.NamHoc" Multiplicity="0..1" />
+          <End Role="survey" Type="Self.survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NamHoc">
+              <PropertyRef Name="id_namhoc" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="id_namhoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_users">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="survey" Type="Self.survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_users" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="creator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_ctdt">
+          <End Role="ctdt" Type="Self.ctdt" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_ctdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_DonVi">
+          <End Role="DonVi" Type="Self.DonVi" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonVi">
+              <PropertyRef Name="id_donvi" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_donvi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_typeusers">
+          <End Role="typeusers" Type="Self.typeusers" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="typeusers">
+              <PropertyRef Name="id_typeusers" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_typeusers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbSurveyModelStoreContainer">
+          <EntitySet Name="answer_response" EntityType="Self.answer_response" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CanBoVienChuc" EntityType="Self.CanBoVienChuc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChucVu" EntityType="Self.ChucVu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ctdt" EntityType="Self.ctdt" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DonVi" EntityType="Self.DonVi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="group_mon_hoc" EntityType="Self.group_mon_hoc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hedaotao" EntityType="Self.hedaotao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hoc_ky" EntityType="Self.hoc_ky" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="hoc_phan" EntityType="Self.hoc_phan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="khoa" EntityType="Self.khoa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoaiKhaoSat" EntityType="Self.LoaiKhaoSat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lop" EntityType="Self.lop" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mon_hoc" EntityType="Self.mon_hoc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NamHoc" EntityType="Self.NamHoc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sinhvien" EntityType="Self.sinhvien" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="survey" EntityType="Self.survey" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="typeusers" EntityType="Self.typeusers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_answer_response_CanBoVienChuc" Association="Self.FK_answer_response_CanBoVienChuc">
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_ctdt" Association="Self.FK_answer_response_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_DonVi" Association="Self.FK_answer_response_DonVi">
+            <End Role="DonVi" EntitySet="DonVi" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_hoc_ky" Association="Self.FK_answer_response_hoc_ky">
+            <End Role="hoc_ky" EntitySet="hoc_ky" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_mon_hoc" Association="Self.FK_answer_response_mon_hoc">
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_NamHoc" Association="Self.FK_answer_response_NamHoc">
+            <End Role="NamHoc" EntitySet="NamHoc" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_sinhvien" Association="Self.FK_answer_response_sinhvien">
+            <End Role="sinhvien" EntitySet="sinhvien" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_survey" Association="Self.FK_answer_response_survey">
+            <End Role="survey" EntitySet="survey" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_users" Association="Self.FK_answer_response_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_ChucVu" Association="Self.FK_CanBoVienChuc_ChucVu">
+            <End Role="ChucVu" EntitySet="ChucVu" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_ctdt" Association="Self.FK_CanBoVienChuc_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_DonVi" Association="Self.FK_CanBoVienChuc_DonVi">
+            <End Role="DonVi" EntitySet="DonVi" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_NamHoc" Association="Self.FK_CanBoVienChuc_NamHoc">
+            <End Role="NamHoc" EntitySet="NamHoc" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ctdt_hedaotao" Association="Self.FK_ctdt_hedaotao">
+            <End Role="hedaotao" EntitySet="hedaotao" />
+            <End Role="ctdt" EntitySet="ctdt" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ctdt_khoa" Association="Self.FK_ctdt_khoa">
+            <End Role="khoa" EntitySet="khoa" />
+            <End Role="ctdt" EntitySet="ctdt" />
+          </AssociationSet>
+          <AssociationSet Name="FK_lop_ctdt" Association="Self.FK_lop_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="lop" EntitySet="lop" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mon_hoc_group_mon_hoc" Association="Self.FK_mon_hoc_group_mon_hoc">
+            <End Role="group_mon_hoc" EntitySet="group_mon_hoc" />
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mon_hoc_hoc_phan" Association="Self.FK_mon_hoc_hoc_phan">
+            <End Role="hoc_phan" EntitySet="hoc_phan" />
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sinhvien_lop" Association="Self.FK_sinhvien_lop">
+            <End Role="lop" EntitySet="lop" />
+            <End Role="sinhvien" EntitySet="sinhvien" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_hedaotao" Association="Self.FK_survey_hedaotao">
+            <End Role="hedaotao" EntitySet="hedaotao" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_LoaiKhaoSat" Association="Self.FK_survey_LoaiKhaoSat">
+            <End Role="LoaiKhaoSat" EntitySet="LoaiKhaoSat" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_NamHoc" Association="Self.FK_survey_NamHoc">
+            <End Role="NamHoc" EntitySet="NamHoc" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_users" Association="Self.FK_survey_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_ctdt" Association="Self.FK_users_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_DonVi" Association="Self.FK_users_DonVi">
+            <End Role="DonVi" EntitySet="DonVi" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_typeusers" Association="Self.FK_users_typeusers">
+            <End Role="typeusers" EntitySet="typeusers" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbSurveyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="dbSurveyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="answer_response" EntityType="dbSurveyModel.answer_response" />
+          <EntitySet Name="CanBoVienChuc" EntityType="dbSurveyModel.CanBoVienChuc" />
+          <EntitySet Name="ChucVu" EntityType="dbSurveyModel.ChucVu" />
+          <EntitySet Name="ctdt" EntityType="dbSurveyModel.ctdt" />
+          <EntitySet Name="DonVi" EntityType="dbSurveyModel.DonVi" />
+          <EntitySet Name="group_mon_hoc" EntityType="dbSurveyModel.group_mon_hoc" />
+          <EntitySet Name="hedaotao" EntityType="dbSurveyModel.hedaotao" />
+          <EntitySet Name="hoc_ky" EntityType="dbSurveyModel.hoc_ky" />
+          <EntitySet Name="hoc_phan" EntityType="dbSurveyModel.hoc_phan" />
+          <EntitySet Name="khoa" EntityType="dbSurveyModel.khoa" />
+          <EntitySet Name="LoaiKhaoSat" EntityType="dbSurveyModel.LoaiKhaoSat" />
+          <EntitySet Name="lop" EntityType="dbSurveyModel.lop" />
+          <EntitySet Name="mon_hoc" EntityType="dbSurveyModel.mon_hoc" />
+          <EntitySet Name="NamHoc" EntityType="dbSurveyModel.NamHoc" />
+          <EntitySet Name="sinhvien" EntityType="dbSurveyModel.sinhvien" />
+          <EntitySet Name="survey" EntityType="dbSurveyModel.survey" />
+          <EntitySet Name="sysdiagrams" EntityType="dbSurveyModel.sysdiagrams" />
+          <EntitySet Name="typeusers" EntityType="dbSurveyModel.typeusers" />
+          <EntitySet Name="users" EntityType="dbSurveyModel.users" />
+          <AssociationSet Name="FK_answer_response_CanBoVienChuc" Association="dbSurveyModel.FK_answer_response_CanBoVienChuc">
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_ctdt" Association="dbSurveyModel.FK_answer_response_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_DonVi" Association="dbSurveyModel.FK_answer_response_DonVi">
+            <End Role="DonVi" EntitySet="DonVi" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_hoc_ky" Association="dbSurveyModel.FK_answer_response_hoc_ky">
+            <End Role="hoc_ky" EntitySet="hoc_ky" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_mon_hoc" Association="dbSurveyModel.FK_answer_response_mon_hoc">
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_NamHoc" Association="dbSurveyModel.FK_answer_response_NamHoc">
+            <End Role="NamHoc" EntitySet="NamHoc" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_sinhvien" Association="dbSurveyModel.FK_answer_response_sinhvien">
+            <End Role="sinhvien" EntitySet="sinhvien" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_survey" Association="dbSurveyModel.FK_answer_response_survey">
+            <End Role="survey" EntitySet="survey" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_answer_response_users" Association="dbSurveyModel.FK_answer_response_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="answer_response" EntitySet="answer_response" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_ChucVu" Association="dbSurveyModel.FK_CanBoVienChuc_ChucVu">
+            <End Role="ChucVu" EntitySet="ChucVu" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_ctdt" Association="dbSurveyModel.FK_CanBoVienChuc_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_DonVi" Association="dbSurveyModel.FK_CanBoVienChuc_DonVi">
+            <End Role="DonVi" EntitySet="DonVi" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CanBoVienChuc_NamHoc" Association="dbSurveyModel.FK_CanBoVienChuc_NamHoc">
+            <End Role="NamHoc" EntitySet="NamHoc" />
+            <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ctdt_hedaotao" Association="dbSurveyModel.FK_ctdt_hedaotao">
+            <End Role="hedaotao" EntitySet="hedaotao" />
+            <End Role="ctdt" EntitySet="ctdt" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ctdt_khoa" Association="dbSurveyModel.FK_ctdt_khoa">
+            <End Role="khoa" EntitySet="khoa" />
+            <End Role="ctdt" EntitySet="ctdt" />
+          </AssociationSet>
+          <AssociationSet Name="FK_lop_ctdt" Association="dbSurveyModel.FK_lop_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="lop" EntitySet="lop" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_ctdt" Association="dbSurveyModel.FK_users_ctdt">
+            <End Role="ctdt" EntitySet="ctdt" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_DonVi" Association="dbSurveyModel.FK_users_DonVi">
+            <End Role="DonVi" EntitySet="DonVi" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mon_hoc_group_mon_hoc" Association="dbSurveyModel.FK_mon_hoc_group_mon_hoc">
+            <End Role="group_mon_hoc" EntitySet="group_mon_hoc" />
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_hedaotao" Association="dbSurveyModel.FK_survey_hedaotao">
+            <End Role="hedaotao" EntitySet="hedaotao" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mon_hoc_hoc_phan" Association="dbSurveyModel.FK_mon_hoc_hoc_phan">
+            <End Role="hoc_phan" EntitySet="hoc_phan" />
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_LoaiKhaoSat" Association="dbSurveyModel.FK_survey_LoaiKhaoSat">
+            <End Role="LoaiKhaoSat" EntitySet="LoaiKhaoSat" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sinhvien_lop" Association="dbSurveyModel.FK_sinhvien_lop">
+            <End Role="lop" EntitySet="lop" />
+            <End Role="sinhvien" EntitySet="sinhvien" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_NamHoc" Association="dbSurveyModel.FK_survey_NamHoc">
+            <End Role="NamHoc" EntitySet="NamHoc" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_survey_users" Association="dbSurveyModel.FK_survey_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="survey" EntitySet="survey" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_typeusers" Association="dbSurveyModel.FK_users_typeusers">
+            <End Role="typeusers" EntitySet="typeusers" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="answer_response">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="surveyID" Type="Int32" Nullable="false" />
+          <Property Name="id_donvi" Type="Int32" />
+          <Property Name="id_CBVC" Type="Int32" />
+          <Property Name="id_hk" Type="Int32" />
+          <Property Name="id_users" Type="Int32" />
+          <Property Name="id_mh" Type="Int32" />
+          <Property Name="id_sv" Type="Int32" />
+          <Property Name="id_ctdt" Type="Int32" />
+          <Property Name="json_answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="time" Type="Int32" />
+          <Property Name="id_namhoc" Type="Int32" />
+          <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_answer_response_CanBoVienChuc" FromRole="answer_response" ToRole="CanBoVienChuc" />
+          <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_answer_response_ctdt" FromRole="answer_response" ToRole="ctdt" />
+          <NavigationProperty Name="DonVi" Relationship="dbSurveyModel.FK_answer_response_DonVi" FromRole="answer_response" ToRole="DonVi" />
+          <NavigationProperty Name="hoc_ky" Relationship="dbSurveyModel.FK_answer_response_hoc_ky" FromRole="answer_response" ToRole="hoc_ky" />
+          <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_answer_response_mon_hoc" FromRole="answer_response" ToRole="mon_hoc" />
+          <NavigationProperty Name="NamHoc" Relationship="dbSurveyModel.FK_answer_response_NamHoc" FromRole="answer_response" ToRole="NamHoc" />
+          <NavigationProperty Name="sinhvien" Relationship="dbSurveyModel.FK_answer_response_sinhvien" FromRole="answer_response" ToRole="sinhvien" />
+          <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_answer_response_survey" FromRole="answer_response" ToRole="survey" />
+          <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_answer_response_users" FromRole="answer_response" ToRole="users" />
+        </EntityType>
+        <EntityType Name="CanBoVienChuc">
+          <Key>
+            <PropertyRef Name="id_CBVC" />
+          </Key>
+          <Property Name="id_CBVC" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaCBVC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TenCBVC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NgaySinh" Type="DateTime" Precision="0" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_donvi" Type="Int32" />
+          <Property Name="id_chucvu" Type="Int32" />
+          <Property Name="id_chuongtrinhdaotao" Type="Int32" />
+          <Property Name="id_namhoc" Type="Int32" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_CanBoVienChuc" FromRole="CanBoVienChuc" ToRole="answer_response" />
+          <NavigationProperty Name="ChucVu" Relationship="dbSurveyModel.FK_CanBoVienChuc_ChucVu" FromRole="CanBoVienChuc" ToRole="ChucVu" />
+          <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_CanBoVienChuc_ctdt" FromRole="CanBoVienChuc" ToRole="ctdt" />
+          <NavigationProperty Name="DonVi" Relationship="dbSurveyModel.FK_CanBoVienChuc_DonVi" FromRole="CanBoVienChuc" ToRole="DonVi" />
+          <NavigationProperty Name="NamHoc" Relationship="dbSurveyModel.FK_CanBoVienChuc_NamHoc" FromRole="CanBoVienChuc" ToRole="NamHoc" />
+        </EntityType>
+        <EntityType Name="ChucVu">
+          <Key>
+            <PropertyRef Name="id_chucvu" />
+          </Key>
+          <Property Name="id_chucvu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_chucvu" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_ChucVu" FromRole="ChucVu" ToRole="CanBoVienChuc" />
+        </EntityType>
+        <EntityType Name="ctdt">
+          <Key>
+            <PropertyRef Name="id_ctdt" />
+          </Key>
+          <Property Name="id_ctdt" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ma_ctdt" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="id_khoa" Type="Int32" Nullable="false" />
+          <Property Name="ten_ctdt" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_hdt" Type="Int32" />
+          <Property Name="ngaycapnhat" Type="Int32" Nullable="false" />
+          <Property Name="ngaytao" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_ctdt" FromRole="ctdt" ToRole="answer_response" />
+          <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_ctdt" FromRole="ctdt" ToRole="CanBoVienChuc" />
+          <NavigationProperty Name="hedaotao" Relationship="dbSurveyModel.FK_ctdt_hedaotao" FromRole="ctdt" ToRole="hedaotao" />
+          <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_ctdt_khoa" FromRole="ctdt" ToRole="khoa" />
+          <NavigationProperty Name="lop" Relationship="dbSurveyModel.FK_lop_ctdt" FromRole="ctdt" ToRole="lop" />
+          <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_users_ctdt" FromRole="ctdt" ToRole="users" />
+        </EntityType>
+        <EntityType Name="DonVi">
+          <Key>
+            <PropertyRef Name="id_donvi" />
+          </Key>
+          <Property Name="id_donvi" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ma_donvi" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="name_donvi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_DonVi" FromRole="DonVi" ToRole="answer_response" />
+          <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_DonVi" FromRole="DonVi" ToRole="CanBoVienChuc" />
+          <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_users_DonVi" FromRole="DonVi" ToRole="users" />
+        </EntityType>
+        <EntityType Name="group_mon_hoc">
+          <Key>
+            <PropertyRef Name="id_group_mh" />
+          </Key>
+          <Property Name="id_group_mh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ten_group_mh" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ngay_tao" Type="Int32" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_group_mon_hoc" FromRole="group_mon_hoc" ToRole="mon_hoc" />
+        </EntityType>
+        <EntityType Name="hedaotao">
+          <Key>
+            <PropertyRef Name="id_hedaotao" />
+          </Key>
+          <Property Name="id_hedaotao" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ten_hedaotao" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_ctdt_hedaotao" FromRole="hedaotao" ToRole="ctdt" />
+          <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_hedaotao" FromRole="hedaotao" ToRole="survey" />
+        </EntityType>
+        <EntityType Name="hoc_ky">
+          <Key>
+            <PropertyRef Name="id_hk" />
+          </Key>
+          <Property Name="id_hk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ten_hk" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ngay_tao" Type="Int32" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_hoc_ky" FromRole="hoc_ky" ToRole="answer_response" />
+        </EntityType>
+        <EntityType Name="hoc_phan">
+          <Key>
+            <PropertyRef Name="id_hoc_phan" />
+          </Key>
+          <Property Name="id_hoc_phan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ten_hoc_phan" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ngay_tao" Type="Int32" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_hoc_phan" FromRole="hoc_phan" ToRole="mon_hoc" />
+        </EntityType>
+        <EntityType Name="khoa">
+          <Key>
+            <PropertyRef Name="id_khoa" />
+          </Key>
+          <Property Name="id_khoa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ma_khoa" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ten_khoa" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ngaycapnhat" Type="Int32" Nullable="false" />
+          <Property Name="ngaytao" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_ctdt_khoa" FromRole="khoa" ToRole="ctdt" />
+        </EntityType>
+        <EntityType Name="LoaiKhaoSat">
+          <Key>
+            <PropertyRef Name="id_loaikhaosat" />
+          </Key>
+          <Property Name="id_loaikhaosat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_loaikhaosat" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TimeMake" Type="Int32" />
+          <Property Name="TimeUpdate" Type="Int32" />
+          <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_LoaiKhaoSat" FromRole="LoaiKhaoSat" ToRole="survey" />
+        </EntityType>
+        <EntityType Name="lop">
+          <Key>
+            <PropertyRef Name="id_lop" />
+          </Key>
+          <Property Name="id_lop" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_ctdt" Type="Int32" Nullable="false" />
+          <Property Name="ma_lop" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ngaycapnhat" Type="Int32" Nullable="false" />
+          <Property Name="ngaytao" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_lop_ctdt" FromRole="lop" ToRole="ctdt" />
+          <NavigationProperty Name="sinhvien" Relationship="dbSurveyModel.FK_sinhvien_lop" FromRole="lop" ToRole="sinhvien" />
+        </EntityType>
+        <EntityType Name="mon_hoc">
+          <Key>
+            <PropertyRef Name="id_mon_hoc" />
+          </Key>
+          <Property Name="id_mon_hoc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ma_mon_hoc" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ten_mon_hoc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="id_hoc_phan" Type="Int32" Nullable="false" />
+          <Property Name="id_group_mh" Type="Int32" Nullable="false" />
+          <Property Name="ngay_tao" Type="Int32" Nullable="false" />
+          <Property Name="ngay_cap_nhat" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_mon_hoc" FromRole="mon_hoc" ToRole="answer_response" />
+          <NavigationProperty Name="group_mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_group_mon_hoc" FromRole="mon_hoc" ToRole="group_mon_hoc" />
+          <NavigationProperty Name="hoc_phan" Relationship="dbSurveyModel.FK_mon_hoc_hoc_phan" FromRole="mon_hoc" ToRole="hoc_phan" />
+        </EntityType>
+        <EntityType Name="NamHoc">
+          <Key>
+            <PropertyRef Name="id_namhoc" />
+          </Key>
+          <Property Name="id_namhoc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ten_namhoc" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_NamHoc" FromRole="NamHoc" ToRole="answer_response" />
+          <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_NamHoc" FromRole="NamHoc" ToRole="CanBoVienChuc" />
+          <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_NamHoc" FromRole="NamHoc" ToRole="survey" />
+        </EntityType>
+        <EntityType Name="sinhvien">
+          <Key>
+            <PropertyRef Name="id_sv" />
+          </Key>
+          <Property Name="id_sv" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_lop" Type="Int32" Nullable="false" />
+          <Property Name="ma_sv" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="hovaten" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ngaysinh" Type="DateTime" Precision="0" />
+          <Property Name="sodienthoai" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="diachi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="phai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="namtotnghiep" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ngaycapnhat" Type="Int32" />
+          <Property Name="ngaytao" Type="Int32" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_sinhvien" FromRole="sinhvien" ToRole="answer_response" />
+          <NavigationProperty Name="lop" Relationship="dbSurveyModel.FK_sinhvien_lop" FromRole="sinhvien" ToRole="lop" />
+        </EntityType>
+        <EntityType Name="survey">
+          <Key>
+            <PropertyRef Name="surveyID" />
+          </Key>
+          <Property Name="surveyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_hedaotao" Type="Int32" Nullable="false" />
+          <Property Name="surveyData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="surveyTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="surveyDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="surveyTimeStart" Type="Int32" />
+          <Property Name="surveyTimeEnd" Type="Int32" />
+          <Property Name="surveyTimeMake" Type="Int32" />
+          <Property Name="surveyTimeUpdate" Type="Int32" />
+          <Property Name="surveyStatus" Type="Boolean" />
+          <Property Name="id_loaikhaosat" Type="Int32" Nullable="false" />
+          <Property Name="creator" Type="Int32" />
+          <Property Name="id_namhoc" Type="Int32" />
+          <Property Name="key_class" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="doi_tuong_dat_biet" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_survey" FromRole="survey" ToRole="answer_response" />
+          <NavigationProperty Name="hedaotao" Relationship="dbSurveyModel.FK_survey_hedaotao" FromRole="survey" ToRole="hedaotao" />
+          <NavigationProperty Name="LoaiKhaoSat" Relationship="dbSurveyModel.FK_survey_LoaiKhaoSat" FromRole="survey" ToRole="LoaiKhaoSat" />
+          <NavigationProperty Name="NamHoc" Relationship="dbSurveyModel.FK_survey_NamHoc" FromRole="survey" ToRole="NamHoc" />
+          <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_survey_users" FromRole="survey" ToRole="users" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="typeusers">
+          <Key>
+            <PropertyRef Name="id_typeusers" />
+          </Key>
+          <Property Name="id_typeusers" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_typeusers" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="chuc_nang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_users_typeusers" FromRole="typeusers" ToRole="users" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id_users" />
+          </Key>
+          <Property Name="id_users" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="lastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="id_typeusers" Type="Int32" />
+          <Property Name="ngaycapnhat" Type="Int32" />
+          <Property Name="ngaytao" Type="Int32" />
+          <Property Name="id_donvi" Type="Int32" />
+          <Property Name="id_ctdt" Type="Int32" />
+          <Property Name="id_hdt" Type="Int32" />
+          <Property Name="set_phan_quyen" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="avatarUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="Byte" />
+          <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_users" FromRole="users" ToRole="answer_response" />
+          <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_users_ctdt" FromRole="users" ToRole="ctdt" />
+          <NavigationProperty Name="DonVi" Relationship="dbSurveyModel.FK_users_DonVi" FromRole="users" ToRole="DonVi" />
+          <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_users" FromRole="users" ToRole="survey" />
+          <NavigationProperty Name="typeusers" Relationship="dbSurveyModel.FK_users_typeusers" FromRole="users" ToRole="typeusers" />
+        </EntityType>
+        <Association Name="FK_answer_response_CanBoVienChuc">
+          <End Type="dbSurveyModel.CanBoVienChuc" Role="CanBoVienChuc" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CanBoVienChuc">
+              <PropertyRef Name="id_CBVC" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_CBVC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_ctdt">
+          <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_ctdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_DonVi">
+          <End Type="dbSurveyModel.DonVi" Role="DonVi" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonVi">
+              <PropertyRef Name="id_donvi" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_donvi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_hoc_ky">
+          <End Type="dbSurveyModel.hoc_ky" Role="hoc_ky" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hoc_ky">
+              <PropertyRef Name="id_hk" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_hk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_mon_hoc">
+          <End Type="dbSurveyModel.mon_hoc" Role="mon_hoc" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mon_hoc">
+              <PropertyRef Name="id_mon_hoc" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_mh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_NamHoc">
+          <End Type="dbSurveyModel.NamHoc" Role="NamHoc" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NamHoc">
+              <PropertyRef Name="id_namhoc" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_namhoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_sinhvien">
+          <End Type="dbSurveyModel.sinhvien" Role="sinhvien" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sinhvien">
+              <PropertyRef Name="id_sv" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_sv" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_survey">
+          <End Type="dbSurveyModel.survey" Role="survey" Multiplicity="1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="survey">
+              <PropertyRef Name="surveyID" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="surveyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_answer_response_users">
+          <End Type="dbSurveyModel.users" Role="users" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.answer_response" Role="answer_response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_users" />
+            </Principal>
+            <Dependent Role="answer_response">
+              <PropertyRef Name="id_users" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_ChucVu">
+          <End Type="dbSurveyModel.ChucVu" Role="ChucVu" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.CanBoVienChuc" Role="CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChucVu">
+              <PropertyRef Name="id_chucvu" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_chucvu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_ctdt">
+          <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.CanBoVienChuc" Role="CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_chuongtrinhdaotao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_DonVi">
+          <End Type="dbSurveyModel.DonVi" Role="DonVi" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.CanBoVienChuc" Role="CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonVi">
+              <PropertyRef Name="id_donvi" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_donvi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CanBoVienChuc_NamHoc">
+          <End Type="dbSurveyModel.NamHoc" Role="NamHoc" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.CanBoVienChuc" Role="CanBoVienChuc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NamHoc">
+              <PropertyRef Name="id_namhoc" />
+            </Principal>
+            <Dependent Role="CanBoVienChuc">
+              <PropertyRef Name="id_namhoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ctdt_hedaotao">
+          <End Type="dbSurveyModel.hedaotao" Role="hedaotao" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hedaotao">
+              <PropertyRef Name="id_hedaotao" />
+            </Principal>
+            <Dependent Role="ctdt">
+              <PropertyRef Name="id_hdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ctdt_khoa">
+          <End Type="dbSurveyModel.khoa" Role="khoa" Multiplicity="1" />
+          <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="khoa">
+              <PropertyRef Name="id_khoa" />
+            </Principal>
+            <Dependent Role="ctdt">
+              <PropertyRef Name="id_khoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_lop_ctdt">
+          <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="1" />
+          <End Type="dbSurveyModel.lop" Role="lop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="lop">
+              <PropertyRef Name="id_ctdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_ctdt">
+          <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.users" Role="users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ctdt">
+              <PropertyRef Name="id_ctdt" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_ctdt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_DonVi">
+          <End Type="dbSurveyModel.DonVi" Role="DonVi" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.users" Role="users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonVi">
+              <PropertyRef Name="id_donvi" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_donvi" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mon_hoc_group_mon_hoc">
+          <End Type="dbSurveyModel.group_mon_hoc" Role="group_mon_hoc" Multiplicity="1" />
+          <End Type="dbSurveyModel.mon_hoc" Role="mon_hoc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group_mon_hoc">
+              <PropertyRef Name="id_group_mh" />
+            </Principal>
+            <Dependent Role="mon_hoc">
+              <PropertyRef Name="id_group_mh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_hedaotao">
+          <End Type="dbSurveyModel.hedaotao" Role="hedaotao" Multiplicity="1" />
+          <End Type="dbSurveyModel.survey" Role="survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hedaotao">
+              <PropertyRef Name="id_hedaotao" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="id_hedaotao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mon_hoc_hoc_phan">
+          <End Type="dbSurveyModel.hoc_phan" Role="hoc_phan" Multiplicity="1" />
+          <End Type="dbSurveyModel.mon_hoc" Role="mon_hoc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hoc_phan">
+              <PropertyRef Name="id_hoc_phan" />
+            </Principal>
+            <Dependent Role="mon_hoc">
+              <PropertyRef Name="id_hoc_phan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_LoaiKhaoSat">
+          <End Type="dbSurveyModel.LoaiKhaoSat" Role="LoaiKhaoSat" Multiplicity="1" />
+          <End Type="dbSurveyModel.survey" Role="survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoaiKhaoSat">
+              <PropertyRef Name="id_loaikhaosat" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="id_loaikhaosat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sinhvien_lop">
+          <End Type="dbSurveyModel.lop" Role="lop" Multiplicity="1" />
+          <End Type="dbSurveyModel.sinhvien" Role="sinhvien" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lop">
+              <PropertyRef Name="id_lop" />
+            </Principal>
+            <Dependent Role="sinhvien">
+              <PropertyRef Name="id_lop" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_NamHoc">
+          <End Type="dbSurveyModel.NamHoc" Role="NamHoc" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.survey" Role="survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NamHoc">
+              <PropertyRef Name="id_namhoc" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="id_namhoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_survey_users">
+          <End Type="dbSurveyModel.users" Role="users" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.survey" Role="survey" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_users" />
+            </Principal>
+            <Dependent Role="survey">
+              <PropertyRef Name="creator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_typeusers">
+          <End Type="dbSurveyModel.typeusers" Role="typeusers" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.users" Role="users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="typeusers">
+              <PropertyRef Name="id_typeusers" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_typeusers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbSurveyModelStoreContainer" CdmEntityContainer="dbSurveyEntities">
+          <EntitySetMapping Name="answer_response">
+            <EntityTypeMapping TypeName="dbSurveyModel.answer_response">
+              <MappingFragment StoreEntitySet="answer_response">
+                <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="json_answer" ColumnName="json_answer" />
+                <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
+                <ScalarProperty Name="id_sv" ColumnName="id_sv" />
+                <ScalarProperty Name="id_mh" ColumnName="id_mh" />
+                <ScalarProperty Name="id_users" ColumnName="id_users" />
+                <ScalarProperty Name="id_hk" ColumnName="id_hk" />
+                <ScalarProperty Name="id_CBVC" ColumnName="id_CBVC" />
+                <ScalarProperty Name="id_donvi" ColumnName="id_donvi" />
+                <ScalarProperty Name="surveyID" ColumnName="surveyID" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CanBoVienChuc">
+            <EntityTypeMapping TypeName="dbSurveyModel.CanBoVienChuc">
+              <MappingFragment StoreEntitySet="CanBoVienChuc">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
+                <ScalarProperty Name="id_chuongtrinhdaotao" ColumnName="id_chuongtrinhdaotao" />
+                <ScalarProperty Name="id_chucvu" ColumnName="id_chucvu" />
+                <ScalarProperty Name="id_donvi" ColumnName="id_donvi" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
+                <ScalarProperty Name="TenCBVC" ColumnName="TenCBVC" />
+                <ScalarProperty Name="MaCBVC" ColumnName="MaCBVC" />
+                <ScalarProperty Name="id_CBVC" ColumnName="id_CBVC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChucVu">
+            <EntityTypeMapping TypeName="dbSurveyModel.ChucVu">
+              <MappingFragment StoreEntitySet="ChucVu">
+                <ScalarProperty Name="name_chucvu" ColumnName="name_chucvu" />
+                <ScalarProperty Name="id_chucvu" ColumnName="id_chucvu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ctdt">
+            <EntityTypeMapping TypeName="dbSurveyModel.ctdt">
+              <MappingFragment StoreEntitySet="ctdt">
+                <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
+                <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+                <ScalarProperty Name="id_hdt" ColumnName="id_hdt" />
+                <ScalarProperty Name="ten_ctdt" ColumnName="ten_ctdt" />
+                <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
+                <ScalarProperty Name="ma_ctdt" ColumnName="ma_ctdt" />
+                <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DonVi">
+            <EntityTypeMapping TypeName="dbSurveyModel.DonVi">
+              <MappingFragment StoreEntitySet="DonVi">
+                <ScalarProperty Name="name_donvi" ColumnName="name_donvi" />
+                <ScalarProperty Name="ma_donvi" ColumnName="ma_donvi" />
+                <ScalarProperty Name="id_donvi" ColumnName="id_donvi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="group_mon_hoc">
+            <EntityTypeMapping TypeName="dbSurveyModel.group_mon_hoc">
+              <MappingFragment StoreEntitySet="group_mon_hoc">
+                <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
+                <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
+                <ScalarProperty Name="ten_group_mh" ColumnName="ten_group_mh" />
+                <ScalarProperty Name="id_group_mh" ColumnName="id_group_mh" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hedaotao">
+            <EntityTypeMapping TypeName="dbSurveyModel.hedaotao">
+              <MappingFragment StoreEntitySet="hedaotao">
+                <ScalarProperty Name="ten_hedaotao" ColumnName="ten_hedaotao" />
+                <ScalarProperty Name="id_hedaotao" ColumnName="id_hedaotao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hoc_ky">
+            <EntityTypeMapping TypeName="dbSurveyModel.hoc_ky">
+              <MappingFragment StoreEntitySet="hoc_ky">
+                <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
+                <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
+                <ScalarProperty Name="ten_hk" ColumnName="ten_hk" />
+                <ScalarProperty Name="id_hk" ColumnName="id_hk" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hoc_phan">
+            <EntityTypeMapping TypeName="dbSurveyModel.hoc_phan">
+              <MappingFragment StoreEntitySet="hoc_phan">
+                <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
+                <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
+                <ScalarProperty Name="ten_hoc_phan" ColumnName="ten_hoc_phan" />
+                <ScalarProperty Name="id_hoc_phan" ColumnName="id_hoc_phan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="khoa">
+            <EntityTypeMapping TypeName="dbSurveyModel.khoa">
+              <MappingFragment StoreEntitySet="khoa">
+                <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
+                <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+                <ScalarProperty Name="ten_khoa" ColumnName="ten_khoa" />
+                <ScalarProperty Name="ma_khoa" ColumnName="ma_khoa" />
+                <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoaiKhaoSat">
+            <EntityTypeMapping TypeName="dbSurveyModel.LoaiKhaoSat">
+              <MappingFragment StoreEntitySet="LoaiKhaoSat">
+                <ScalarProperty Name="TimeUpdate" ColumnName="TimeUpdate" />
+                <ScalarProperty Name="TimeMake" ColumnName="TimeMake" />
+                <ScalarProperty Name="name_loaikhaosat" ColumnName="name_loaikhaosat" />
+                <ScalarProperty Name="id_loaikhaosat" ColumnName="id_loaikhaosat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lop">
+            <EntityTypeMapping TypeName="dbSurveyModel.lop">
+              <MappingFragment StoreEntitySet="lop">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
+                <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+                <ScalarProperty Name="ma_lop" ColumnName="ma_lop" />
+                <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
+                <ScalarProperty Name="id_lop" ColumnName="id_lop" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mon_hoc">
+            <EntityTypeMapping TypeName="dbSurveyModel.mon_hoc">
+              <MappingFragment StoreEntitySet="mon_hoc">
+                <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
+                <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
+                <ScalarProperty Name="id_group_mh" ColumnName="id_group_mh" />
+                <ScalarProperty Name="id_hoc_phan" ColumnName="id_hoc_phan" />
+                <ScalarProperty Name="ten_mon_hoc" ColumnName="ten_mon_hoc" />
+                <ScalarProperty Name="ma_mon_hoc" ColumnName="ma_mon_hoc" />
+                <ScalarProperty Name="id_mon_hoc" ColumnName="id_mon_hoc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NamHoc">
+            <EntityTypeMapping TypeName="dbSurveyModel.NamHoc">
+              <MappingFragment StoreEntitySet="NamHoc">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="ten_namhoc" ColumnName="ten_namhoc" />
+                <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sinhvien">
+            <EntityTypeMapping TypeName="dbSurveyModel.sinhvien">
+              <MappingFragment StoreEntitySet="sinhvien">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
+                <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+                <ScalarProperty Name="namtotnghiep" ColumnName="namtotnghiep" />
+                <ScalarProperty Name="phai" ColumnName="phai" />
+                <ScalarProperty Name="diachi" ColumnName="diachi" />
+                <ScalarProperty Name="sodienthoai" ColumnName="sodienthoai" />
+                <ScalarProperty Name="ngaysinh" ColumnName="ngaysinh" />
+                <ScalarProperty Name="hovaten" ColumnName="hovaten" />
+                <ScalarProperty Name="ma_sv" ColumnName="ma_sv" />
+                <ScalarProperty Name="id_lop" ColumnName="id_lop" />
+                <ScalarProperty Name="id_sv" ColumnName="id_sv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="survey">
+            <EntityTypeMapping TypeName="dbSurveyModel.survey">
+              <MappingFragment StoreEntitySet="survey">
+                <ScalarProperty Name="doi_tuong_dat_biet" ColumnName="doi_tuong_dat_biet" />
+                <ScalarProperty Name="key_class" ColumnName="key_class" />
+                <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
+                <ScalarProperty Name="creator" ColumnName="creator" />
+                <ScalarProperty Name="id_loaikhaosat" ColumnName="id_loaikhaosat" />
+                <ScalarProperty Name="surveyStatus" ColumnName="surveyStatus" />
+                <ScalarProperty Name="surveyTimeUpdate" ColumnName="surveyTimeUpdate" />
+                <ScalarProperty Name="surveyTimeMake" ColumnName="surveyTimeMake" />
+                <ScalarProperty Name="surveyTimeEnd" ColumnName="surveyTimeEnd" />
+                <ScalarProperty Name="surveyTimeStart" ColumnName="surveyTimeStart" />
+                <ScalarProperty Name="surveyDescription" ColumnName="surveyDescription" />
+                <ScalarProperty Name="surveyTitle" ColumnName="surveyTitle" />
+                <ScalarProperty Name="surveyData" ColumnName="surveyData" />
+                <ScalarProperty Name="id_hedaotao" ColumnName="id_hedaotao" />
+                <ScalarProperty Name="surveyID" ColumnName="surveyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="dbSurveyModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="typeusers">
+            <EntityTypeMapping TypeName="dbSurveyModel.typeusers">
+              <MappingFragment StoreEntitySet="typeusers">
+                <ScalarProperty Name="chuc_nang" ColumnName="chuc_nang" />
+                <ScalarProperty Name="name_typeusers" ColumnName="name_typeusers" />
+                <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="dbSurveyModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="avatarUrl" ColumnName="avatarUrl" />
+                <ScalarProperty Name="set_phan_quyen" ColumnName="set_phan_quyen" />
+                <ScalarProperty Name="id_hdt" ColumnName="id_hdt" />
+                <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
+                <ScalarProperty Name="id_donvi" ColumnName="id_donvi" />
+                <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
+                <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+                <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="id_users" ColumnName="id_users" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

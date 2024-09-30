@@ -1,0 +1,258 @@
+﻿
+@{
+    ViewBag.Title = "Thống kê kết quả khảo sát - TDMU";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Kết quả khảo sát và thống kê</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <span class="breadcrumb-item active">Kết quả khảo sát và thống kê</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <div class="col-lg-12">
+                    <div class="mb-4" style="border: 1px solid #9caab9; padding: 15px; border-radius: 8px; background-color: #fcfcfc;">
+                        <p style="font-weight:bold;font-size:25px;text-align:center;color:black">KẾT QUẢ KHẢO SÁT VÀ THỐNG KÊ</p>
+                        <div class="row items-push">
+                            <div class="col-6">
+                                <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo năm học</label>
+                                <select class="form-control" id="year">
+                                    @foreach (var item in ViewBag.Year)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo phiếu khảo sát</label>
+                                <select class="form-control" id="surveyid">
+                                    <!---->
+                                </select>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="text">
+                                    <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Xuất Excel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-t-25" id="showalldata" style="display:none">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead style="color:black; text-align:center; font-weight:bold">
+                            <tr>
+                                <th rowspan="2">STT</th>
+                                <th rowspan="2">Nội dung</th>
+                                <th rowspan="2">Tổng số phiếu</th>
+                                <th colspan="5">Tần số</th>
+                                <th colspan="5">Tỷ lệ phần trăm</th>
+                                <th rowspan="2">Điểm trung bình</th>
+                            </tr>
+                            <tr>
+                                <th>Hoàn toàn không đồng ý</th>
+                                <th>Không đồng ý</th>
+                                <th>Bình thường</th>
+                                <th>Đồng ý</th>
+                                <th>Hoàn toàn đồng ý</th>
+                                <th>Hoàn toàn không đồng ý</th>
+                                <th>Không đồng ý</th>
+                                <th>Bình thường</th>
+                                <th>Đồng ý</th>
+                                <th>Hoàn toàn đồng ý</th>
+                            </tr>
+                        </thead>
+                        <tbody id="showdata">
+                        </tbody>
+                        <tfoot id="showfoot">
+                            <tr>
+                                <th colspan="2">Tổng</th>
+                                <th id="totalResponses"></th>
+                                <th id="totalStronglyDisagree"></th>
+                                <th id="totalDisagree"></th>
+                                <th id="totalNeutral"></th>
+                                <th id="totalAgree"></th>
+                                <th id="totalStronglyAgree"></th>
+                                <th id="percentageStronglyDisagree"></th>
+                                <th id="percentageDisagree"></th>
+                                <th id="percentageNeutral"></th>
+                                <th id="percentageAgree"></th>
+                                <th id="percentageStronglyAgree"></th>
+                                <th id="averageScore"></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scriptsAdmin {
+    <script>
+        var initializing = false;
+        $("#surveyid,#year").select2();
+        $(document).ready(function () {
+            var defaultYearId = $("#year").val();
+            LoadSurveys(defaultYearId);
+
+            $("#year").change(function () {
+                var selectedYearId = $(this).val();
+                LoadSurveys(selectedYearId);
+            });
+        });
+
+        $(document).on("change", "#surveyid", function () {
+            if (!initializing) {
+                var id = $(this).val();
+                loadData(id);
+            }
+        });
+
+        function LoadSurveys(yearId) {
+            $.ajax({
+                url: "/Admin/ThongKeKhaoSat/LoadPKSByYear",
+                type: "GET",
+                data: { id: yearId },
+                success: function (res) {
+                    $("#surveyid").empty();
+                    if (res.success) {
+                        var items = res.data;
+                        if (items.length === 0) {
+                            var html = '<option value="">Không có dữ liệu phiếu khảo sát cho năm học này</option>';
+                            $("#surveyid").append(html);
+                            $("#surveyid").val('').trigger('change');
+                        } else {
+                            items.forEach(function (Chil) {
+                                var html = `<option value="${Chil.IDSurvey}">${Chil.NameSurvey}</option>`;
+                                $("#surveyid").append(html);
+                            });
+                            if (!initializing) {
+                                $("#surveyid").val(items[0].IDSurvey).trigger('change');
+                            } else {
+                                $("#surveyid").val(items[0].IDSurvey);
+                            }
+                        }
+                    } else {
+                        var html = '<option value="">Error loading surveys</option>';
+                        $("#surveyid").append(html);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading surveys by year:", error);
+                    $("#surveyid").empty().append('<option value="">Error loading surveys</option>');
+                }
+            });
+        }
+        $(window).on('load', function () {
+            initializing = false;
+        });
+        function loadData(id) {
+            $.ajax({
+                url: '/Admin/ThongKeKetQuaKhaoSat/Loadthongketanxuat',
+                type: 'GET',
+                data: { surveyid: id },
+                success: function (data) {
+                    var tbody = $('#showdata');
+                    tbody.empty();
+
+                    if (data.length > 0) {
+                        var totalResponses = 0;
+                        var totalStronglyDisagree = 0;
+                        var totalDisagree = 0;
+                        var totalNeutral = 0;
+                        var totalAgree = 0;
+                        var totalStronglyAgree = 0;
+                        var totalScore = 0;
+
+                        data.forEach(function (item, index) {
+                            var row = $('<tr>');
+                            row.append($('<td>').text(index + 1));
+                            row.append($('<td>').text(item.Question));
+                            row.append($('<td>').text(item.TotalResponses));
+
+                            totalResponses += item.TotalResponses;
+
+                            var frequencies = item.Frequencies;
+                            var percentages = item.Percentages;
+
+                            var stronglyDisagree = frequencies["Hoàn toàn không đồng ý"] || 0;
+                            var disagree = frequencies["Không đồng ý"] || 0;
+                            var neutral = frequencies["Bình thường"] || 0;
+                            var agree = frequencies["Đồng ý"] || 0;
+                            var stronglyAgree = frequencies["Hoàn toàn đồng ý"] || 0;
+
+                            totalStronglyDisagree += stronglyDisagree;
+                            totalDisagree += disagree;
+                            totalNeutral += neutral;
+                            totalAgree += agree;
+                            totalStronglyAgree += stronglyAgree;
+
+                            row.append($('<td>').text(stronglyDisagree));
+                            row.append($('<td>').text(disagree));
+                            row.append($('<td>').text(neutral));
+                            row.append($('<td>').text(agree));
+                            row.append($('<td>').text(stronglyAgree));
+
+                            var stronglyDisagreePercentage = percentages["Hoàn toàn không đồng ý"] ? percentages["Hoàn toàn không đồng ý"].toFixed(2) + "%" : "0%";
+                            var disagreePercentage = percentages["Không đồng ý"] ? percentages["Không đồng ý"].toFixed(2) + "%" : "0%";
+                            var neutralPercentage = percentages["Bình thường"] ? percentages["Bình thường"].toFixed(2) + "%" : "0%";
+                            var agreePercentage = percentages["Đồng ý"] ? percentages["Đồng ý"].toFixed(2) + "%" : "0%";
+                            var stronglyAgreePercentage = percentages["Hoàn toàn đồng ý"] ? percentages["Hoàn toàn đồng ý"].toFixed(2) + "%" : "0%";
+
+                            row.append($('<td>').text(stronglyDisagreePercentage));
+                            row.append($('<td>').text(disagreePercentage));
+                            row.append($('<td>').text(neutralPercentage));
+                            row.append($('<td>').text(agreePercentage));
+                            row.append($('<td>').text(stronglyAgreePercentage));
+
+                            var averageScore = item.AverageScore;
+                            totalScore += averageScore * item.TotalResponses;
+
+                            row.append($('<td>').text(averageScore.toFixed(2)));
+                            tbody.append(row);
+                        });
+
+                        var averageScore = totalScore / totalResponses;
+
+                        $('#totalResponses').text(totalResponses);
+                        $('#totalStronglyDisagree').text(totalStronglyDisagree);
+                        $('#totalDisagree').text(totalDisagree);
+                        $('#totalNeutral').text(totalNeutral);
+                        $('#totalAgree').text(totalAgree);
+                        $('#totalStronglyAgree').text(totalStronglyAgree);
+
+                        $('#percentageStronglyDisagree').text(((totalStronglyDisagree / totalResponses) * 100).toFixed(2) + "%");
+                        $('#percentageDisagree').text(((totalDisagree / totalResponses) * 100).toFixed(2) + "%");
+                        $('#percentageNeutral').text(((totalNeutral / totalResponses) * 100).toFixed(2) + "%");
+                        $('#percentageAgree').text(((totalAgree / totalResponses) * 100).toFixed(2) + "%");
+                        $('#percentageStronglyAgree').text(((totalStronglyAgree / totalResponses) * 100).toFixed(2) + "%");
+                        $('#averageScore').text(averageScore.toFixed(2));
+                        $("#showalldata").show();
+                        $("#showfoot").show();
+                    }
+                    else {
+                        $("#showalldata").show();
+                        var errorRow = '<tr><td colspan="14" class="text-center">Không có dữ liệu</td></tr>';
+                        tbody.append(errorRow);
+                        $("#showfoot").hide();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("An error occurred: " + status + " " + error);
+                }
+            });
+        }
+    </script>
+}
+

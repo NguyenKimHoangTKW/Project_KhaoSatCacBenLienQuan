@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Khảo sát lấy ý kiến các bên liên quan - TDMU</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="shortcut icon" href="https://tdmu.edu.vn/hinh/Icon.png">
+    <link rel="stylesheet" href="~/style/assets/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/Style/assets/css/animate.css">
+    <link rel="stylesheet" href="~/Style/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/Style/assets/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/Style/assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/Style/assets/css/aos.css">
+    <link rel="stylesheet" href="~/Style/assets/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/Style/assets/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/Style/assets/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="~/Style/assets/css/flaticon.css">
+    <link rel="stylesheet" href="~/Style/assets/css/icomoon.css">
+    <link rel="stylesheet" href="~/Style/assets/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <div id="nav-placeholder">
+        @Html.Partial("_NavLayout")
+    </div>
+    <!-- END nav -->
+
+    <div class="hero-wrap">
+        <div class="overlay"></div>
+    </div>
+
+
+    @RenderBody()
+
+    @Html.Partial("_FooterLayout")
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+        </svg>
+    </div>
+    @Scripts.Render("~/script/client/js")
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/Scripts/login-with-google.js"></script>
+    @Scripts.Render("~/bundles/signalr")
+    <script src="~/signalr/hubs"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

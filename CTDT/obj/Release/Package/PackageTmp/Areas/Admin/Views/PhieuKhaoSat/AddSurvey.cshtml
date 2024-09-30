@@ -1,0 +1,268 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tạo mới Form Phiếu khảo sát</title>
+    <link rel="shortcut icon" href="https://tdmu.edu.vn/hinh/Icon.png">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: auto;
+            max-width: 800px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+
+        .form-section {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+            .form-section h2 {
+                color: #495057;
+                margin-bottom: 15px;
+            }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        input[type="text"],
+        select {
+            width: calc(100% - 16px);
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input.title-input {
+            font-size: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            width: 700px;
+        }
+
+        input.element-title-input {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        .delete-button,
+        .move-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            position: relative;
+            top: -2px;
+            transition: color 0.3s ease;
+        }
+
+        .delete-button {
+            color: red;
+        }
+
+            .delete-button:hover {
+                color: darkred;
+            }
+
+        .move-button {
+            color: blue;
+        }
+
+            .move-button:hover {
+                color: #007bff;
+            }
+
+        pre {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 4px;
+            overflow: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>PHIẾU KHẢO SÁT Ý KIẾN CỰU NGƯỜI HỌC</h1>
+        <div class="form-section">
+            <h2 style="color:red;">{{ json.titles }}</h2>
+            <label>Tiêu đề chính:</label>
+            <input v-model="json.titles" placeholder="Tiêu đề chính" class="title-input" />
+        </div>
+        <div class="form-section">
+            <label>Mô tả:</label>
+            <h2>{{ json.description }}</h2>
+            <input v-model="json.description" placeholder="Mô tả" class="title-input" />
+        </div>
+        <button v-on:click="addPage">Thêm Trang</button>
+        <div v-for="(page, pageIndex) in json.pages" :key="pageIndex" class="form-section">
+            <h2>{{ page.title }}</h2>
+            <input v-model="page.title" placeholder="Tiêu đề trang" class="title-input" />
+            <span class="delete-button" v-on:click="removePage(pageIndex)">&#10006;</span>
+            <button class="move-button" v-if="pageIndex > 0" v-on:click="movePage(pageIndex, 'up')">↑</button>
+            <button class="move-button" v-if="pageIndex < json.pages.length - 1" v-on:click="movePage(pageIndex, 'down')">↓</button>
+            <button v-on:click="addElement(pageIndex)">Thêm phần tử</button>
+            <div v-for="(element, elementIndex) in page.elements" :key="elementIndex" class="form-section">
+                <h2>{{ element.title }}</h2>
+                <input v-model="element.title" placeholder="Tiêu đề phần tử" class="element-title-input" />
+                <select v-model="element.type" v-on:change="updateChoiceType(pageIndex, elementIndex)">
+                    <option value="text">Dạng chữ</option>
+                    <option value="number">Dạng số</option>
+                    <option value="radiogroup">Dạng Radio</option>
+                    <option value="checkbox">Dạng Checkbox</option>
+                    <option value="comment">Dạng ô điền lớn</option>
+                    <option value="select">Dạng Select</option>
+                </select>
+                <label><input type="checkbox" v-model="element.isRequired" /> Bắt buộc</label>
+                <div v-if="element.type === 'radiogroup'">
+                    <label><input type="checkbox" v-model="element.showOtherItem" v-on:change="toggleOtherOption(pageIndex, elementIndex)" /> Khác</label>
+                    <input v-if="element.showOtherItem" v-model="element.otherText" placeholder="Khác" class="element-title-input" />
+                </div>
+                <span class="delete-button" v-on:click="removeElement(pageIndex, elementIndex)">&#10006;</span>
+                <button class="move-button" v-if="elementIndex > 0" v-on:click="moveElement(pageIndex, elementIndex, 'up')">↑</button>
+                <button class="move-button" v-if="elementIndex < page.elements.length - 1" v-on:click="moveElement(pageIndex, elementIndex, 'down')">↓</button>
+                <button v-on:click="addChoice(pageIndex, elementIndex)" v-if="['radiogroup', 'checkbox', 'select'].includes(element.type)">Thêm lựa chọn</button>
+                <div v-if="['radiogroup', 'checkbox', 'select'].includes(element.type)">
+                    <div v-for="(choice, choiceIndex) in element.choices" :key="choiceIndex" class="form-section">
+                        <input v-model="choice.text" placeholder="Lựa chọn" />
+                        <span class="delete-button" v-on:click="removeChoice(pageIndex, elementIndex, choiceIndex)">&#10006;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <pre>{{ json }}</pre>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    json: {
+                        titles: '',
+                        description: '',
+                        pages: []
+                    },
+                    elementCount: 1,
+                    choiceCount: 1
+                }
+            },
+            methods: {
+                increaseId() {
+                    let maxId = 0;
+                    this.json.pages.forEach((page) => {
+                        page.elements.forEach((element) => {
+                            const number = parseInt(element.name.match(/\d+$/)[0]);
+                            if (!isNaN(number) && number > maxId) {
+                                maxId = number;
+                            }
+                        });
+                    });
+                    return maxId + 1;
+                },
+                addPage() {
+                    this.json.pages.push({
+                        title: '',
+                        elements: []
+                    });
+                },
+                removePage(pageIndex) {
+                    this.json.pages.splice(pageIndex, 1);
+                },
+                movePage(pageIndex, direction) {
+                    const page = this.json.pages.splice(pageIndex, 1)[0];
+                    if (direction === 'up') {
+                        this.json.pages.splice(pageIndex - 1, 0, page);
+                    } else if (direction === 'down') {
+                        this.json.pages.splice(pageIndex + 1, 0, page);
+                    }
+                },
+                addElement(pageIndex) {
+                    let elementName = `question${this.increaseId()}`;
+                    this.json.pages[pageIndex].elements.push({
+                        type: 'text',
+                        name: elementName,
+                        title: '',
+                        isRequired: false,
+                        choices: [],
+                        showOtherItem: false,
+                        otherText: ''
+                    });
+                },
+                removeElement(pageIndex, elementIndex) {
+                    this.json.pages[pageIndex].elements.splice(elementIndex, 1);
+                },
+                addChoice(pageIndex, elementIndex) {
+                    let choiceName = `${this.json.pages[pageIndex].elements[elementIndex].name}_${this.choiceCount}`;
+                    this.json.pages[pageIndex].elements[elementIndex].choices.push({
+                        name: choiceName,
+                        text: ''
+                    });
+                    this.choiceCount++;
+                },
+                removeChoice(pageIndex, elementIndex, choiceIndex) {
+                    this.json.pages[pageIndex].elements[elementIndex].choices.splice(choiceIndex, 1);
+                },
+                updateChoiceType(pageIndex, elementIndex) {
+                    this.$set(this.json.pages[pageIndex].elements[elementIndex], 'choices', []);
+                },
+                moveElement(pageIndex, elementIndex, direction) {
+                    const element = this.json.pages[pageIndex].elements.splice(elementIndex, 1)[0];
+                    if (direction === 'up') {
+                        this.json.pages[pageIndex].elements.splice(elementIndex - 1, 0, element);
+                    } else if (direction === 'down') {
+                        this.json.pages[pageIndex].elements.splice(elementIndex + 1, 0, element);
+                    }
+                },
+                toggleOtherOption(pageIndex, elementIndex) {
+                    this.json.pages[pageIndex].elements[elementIndex].showOtherItem = !this.json.pages[pageIndex].elements[elementIndex].showOtherItem;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

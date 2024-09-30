@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4bde84ba2e194664bf55980208618204" Name="Diagram1">
+        <EntityTypeShape EntityType="dbSurveyModel.answer_response" Width="1.5" PointX="8.25" PointY="7" />
+        <EntityTypeShape EntityType="dbSurveyModel.CanBoVienChuc" Width="1.5" PointX="6" PointY="7.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.ChucVu" Width="1.5" PointX="3.75" PointY="13.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.ctdt" Width="1.5" PointX="3.75" PointY="17.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.DonVi" Width="1.5" PointX="0.75" PointY="8.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.hedaotao" Width="1.5" PointX="1.5" PointY="19.5" />
+        <EntityTypeShape EntityType="dbSurveyModel.khoa" Width="1.5" PointX="1.5" PointY="16.5" />
+        <EntityTypeShape EntityType="dbSurveyModel.LoaiKhaoSat" Width="1.5" PointX="3" PointY="3.875" />
+        <EntityTypeShape EntityType="dbSurveyModel.lop" Width="1.5" PointX="3.75" PointY="26.375" />
+        <EntityTypeShape EntityType="dbSurveyModel.NamHoc" Width="1.5" PointX="3.75" PointY="22" />
+        <EntityTypeShape EntityType="dbSurveyModel.sinhvien" Width="1.5" PointX="6" PointY="25.75" />
+        <EntityTypeShape EntityType="dbSurveyModel.survey" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="dbSurveyModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="dbSurveyModel.typeusers" Width="1.5" PointX="0.75" PointY="5.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.users" Width="1.5" PointX="3" PointY="6.75" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_CanBoVienChuc" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_DonVi" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_NamHoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_sinhvien" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_survey" />
+        <AssociationConnector Association="dbSurveyModel.FK_answer_response_users" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_ChucVu" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_DonVi" />
+        <AssociationConnector Association="dbSurveyModel.FK_CanBoVienChuc_NamHoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_ctdt_hedaotao" />
+        <AssociationConnector Association="dbSurveyModel.FK_ctdt_khoa" />
+        <AssociationConnector Association="dbSurveyModel.FK_lop_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_users_ctdt" />
+        <AssociationConnector Association="dbSurveyModel.FK_users_DonVi" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_hedaotao" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_LoaiKhaoSat" />
+        <AssociationConnector Association="dbSurveyModel.FK_sinhvien_lop" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_NamHoc" />
+        <AssociationConnector Association="dbSurveyModel.FK_survey_users" />
+        <AssociationConnector Association="dbSurveyModel.FK_users_typeusers" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,55 @@
+﻿@using CTDT.Helper
+
+@{
+    var user = SessionHelper.GetUser();
+}
+
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <img src="~/Style/assets/Logo_TDMU_2024_nguyen_ban.svg" style="width:130px" />
+        <div class="scrolling-text-wrapper">
+            <div class="scrolling-text text-uppercase">
+                Phần mềm khảo sát lấy ý kiến các bên liên quan
+            </div>
+        </div>
+        @if (!SessionHelper.IsUserLoggedIn())
+        {
+            <span></span>
+        }
+        else
+        {
+            <span class="d-block d-lg-none" style="padding-top: 15px;font-size:17px">Xin chào : @user.firstName @user.lastName</span>
+        }
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Chức năng
+        </button>
+
+        @if (!SessionHelper.IsUserLoggedIn())
+        {
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="javascript:void(0)" onclick="window.location.href='/trang-chu'" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="https://tdmu.edu.vn/gioi-thieu" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="https://tdmu.edu.vn/lien-he" class="nav-link">Liên hệ</a></li>
+                    <li class="nav-item cta">
+                        <a href="javascript:void(0)" onclick="signIn()" class="nav-link"><span>Đăng nhập</span></a>
+                    </li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="javascript:void(0)" onclick="window.location.href='/'" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="https://tdmu.edu.vn/gioi-thieu" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="https://tdmu.edu.vn/lien-he" class="nav-link">Liên hệ</a></li>
+                    <li class="nav-item"><a href="/bo-phieu-da-khao-sat" class="nav-link">Biểu mẫu đã khảo sát</a></li>
+                    <li class="nav-item d-none d-lg-block"><a href="#" class="nav-link">Xin chào : @user.firstName @user.lastName</a></li>
+                    <li class="nav-item cta"><a href="javascript:void(0)" onclick="logout()" class="nav-link"><span>Đăng xuất</span></a></li>
+                </ul>
+            </div>
+        }
+    </div>
+</nav>
