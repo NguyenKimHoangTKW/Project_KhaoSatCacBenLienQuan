@@ -33,7 +33,7 @@ async function LoadChartFullSurvey() {
             let participationRateMap = {};
             let satisfactionLevelMap = {};
 
-            res.data.TitleSurvey.forEach(function (chil) {
+            res.data.TitleSurvey.forEach(async function (chil) {
                 if (chil.HocKy) {
                     let formatName = chil.NameSurvey.split('.')[0] + " - " + chil.HocKy;
                     titleSurveyMap[chil.IDSurvey] = formatName;
@@ -44,11 +44,11 @@ async function LoadChartFullSurvey() {
                 }
             });
 
-            res.data.SurveyParticipationRate.forEach(function (chil) {
+            res.data.SurveyParticipationRate.forEach(async function (chil) {
                 participationRateMap[chil.IDPhieu] = chil.TyLeDaTraLoi;
             });
 
-            res.data.SatisfactionLevel.forEach(function (survey) {
+            res.data.SatisfactionLevel.forEach(async function (survey) {
                 let sum = 0;
                 let totalQuestions = 0;
                 survey.forEach(function (question) {
@@ -281,7 +281,7 @@ async function LoadChartSurveyThongTu01() {
             let participationRateMap = {};
             let satisfactionLevelMap = {};
 
-            res.data.TitleSurvey.forEach(function (chil) {
+            res.data.TitleSurvey.forEach(async function (chil) {
                 if (chil.HocKy) {
                     let formatName = chil.NameSurvey.split('.')[0] + " - " + chil.HocKy;
                     titleSurveyMap[chil.IDSurvey] = formatName;
@@ -292,11 +292,11 @@ async function LoadChartSurveyThongTu01() {
                 }
             });
 
-            res.data.SurveyParticipationRate.forEach(function (chil) {
+            res.data.SurveyParticipationRate.forEach(async function (chil) {
                 participationRateMap[chil.IDPhieu] = chil.TyLeDaTraLoi;
             });
 
-            res.data.SatisfactionLevel.forEach(function (survey) {
+            res.data.SatisfactionLevel.forEach(async function (survey) {
                 let sum = 0;
                 let totalQuestions = 0;
                 survey.forEach(function (question) {

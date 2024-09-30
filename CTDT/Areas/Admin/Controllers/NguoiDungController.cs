@@ -50,18 +50,10 @@ namespace CTDT.Areas.Admin.Controllers
             return Json(new { data = item, status = "Load dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult LoadUser(int pageNumber = 1, int pageSize = 10, int ctdt = 0, int donvi = 0 ,int trangthaiuser = 0 ,string keyword = "")
+        public ActionResult load_data(int ctdt = 0, int donvi = 0 ,int trangthaiuser = 0)
         {
-            try
-            {
+           
                 IQueryable<users> query = db.users;
-                if (!string.IsNullOrEmpty(keyword))
-                {
-                    query = query.Where(l => l.email.ToLower().Contains(keyword.ToLower())
-                                          || l.lastName.ToLower().Contains(keyword.ToLower())
-                                          || l.firstName.ToLower().Contains(keyword.ToLower()));
-                }
                 if(ctdt != 0)
                 {
                     query = query.Where(u => u.id_ctdt == ctdt);
@@ -75,31 +67,19 @@ namespace CTDT.Areas.Admin.Controllers
                     query = query.Where(u => u.id_typeusers == trangthaiuser);
                 }
                 var Listuser = query
-                .OrderBy(l => l.id_users)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
                 .Select(x => new
                 {
-                    MaUser = x.id_users,
-                    TenUser = x.firstName + " " + x.lastName,
-                    EmailUser = x.email,
-                    MaChucVu = x.id_typeusers,
-                    ChucVu = x.typeusers.name_typeusers,
-                    NgayCapNhat = x.ngaycapnhat,
-                    NgayTao = x.ngaytao,
-                    DonVi = x.DonVi.name_donvi,
-                    TypeCTDT = x.ctdt.ten_ctdt
+                    id_user = x.id_users,
+                    ten_user = x.firstName + " " + x.lastName,
+                    email = x.email,
+                    quyen_han = x.typeusers.name_typeusers,
+                    ngay_cap_nhat = x.ngaycapnhat,
+                    ngay_tao = x.ngaytao,
+                    don_vi = x.DonVi != null ? x.DonVi.name_donvi : "None",
+                    ctdt = x.ctdt != null ? x.ctdt.ten_ctdt : "None"
                 }).ToList();
-
-                var totalRecords = query.Count();
-                var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
-
-                return Json(new { data = Listuser, totalPages = totalPages, status = "Load dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
-            }
-            catch
-            {
-                return Json(new { status = "Load dữ liệu thất bại" }, JsonRequestBehavior.AllowGet);
-            }
+                return Json(new { data = Listuser}, JsonRequestBehavior.AllowGet);
+           
         }
         [HttpPost]
         public ActionResult Add(users us)
@@ -136,7 +116,6 @@ namespace CTDT.Areas.Admin.Controllers
 
             return Json(new { status = status, success = success }, JsonRequestBehavior.AllowGet);
         }
-        [HttpGet]
         public ActionResult GetIdHdt(int id_ctdt)
         {
             var idHdt = db.ctdt
@@ -153,8 +132,6 @@ namespace CTDT.Areas.Admin.Controllers
                 return Json(new { success = false, id_hdt = (int?)null }, JsonRequestBehavior.AllowGet);
             }
         }
-
-
         [HttpPost]
         public ActionResult Edit(users us)
         {

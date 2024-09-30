@@ -37,7 +37,7 @@ async function LoadChartSurvey() {
             return idA.localeCompare(idB, undefined, { numeric: true });
         });
 
-        res.data.AllSurvey.forEach(function (survey) {
+        res.data.AllSurvey.forEach(async function (survey) {
             const MaPhieu = survey.NameSurvey.split(".")[0].toUpperCase();
             const TieuDePhieu = survey.NameSurvey.split(".")[1];
             const surveyData = res.data.ChartSurvey.find(chil => chil.IDPhieu === survey.IDSurvey);
@@ -126,9 +126,15 @@ async function load_nguoi_hoc(id) {
 
     if (res && res.data.length > 0) {
         var body = $("#load_data");
+        var label = $("#exampleModalLabel");
         var html = "";
+        if ($.fn.DataTable.isDataTable('#load_data')) {
+            $('#load_data').DataTable().clear().destroy();
+        }
+
         body.empty();
         res.data.forEach(function (items, index) {
+            label.html(items.ten_phieu);
             if (items.is_nguoi_hoc) {
                 html += "<thead>";
                 html += "<tr>";
@@ -151,11 +157,28 @@ async function load_nguoi_hoc(id) {
                 });
                 html += "</tbody>";
             }
-
         });
 
         body.html(html);
+
+        $('#load_data').DataTable({
+            pageLength: 10, 
+            lengthMenu: [5, 10, 25, 50, 100], 
+            ordering: true, 
+            searching: true,
+            language: {
+                paginate: {
+                    next: "Next",
+                    previous: "Previous"
+                },
+                search: "Search",
+                lengthMenu: "Show _MENU_ entries"
+            },
+            dom: "Bfrtip",
+            buttons: ['csv', 'excel', 'pdf', 'print']
+        });
     } else {
         $("#load_data").html("<tr><td colspan='5'>No data available</td></tr>");
     }
 }
+

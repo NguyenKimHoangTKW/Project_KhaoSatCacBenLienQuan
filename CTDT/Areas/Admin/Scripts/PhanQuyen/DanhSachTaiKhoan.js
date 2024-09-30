@@ -1,7 +1,5 @@
-﻿$(".select2").select2();
-var currentPage = 1;
-var totalPages = 0;
-$(document).ready(function () {
+﻿$(document).ready(function () {
+    load_data()
     $("#btnSave").click(function () {
         AddUser();
     });
@@ -11,12 +9,9 @@ $(document).ready(function () {
     });
 
     $("#btnFilter").click(function () {
-        var Search = $("#searchInput").val().toLowerCase();
-        var filterctdt = $("#FiterCTDT").val();
-        var filtertype = $("#FilterTrangThai").val();
-        var filterdonvi = $("#FilterDonVi").val();
+        load_data()
     });
-    $(document).on("click", ".btnEdit", function () {
+    $(document).on("click", "#btnEdit", function () {
         var MaUser = $(this).data('id');
         GetByID(MaUser);
     });
@@ -25,7 +20,7 @@ $(document).ready(function () {
         EditUser();
     });
 
-    $(document).on("click", ".btnDelete", function () {
+    $(document).on("click", "#btnDel", function () {
         var id = $(this).data('id');
         var name = $(this).closest("tr").find("td:eq(2)").text();
 
@@ -85,6 +80,101 @@ function toggleCTDTDropdown(chucVuId) {
         $('#' + chucVuId).closest('.form-group').find('#donviContainer').hide();
     }
 };
+
+async function load_data() {
+    var ctdt_select = $('#FiterCTDT').val();
+    var donvi_select = $('#FilterDonVi').val();
+    var trangthai_select = $('#FilterTrangThai').val();
+
+    const res = await $.ajax({
+        url: '/Admin/NguoiDung/load_data',
+        type: 'POST',
+        data: {
+            ctdt: ctdt_select,
+            donvi: donvi_select,
+            trangthaiuser: trangthai_select
+        }
+    });
+    if (res && res.data.length > 0) {
+        var body = $('#load_data_table');
+        var html = "";
+        if ($.fn.DataTable.isDataTable('#load_data_table')) {
+            $('#load_data_table').DataTable().clear().destroy();
+        }
+        body.empty();
+        html += "<thead>";
+        html += "<tr>";
+        html += "<th>Số Thứ Tự</th>";
+        html += "<th>ID người dùng</th>";
+        html += "<th>Tên người dùng</th>";
+        html += "<th>Email</th>";
+        html += "<th>Quyền hạn</th>";
+        html += "<th>Ngày tạo</th>";
+        html += "<th>Ngày cập nhật</th>";
+        html += "<th>Đơn vị</th>";
+        html += "<th>Chương trình đào tạo</th>";
+        html += "<th>Chức năng</th>";
+        html += "</tr>";
+        html += "</thead>";
+        html += "<tbody>";
+        res.data.forEach(function (items, index) {
+            html += "<tr>";
+            html += `<td>${index + 1}</td>`;
+            html += `<td>${items.id_user}</td>`;
+            html += `<td>${items.ten_user}</td>`;
+            html += `<td>${items.email}</td>`;
+            html += `<td>${items.quyen_han}</td>`;
+            html += `<td>${unixTimestampToDate(items.ngay_cap_nhat)}</td>`;
+            html += `<td>${unixTimestampToDate(items.ngay_tao)}</td>`;
+            html += `<td>${items.don_vi}</td>`;
+            html += `<td>${items.ctdt}</td>`;
+            html += `<td>`;
+            html += `<button class="btn  btn-hover btn-sm btn-rounded pull-right" data-toggle='modal' data-target='#ModalEditNguoiDung' id="btnEdit" data-id="${items.id_user}">Cấp quyền</button>`;
+            html += `<button class="btn  btn-hover btn-sm btn-rounded pull-right" id="btnDel" data-id="${items.id_user}">Xóa</button>`; 
+            html += `</td>`;
+            html += "</tr>";
+        })
+        html += "</tbody>";
+        body.html(html);
+        $('#load_data_table').DataTable({
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
+            searching: true,
+            autoWidth: false,
+            responsive: true,
+            language: {
+                paginate: {
+                    next: "Next",
+                    previous: "Previous"
+                },
+                search: "Search",
+                lengthMenu: "Show _MENU_ entries"
+            },
+            dom: "Bfrtip",
+            buttons: [
+                {
+                    extend: 'csv',
+                    title: 'Danh sách người dùng - CSV'
+                },
+                {
+                    extend: 'excel',
+                    title: 'Danh sách người dùng - Excel'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Danh sách người dùng PDF'
+                },
+                {
+                    extend: 'print',
+                    title: 'Danh sách người dùng'
+                }
+            ]
+        });
+
+    }
+
+}
 function AddUser() {
     var Email = $("#Email").val();
     var ChucVu = $('#ChucVu').val();

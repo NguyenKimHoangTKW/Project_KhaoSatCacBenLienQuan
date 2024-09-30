@@ -30,52 +30,20 @@ namespace CTDT.Areas.CTDT.Controllers
             ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(x => x.id_namhoc), "id_namhoc", "ten_namhoc");
             return View();
         }
-        [HttpGet]
-        public ActionResult LoadFullSurvey(int year = 0)
+        public ActionResult load_charts_nguoi_hoc(int year = 0)
         {
             var user = SessionHelper.GetUser();
+
             var query = db.answer_response
                 .Where(x => x.survey.id_hedaotao == user.id_hdt)
                 .GroupBy(x => x.survey.surveyID)
                 .Select(g => g.FirstOrDefault());
-            if (year != 0)
-            {
-                query = query.Where(x => x.id_namhoc == year);
-            }
-            var GetAllSurvey = query
-                .Where(x => x.survey.surveyStatus == true)
-                .Select(x => new
-                {
-                    IDSurvey = x.surveyID,
-                    NameSurvey = x.survey.surveyTitle,
-                    HocKy = x.hoc_ky != null ? x.hoc_ky.ten_hk : null
-                }).ToList();
-            return Json(new { data = GetAllSurvey, message = "Load dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
-        }
-        [HttpGet]
-        public ActionResult LoadSurveyDetail(int surveyid)
-        {
-            var GetSurvey = db.answer_response
-                .Where(x => x.surveyID == surveyid)
-                .Select(x => new
-                {
-                    IDSurvey = x.surveyID,
-                    NameSurvey = x.survey.surveyTitle,
-                    HocKy = x.hoc_ky != null ? x.hoc_ky.ten_hk : null
-                }).FirstOrDefault();
-            return Json(new { data = GetSurvey }, JsonRequestBehavior.AllowGet);
-        }
 
-        public ActionResult load_charts_nguoi_hoc(int year = 0)
-        {
-            var user = SessionHelper.GetUser();
-            var query = db.answer_response.Where(x => x.survey.id_hedaotao == user.id_hdt)
-                .GroupBy(x => x.survey.surveyID)
-                .Select(g => g.FirstOrDefault());
             if (year != 0)
             {
                 query = query.Where(x => x.id_namhoc == year);
             }
+
             var GetAllSurvey = query
                 .Select(x => new
                 {
@@ -83,10 +51,13 @@ namespace CTDT.Areas.CTDT.Controllers
                     NameSurvey = x.survey.surveyTitle,
                     HocKy = x.hoc_ky != null ? x.hoc_ky.ten_hk : null
                 }).ToList();
+
             var ChartSurvey = new List<dynamic>();
+
             foreach (var survey in GetAllSurvey)
             {
                 var idphieu = db.survey.Where(x => x.surveyID == survey.IDSurvey).FirstOrDefault();
+
                 if (!string.IsNullOrEmpty(idphieu.key_class))
                 {
                     var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(idphieu.key_class);
@@ -100,9 +71,9 @@ namespace CTDT.Areas.CTDT.Controllers
                             aw.id_CBVC == null &&
                             aw.id_mh == null &&
                             aw.id_ctdt == user.id_ctdt &&
-                            aw.id_CBVC == null &&
                             keyClassList.Any(k => aw.survey.key_class.Contains(k)) &&
                             aw.json_answer != null);
+
                         bool isStudentBySubject = db.answer_response.Any(aw =>
                             aw.id_sv != null &&
                             aw.surveyID == survey.IDSurvey &&
@@ -110,13 +81,32 @@ namespace CTDT.Areas.CTDT.Controllers
                             aw.id_CBVC != null &&
                             aw.id_mh != null &&
                             aw.id_ctdt == user.id_ctdt &&
-                            aw.id_CBVC != null &&
                             keyClassList.Any(k => aw.survey.key_class.Contains(k)) &&
+                            aw.json_answer != null);
+
+                        bool isCTDT = db.answer_response.Any(aw =>
+                            aw.id_sv == null &&
+                            aw.surveyID == survey.IDSurvey &&
+                            aw.id_ctdt == user.id_ctdt &&
+                            aw.id_mh == null &&
+                            aw.id_users != null &&
+                            aw.id_hk == null &&
+                            aw.id_CBVC == null &&
+                            aw.json_answer != null);
+
+                        bool isCBVC = db.answer_response.Any(aw =>
+                            aw.id_sv == null &&
+                            aw.surveyID == survey.IDSurvey &&
+                            aw.id_ctdt == user.id_ctdt &&
+                            aw.id_CBVC != null &&
+                            aw.id_users != null &&
+                            aw.id_mh == null &&
+                            aw.id_hk == null &&
                             aw.json_answer != null);
                         if (isStudent)
                         {
                             var sinhvienQuery = db.sinhvien
-                             .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == user.id_ctdt);
+                                .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == user.id_ctdt);
 
                             var TotalAll = sinhvienQuery.LongCount();
                             var TotalIsKhaoSat = sinhvienQuery.LongCount(sv => db.answer_response
@@ -148,7 +138,7 @@ namespace CTDT.Areas.CTDT.Controllers
                         else if (isStudentBySubject)
                         {
                             var sinhvienQuery = db.sinhvien
-                            .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == user.id_ctdt);
+                                .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == user.id_ctdt);
 
                             var TotalAll = sinhvienQuery.LongCount();
                             var TotalIsKhaoSat = sinhvienQuery.LongCount(sv => db.answer_response
@@ -164,7 +154,7 @@ namespace CTDT.Areas.CTDT.Controllers
                                 ? Math.Round(((double)TotalIsKhaoSat / TotalAll) * 100, 2)
                                 : (double?)null;
 
-                            var DataStudent = new
+                            var DataStudentBySubject = new
                             {
                                 IDPhieu = idphieu.surveyID,
                                 TongKhaoSat = TotalAll,
@@ -174,58 +164,65 @@ namespace CTDT.Areas.CTDT.Controllers
                                 TyLeChuaTraLoi = Math.Round(100 - (percentage ?? 0), 2),
                                 isStudentBySubject = true
                             };
-                            ChartSurvey.Add(DataStudent);
+
+                            ChartSurvey.Add(DataStudentBySubject);
+                        }
+                        else if (isCTDT)
+                        {
+                            var ctdt = db.answer_response
+                                .Where(x => x.id_ctdt == user.id_ctdt &&
+                                            x.id_sv == null &&
+                                            x.id_mh == null &&
+                                            x.id_users != null &&
+                                            x.id_hk == null &&
+                                            x.id_CBVC == null)
+                                .Count();
+
+                            var DataCTDT = new
+                            {
+                                IDPhieu = idphieu.surveyID,
+                                TongKhaoSat = ctdt,
+                                TongPhieuDaTraLoi = ctdt,
+                                TongPhieuChuaTraLoi = 0,
+                                TyLeDaTraLoi = 100,
+                                TyLeChuaTraLoi = 0
+                            };
+
+                            ChartSurvey.Add(DataCTDT);
+                        }
+                        else if (isCBVC)
+                        {
+                            var cbvc = db.CanBoVienChuc
+                                .Where(x => x.id_chuongtrinhdaotao == user.id_ctdt)
+                                .ToList();
+
+                            var TotalAll = cbvc.Count();
+
+                            var DataCBVC = new
+                            {
+                                IDPhieu = idphieu.surveyID,
+                                TongKhaoSat = TotalAll,
+                                TongPhieuDaTraLoi = TotalAll,
+                                TongPhieuChuaTraLoi = 0,
+                                TyLeDaTraLoi = 100,
+                                TyLeChuaTraLoi = 0
+                            };
+
+                            ChartSurvey.Add(DataCBVC);
                         }
                     }
                 }
-                else
-                {
-                    bool isCTDT = db.answer_response.Any(aw => aw.id_sv == null && aw.surveyID == survey.IDSurvey && aw.id_ctdt == user.id_ctdt && aw.id_CBVC == null && aw.json_answer != null);
-                    bool isCBVC = db.answer_response.Any(aw => aw.id_sv == null && aw.surveyID == survey.IDSurvey && aw.id_ctdt == user.id_ctdt && aw.id_CBVC != null && aw.json_answer != null);
-                    if (isCTDT)
-                    {
-                        var ctdt = db.answer_response
-                            .Where(x => x.id_ctdt == user.id_ctdt && x.id_sv == null)
-                            .AsQueryable();
-                        var TotalAll = ctdt.Count();
-                        var DataCTDT = new
-                        {
-                            IDPhieu = idphieu.surveyID,
-                            TongKhaoSat = TotalAll,
-                            TongPhieuDaTraLoi = TotalAll,
-                            TongPhieuChuaTraLoi = 0,
-                            TyLeDaTraLoi = 100,
-                            TyLeChuaTraLoi = 0
-                        };
-                        ChartSurvey.Add(DataCTDT);
-                    }
-                    else if (isCBVC)
-                    {
-                        var cbvc = db.CanBoVienChuc
-                            .Where(x => x.id_chuongtrinhdaotao == user.id_ctdt)
-                            .AsQueryable();
-                        var TotalAll = cbvc.Count();
-
-                        var DataCBVC = new
-                        {
-                            IDPhieu = idphieu.surveyID,
-                            TongKhaoSat = TotalAll,
-                            TongPhieuDaTraLoi = TotalAll,
-                            TongPhieuChuaTraLoi = 0,
-                            TyLeDaTraLoi = 100,
-                            TyLeChuaTraLoi = 0
-                        };
-                        ChartSurvey.Add(DataCBVC);
-                    }
-                }
             }
+
             var Alldata = new
             {
                 AllSurvey = GetAllSurvey,
                 ChartSurvey = ChartSurvey,
             };
+
             return Json(new { data = Alldata }, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult load_nguoi_hoc(int surveyid)
         {
             var user = SessionHelper.GetUser();
@@ -264,10 +261,11 @@ namespace CTDT.Areas.CTDT.Controllers
                                  ho_ten = x.hovaten,
                                  ma_nguoi_hoc = x.ma_sv,
                                  lop = x.lop.ma_lop,
-                                 tinh_trang_khao_sat = db.answer_response.Any(aw => aw.id_sv == x.id_sv &&  aw.surveyID == surveyid) ? "Đã khảo sát" : "Chưa khảo sát"
+                                 tinh_trang_khao_sat = db.answer_response.Any(aw => aw.id_sv == x.id_sv && aw.surveyID == surveyid) ? "Đã khảo sát" : "Chưa khảo sát"
                              }).ToList();
                         list_data.Add(new
                         {
+                            ten_phieu = surveys.surveyTitle,
                             nguoi_hoc = sinh_vien,
                             is_nguoi_hoc = true
                         });
@@ -284,6 +282,7 @@ namespace CTDT.Areas.CTDT.Controllers
                              }).ToList();
                         list_data.Add(new
                         {
+                            ten_phieu = surveys.surveyTitle,
                             nguoi_hoc = sinh_vien,
                             is_nguoi_hoc_mon_hoc = true
                         });
@@ -319,6 +318,7 @@ namespace CTDT.Areas.CTDT.Controllers
                             }).ToList();
                         list_data.Add(new
                         {
+                            ten_phieu = surveys.surveyTitle,
                             ctdt = ctdt,
                             is_ctdt = true
                         });
@@ -336,6 +336,7 @@ namespace CTDT.Areas.CTDT.Controllers
                             }).ToList();
                         list_data.Add(new
                         {
+                            ten_phieu = surveys.surveyTitle,
                             cbvc = cbvc,
                             is_cbvc = true
                         });
