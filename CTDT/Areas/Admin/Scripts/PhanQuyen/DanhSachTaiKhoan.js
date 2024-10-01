@@ -322,7 +322,7 @@ function EditUser() {
                     showConfirmButton: false,
                     timer: 2000
                 });
-                LoadData(currentPage);
+                load_data()
             },
             error: function (response) {
                 Swal.fire({
@@ -371,7 +371,7 @@ function DelNguoiDung(id) {
                 showConfirmButton: false,
                 timer: 2000
             });
-            LoadData(currentPage);
+            load_data()
         },
         error: function (response) {
             Swal.fire({

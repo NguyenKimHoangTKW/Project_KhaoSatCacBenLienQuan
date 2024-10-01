@@ -23,7 +23,7 @@ namespace CTDT.Areas.CTDT.Controllers
             ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(x => x.id_namhoc), "id_namhoc", "ten_namhoc");
             return View();
         }
-        // ChartsTyLeThamGiaKhaoSat Full Phiếu
+        #region Thống kê toàn bộ phiếu
         public JsonResult ChartsTyLeThamGiaKhaoSat(int year = 0)
         {
             var user = SessionHelper.GetUser();
@@ -48,39 +48,52 @@ namespace CTDT.Areas.CTDT.Controllers
                 }).ToList();
             foreach (var survey in GetAllSurvey)
             {
-                bool isStudent = db.answer_response
-                    .Any(x => x.id_sv != null
-                    && x.surveyID == survey.IDSurvey
-                    && x.id_ctdt == user.id_ctdt
-                    && x.id_hk == null
-                    && x.id_CBVC == null
-                    && x.id_mh == null
-                    && x.json_answer != null);
-
-                bool isCTDT = db.answer_response
-                    .Any(aw => aw.id_sv == null
-                    && aw.surveyID == survey.IDSurvey
-                    && aw.id_CBVC == null
-                    && aw.id_hk == null
-                    && aw.id_mh == null
-                    && aw.id_users != null
-                    && aw.id_ctdt == user.id_ctdt
-                    && aw.json_answer != null);
-
-                bool isStudentBySubject = db.answer_response
-                    .Any(x => x.id_sv != null
-                    && x.surveyID == survey.IDSurvey
-                    && x.id_ctdt == user.id_ctdt
-                    && x.id_hk != null
-                    && x.id_CBVC != null
-                    && x.id_mh != null
-                    && x.json_answer != null);
                 var idphieu = db.survey.Where(x => x.surveyID == survey.IDSurvey).FirstOrDefault();
+               
                 if (!string.IsNullOrEmpty(idphieu.key_class))
                 {
                     var keyClassList = JsonConvert.DeserializeObject<List<string>>(idphieu.key_class);
                     if (keyClassList != null)
                     {
+                        bool isStudent = db.answer_response.Any(aw =>
+                            aw.id_sv != null &&
+                            aw.surveyID == survey.IDSurvey &&
+                            aw.id_hk == null &&
+                            aw.id_CBVC == null &&
+                            aw.id_mh == null &&
+                            aw.id_ctdt == user.id_ctdt &&
+                            keyClassList.Any(k => aw.survey.key_class.Contains(k)) &&
+                            aw.json_answer != null);
+
+                        bool isStudentBySubject = db.answer_response.Any(aw =>
+                            aw.id_sv != null &&
+                            aw.surveyID == survey.IDSurvey &&
+                            aw.id_hk != null &&
+                            aw.id_CBVC != null &&
+                            aw.id_mh != null &&
+                            aw.id_ctdt == user.id_ctdt &&
+                            keyClassList.Any(k => aw.survey.key_class.Contains(k)) &&
+                            aw.json_answer != null);
+
+                        bool isCTDT = db.answer_response.Any(aw =>
+                            aw.id_sv == null &&
+                            aw.surveyID == survey.IDSurvey &&
+                            aw.id_ctdt == user.id_ctdt &&
+                            aw.id_mh == null &&
+                            aw.id_users != null &&
+                            aw.id_hk == null &&
+                            aw.id_CBVC == null &&
+                            aw.json_answer != null);
+
+                        bool isCBVC = db.answer_response.Any(aw =>
+                            aw.id_sv == null &&
+                            aw.surveyID == survey.IDSurvey &&
+                            aw.id_ctdt == user.id_ctdt &&
+                            aw.id_CBVC != null &&
+                            aw.id_users != null &&
+                            aw.id_mh == null &&
+                            aw.id_hk == null &&
+                            aw.json_answer != null);
                         if (isStudent)
                         {
                             var sinhvienQuery = db.sinhvien
@@ -110,6 +123,7 @@ namespace CTDT.Areas.CTDT.Controllers
                                 isStudent = true
                             };
                             DataList.Add(DataStudent);
+                            tan_xuat_cau_hoi_by_class(MucDoHaiLong, user.id_ctdt, survey.IDSurvey,keyClassList);
                         }
                         else if (isStudentBySubject)
                         {
@@ -140,144 +154,9 @@ namespace CTDT.Areas.CTDT.Controllers
                                 isStudentBySubject = true
                             };
                             DataList.Add(DataStudent);
+                            tan_xuat_cau_hoi_by_class(MucDoHaiLong, user.id_ctdt, survey.IDSurvey, keyClassList);
                         }
-                        var Mucdohailong = db.answer_response.Where(d => keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k)) && d.id_ctdt == user.id_ctdt && d.surveyID == survey.IDSurvey).AsQueryable();
-                        var responses = Mucdohailong
-                            .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
-                            .ToList();
-
-                        var questionDataDict = new Dictionary<string, dynamic>();
-                        List<string> specificChoices = new List<string> {
-                    "Hoàn toàn không đồng ý",
-                    "Không đồng ý",
-                    "Bình thường",
-                    "Đồng ý",
-                    "Hoàn toàn đồng ý"
-                };
-
-                        foreach (var response in responses)
-                        {
-                            var surveyDataObject = JObject.Parse(response.SurveyJson);
-                            var answerDataObject = JObject.Parse(response.JsonAnswer);
-                            var surveyPages = (JArray)surveyDataObject["pages"];
-                            var answerPages = (JArray)answerDataObject["pages"];
-
-                            foreach (JObject surveyPage in surveyPages)
-                            {
-
-                                var surveyElements = (JArray)surveyPage["elements"];
-
-                                foreach (JObject surveyElement in surveyElements)
-                                {
-                                    var type = surveyElement["type"].ToString();
-                                    if (type == "radiogroup")
-                                    {
-                                        var questionName = surveyElement["name"].ToString();
-                                        var questionTitle = surveyElement["title"].ToString();
-                                        var choices = (JArray)surveyElement["choices"];
-                                        List<string> elementChoiceTexts = choices.Select(c => c["text"].ToString()).ToList();
-                                        if ((elementChoiceTexts.SequenceEqual(specificChoices)))
-                                        {
-                                            var choiceCounts = choices.ToDictionary(
-                                                c => c["name"].ToString(),
-                                                c =>
-                                                {
-                                                    dynamic choice = new ExpandoObject();
-                                                    choice.ChoiceName = c["name"].ToString();
-                                                    choice.ChoiceText = c["text"].ToString();
-                                                    choice.Count = 0;
-                                                    choice.Percentage = 0.0;
-                                                    return choice;
-                                                }
-                                            );
-
-                                            int totalResponses = 0;
-                                            foreach (JObject answerPage in answerPages)
-                                            {
-                                                var answerElements = (JArray)answerPage["elements"];
-                                                foreach (JObject answerElement in answerElements)
-                                                {
-                                                    if (answerElement["name"].ToString() == questionName)
-                                                    {
-                                                        var responseObject = answerElement["response"];
-                                                        if (responseObject != null)
-                                                        {
-                                                            string responseName = responseObject["name"]?.ToString();
-                                                            string responseText = responseObject["text"]?.ToString();
-
-                                                            if (!string.IsNullOrEmpty(responseName) && choiceCounts.ContainsKey(responseName))
-                                                            {
-                                                                choiceCounts[responseName].Count++;
-                                                                totalResponses++;
-                                                            }
-                                                            else if (!string.IsNullOrEmpty(responseText))
-                                                            {
-                                                                var matchingChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceText == responseText);
-                                                                if (matchingChoice != null)
-                                                                {
-                                                                    matchingChoice.Count++;
-                                                                    totalResponses++;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            foreach (var choice in choiceCounts.Values)
-                                            {
-                                                choice.Percentage = totalResponses > 0 ? (double)choice.Count / totalResponses * 100 : 0;
-                                            }
-
-                                            if (questionDataDict.ContainsKey(questionName))
-                                            {
-                                                var existingQuestionData = questionDataDict[questionName];
-                                                existingQuestionData.TotalResponses += totalResponses;
-
-                                                foreach (var existingChoice in existingQuestionData.Choices)
-                                                {
-                                                    var matchingNewChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceName == existingChoice.ChoiceName);
-                                                    if (matchingNewChoice != null)
-                                                    {
-                                                        existingChoice.Count += matchingNewChoice.Count;
-                                                        existingChoice.Percentage = existingQuestionData.TotalResponses > 0 ? (double)existingChoice.Count / existingQuestionData.TotalResponses * 100 : 0;
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                dynamic questionData = new ExpandoObject();
-                                                questionData.QuestionName = questionName;
-                                                questionData.QuestionTitle = questionTitle;
-                                                questionData.TotalResponses = totalResponses;
-                                                questionData.Choices = choiceCounts.Values.ToList();
-                                                questionDataDict[questionName] = questionData;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        var questionDataList = questionDataDict.Values.Select(q => new
-                        {
-                            q.QuestionName,
-                            q.QuestionTitle,
-                            q.TotalResponses,
-                            Choices = ((List<dynamic>)q.Choices).Select(c => new
-                            {
-                                c.ChoiceName,
-                                c.ChoiceText,
-                                c.Count,
-                                c.Percentage
-                            }).ToList(),
-                            TotalAgreePercentage = ((List<dynamic>)q.Choices).Where(c => c.ChoiceText == "Đồng ý" || c.ChoiceText == "Hoàn toàn đồng ý")
-                                .Sum(c => (double)c.Percentage)
-                        }).ToList();
-
-                        MucDoHaiLong.Add(questionDataList);
-                    }
-                    else
-                    {
-                        if (isCTDT)
+                        else if (isCTDT)
                         {
                             var ctdt = db.answer_response
                                     .Where(x => x.id_ctdt == user.id_ctdt &&
@@ -298,142 +177,9 @@ namespace CTDT.Areas.CTDT.Controllers
                                 isCTDT = true
                             };
                             DataList.Add(DataCTDT);
+                            tan_xuat_cau_hoi_none_class(MucDoHaiLong,user.id_ctdt ,survey.IDSurvey);
                         }
-                        var Mucdohailong = db.answer_response.Where(d => d.id_ctdt == user.id_ctdt && d.surveyID == survey.IDSurvey).AsQueryable();
-                        var responses = Mucdohailong
-                            .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
-                            .ToList();
-
-                        var questionDataDict = new Dictionary<string, dynamic>();
-                        List<string> specificChoices = new List<string> {
-                    "Hoàn toàn không đồng ý",
-                    "Không đồng ý",
-                    "Bình thường",
-                    "Đồng ý",
-                    "Hoàn toàn đồng ý"
-                };
-
-                        foreach (var response in responses)
-                        {
-                            var surveyDataObject = JObject.Parse(response.SurveyJson);
-                            var answerDataObject = JObject.Parse(response.JsonAnswer);
-                            var surveyPages = (JArray)surveyDataObject["pages"];
-                            var answerPages = (JArray)answerDataObject["pages"];
-
-                            foreach (JObject surveyPage in surveyPages)
-                            {
-
-                                var surveyElements = (JArray)surveyPage["elements"];
-
-                                foreach (JObject surveyElement in surveyElements)
-                                {
-                                    var type = surveyElement["type"].ToString();
-                                    if (type == "radiogroup")
-                                    {
-                                        var questionName = surveyElement["name"].ToString();
-                                        var questionTitle = surveyElement["title"].ToString();
-                                        var choices = (JArray)surveyElement["choices"];
-                                        List<string> elementChoiceTexts = choices.Select(c => c["text"].ToString()).ToList();
-                                        if ((elementChoiceTexts.SequenceEqual(specificChoices)))
-                                        {
-                                            var choiceCounts = choices.ToDictionary(
-                                                c => c["name"].ToString(),
-                                                c =>
-                                                {
-                                                    dynamic choice = new ExpandoObject();
-                                                    choice.ChoiceName = c["name"].ToString();
-                                                    choice.ChoiceText = c["text"].ToString();
-                                                    choice.Count = 0;
-                                                    choice.Percentage = 0.0;
-                                                    return choice;
-                                                }
-                                            );
-
-                                            int totalResponses = 0;
-                                            foreach (JObject answerPage in answerPages)
-                                            {
-                                                var answerElements = (JArray)answerPage["elements"];
-                                                foreach (JObject answerElement in answerElements)
-                                                {
-                                                    if (answerElement["name"].ToString() == questionName)
-                                                    {
-                                                        var responseObject = answerElement["response"];
-                                                        if (responseObject != null)
-                                                        {
-                                                            string responseName = responseObject["name"]?.ToString();
-                                                            string responseText = responseObject["text"]?.ToString();
-
-                                                            if (!string.IsNullOrEmpty(responseName) && choiceCounts.ContainsKey(responseName))
-                                                            {
-                                                                choiceCounts[responseName].Count++;
-                                                                totalResponses++;
-                                                            }
-                                                            else if (!string.IsNullOrEmpty(responseText))
-                                                            {
-                                                                var matchingChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceText == responseText);
-                                                                if (matchingChoice != null)
-                                                                {
-                                                                    matchingChoice.Count++;
-                                                                    totalResponses++;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            foreach (var choice in choiceCounts.Values)
-                                            {
-                                                choice.Percentage = totalResponses > 0 ? (double)choice.Count / totalResponses * 100 : 0;
-                                            }
-
-                                            if (questionDataDict.ContainsKey(questionName))
-                                            {
-                                                var existingQuestionData = questionDataDict[questionName];
-                                                existingQuestionData.TotalResponses += totalResponses;
-
-                                                foreach (var existingChoice in existingQuestionData.Choices)
-                                                {
-                                                    var matchingNewChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceName == existingChoice.ChoiceName);
-                                                    if (matchingNewChoice != null)
-                                                    {
-                                                        existingChoice.Count += matchingNewChoice.Count;
-                                                        existingChoice.Percentage = existingQuestionData.TotalResponses > 0 ? (double)existingChoice.Count / existingQuestionData.TotalResponses * 100 : 0;
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                dynamic questionData = new ExpandoObject();
-                                                questionData.QuestionName = questionName;
-                                                questionData.QuestionTitle = questionTitle;
-                                                questionData.TotalResponses = totalResponses;
-                                                questionData.Choices = choiceCounts.Values.ToList();
-                                                questionDataDict[questionName] = questionData;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        var questionDataList = questionDataDict.Values.Select(q => new
-                        {
-                            q.QuestionName,
-                            q.QuestionTitle,
-                            q.TotalResponses,
-                            Choices = ((List<dynamic>)q.Choices).Select(c => new
-                            {
-                                c.ChoiceName,
-                                c.ChoiceText,
-                                c.Count,
-                                c.Percentage
-                            }).ToList(),
-                            TotalAgreePercentage = ((List<dynamic>)q.Choices).Where(c => c.ChoiceText == "Đồng ý" || c.ChoiceText == "Hoàn toàn đồng ý")
-                                .Sum(c => (double)c.Percentage)
-                        }).ToList();
-
-                        MucDoHaiLong.Add(questionDataList);
                     }
-                   
                 }
             }
 
@@ -446,7 +192,286 @@ namespace CTDT.Areas.CTDT.Controllers
 
             return Json(new { data = Alldata, message = "Load dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
         }
-        // ChartsTyLeThamGiaKhaoSat Thông tư 01
+
+        private void tan_xuat_cau_hoi_none_class( dynamic MucDoHaiLong, int? idctdt, int? idsurvey)
+        {
+            var Mucdohailong = db.answer_response.Where(d => 
+            d.id_ctdt == idctdt && 
+            d.surveyID == idsurvey).AsQueryable();
+            var responses = Mucdohailong
+                .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
+                .ToList();
+
+            var questionDataDict = new Dictionary<string, dynamic>();
+            List<string> specificChoices = new List<string> {
+                    "Hoàn toàn không đồng ý",
+                    "Không đồng ý",
+                    "Bình thường",
+                    "Đồng ý",
+                    "Hoàn toàn đồng ý"
+                };
+
+            foreach (var response in responses)
+            {
+                var surveyDataObject = JObject.Parse(response.SurveyJson);
+                var answerDataObject = JObject.Parse(response.JsonAnswer);
+                var surveyPages = (JArray)surveyDataObject["pages"];
+                var answerPages = (JArray)answerDataObject["pages"];
+
+                foreach (JObject surveyPage in surveyPages)
+                {
+
+                    var surveyElements = (JArray)surveyPage["elements"];
+
+                    foreach (JObject surveyElement in surveyElements)
+                    {
+                        var type = surveyElement["type"].ToString();
+                        if (type == "radiogroup")
+                        {
+                            var questionName = surveyElement["name"].ToString();
+                            var questionTitle = surveyElement["title"].ToString();
+                            var choices = (JArray)surveyElement["choices"];
+                            List<string> elementChoiceTexts = choices.Select(c => c["text"].ToString()).ToList();
+                            if ((elementChoiceTexts.SequenceEqual(specificChoices)))
+                            {
+                                var choiceCounts = choices.ToDictionary(
+                                    c => c["name"].ToString(),
+                                    c =>
+                                    {
+                                        dynamic choice = new ExpandoObject();
+                                        choice.ChoiceName = c["name"].ToString();
+                                        choice.ChoiceText = c["text"].ToString();
+                                        choice.Count = 0;
+                                        choice.Percentage = 0.0;
+                                        return choice;
+                                    }
+                                );
+
+                                int totalResponses = 0;
+                                foreach (JObject answerPage in answerPages)
+                                {
+                                    var answerElements = (JArray)answerPage["elements"];
+                                    foreach (JObject answerElement in answerElements)
+                                    {
+                                        if (answerElement["name"].ToString() == questionName)
+                                        {
+                                            var responseObject = answerElement["response"];
+                                            if (responseObject != null)
+                                            {
+                                                string responseName = responseObject["name"]?.ToString();
+                                                string responseText = responseObject["text"]?.ToString();
+
+                                                if (!string.IsNullOrEmpty(responseName) && choiceCounts.ContainsKey(responseName))
+                                                {
+                                                    choiceCounts[responseName].Count++;
+                                                    totalResponses++;
+                                                }
+                                                else if (!string.IsNullOrEmpty(responseText))
+                                                {
+                                                    var matchingChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceText == responseText);
+                                                    if (matchingChoice != null)
+                                                    {
+                                                        matchingChoice.Count++;
+                                                        totalResponses++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                foreach (var choice in choiceCounts.Values)
+                                {
+                                    choice.Percentage = totalResponses > 0 ? (double)choice.Count / totalResponses * 100 : 0;
+                                }
+
+                                if (questionDataDict.ContainsKey(questionName))
+                                {
+                                    var existingQuestionData = questionDataDict[questionName];
+                                    existingQuestionData.TotalResponses += totalResponses;
+
+                                    foreach (var existingChoice in existingQuestionData.Choices)
+                                    {
+                                        var matchingNewChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceName == existingChoice.ChoiceName);
+                                        if (matchingNewChoice != null)
+                                        {
+                                            existingChoice.Count += matchingNewChoice.Count;
+                                            existingChoice.Percentage = existingQuestionData.TotalResponses > 0 ? (double)existingChoice.Count / existingQuestionData.TotalResponses * 100 : 0;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    dynamic questionData = new ExpandoObject();
+                                    questionData.QuestionName = questionName;
+                                    questionData.QuestionTitle = questionTitle;
+                                    questionData.TotalResponses = totalResponses;
+                                    questionData.Choices = choiceCounts.Values.ToList();
+                                    questionDataDict[questionName] = questionData;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            var questionDataList = questionDataDict.Values.Select(q => new
+            {
+                q.QuestionName,
+                q.QuestionTitle,
+                q.TotalResponses,
+                Choices = ((List<dynamic>)q.Choices).Select(c => new
+                {
+                    c.ChoiceName,
+                    c.ChoiceText,
+                    c.Count,
+                    c.Percentage
+                }).ToList(),
+                TotalAgreePercentage = ((List<dynamic>)q.Choices).Where(c => c.ChoiceText == "Đồng ý" || c.ChoiceText == "Hoàn toàn đồng ý")
+                    .Sum(c => (double)c.Percentage)
+            }).ToList();
+
+            MucDoHaiLong.Add(questionDataList);
+        }
+        private void tan_xuat_cau_hoi_by_class(dynamic MucDoHaiLong, int? idctdt, int? idsurvey,List<string> keyClassList)
+        {
+            var Mucdohailong = db.answer_response.Where(d =>
+            keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k)) &&
+            d.id_ctdt == idctdt &&
+            d.surveyID == idsurvey).AsQueryable();
+            var responses = Mucdohailong
+                .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
+                .ToList();
+
+            var questionDataDict = new Dictionary<string, dynamic>();
+            List<string> specificChoices = new List<string> {
+                    "Hoàn toàn không đồng ý",
+                    "Không đồng ý",
+                    "Bình thường",
+                    "Đồng ý",
+                    "Hoàn toàn đồng ý"
+                };
+
+            foreach (var response in responses)
+            {
+                var surveyDataObject = JObject.Parse(response.SurveyJson);
+                var answerDataObject = JObject.Parse(response.JsonAnswer);
+                var surveyPages = (JArray)surveyDataObject["pages"];
+                var answerPages = (JArray)answerDataObject["pages"];
+
+                foreach (JObject surveyPage in surveyPages)
+                {
+
+                    var surveyElements = (JArray)surveyPage["elements"];
+
+                    foreach (JObject surveyElement in surveyElements)
+                    {
+                        var type = surveyElement["type"].ToString();
+                        if (type == "radiogroup")
+                        {
+                            var questionName = surveyElement["name"].ToString();
+                            var questionTitle = surveyElement["title"].ToString();
+                            var choices = (JArray)surveyElement["choices"];
+                            List<string> elementChoiceTexts = choices.Select(c => c["text"].ToString()).ToList();
+                            if ((elementChoiceTexts.SequenceEqual(specificChoices)))
+                            {
+                                var choiceCounts = choices.ToDictionary(
+                                    c => c["name"].ToString(),
+                                    c =>
+                                    {
+                                        dynamic choice = new ExpandoObject();
+                                        choice.ChoiceName = c["name"].ToString();
+                                        choice.ChoiceText = c["text"].ToString();
+                                        choice.Count = 0;
+                                        choice.Percentage = 0.0;
+                                        return choice;
+                                    }
+                                );
+
+                                int totalResponses = 0;
+                                foreach (JObject answerPage in answerPages)
+                                {
+                                    var answerElements = (JArray)answerPage["elements"];
+                                    foreach (JObject answerElement in answerElements)
+                                    {
+                                        if (answerElement["name"].ToString() == questionName)
+                                        {
+                                            var responseObject = answerElement["response"];
+                                            if (responseObject != null)
+                                            {
+                                                string responseName = responseObject["name"]?.ToString();
+                                                string responseText = responseObject["text"]?.ToString();
+
+                                                if (!string.IsNullOrEmpty(responseName) && choiceCounts.ContainsKey(responseName))
+                                                {
+                                                    choiceCounts[responseName].Count++;
+                                                    totalResponses++;
+                                                }
+                                                else if (!string.IsNullOrEmpty(responseText))
+                                                {
+                                                    var matchingChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceText == responseText);
+                                                    if (matchingChoice != null)
+                                                    {
+                                                        matchingChoice.Count++;
+                                                        totalResponses++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                foreach (var choice in choiceCounts.Values)
+                                {
+                                    choice.Percentage = totalResponses > 0 ? (double)choice.Count / totalResponses * 100 : 0;
+                                }
+
+                                if (questionDataDict.ContainsKey(questionName))
+                                {
+                                    var existingQuestionData = questionDataDict[questionName];
+                                    existingQuestionData.TotalResponses += totalResponses;
+
+                                    foreach (var existingChoice in existingQuestionData.Choices)
+                                    {
+                                        var matchingNewChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceName == existingChoice.ChoiceName);
+                                        if (matchingNewChoice != null)
+                                        {
+                                            existingChoice.Count += matchingNewChoice.Count;
+                                            existingChoice.Percentage = existingQuestionData.TotalResponses > 0 ? (double)existingChoice.Count / existingQuestionData.TotalResponses * 100 : 0;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    dynamic questionData = new ExpandoObject();
+                                    questionData.QuestionName = questionName;
+                                    questionData.QuestionTitle = questionTitle;
+                                    questionData.TotalResponses = totalResponses;
+                                    questionData.Choices = choiceCounts.Values.ToList();
+                                    questionDataDict[questionName] = questionData;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            var questionDataList = questionDataDict.Values.Select(q => new
+            {
+                q.QuestionName,
+                q.QuestionTitle,
+                q.TotalResponses,
+                Choices = ((List<dynamic>)q.Choices).Select(c => new
+                {
+                    c.ChoiceName,
+                    c.ChoiceText,
+                    c.Count,
+                    c.Percentage
+                }).ToList(),
+                TotalAgreePercentage = ((List<dynamic>)q.Choices).Where(c => c.ChoiceText == "Đồng ý" || c.ChoiceText == "Hoàn toàn đồng ý")
+                    .Sum(c => (double)c.Percentage)
+            }).ToList();
+
+            MucDoHaiLong.Add(questionDataList);
+        }
+        #endregion
+        #region Thống  kê theo thông tư 01
         public JsonResult ChartsTyLeThamGiaKhaoSatThongTu01(int year = 0)
         {
             var user = SessionHelper.GetUser();
@@ -522,6 +547,7 @@ namespace CTDT.Areas.CTDT.Controllers
                             isStudent = true
                         };
                         DataList.Add(DataStudent);
+                        tan_xuat_cau_hoi_thong_tu_01(MucDoHaiLong, user.id_ctdt, survey.IDSurvey, keyClassList);
                     }
                     else if(isStudentBySubject)
                     {
@@ -552,14 +578,29 @@ namespace CTDT.Areas.CTDT.Controllers
                             isStudentBySubject = true
                         };
                         DataList.Add(DataStudent);
-                    }
-                    var Mucdohailong = db.answer_response.Where(d => keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k)) && d.id_ctdt == user.id_ctdt && d.surveyID == survey.IDSurvey).AsQueryable();
-                    var responses = Mucdohailong
-                        .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
-                        .ToList();
+                        tan_xuat_cau_hoi_thong_tu_01(MucDoHaiLong, user.id_ctdt, survey.IDSurvey, keyClassList);
+                    }                  
+                }
+            }
 
-                    var questionDataDict = new Dictionary<string, dynamic>();
-                    List<string> specificChoices = new List<string> {
+            var Alldata = new
+            {
+                TitleSurvey = GetAllSurvey,
+                SurveyParticipationRate = DataList,
+                SatisfactionLevel = MucDoHaiLong
+            };
+
+            return Json(new { data = Alldata, message = "Load dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
+        }
+        private void tan_xuat_cau_hoi_thong_tu_01(dynamic MucDoHaiLong, int? idctdt, int? idsurvey, List<string> keyClassList)
+        {
+            var Mucdohailong = db.answer_response.Where(d => keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k)) && d.id_ctdt == idctdt && d.surveyID == idsurvey).AsQueryable();
+            var responses = Mucdohailong
+                .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
+                .ToList();
+
+            var questionDataDict = new Dictionary<string, dynamic>();
+            List<string> specificChoices = new List<string> {
                         "Hoàn toàn không đồng ý",
                         "Không đồng ý",
                         "Bình thường",
@@ -567,113 +608,113 @@ namespace CTDT.Areas.CTDT.Controllers
                         "Hoàn toàn đồng ý"
                     };
 
-                    foreach (var response in responses)
+            foreach (var response in responses)
+            {
+                var surveyDataObject = JObject.Parse(response.SurveyJson);
+                var answerDataObject = JObject.Parse(response.JsonAnswer);
+                var surveyPages = (JArray)surveyDataObject["pages"];
+                var answerPages = (JArray)answerDataObject["pages"];
+
+                foreach (JObject surveyPage in surveyPages)
+                {
+
+                    var surveyElements = (JArray)surveyPage["elements"];
+
+                    foreach (JObject surveyElement in surveyElements)
                     {
-                        var surveyDataObject = JObject.Parse(response.SurveyJson);
-                        var answerDataObject = JObject.Parse(response.JsonAnswer);
-                        var surveyPages = (JArray)surveyDataObject["pages"];
-                        var answerPages = (JArray)answerDataObject["pages"];
-
-                        foreach (JObject surveyPage in surveyPages)
+                        var type = surveyElement["type"].ToString();
+                        if (type == "radiogroup")
                         {
-
-                            var surveyElements = (JArray)surveyPage["elements"];
-
-                            foreach (JObject surveyElement in surveyElements)
+                            var questionName = surveyElement["name"].ToString();
+                            var questionTitle = surveyElement["title"].ToString();
+                            var choices = (JArray)surveyElement["choices"];
+                            List<string> elementChoiceTexts = choices.Select(c => c["text"].ToString()).ToList();
+                            if ((elementChoiceTexts.SequenceEqual(specificChoices)))
                             {
-                                var type = surveyElement["type"].ToString();
-                                if (type == "radiogroup")
-                                {
-                                    var questionName = surveyElement["name"].ToString();
-                                    var questionTitle = surveyElement["title"].ToString();
-                                    var choices = (JArray)surveyElement["choices"];
-                                    List<string> elementChoiceTexts = choices.Select(c => c["text"].ToString()).ToList();
-                                    if ((elementChoiceTexts.SequenceEqual(specificChoices)))
+                                var choiceCounts = choices.ToDictionary(
+                                    c => c["name"].ToString(),
+                                    c =>
                                     {
-                                        var choiceCounts = choices.ToDictionary(
-                                            c => c["name"].ToString(),
-                                            c =>
-                                            {
-                                                dynamic choice = new ExpandoObject();
-                                                choice.ChoiceName = c["name"].ToString();
-                                                choice.ChoiceText = c["text"].ToString();
-                                                choice.Count = 0;
-                                                choice.Percentage = 0.0;
-                                                return choice;
-                                            }
-                                        );
+                                        dynamic choice = new ExpandoObject();
+                                        choice.ChoiceName = c["name"].ToString();
+                                        choice.ChoiceText = c["text"].ToString();
+                                        choice.Count = 0;
+                                        choice.Percentage = 0.0;
+                                        return choice;
+                                    }
+                                );
 
-                                        int totalResponses = 0;
-                                        foreach (JObject answerPage in answerPages)
+                                int totalResponses = 0;
+                                foreach (JObject answerPage in answerPages)
+                                {
+                                    var answerElements = (JArray)answerPage["elements"];
+                                    foreach (JObject answerElement in answerElements)
+                                    {
+                                        if (answerElement["name"].ToString() == questionName)
                                         {
-                                            var answerElements = (JArray)answerPage["elements"];
-                                            foreach (JObject answerElement in answerElements)
+                                            var responseObject = answerElement["response"];
+                                            if (responseObject != null)
                                             {
-                                                if (answerElement["name"].ToString() == questionName)
-                                                {
-                                                    var responseObject = answerElement["response"];
-                                                    if (responseObject != null)
-                                                    {
-                                                        string responseName = responseObject["name"]?.ToString();
-                                                        string responseText = responseObject["text"]?.ToString();
+                                                string responseName = responseObject["name"]?.ToString();
+                                                string responseText = responseObject["text"]?.ToString();
 
-                                                        if (!string.IsNullOrEmpty(responseName) && choiceCounts.ContainsKey(responseName))
-                                                        {
-                                                            choiceCounts[responseName].Count++;
-                                                            totalResponses++;
-                                                        }
-                                                        else if (!string.IsNullOrEmpty(responseText))
-                                                        {
-                                                            var matchingChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceText == responseText);
-                                                            if (matchingChoice != null)
-                                                            {
-                                                                matchingChoice.Count++;
-                                                                totalResponses++;
-                                                            }
-                                                        }
+                                                if (!string.IsNullOrEmpty(responseName) && choiceCounts.ContainsKey(responseName))
+                                                {
+                                                    choiceCounts[responseName].Count++;
+                                                    totalResponses++;
+                                                }
+                                                else if (!string.IsNullOrEmpty(responseText))
+                                                {
+                                                    var matchingChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceText == responseText);
+                                                    if (matchingChoice != null)
+                                                    {
+                                                        matchingChoice.Count++;
+                                                        totalResponses++;
                                                     }
                                                 }
                                             }
                                         }
-                                        foreach (var choice in choiceCounts.Values)
-                                        {
-                                            choice.Percentage = totalResponses > 0 ? (double)choice.Count / totalResponses * 100 : 0;
-                                        }
+                                    }
+                                }
+                                foreach (var choice in choiceCounts.Values)
+                                {
+                                    choice.Percentage = totalResponses > 0 ? (double)choice.Count / totalResponses * 100 : 0;
+                                }
 
-                                        if (questionDataDict.ContainsKey(questionName))
-                                        {
-                                            var existingQuestionData = questionDataDict[questionName];
-                                            existingQuestionData.TotalResponses += totalResponses;
+                                if (questionDataDict.ContainsKey(questionName))
+                                {
+                                    var existingQuestionData = questionDataDict[questionName];
+                                    existingQuestionData.TotalResponses += totalResponses;
 
-                                            foreach (var existingChoice in existingQuestionData.Choices)
-                                            {
-                                                var matchingNewChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceName == existingChoice.ChoiceName);
-                                                if (matchingNewChoice != null)
-                                                {
-                                                    existingChoice.Count += matchingNewChoice.Count;
-                                                    existingChoice.Percentage = existingQuestionData.TotalResponses > 0 ? (double)existingChoice.Count / existingQuestionData.TotalResponses * 100 : 0;
-                                                }
-                                            }
-                                        }
-                                        else
+                                    foreach (var existingChoice in existingQuestionData.Choices)
+                                    {
+                                        var matchingNewChoice = choiceCounts.Values.FirstOrDefault(c => c.ChoiceName == existingChoice.ChoiceName);
+                                        if (matchingNewChoice != null)
                                         {
-                                            dynamic questionData = new ExpandoObject();
-                                            questionData.QuestionName = questionName;
-                                            questionData.QuestionTitle = questionTitle;
-                                            questionData.TotalResponses = totalResponses;
-                                            questionData.Choices = choiceCounts.Values.ToList();
-                                            questionDataDict[questionName] = questionData;
+                                            existingChoice.Count += matchingNewChoice.Count;
+                                            existingChoice.Percentage = existingQuestionData.TotalResponses > 0 ? (double)existingChoice.Count / existingQuestionData.TotalResponses * 100 : 0;
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    dynamic questionData = new ExpandoObject();
+                                    questionData.QuestionName = questionName;
+                                    questionData.QuestionTitle = questionTitle;
+                                    questionData.TotalResponses = totalResponses;
+                                    questionData.Choices = choiceCounts.Values.ToList();
+                                    questionDataDict[questionName] = questionData;
                                 }
                             }
                         }
                     }
-                    var lastQuestionData = questionDataDict.Values.LastOrDefault();
+                }
+            }
+            var lastQuestionData = questionDataDict.Values.LastOrDefault();
 
-                    if (lastQuestionData != null)
-                    {
-                        var questionDataList = new List<dynamic>
+            if (lastQuestionData != null)
+            {
+                var questionDataList = new List<dynamic>
                     {
                         new
                         {
@@ -692,20 +733,10 @@ namespace CTDT.Areas.CTDT.Controllers
                         }
                     };
 
-                        MucDoHaiLong.Add(questionDataList);
-                    }
-                }
+                MucDoHaiLong.Add(questionDataList);
             }
-
-            var Alldata = new
-            {
-                TitleSurvey = GetAllSurvey,
-                SurveyParticipationRate = DataList,
-                SatisfactionLevel = MucDoHaiLong
-            };
-
-            return Json(new { data = Alldata, message = "Load dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
         }
+        #endregion
     }
 }
 

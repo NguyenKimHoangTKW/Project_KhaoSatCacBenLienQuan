@@ -1,11 +1,38 @@
-﻿$(document).ready(function () {
-    LoadChartFullSurvey();
-    LoadChartSurveyThongTu01();
+﻿function Loading() {
+    Swal.fire({
+        title: 'Loading...',
+        text: 'Đang thống kê dữ liệu, vui lòng chờ trong giây lát !',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+function EndLoading() {
+    Swal.close();
+}
+
+$(document).ready(async function () {
+    Loading();
+    try {
+        await LoadChartFullSurvey();
+        await LoadChartSurveyThongTu01(); 
+    }  finally {
+        EndLoading(); 
+    }
 });
-$(document).on("change", "#yearGiamSat", function () {
-    LoadChartFullSurvey();
-    LoadChartSurveyThongTu01();
-})
+
+$(document).on("change", "#yearGiamSat", async function () {
+    Loading();
+    try {
+        await LoadChartFullSurvey();  
+        await LoadChartSurveyThongTu01(); 
+    }  finally {
+        EndLoading();
+    }
+});
+
 
 
 async function LoadChartFullSurvey() {
@@ -246,8 +273,6 @@ async function LoadChartFullSurvey() {
         console.error("Error fetching data:", error);
     }
 }
-
-
 async function LoadChartSurveyThongTu01() {
     var year = $("#yearGiamSat").val();
 

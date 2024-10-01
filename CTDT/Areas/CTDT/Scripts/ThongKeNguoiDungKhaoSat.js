@@ -1,27 +1,36 @@
-﻿var currentPage = 1;
-var totalPages = 0;
-
-$(document).ready(function () {
-    LoadChartSurvey();
-    $(document).on("change", "#Year", function () {
-        LoadChartSurvey();
-    });
-});
-
-function showLoading() {
+﻿
+function Loading() {
     Swal.fire({
         title: 'Loading...',
-        text: 'Đang tải dữ liệu, vui lòng chờ trong giây lát!',
+        text: 'Đang thống kê dữ liệu, vui lòng chờ trong giây lát !',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
         }
     });
 }
-
-function hideLoading() {
+function EndLoading() {
     Swal.close();
 }
+$(document).ready(async function () {
+    Loading()
+    try {
+        await LoadChartSurvey();
+    }
+    finally {
+        EndLoading()
+    }
+    
+});
+$(document).on("change", "#Year", async function () {
+    Loading()
+    try {
+        await LoadChartSurvey();
+    }
+    finally {
+        EndLoading()
+    }
+});
 async function LoadChartSurvey() {
     var year = $("#Year").val();
     const res = await $.ajax({
@@ -128,11 +137,12 @@ async function load_nguoi_hoc(id) {
         var body = $("#load_data");
         var label = $("#exampleModalLabel");
         var html = "";
+        body.empty();
         if ($.fn.DataTable.isDataTable('#load_data')) {
             $('#load_data').DataTable().clear().destroy();
         }
 
-        body.empty();
+  
         res.data.forEach(function (items, index) {
             label.html(items.ten_phieu);
             if (items.is_nguoi_hoc) {
@@ -157,14 +167,55 @@ async function load_nguoi_hoc(id) {
                 });
                 html += "</tbody>";
             }
+            else if (items.is_ctdt) {
+                html += "<thead>";
+                html += "<tr>";
+                html += "<th>Số Thứ Tự</th>";
+                html += "<th>Họ và tên</th>";
+                html += "<th>Email</th>";
+                html += "<th>Chương trình đào tạo</th>";
+                html += "</tr>";
+                html += "</thead>";
+                html += "<tbody>";
+                items.ctdt.forEach(function (ctdt, index) {
+                    html += "<tr>";
+                    html += `<td>${index + 1}</td>`;
+                    html += `<td>${ctdt.ho_ten}</td>`;
+                    html += `<td>${ctdt.email}</td>`;
+                    html += `<td>${ctdt.ctdt}</td>`;
+                    html += "</tr>";
+                });
+                html += "</tbody>";
+            }
+            else if (items.is_cbvc) {
+                html += "<thead>";
+                html += "<tr>";
+                html += "<th>Số Thứ Tự</th>";
+                html += "<th>Họ và tên</th>";
+                html += "<th>Email</th>";
+                html += "<th>Đơn vị</th>";
+                html += "<th>Chương trình đào tạo</th>";
+                html += "</tr>";
+                html += "</thead>";
+                html += "<tbody>";
+                items.cbvc.forEach(function (cbvc, index) {
+                    html += "<tr>";
+                    html += `<td>${index + 1}</td>`;
+                    html += `<td>${cbvc.ho_ten}</td>`;
+                    html += `<td>${cbvc.email}</td>`;
+                    html += `<td>${cbvc.don_vi}</td>`;
+                    html += `<td>${cbvc.ctdt}</td>`;
+                    html += "</tr>";
+                });
+                html += "</tbody>";
+            }
         });
 
         body.html(html);
-
         $('#load_data').DataTable({
-            pageLength: 10, 
-            lengthMenu: [5, 10, 25, 50, 100], 
-            ordering: true, 
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
             searching: true,
             language: {
                 paginate: {
@@ -177,6 +228,7 @@ async function load_nguoi_hoc(id) {
             dom: "Bfrtip",
             buttons: ['csv', 'excel', 'pdf', 'print']
         });
+        
     } else {
         $("#load_data").html("<tr><td colspan='5'>No data available</td></tr>");
     }
