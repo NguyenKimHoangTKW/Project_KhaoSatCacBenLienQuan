@@ -145,7 +145,7 @@ async function load_nguoi_hoc(id) {
   
         res.data.forEach(function (items, index) {
             label.html(items.ten_phieu);
-            if (items.is_nguoi_hoc) {
+            if (items.is_nguoi_hoc || items.is_nguoi_hoc_mon_hoc) {
                 html += "<thead>";
                 html += "<tr>";
                 html += "<th>Số Thứ Tự</th>";

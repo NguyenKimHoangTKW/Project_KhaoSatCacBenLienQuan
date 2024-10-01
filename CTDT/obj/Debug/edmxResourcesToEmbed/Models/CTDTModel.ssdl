@@ -177,6 +177,7 @@
     <Property Name="id_loaikhaosat" Type="int" Nullable="false" />
     <Property Name="creator" Type="int" />
     <Property Name="id_namhoc" Type="int" />
+    <Property Name="is_hocky" Type="bit" />
     <Property Name="key_class" Type="nvarchar(max)" />
     <Property Name="doi_tuong_dat_biet" Type="nvarchar(max)" />
   </EntityType>

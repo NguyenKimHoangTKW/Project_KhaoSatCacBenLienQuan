@@ -63,27 +63,10 @@ namespace CTDT.Areas.CTDT.Controllers
                 {
                     var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(idphieu.key_class);
 
-                    if (keyClassList != null)
-                    {
-                        bool isStudent = db.answer_response.Any(aw =>
-                            aw.id_sv != null &&
-                            aw.surveyID == survey.IDSurvey &&
-                            aw.id_hk == null &&
-                            aw.id_CBVC == null &&
-                            aw.id_mh == null &&
-                            aw.id_ctdt == user.id_ctdt &&
-                            keyClassList.Any(k => aw.survey.key_class.Contains(k)) &&
-                            aw.json_answer != null);
+                   
+                        bool isStudent = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == false;
 
-                        bool isStudentBySubject = db.answer_response.Any(aw =>
-                            aw.id_sv != null &&
-                            aw.surveyID == survey.IDSurvey &&
-                            aw.id_hk != null &&
-                            aw.id_CBVC != null &&
-                            aw.id_mh != null &&
-                            aw.id_ctdt == user.id_ctdt &&
-                            keyClassList.Any(k => aw.survey.key_class.Contains(k)) &&
-                            aw.json_answer != null);
+                        bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == true;
 
                         bool isCTDT = db.answer_response.Any(aw =>
                             aw.id_sv == null &&
@@ -112,14 +95,19 @@ namespace CTDT.Areas.CTDT.Controllers
                         {
                             sinh_vien_subject(ChartSurvey, user.id_ctdt, idphieu.surveyID, keyClassList);
                         }
-                        else if (isCTDT)
-                        {
-                            chuong_trinh_dao_tao(ChartSurvey, user.id_ctdt, idphieu.surveyID);
-                        }
-                        else if (isCBVC)
-                        {
-                            can_bo_vien_chuc(ChartSurvey, user.id_ctdt, idphieu.surveyID);
-                        }
+                }
+                else
+                {
+                    bool isCTDT = new[] { 5 }.Contains(idphieu.id_loaikhaosat);
+
+                    bool isCBVC = new[] { 3, 8 }.Contains(idphieu.id_loaikhaosat);
+                    if (isCTDT)
+                    {
+                        chuong_trinh_dao_tao(ChartSurvey, user.id_ctdt, idphieu.surveyID);
+                    }
+                    else if (isCBVC)
+                    {
+                        can_bo_vien_chuc(ChartSurvey, user.id_ctdt, idphieu.surveyID);
                     }
                 }
             }
@@ -245,49 +233,22 @@ namespace CTDT.Areas.CTDT.Controllers
                 if (!string.IsNullOrEmpty(surveys.key_class))
                 {
                     var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(surveys.key_class);
-                    bool isStudent = db.answer_response
-                         .Any(aw => aw.id_sv != null
-                     && aw.id_CBVC == null
-                     && aw.id_hk == null
-                     && aw.id_mh == null
-                     && aw.id_ctdt == user.id_ctdt &&
-                     keyClassList.Any(k => aw.survey.key_class.Contains(k))
-                     && aw.json_answer != null);
-                    bool isStudentByStudent = db.answer_response
-                         .Any(aw => aw.id_sv != null
-                     && aw.id_CBVC != null
-                     && aw.id_hk != null
-                     && aw.id_mh != null
-                     && aw.id_ctdt == user.id_ctdt &&
-                     keyClassList.Any(k => aw.survey.key_class.Contains(k))
-                     && aw.json_answer != null);
-
-                    bool isCTDT = db.answer_response
-                          .Any(aw => aw.id_sv == null
-                      && aw.id_CBVC == null
-                      && aw.id_hk == null
-                      && aw.id_mh == null
-                      && aw.id_donvi == null
-                      && aw.id_users != null
-                      && aw.id_ctdt == user.id_ctdt);
-
-                    bool isCBVC = db.answer_response
-                        .Any(aw => aw.id_sv == null
-                      && aw.id_CBVC != null
-                      && aw.id_hk == null
-                      && aw.id_mh == null
-                      && aw.id_donvi != null
-                      && aw.id_ctdt == user.id_ctdt);
-
+                    bool isStudent = new[] { 1, 2, 4, 6 }.Contains(surveys.id_loaikhaosat) && surveys.is_hocky == false;
+                    bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(surveys.id_loaikhaosat) && surveys.is_hocky == true;
                     if (isStudent)
                     {
                         sinh_vien_thuong(surveys.surveyTitle, user.id_ctdt, surveys.surveyID, list_data, keyClassList);
                     }
-                    else if (isStudentByStudent)
+                    else if (isStudentBySubject)
                     {
                         sinh_vien_subject(surveys.surveyTitle, user.id_ctdt, surveys.surveyID, list_data, keyClassList);
                     }
-                    else if (isCTDT)
+                }
+                else
+                {
+                    bool isCTDT = new[] { 5 }.Contains(surveys.id_loaikhaosat);
+                    bool isCBVC = new[] { 3, 8 }.Contains(surveys.id_loaikhaosat);
+                    if (isCTDT)
                     {
                         chuong_trinh_dao_tao(surveys.surveyTitle, user.id_ctdt, list_data);
                     }
@@ -361,6 +322,7 @@ namespace CTDT.Areas.CTDT.Controllers
                                  ho_ten = x.hovaten,
                                  ma_nguoi_hoc = x.ma_sv,
                                  lop = x.lop.ma_lop,
+                                 tinh_trang_khao_sat = db.answer_response.Any(aw => aw.id_sv == x.id_sv && aw.surveyID == surveyid) ? "Đã khảo sát" : "Chưa khảo sát"
                              }).ToList();
             list_data.Add(new
             {
@@ -376,7 +338,6 @@ namespace CTDT.Areas.CTDT.Controllers
         {
             var user = SessionHelper.GetUser();
             var surveyList = db.survey.Where(x => x.id_hedaotao == user.id_hdt).ToList();
-
             var sortedSurveyList = surveyList
                 .OrderBy(s => s.surveyTitle.Split('.').First())
                 .ThenBy(s => s.surveyTitle)
@@ -389,7 +350,6 @@ namespace CTDT.Areas.CTDT.Controllers
         {
             var user = SessionHelper.GetUser();
 
-            db.Configuration.ProxyCreationEnabled = false;
             var surveys = db.survey
                             .Where(x => x.id_namhoc == id && x.id_hedaotao == user.id_hdt)
                             .ToList();

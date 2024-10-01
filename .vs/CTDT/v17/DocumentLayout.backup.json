@@ -1,14 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\TTDBCL\\KhaoSat-DBCL\\",
+  "WorkspaceRootPath": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\areas\\ctdt\\controllers\\thongkekhaosatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\controllers\\thongkekhaosatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\dbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\ctdt\\controllers\\baocaotonghopketquakhaosatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\controllers\\baocaotonghopketquakhaosatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\areas\\ctdt\\scripts\\thongkenguoidungkhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\scripts\\thongkenguoidungkhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\dbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\ctdt\\controllers\\thongkekhaosatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\controllers\\thongkekhaosatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,53 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ThongKeNguoiDungKhaoSat.js",
-              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Scripts\\ThongKeNguoiDungKhaoSat.js",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Scripts\\ThongKeNguoiDungKhaoSat.js",
-              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Scripts\\ThongKeNguoiDungKhaoSat.js",
-              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Scripts\\ThongKeNguoiDungKhaoSat.js",
-              "ViewState": "AgIAAHUAAAAAAAAAAAAswJAAAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-01T03:22:34.918Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Orientation": 0,
-      "VerticalTabListWidth": 256,
-      "FloatingWindowState": {
-        "Id": "e509bca8-6f98-47e2-bf10-c86c799fad4f",
-        "Display": 0,
-        "X": 244,
-        "Y": 175,
-        "Width": 1251,
-        "Height": 780,
-        "WindowState": 0
-      },
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ThongKeKhaoSatController.cs",
-              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
-              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
-              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
-              "ViewState": "AgIAAIUAAAAAAAAAAAAAAJ4AAABBAAAAAAAAAA==",
+              "Title": "BaoCaoTongHopKetQuaKhaoSatController.cs",
+              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\CTDT\\Controllers\\BaoCaoTongHopKetQuaKhaoSatController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Controllers\\BaoCaoTongHopKetQuaKhaoSatController.cs",
+              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\CTDT\\Controllers\\BaoCaoTongHopKetQuaKhaoSatController.cs",
+              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Controllers\\BaoCaoTongHopKetQuaKhaoSatController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF8AAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-01T03:48:41.447Z",
+              "WhenOpened": "2024-10-01T17:32:03.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ThongKeKhaoSatController.cs",
+              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
+              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
+              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatController.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAFABAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-01T17:21:32.236Z",
               "EditorCaption": ""
             }
           ]

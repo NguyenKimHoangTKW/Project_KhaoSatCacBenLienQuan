@@ -181,6 +181,7 @@
         <MappingFragment StoreEntitySet="survey">
           <ScalarProperty Name="doi_tuong_dat_biet" ColumnName="doi_tuong_dat_biet" />
           <ScalarProperty Name="key_class" ColumnName="key_class" />
+          <ScalarProperty Name="is_hocky" ColumnName="is_hocky" />
           <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
           <ScalarProperty Name="creator" ColumnName="creator" />
           <ScalarProperty Name="id_loaikhaosat" ColumnName="id_loaikhaosat" />

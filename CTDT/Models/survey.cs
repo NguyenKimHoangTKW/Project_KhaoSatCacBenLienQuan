@@ -33,6 +33,7 @@ namespace CTDT.Models
         public int id_loaikhaosat { get; set; }
         public Nullable<int> creator { get; set; }
         public Nullable<int> id_namhoc { get; set; }
+        public Nullable<bool> is_hocky { get; set; }
         public string key_class { get; set; }
         public string doi_tuong_dat_biet { get; set; }
     

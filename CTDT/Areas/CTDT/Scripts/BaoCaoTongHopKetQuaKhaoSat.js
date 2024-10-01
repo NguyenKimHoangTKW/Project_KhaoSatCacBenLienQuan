@@ -1,42 +1,67 @@
-﻿$(document).ready(function () {
-    LoadKetQua();
-    $('#Year').change(function () {
-        LoadKetQua();
-    })
-
-    $('#ExportExcel').click(function () {
-        if ($('#bao_cao_tong_hop').text().trim() === 'Không có dữ liệu báo cáo tổng hợp cho năm học này') {
-            Swal.fire({
-                title: 'Không có dữ liệu',
-                text: 'Không có dữ liệu có sẵn để xuất Excel',
-                icon: 'warning',
-                confirmButtonText: 'OK'
-            });
-        } else {
-            let timerInterval;
-            Swal.fire({
-                title: "Loading ...",
-                html: "Đang kiểm tra và xuất kết quả, vui lòng chờ <b></b> giây.",
-                timer: 4000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                }
-            }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
-                    ExportExcelBaoCaoTongHop();
-                }
-            });
+﻿function Loading() {
+    Swal.fire({
+        title: 'Loading...',
+        text: 'Đang thống kê dữ liệu, vui lòng chờ trong giây lát !',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
         }
     });
+}
+function EndLoading() {
+    Swal.close();
+}
+$(document).ready(async function () {
+    Loading()
+    try {
+        await LoadKetQua();
+    }
+    finally {
+        EndLoading()
+    }
 });
+
+$(document).on('click', '#ExportExcel', function () {
+    if ($('#bao_cao_tong_hop').text().trim() === 'Không có dữ liệu báo cáo tổng hợp cho năm học này') {
+        Swal.fire({
+            title: 'Không có dữ liệu',
+            text: 'Không có dữ liệu có sẵn để xuất Excel',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+    } else {
+        let timerInterval;
+        Swal.fire({
+            title: "Loading ...",
+            html: "Đang kiểm tra và xuất kết quả, vui lòng chờ <b></b> giây.",
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                ExportExcelBaoCaoTongHop();
+            }
+        });
+    }
+})
+$(document).on('change', '#Year', async function () {
+    Loading()
+    try {
+        await LoadKetQua();
+    }
+    finally {
+        EndLoading()
+    }
+})
 function getFormattedDateTime() {
     const now = new Date();
     const year = now.getFullYear();

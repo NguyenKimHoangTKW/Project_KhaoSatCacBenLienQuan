@@ -182,6 +182,7 @@
           <Property Name="id_loaikhaosat" Type="int" Nullable="false" />
           <Property Name="creator" Type="int" />
           <Property Name="id_namhoc" Type="int" />
+          <Property Name="is_hocky" Type="bit" />
           <Property Name="key_class" Type="nvarchar(max)" />
           <Property Name="doi_tuong_dat_biet" Type="nvarchar(max)" />
         </EntityType>
@@ -1007,6 +1008,7 @@
           <Property Name="id_loaikhaosat" Type="Int32" Nullable="false" />
           <Property Name="creator" Type="Int32" />
           <Property Name="id_namhoc" Type="Int32" />
+          <Property Name="is_hocky" Type="Boolean" />
           <Property Name="key_class" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="doi_tuong_dat_biet" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_survey" FromRole="survey" ToRole="answer_response" />
@@ -1557,6 +1559,7 @@
               <MappingFragment StoreEntitySet="survey">
                 <ScalarProperty Name="doi_tuong_dat_biet" ColumnName="doi_tuong_dat_biet" />
                 <ScalarProperty Name="key_class" ColumnName="key_class" />
+                <ScalarProperty Name="is_hocky" ColumnName="is_hocky" />
                 <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
                 <ScalarProperty Name="creator" ColumnName="creator" />
                 <ScalarProperty Name="id_loaikhaosat" ColumnName="id_loaikhaosat" />

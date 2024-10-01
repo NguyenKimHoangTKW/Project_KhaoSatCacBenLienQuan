@@ -39,7 +39,7 @@ async function LoadChartFullSurvey() {
     var year = $("#yearGiamSat").val();
 
     try {
-        const response = await fetch('/CTDT/GiamSatKetQuaKhaoSat/ChartsTyLeThamGiaKhaoSat', {
+        const response = await fetch('/CTDT/GiamSatKetQuaKhaoSat/load_charts_ty_le', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -277,7 +277,7 @@ async function LoadChartSurveyThongTu01() {
     var year = $("#yearGiamSat").val();
 
     try {
-        const response = await fetch('/CTDT/GiamSatKetQuaKhaoSat/ChartsTyLeThamGiaKhaoSatThongTu01', {
+        const response = await fetch('/CTDT/GiamSatKetQuaKhaoSat/load_charts_ty_le_01', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
