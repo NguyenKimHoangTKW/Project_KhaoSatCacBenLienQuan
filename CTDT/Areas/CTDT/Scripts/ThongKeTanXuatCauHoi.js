@@ -469,11 +469,12 @@ $(document).on("change", "#surveyid", async function () {
         showLoading();
         try {
             await Promise.all([
-                LoadTyLeKhaoSat(id),
-                LoadCauHoiSingle(id),
-                LoadCauHoiNhieuLuaChon(id),
-                LoadCauHoi5Muc(id),
-                LoadYKienKhac(id)
+                //LoadTyLeKhaoSat(id),
+                //LoadCauHoiSingle(id),
+                //LoadCauHoiNhieuLuaChon(id),
+                //LoadCauHoi5Muc(id),
+                //LoadYKienKhac(id),
+                test(id)
             ]);
         } catch (error) {
             console.error('Error loading data:', error);
@@ -694,6 +695,15 @@ async function LoadCauHoiNhieuLuaChon(id) {
         container.html('');
     }
 }
+
+async function test(id) {
+    const res = await $.ajax({
+        url: '/CTDT/ThongKeKhaoSat/load_tan_xuat',
+        type: "POST",
+        data: { surveyid: id }
+    });
+    console.log(res);
+}
 async function LoadCauHoiSingle(id) {
     try {
         const response = await $.ajax({
@@ -805,7 +815,6 @@ async function LoadCauHoi5Muc(id) {
             },
             body: JSON.stringify({ surveyid: id }),
         });
-
         const res = await response.json();
         const tbody = $('#showdata');
         tbody.empty();

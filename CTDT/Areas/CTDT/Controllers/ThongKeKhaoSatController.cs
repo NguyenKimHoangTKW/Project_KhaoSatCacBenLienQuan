@@ -2,6 +2,7 @@
 using CTDT.Models;
 using Google.Apis.Util;
 using GoogleApi.Entities.Search.Common.Enums;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using System;
@@ -24,7 +25,6 @@ namespace CTDT.Areas.CTDT.Controllers
     public class ThongKeKhaoSatController : Controller
     {
         dbSurveyEntities db = new dbSurveyEntities();
-        #region Thống kê tỷ lệ tham gia khảo sát
         public ActionResult Index()
         {
             ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(x => x.id_namhoc), "id_namhoc", "ten_namhoc");
@@ -62,44 +62,20 @@ namespace CTDT.Areas.CTDT.Controllers
                 if (!string.IsNullOrEmpty(idphieu.key_class))
                 {
                     var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(idphieu.key_class);
-
-                   
-                        bool isStudent = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == false;
-
-                        bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == true;
-
-                        bool isCTDT = db.answer_response.Any(aw =>
-                            aw.id_sv == null &&
-                            aw.surveyID == survey.IDSurvey &&
-                            aw.id_ctdt == user.id_ctdt &&
-                            aw.id_mh == null &&
-                            aw.id_users != null &&
-                            aw.id_hk == null &&
-                            aw.id_CBVC == null &&
-                            aw.json_answer != null);
-
-                        bool isCBVC = db.answer_response.Any(aw =>
-                            aw.id_sv == null &&
-                            aw.surveyID == survey.IDSurvey &&
-                            aw.id_ctdt == user.id_ctdt &&
-                            aw.id_CBVC != null &&
-                            aw.id_users != null &&
-                            aw.id_mh == null &&
-                            aw.id_hk == null &&
-                            aw.json_answer != null);
-                        if (isStudent)
-                        {
-                            sinh_vien_thuong(ChartSurvey, user.id_ctdt, idphieu.surveyID, keyClassList);
-                        }
-                        else if (isStudentBySubject)
-                        {
-                            sinh_vien_subject(ChartSurvey, user.id_ctdt, idphieu.surveyID, keyClassList);
-                        }
+                    bool isStudent = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == false;
+                    bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == true;
+                    if (isStudent)
+                    {
+                        sinh_vien_thuong(ChartSurvey, user.id_ctdt, idphieu.surveyID, keyClassList);
+                    }
+                    else if (isStudentBySubject)
+                    {
+                        sinh_vien_subject(ChartSurvey, user.id_ctdt, idphieu.surveyID, keyClassList);
+                    }
                 }
                 else
                 {
                     bool isCTDT = new[] { 5 }.Contains(idphieu.id_loaikhaosat);
-
                     bool isCBVC = new[] { 3, 8 }.Contains(idphieu.id_loaikhaosat);
                     if (isCTDT)
                     {
@@ -111,13 +87,11 @@ namespace CTDT.Areas.CTDT.Controllers
                     }
                 }
             }
-
             var Alldata = new
             {
                 AllSurvey = GetAllSurvey,
                 ChartSurvey = ChartSurvey,
             };
-
             return Json(new { data = Alldata }, JsonRequestBehavior.AllowGet);
         }
         private void can_bo_vien_chuc(dynamic ChartSurvey, int? idctdt, int? surveyid)
@@ -125,7 +99,6 @@ namespace CTDT.Areas.CTDT.Controllers
             var cbvc = db.CanBoVienChuc
                                 .Where(x => x.id_chuongtrinhdaotao == idctdt)
                                 .ToList();
-
             var TotalAll = cbvc.Count();
             var DataCBVC = new
             {
@@ -260,7 +233,7 @@ namespace CTDT.Areas.CTDT.Controllers
             }
             return Json(new { data = list_data }, JsonRequestBehavior.AllowGet);
         }
-        private void can_bo_vien_chuc(string namesurvey ,int? idctdt, dynamic list_data )
+        private void can_bo_vien_chuc(string namesurvey, int? idctdt, dynamic list_data)
         {
             var cbvc = db.CanBoVienChuc
                             .Where(x => x.id_chuongtrinhdaotao == idctdt)
@@ -278,7 +251,7 @@ namespace CTDT.Areas.CTDT.Controllers
                 is_cbvc = true
             });
         }
-        private void chuong_trinh_dao_tao(string namesurvey, int? idctdt,dynamic list_data)
+        private void chuong_trinh_dao_tao(string namesurvey, int? idctdt, dynamic list_data)
         {
             var ctdt = db.answer_response
                             .Where(x => x.id_ctdt == idctdt)
@@ -295,10 +268,10 @@ namespace CTDT.Areas.CTDT.Controllers
                 is_ctdt = true
             });
         }
-        private void sinh_vien_thuong(string namesurvey,int? idctdt, int surveyid,dynamic list_data, List<string> keyClassList)
+        private void sinh_vien_thuong(string namesurvey, int? idctdt, int surveyid, dynamic list_data, List<string> keyClassList)
         {
             var sinh_vien = db.sinhvien
-                             .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt ==idctdt)
+                             .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == idctdt)
                              .Select(x => new
                              {
                                  ho_ten = x.hovaten,
@@ -332,7 +305,6 @@ namespace CTDT.Areas.CTDT.Controllers
             });
         }
         #endregion
-        #endregion
         #region Thống kê tần xuất câu hỏi
         public ActionResult thongketanxuat()
         {
@@ -360,6 +332,152 @@ namespace CTDT.Areas.CTDT.Controllers
                                 .ToList();
             return Json(new { data = sortedSurveys, success = true }, JsonRequestBehavior.AllowGet);
         }
+        public async Task<JsonResult> load_tan_xuat(int surveyid = 0)
+        {
+            var user = SessionHelper.GetUser();
+            var query = db.answer_response.AsQueryable();
+            var survey = await db.survey.AsNoTracking().FirstOrDefaultAsync(x => x.surveyID == surveyid);
+            List<object> results = new List<object>();
+
+            if (surveyid != 0)
+            {
+                query = query.Where(x => x.surveyID == surveyid);
+            }
+
+            if (!string.IsNullOrEmpty(survey?.key_class))
+            {
+                var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(survey.key_class);
+                bool isStudent = new[] { 1, 2, 4, 6 }.Contains(survey.id_loaikhaosat) && survey.is_hocky == false;
+                bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(survey.id_loaikhaosat) && survey.is_hocky == true;
+                if (isStudent || isStudentBySubject)
+                {
+                    results = cau_hoi_5_muc(query, user.id_ctdt, survey.surveyID, keyClassList);
+                }
+            }
+            else
+            {
+                bool isCTDT = new[] { 5 }.Contains(survey.id_loaikhaosat);
+                bool isCBVC = new[] { 3, 8 }.Contains(survey.id_loaikhaosat);
+                if (isCTDT)
+                {
+                    results = cau_hoi_5_muc(query, user.id_ctdt, survey.surveyID);
+                }
+                else if (isCBVC)
+                {
+                    results = cau_hoi_5_muc(query, user.id_ctdt, survey.surveyID);
+                }
+            }
+
+            return Json(new { Results = results }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        private List<object> cau_hoi_5_muc(IEnumerable<answer_response> query, int? idctdt, int? idsurvey, List<string> keyClassList = null)
+        {
+            var responses = query
+                .Where(d => (keyClassList == null || keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k))) && d.id_ctdt == idctdt && d.surveyID == idsurvey)
+                .Select(x => new { JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
+                .ToList();
+
+            Dictionary<string, Dictionary<string, int>> frequency = new Dictionary<string, Dictionary<string, int>>();
+            Dictionary<string, List<string>> choices = new Dictionary<string, List<string>>();
+
+            List<string> specificChoices = new List<string> {
+        "Hoàn toàn không đồng ý",
+        "Không đồng ý",
+        "Bình thường",
+        "Đồng ý",
+        "Hoàn toàn đồng ý"
+    };
+
+            foreach (var response in responses)
+            {
+
+                JObject jsonAnswerObject = JObject.Parse(response.JsonAnswer);
+                JObject surveydataObject = JObject.Parse(response.SurveyJson);
+
+                JArray answerPages = (JArray)jsonAnswerObject["pages"];
+                JArray surveyPages = (JArray)surveydataObject["pages"];
+
+                foreach (JObject surveyPage in surveyPages)
+                {
+                    JArray surveyElements = (JArray)surveyPage["elements"];
+
+                    foreach (JObject surveyElement in surveyElements)
+                    {
+                        string type = surveyElement["type"].ToString();
+                        if (type == "radiogroup")
+                        {
+                            JArray elementChoices = (JArray)surveyElement["choices"];
+                            List<string> elementChoiceTexts = elementChoices.Select(c => c["text"].ToString()).ToList();
+
+                            if (elementChoiceTexts.SequenceEqual(specificChoices))
+                            {
+                                string questionName = surveyElement["name"].ToString();
+                                string questionTitle = surveyElement["title"].ToString();
+
+                                if (!choices.ContainsKey(questionTitle))
+                                {
+                                    choices[questionTitle] = elementChoiceTexts;
+                                }
+
+                                foreach (JObject answerPage in answerPages)
+                                {
+                                    JArray answerElements = (JArray)answerPage["elements"];
+
+                                    foreach (JObject answerElement in answerElements)
+                                    {
+                                        if (answerElement["name"].ToString() == questionName)
+                                        {
+                                            string answer = answerElement["response"]["text"]?.ToString() ?? answerElement["response"]["name"]?.ToString() ?? "";
+
+                                            if (!frequency.ContainsKey(questionTitle))
+                                            {
+                                                frequency[questionTitle] = new Dictionary<string, int>();
+                                            }
+
+                                            if (!frequency[questionTitle].ContainsKey(answer))
+                                            {
+                                                frequency[questionTitle][answer] = 0;
+                                            }
+
+                                            frequency[questionTitle][answer]++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            var results = frequency.Select(f => (object)new
+            {
+                Question = f.Key,
+                TotalResponses = f.Value.Values.Sum(),
+                Frequencies = f.Value,
+                Percentages = f.Value.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => (double)kvp.Value / f.Value.Values.Sum() * 100
+                ),
+                AverageScore = f.Value.Sum(kvp =>
+                {
+                    switch (kvp.Key)
+                    {
+                        case "Hoàn toàn không đồng ý": return kvp.Value * 1;
+                        case "Không đồng ý": return kvp.Value * 2;
+                        case "Bình thường": return kvp.Value * 3;
+                        case "Đồng ý": return kvp.Value * 4;
+                        case "Hoàn toàn đồng ý": return kvp.Value * 5;
+                        default: return 0;
+                    }
+                }) / (double)f.Value.Values.Sum()
+            }).ToList();
+
+            return results;
+        }
+
+
         public JsonResult Loadthongketanxuat5Muc(int surveyid = 0)
         {
             var user = SessionHelper.GetUser();

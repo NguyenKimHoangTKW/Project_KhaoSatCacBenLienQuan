@@ -8,33 +8,28 @@
         }
     });
 }
-
 function EndLoading() {
     Swal.close();
 }
-
 $(document).ready(async function () {
     Loading();
     try {
         await LoadChartFullSurvey();
-        await LoadChartSurveyThongTu01(); 
-    }  finally {
-        EndLoading(); 
+        await LoadChartSurveyThongTu01();
+    } finally {
+        EndLoading();
     }
 });
 
 $(document).on("change", "#yearGiamSat", async function () {
     Loading();
     try {
-        await LoadChartFullSurvey();  
-        await LoadChartSurveyThongTu01(); 
-    }  finally {
+        await LoadChartFullSurvey();
+        await LoadChartSurveyThongTu01();
+    } finally {
         EndLoading();
     }
 });
-
-
-
 async function LoadChartFullSurvey() {
     var year = $("#yearGiamSat").val();
 
@@ -51,7 +46,7 @@ async function LoadChartFullSurvey() {
         const barChart = document.getElementById('bar-chart').getContext('2d');
         const lineChart = document.getElementById('line-chart').getContext('2d');
 
-        if (res.data && res.data.TitleSurvey.length > 0 && res.data.SurveyParticipationRate.length > 0 && res.data.SatisfactionLevel.length > 0) {
+        if (res.data.length > 0) {
             let labels = [];
             let data = [];
             let MucDoHaiLong = [];
@@ -60,7 +55,7 @@ async function LoadChartFullSurvey() {
             let participationRateMap = {};
             let satisfactionLevelMap = {};
 
-            res.data.TitleSurvey.forEach(async function (chil) {
+            res.data[0].TitleSurvey.forEach(async function (chil) {
                 if (chil.HocKy) {
                     let formatName = chil.NameSurvey.split('.')[0] + " - " + chil.HocKy;
                     titleSurveyMap[chil.IDSurvey] = formatName;
@@ -71,11 +66,11 @@ async function LoadChartFullSurvey() {
                 }
             });
 
-            res.data.SurveyParticipationRate.forEach(async function (chil) {
+            res.data[0].SurveyParticipationRate.forEach(async function (chil) {
                 participationRateMap[chil.IDPhieu] = chil.TyLeDaTraLoi;
             });
 
-            res.data.SatisfactionLevel.forEach(async function (survey) {
+            res.data[0].SatisfactionLevel.forEach(async function (survey) {
                 let sum = 0;
                 let totalQuestions = 0;
                 survey.forEach(function (question) {
@@ -301,12 +296,12 @@ async function LoadChartSurveyThongTu01() {
         let data = [];
         let MucDoHaiLong = [];
 
-        if (res.data && res.data.TitleSurvey.length > 0 && res.data.SurveyParticipationRate.length > 0 && res.data.SatisfactionLevel.length > 0) {
+        if (res.data.length > 0) {
             let titleSurveyMap = {};
             let participationRateMap = {};
             let satisfactionLevelMap = {};
 
-            res.data.TitleSurvey.forEach(async function (chil) {
+            res.data[0].TitleSurvey.forEach(async function (chil) {
                 if (chil.HocKy) {
                     let formatName = chil.NameSurvey.split('.')[0] + " - " + chil.HocKy;
                     titleSurveyMap[chil.IDSurvey] = formatName;
@@ -317,11 +312,11 @@ async function LoadChartSurveyThongTu01() {
                 }
             });
 
-            res.data.SurveyParticipationRate.forEach(async function (chil) {
+            res.data[0].SurveyParticipationRate.forEach(async function (chil) {
                 participationRateMap[chil.IDPhieu] = chil.TyLeDaTraLoi;
             });
 
-            res.data.SatisfactionLevel.forEach(async function (survey) {
+            res.data[0].SatisfactionLevel.forEach(async function (survey) {
                 let sum = 0;
                 let totalQuestions = 0;
                 survey.forEach(function (question) {
