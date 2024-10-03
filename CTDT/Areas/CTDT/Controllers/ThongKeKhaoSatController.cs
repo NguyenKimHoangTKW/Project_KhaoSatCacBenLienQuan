@@ -36,28 +36,15 @@ namespace CTDT.Areas.CTDT.Controllers
             var user = SessionHelper.GetUser();
 
             var query = db.answer_response
-                .Where(x => x.survey.id_hedaotao == user.id_hdt)
-                .GroupBy(x => x.survey.surveyID)
-                .Select(g => g.FirstOrDefault());
-
-            if (year != 0)
-            {
-                query = query.Where(x => x.id_namhoc == year);
-            }
-
-            var GetAllSurvey = query
-                .Select(x => new
-                {
-                    IDSurvey = x.surveyID,
-                    NameSurvey = x.survey.surveyTitle,
-                    HocKy = x.hoc_ky != null ? x.hoc_ky.ten_hk : null
-                }).ToList();
-
+                .Where(x => x.survey.id_hedaotao == user.id_hdt && x.id_namhoc == year)
+                .DistinctBy(x => x.surveyID)
+                .ToList();
             var ChartSurvey = new List<dynamic>();
-
-            foreach (var survey in GetAllSurvey)
+            var Survey = new List<dynamic>();
+            var Alldata = new List<dynamic>();
+            foreach (var survey in query)
             {
-                var idphieu = db.survey.Where(x => x.surveyID == survey.IDSurvey).FirstOrDefault();
+                var idphieu = db.survey.Where(x => x.surveyID == survey.surveyID).FirstOrDefault();
 
                 if (!string.IsNullOrEmpty(idphieu.key_class))
                 {
@@ -86,12 +73,18 @@ namespace CTDT.Areas.CTDT.Controllers
                         can_bo_vien_chuc(ChartSurvey, user.id_ctdt, idphieu.surveyID);
                     }
                 }
+                Survey.Add(new
+                {
+                    IDSurvey = survey.surveyID,
+                    NameSurvey = survey.survey.surveyTitle,
+                    HocKy = survey.hoc_ky != null ? survey.hoc_ky.ten_hk : null
+                });
             }
-            var Alldata = new
+            Alldata.Add(new
             {
-                AllSurvey = GetAllSurvey,
+                AllSurvey = Survey,
                 ChartSurvey = ChartSurvey,
-            };
+            });
             return Json(new { data = Alldata }, JsonRequestBehavior.AllowGet);
         }
         private void can_bo_vien_chuc(dynamic ChartSurvey, int? idctdt, int? surveyid)

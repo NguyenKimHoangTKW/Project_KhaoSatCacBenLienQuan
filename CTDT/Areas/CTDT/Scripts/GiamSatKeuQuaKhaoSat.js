@@ -46,7 +46,7 @@ async function LoadChartFullSurvey() {
         const barChart = document.getElementById('bar-chart').getContext('2d');
         const lineChart = document.getElementById('line-chart').getContext('2d');
 
-        if (res.data.length > 0) {
+        if (res.data[0].TitleSurvey.length > 0) {
             let labels = [];
             let data = [];
             let MucDoHaiLong = [];
