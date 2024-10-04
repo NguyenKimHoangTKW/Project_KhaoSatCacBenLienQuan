@@ -974,6 +974,7 @@
     <Content Include="Areas\CTDT\Scripts\BaoCaoTongHopKetQuaKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\DoiSanhKetQuaKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\GiamSatKeuQuaKhaoSat.js" />
+    <Content Include="Areas\CTDT\Scripts\luutru.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeKetQuaKhaoSatTheoYeuCau.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeNguoiDungKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeTanXuatCauHoi.js" />

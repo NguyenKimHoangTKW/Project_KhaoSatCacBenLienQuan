@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -30,10 +31,6 @@ namespace CTDT.Areas.CTDT.Controllers
             var user = SessionHelper.GetUser();
             var survey = db.answer_response
                 .Where(x => x.id_namhoc == id && x.survey.id_hedaotao == user.id_hdt)
-                .ToList();
-            var sortedSurveyList = survey
-                .OrderBy(s => s.survey.surveyTitle.Split('.').First())
-                .ThenBy(s => s.survey.surveyTitle)
                 .Select(x => new
                 {
                     ma_phieu = x.surveyID,
@@ -41,10 +38,19 @@ namespace CTDT.Areas.CTDT.Controllers
                     hoc_ky = x.hoc_ky != null ? x.hoc_ky.ten_hk : null
                 })
                 .Distinct()
+                .ToList()
+                .Select(x => new
+                {
+                    x.ma_phieu,
+                    x.ten_phieu,
+                    x.hoc_ky,
+                    so_phieu = int.TryParse(Regex.Match(x.ten_phieu, @"\d+").Value, out var number) ? number : 0
+                })
+                .OrderBy(x => x.so_phieu)
                 .ToList();
             var DataList = new List<dynamic>();
             var MucDoHaiLong = new List<dynamic>();
-            foreach (var item in sortedSurveyList)
+            foreach (var item in survey)
             {
                 var CheckKey = db.survey.Where(x => x.surveyID == item.ma_phieu).FirstOrDefault();
                 if (!string.IsNullOrEmpty(CheckKey.key_class))
@@ -56,14 +62,16 @@ namespace CTDT.Areas.CTDT.Controllers
                     {
 
                         sinh_vien(DataList, user.id_ctdt, item.ma_phieu, keyClassList);
-                        muc_do_hai_long(MucDoHaiLong, user.id_ctdt, item.ma_phieu, keyClassList);
                     }
-                    else if(isStudentBySubject)
+                    else if (isStudentBySubject)
                     {
                         sinh_vien_subject(DataList, user.id_ctdt, item.ma_phieu, keyClassList);
+
+                    }
+                    if (isStudent || isStudentBySubject)
+                    {
                         muc_do_hai_long(MucDoHaiLong, user.id_ctdt, item.ma_phieu, keyClassList);
                     }
-                    
                 }
                 else
                 {
@@ -72,18 +80,20 @@ namespace CTDT.Areas.CTDT.Controllers
                     if (isCTDT)
                     {
                         chuong_trinh_dao_tao(DataList, user.id_ctdt, item.ma_phieu);
-                        muc_do_hai_long(MucDoHaiLong, user.id_ctdt, item.ma_phieu);
                     }
-                    else if(isCBVC)
+                    else if (isCBVC)
                     {
                         can_bo_vien_chuc(DataList, user.id_ctdt, item.ma_phieu);
+                    }
+                    if (isCTDT || isCBVC)
+                    {
                         muc_do_hai_long(MucDoHaiLong, user.id_ctdt, item.ma_phieu);
                     }
-                } 
+                }
             }
             var GetData = new
             {
-                Survey = sortedSurveyList,
+                Survey = survey,
                 PercentageSurvey = DataList.Select(x => new
                 {
                     ma_phieu = x.IDPhieu,
@@ -156,7 +166,7 @@ namespace CTDT.Areas.CTDT.Controllers
             };
             DataList.Add(DataStudent);
         }
-        private void sinh_vien(dynamic DataList, int? idctdt,int? idsurvey,List<string> keyClassList)
+        private void sinh_vien(dynamic DataList, int? idctdt, int? idsurvey, List<string> keyClassList)
         {
             var sinhvien = db.sinhvien
                              .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == idctdt);
@@ -184,7 +194,7 @@ namespace CTDT.Areas.CTDT.Controllers
             };
             DataList.Add(DataStudent);
         }
-        private void muc_do_hai_long(dynamic MucDoHaiLong, int? idctdt,int? idsurvey,List<string>keyClassList = null)
+        private void muc_do_hai_long(dynamic MucDoHaiLong, int? idctdt, int? idsurvey, List<string> keyClassList = null)
         {
             var Mucdohailong = db.answer_response
                      .Where(d => d.id_ctdt == idctdt && d.surveyID == idsurvey)
