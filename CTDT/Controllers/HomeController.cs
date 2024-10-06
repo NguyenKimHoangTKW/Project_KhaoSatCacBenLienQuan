@@ -157,7 +157,7 @@ namespace CTDT.Controllers
             return View();
         }
 
-        public JsonResult load_select_xac_thuc(int id)
+        public JsonResult load_select_xac_thuc(int? id)
         {
             var user = SessionHelper.GetUser();
             var survey = db.survey.Where(x => x.surveyID == id).FirstOrDefault();

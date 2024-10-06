@@ -12,52 +12,80 @@
 function hideLoading() {
     Swal.close();
 }
-
-
 var initializing = true;
 $(document).ready(function () {
     var defaultYearId = $("#year").val();
     LoadSurveys(defaultYearId);
-
     $("#year").change(function () {
         var selectedYearId = $(this).val();
         LoadSurveys(selectedYearId);
     });
-
-    $('#exportExcel').click(function () {
-        if ($('#ThongKeTyLeSurvey').text().trim() === 'Không có dữ liệu') {
-            Swal.fire({
-                title: 'Không có dữ liệu',
-                text: 'Không có dữ liệu có sẵn để xuất Excel',
-                icon: 'warning',
-                confirmButtonText: 'OK'
-            });
-        } else {
-            let timerInterval;
-            Swal.fire({
-                title: "Loading ...",
-                html: "Đang kiểm tra và xuất kết quả, vui lòng chờ <b></b> giây.",
-                timer: 4000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const timer = Swal.getPopup().querySelector("b");
-                    timerInterval = setInterval(() => {
-                        timer.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
-                    }, 100);
-                },
-                willClose: () => {
-                    clearInterval(timerInterval);
-                }
-            }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
-                    ExportExcelKetQuaKhaoSat();
-                }
-            });
-        }
-    });
-
 });
+
+
+$(document).on('click', '#fildata', async function () {
+    var id = $("#surveyid").val();
+    var hocky = $("#hocky_fil").val();
+    if (id) {
+        showLoading();
+        try {
+            await loc_tan_xuat(id, hocky);
+        } finally {
+            hideLoading();
+        }
+    } else {
+        let html = `
+                <div class="alert alert-info">
+                    <div class="d-flex">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-close-o"></i>
+                        </span>
+                        <span style="font-weight: bold; margin-left: 10px;">Không có dữ liệu</span>
+                    </div>
+                </div>
+            `;
+        $("#ThongKeTyLeSurvey").html(html);
+        $("#accordion-default").hide();
+    }
+})
+
+$(document).on("click", "#exportExcel", async function () {
+    export_excel();
+})
+
+function export_excel() {
+    if ($('#ThongKeTyLeSurvey').text().trim() === 'Không có dữ liệu') {
+        Swal.fire({
+            title: 'Không có dữ liệu',
+            text: 'Không có dữ liệu có sẵn để xuất Excel',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+    } else {
+        let timerInterval;
+        Swal.fire({
+            title: "Loading ...",
+            html: "Đang kiểm tra và xuất kết quả, vui lòng chờ <b></b> giây.",
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                ExportExcelKetQuaKhaoSat();
+            }
+        });
+    }
+}
+
 function getFormattedDateTime() {
     const now = new Date();
     const year = now.getFullYear();
@@ -462,32 +490,6 @@ function ExportExcelKetQuaKhaoSat() {
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
 }
-
-$(document).on("change", "#surveyid", async function () {
-    var id = $(this).val();
-    if (id) {
-        showLoading();
-        try {
-            await test(id);
-        } finally {
-            hideLoading();
-        }
-    } else {
-        let html = `
-            <div class="alert alert-info">
-                <div class="d-flex">
-                    <span class="alert-icon">
-                        <i class="anticon anticon-close-o"></i>
-                    </span>
-                    <span style="font-weight: bold; margin-left: 10px;">Không có dữ liệu</span>
-                </div>
-            </div>
-        `;
-        $("#ThongKeTyLeSurvey").html(html);
-        $("#accordion-default").hide();
-    }
-});
-
 function LoadSurveys(yearId) {
     $.ajax({
         url: "/CTDT/ThongKeKhaoSat/LoadPKSByYear",
@@ -503,9 +505,19 @@ function LoadSurveys(yearId) {
                     $("#surveyid").val('').trigger('change');
                 } else {
                     items.forEach(function (Chil) {
-                        var html = `<option value="${Chil.IDSurvey}">${Chil.NameSurvey}</option>`;
+                        var html = `<option value="${Chil.IDSurvey}" data-is-hoc-ky="${Chil.is_hoc_ky}">${Chil.NameSurvey}</option>`;
                         $("#surveyid").append(html);
                     });
+                    $("#surveyid").off('change').on('change', function () {
+                        var selectedOption = $(this).find(':selected');
+                        var isHocKy = selectedOption.data('is-hoc-ky');
+                        if (isHocKy) {
+                            $('#hoc_ky').show();
+                        } else {
+                            $('#hoc_ky').hide();
+                        }
+                    });
+
                     if (!initializing) {
                         $("#surveyid").val(items[0].IDSurvey).trigger('change');
                     } else {
@@ -516,23 +528,23 @@ function LoadSurveys(yearId) {
                 var html = '<option value="">Error loading surveys</option>';
                 $("#surveyid").append(html);
             }
-        },
-        error: function (xhr, status, error) {
-            console.error("Error loading surveys by year:", error);
-            $("#surveyid").empty().append('<option value="">Error loading surveys</option>');
         }
     });
 }
+
 
 $(window).on('load', function () {
     initializing = false;
 });
 // Load Câu hỏi
-async function test(id) {
+async function loc_tan_xuat(id, hocky) {
     const res = await $.ajax({
         url: '/CTDT/ThongKeKhaoSat/load_tan_xuat',
         type: "POST",
-        data: { surveyid: id }
+        data: {
+            surveyid: id,
+            name_hoc_ky: hocky
+        }
     });
     form_ty_le(res.rate);
     form_cau_hoi_1_lua_chon(res.single_levels);

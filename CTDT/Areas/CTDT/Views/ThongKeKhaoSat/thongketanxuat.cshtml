@@ -21,7 +21,7 @@
                             <legend class="float-none w-auto px-3">Chức năng</legend>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo năm học</label>
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
                                     <select class="form-control select2" id="year">
                                         @foreach (var item in ViewBag.Year)
                                         {
@@ -30,20 +30,33 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo phiếu khảo sát</label>
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn phiếu khảo sát</label>
                                     <select class="form-control select2" id="surveyid">
                                         <!---->
                                     </select>
                                 </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="text">
-                                        <button class="btn btn-success m-r-5" id="exportExcel">Xuất Excel</button>
-                                    </div>
+                                <div class="col-md-6" id="hoc_ky" style="display:none">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn học kỳ</label>
+                                    <select class="form-control select2" id="hocky_fil">
+                                        <option value="">Chọn học kỳ</option>
+                                        @foreach (var item in ViewBag.HocKy)
+                                        {
+                                            <option value="@item.Text">@item.Text</option>
+                                        }
+                                    </select>
                                 </div>
                             </div>
+                            <hr />
+
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <button type="button" class="btn btn-info" id="fildata">Lọc dữ liệu</button>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                    <button class="btn btn-success" id="exportExcel">Xuất Excel</button>
+                                </div>
+                            </div>
+
                         </fieldset>
                     </div>
                     <div class="m-t-25">
