@@ -268,7 +268,7 @@ namespace CTDT.Areas.CTDT.Controllers
                     }
                     else
                     {
-                        return Json(new { message = "No valid semester found" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { message = "Không có dữ liệu cho học kỳ này" }, JsonRequestBehavior.AllowGet);
                     }
 
                 }

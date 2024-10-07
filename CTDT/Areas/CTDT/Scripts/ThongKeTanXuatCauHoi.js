@@ -8,7 +8,23 @@
         }
     });
 }
-
+function Toast_alert(type, message) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+    Toast.fire({
+        icon: type,
+        title: message
+    });
+}
 function hideLoading() {
     Swal.close();
 }
@@ -26,31 +42,32 @@ $(document).ready(function () {
 $(document).on('click', '#fildata', async function () {
     var id = $("#surveyid").val();
     var hocky = $("#hocky_fil").val();
-    if (id.trim() === "") {
-        alert("Vui lòng")
+    var check_hocky = $('#hoc_ky');
+
+    if (check_hocky.is(":visible")) {
+        if (hocky.trim() === "") {
+            var type = "error"
+            var message = "Vui lòng chọn học kỳ"
+            Toast_alert(type, message)
+            return;
+        }
     }
+
+    var body = $('#tan_xuat_table');
     if (id) {
         showLoading();
         try {
+            body.show();
             await loc_tan_xuat(id, hocky);
-        } finally {
             hideLoading();
+        } catch (error) {
+            body.hide();
+            var type = "error"
+            var message = "Không tìm thấy dữ liệu để thống kê"
+            Toast_alert(type, message)
         }
-    } else {
-        let html = `
-                <div class="alert alert-info">
-                    <div class="d-flex">
-                        <span class="alert-icon">
-                            <i class="anticon anticon-close-o"></i>
-                        </span>
-                        <span style="font-weight: bold; margin-left: 10px;">Không có dữ liệu</span>
-                    </div>
-                </div>
-            `;
-        $("#ThongKeTyLeSurvey").html(html);
-        $("#accordion-default").hide();
     }
-})
+});
 
 $(document).on("click", "#exportExcel", async function () {
     export_excel();
@@ -534,8 +551,6 @@ function LoadSurveys(yearId) {
         }
     });
 }
-
-
 $(window).on('load', function () {
     initializing = false;
 });
@@ -549,18 +564,19 @@ async function loc_tan_xuat(id, hocky) {
             name_hoc_ky: hocky
         }
     });
-    form_ty_le(res.rate);
-    form_cau_hoi_1_lua_chon(res.single_levels);
-    form_cau_hoi_nhieu_lua_chon(res.many_leves);
-    form_cau_hoi_5_muc(res.five_levels);
-    form_y_kien_khac(res.other_levels);
+    await form_ty_le(res.rate);
+    await form_cau_hoi_1_lua_chon(res.single_levels);
+    await form_cau_hoi_nhieu_lua_chon(res.many_leves);
+    await form_cau_hoi_5_muc(res.five_levels);
+    await form_y_kien_khac(res.other_levels);
 }
-function form_ty_le(ty_le) {
-    let container = $("#ThongKeTyLeSurvey");
-    let html = "";
-    container.empty();
 
-    html = `
+function form_ty_le(ty_le) {
+    if (ty_le) {
+        let container = $("#ThongKeTyLeSurvey");
+        let html = "";
+        container.empty();
+        html = `
         <p style="font-weight:bold;font-size:15px;text-align:center;color:black">THỐNG KÊ SỐ LƯỢNG THAM GIA KHẢO SÁT</p>
         <div class="question-block">
             <p style="font-size: 20px; font-weight: bold; color: black;"></p>
@@ -579,8 +595,8 @@ function form_ty_le(ty_le) {
                     <tbody>
     `;
 
-    ty_le.forEach(item => {
-        html += `
+        ty_le.forEach(item => {
+            html += `
             <tr>
                 <td>${item.CTDT}</td>
                 <td class="formatSo">${item.TongKhaoSat}</td>
@@ -590,22 +606,27 @@ function form_ty_le(ty_le) {
                 <td class="formatSo">${item.TyLeChuaTraLoi}%</td>
             </tr>
         `;
-    });
+        });
 
-    html += `
+        html += `
                     </tbody>
                 </table>
             </div>
         </div>`;
-    container.append(html);
-    $("#accordion-default").show();
+        container.append(html);
+        $("#accordion-default").show();
+    }
+    else {
+        container.empty();
+    }
 }
 function form_cau_hoi_1_lua_chon(ty_le) {
-    let container = $("#surveyContainerSingle");
-    container.empty();
-    ty_le.forEach(function (item, questionIndex) {
-        let questionTitle = item.QuestionTitle;
-        let questionHtml = `
+    if (ty_le) {
+        let container = $("#surveyContainerSingle");
+        container.empty();
+        ty_le.forEach(function (item, questionIndex) {
+            let questionTitle = item.QuestionTitle;
+            let questionHtml = `
                     <div class="question-block">
                         <p style="font-size: 20px; font-weight: bold; color: black;">${questionTitle}</p>
                         <div class="table-responsive">
@@ -640,15 +661,20 @@ function form_cau_hoi_1_lua_chon(ty_le) {
                     </div>
                     <hr />
                 `;
-        container.append(questionHtml);
-    });
+            container.append(questionHtml);
+        });
+    }
+    else {
+        container.empty();
+    }
 }
 function form_cau_hoi_nhieu_lua_chon(ty_le) {
-    let container = $("#surveyContainer");
-    container.empty();
-    ty_le.forEach(function (item, questionIndex) {
-        let questionTitle = item.QuestionTitle;
-        let questionHtml = `
+    if (ty_le) {
+        let container = $("#surveyContainer");
+        container.empty();
+        ty_le.forEach(function (item, questionIndex) {
+            let questionTitle = item.QuestionTitle;
+            let questionHtml = `
                         <div class="question-block">
                             <p style="font-size: 20px; font-weight: bold; color: black;" data-question-title="${questionTitle}">${questionTitle}</p>
                             <div class="table-responsive">
@@ -683,22 +709,27 @@ function form_cau_hoi_nhieu_lua_chon(ty_le) {
                         </div>
                         <hr />
                     `;
-        container.append(questionHtml);
-    });
+            container.append(questionHtml);
+        });
+    }
+    else {
+        container.empty();
+    }
 }
 function form_cau_hoi_5_muc(ty_le) {
-    const tbody = $('#showdata');
-    tbody.empty();
-    const thead = $("#showhead");
-    let html = "";
-    let totalResponses = 0;
-    let totalStronglyDisagree = 0;
-    let totalDisagree = 0;
-    let totalNeutral = 0;
-    let totalAgree = 0;
-    let totalStronglyAgree = 0;
-    let totalScore = 0;
-    html = `
+    if (ty_le) {
+        const tbody = $('#showdata');
+        tbody.empty();
+        const thead = $("#showhead");
+        let html = "";
+        let totalResponses = 0;
+        let totalStronglyDisagree = 0;
+        let totalDisagree = 0;
+        let totalNeutral = 0;
+        let totalAgree = 0;
+        let totalStronglyAgree = 0;
+        let totalScore = 0;
+        html = `
                 <tr>
                     <th rowspan="2">STT</th>
                     <th rowspan="2">Nội dung</th>
@@ -720,9 +751,9 @@ function form_cau_hoi_5_muc(ty_le) {
                     <th>Hoàn toàn đồng ý</th>
                 </tr>
             `;
-    thead.html(html);
+        thead.html(html);
 
-    html = `
+        html = `
                 <tr>
                     <td colspan="2">Tổng</td>
                     <td class="formatSo" id="totalResponses"></td>
@@ -739,81 +770,86 @@ function form_cau_hoi_5_muc(ty_le) {
                     <td class="formatSo" id="averageScore"></td>
                 </tr>
             `;
-    $("#showfoot").html(html);
+        $("#showfoot").html(html);
 
-    ty_le.forEach(function (item, index) {
-        const row = $('<tr>');
-        row.append($('<td class="formatSo">').text(index + 1));
-        row.append($('<td>').text(item.Question));
-        row.append($('<td class="formatSo">').text(item.TotalResponses));
+        ty_le.forEach(function (item, index) {
+            const row = $('<tr>');
+            row.append($('<td class="formatSo">').text(index + 1));
+            row.append($('<td>').text(item.Question));
+            row.append($('<td class="formatSo">').text(item.TotalResponses));
 
-        totalResponses += item.TotalResponses;
+            totalResponses += item.TotalResponses;
 
-        const frequencies = item.Frequencies;
-        const percentages = item.Percentages;
+            const frequencies = item.Frequencies;
+            const percentages = item.Percentages;
 
-        const stronglyDisagree = frequencies["Hoàn toàn không đồng ý"] || 0;
-        const disagree = frequencies["Không đồng ý"] || 0;
-        const neutral = frequencies["Bình thường"] || 0;
-        const agree = frequencies["Đồng ý"] || 0;
-        const stronglyAgree = frequencies["Hoàn toàn đồng ý"] || 0;
+            const stronglyDisagree = frequencies["Hoàn toàn không đồng ý"] || 0;
+            const disagree = frequencies["Không đồng ý"] || 0;
+            const neutral = frequencies["Bình thường"] || 0;
+            const agree = frequencies["Đồng ý"] || 0;
+            const stronglyAgree = frequencies["Hoàn toàn đồng ý"] || 0;
 
-        totalStronglyDisagree += stronglyDisagree;
-        totalDisagree += disagree;
-        totalNeutral += neutral;
-        totalAgree += agree;
-        totalStronglyAgree += stronglyAgree;
+            totalStronglyDisagree += stronglyDisagree;
+            totalDisagree += disagree;
+            totalNeutral += neutral;
+            totalAgree += agree;
+            totalStronglyAgree += stronglyAgree;
 
-        row.append($('<td class="formatSo">').text(stronglyDisagree));
-        row.append($('<td class="formatSo">').text(disagree));
-        row.append($('<td class="formatSo">').text(neutral));
-        row.append($('<td class="formatSo">').text(agree));
-        row.append($('<td class="formatSo">').text(stronglyAgree));
+            row.append($('<td class="formatSo">').text(stronglyDisagree));
+            row.append($('<td class="formatSo">').text(disagree));
+            row.append($('<td class="formatSo">').text(neutral));
+            row.append($('<td class="formatSo">').text(agree));
+            row.append($('<td class="formatSo">').text(stronglyAgree));
 
-        const stronglyDisagreePercentage = percentages["Hoàn toàn không đồng ý"] ? percentages["Hoàn toàn không đồng ý"].toFixed(2) + "%" : "0%";
-        const disagreePercentage = percentages["Không đồng ý"] ? percentages["Không đồng ý"].toFixed(2) + "%" : "0%";
-        const neutralPercentage = percentages["Bình thường"] ? percentages["Bình thường"].toFixed(2) + "%" : "0%";
-        const agreePercentage = percentages["Đồng ý"] ? percentages["Đồng ý"].toFixed(2) + "%" : "0%";
-        const stronglyAgreePercentage = percentages["Hoàn toàn đồng ý"] ? percentages["Hoàn toàn đồng ý"].toFixed(2) + "%" : "0%";
+            const stronglyDisagreePercentage = percentages["Hoàn toàn không đồng ý"] ? percentages["Hoàn toàn không đồng ý"].toFixed(2) + "%" : "0%";
+            const disagreePercentage = percentages["Không đồng ý"] ? percentages["Không đồng ý"].toFixed(2) + "%" : "0%";
+            const neutralPercentage = percentages["Bình thường"] ? percentages["Bình thường"].toFixed(2) + "%" : "0%";
+            const agreePercentage = percentages["Đồng ý"] ? percentages["Đồng ý"].toFixed(2) + "%" : "0%";
+            const stronglyAgreePercentage = percentages["Hoàn toàn đồng ý"] ? percentages["Hoàn toàn đồng ý"].toFixed(2) + "%" : "0%";
 
-        row.append($('<td class="formatSo">').text(stronglyDisagreePercentage));
-        row.append($('<td class="formatSo">').text(disagreePercentage));
-        row.append($('<td class="formatSo">').text(neutralPercentage));
-        row.append($('<td class="formatSo">').text(agreePercentage));
-        row.append($('<td class="formatSo">').text(stronglyAgreePercentage));
+            row.append($('<td class="formatSo">').text(stronglyDisagreePercentage));
+            row.append($('<td class="formatSo">').text(disagreePercentage));
+            row.append($('<td class="formatSo">').text(neutralPercentage));
+            row.append($('<td class="formatSo">').text(agreePercentage));
+            row.append($('<td class="formatSo">').text(stronglyAgreePercentage));
 
-        const averageScore = item.AverageScore;
-        totalScore += averageScore * item.TotalResponses;
+            const averageScore = item.AverageScore;
+            totalScore += averageScore * item.TotalResponses;
 
-        row.append($('<td class="formatSo">').text(averageScore.toFixed(2)));
-        tbody.append(row);
-    });
+            row.append($('<td class="formatSo">').text(averageScore.toFixed(2)));
+            tbody.append(row);
+        });
 
-    const averageScore = totalScore / totalResponses;
+        const averageScore = totalScore / totalResponses;
 
-    $('#totalResponses').text(totalResponses);
-    $('#totalStronglyDisagree').text(totalStronglyDisagree);
-    $('#totalDisagree').text(totalDisagree);
-    $('#totalNeutral').text(totalNeutral);
-    $('#totalAgree').text(totalAgree);
-    $('#totalStronglyAgree').text(totalStronglyAgree);
+        $('#totalResponses').text(totalResponses);
+        $('#totalStronglyDisagree').text(totalStronglyDisagree);
+        $('#totalDisagree').text(totalDisagree);
+        $('#totalNeutral').text(totalNeutral);
+        $('#totalAgree').text(totalAgree);
+        $('#totalStronglyAgree').text(totalStronglyAgree);
 
-    $('#percentageStronglyDisagree').text(((totalStronglyDisagree / totalResponses) * 100).toFixed(2) + "%");
-    $('#percentageDisagree').text(((totalDisagree / totalResponses) * 100).toFixed(2) + "%");
-    $('#percentageNeutral').text(((totalNeutral / totalResponses) * 100).toFixed(2) + "%");
-    $('#percentageAgree').text(((totalAgree / totalResponses) * 100).toFixed(2) + "%");
-    $('#percentageStronglyAgree').text(((totalStronglyAgree / totalResponses) * 100).toFixed(2) + "%");
-    $('#averageScore').text(averageScore.toFixed(2));
-    $("#showhead").show();
-    $("#showalldata").show();
-    $("#showfoot").show();
-    $("#TitleSurvey").show();
+        $('#percentageStronglyDisagree').text(((totalStronglyDisagree / totalResponses) * 100).toFixed(2) + "%");
+        $('#percentageDisagree').text(((totalDisagree / totalResponses) * 100).toFixed(2) + "%");
+        $('#percentageNeutral').text(((totalNeutral / totalResponses) * 100).toFixed(2) + "%");
+        $('#percentageAgree').text(((totalAgree / totalResponses) * 100).toFixed(2) + "%");
+        $('#percentageStronglyAgree').text(((totalStronglyAgree / totalResponses) * 100).toFixed(2) + "%");
+        $('#averageScore').text(averageScore.toFixed(2));
+        $("#showhead").show();
+        $("#showalldata").show();
+        $("#showfoot").show();
+        $("#TitleSurvey").show();
+    }
+    else {
+        tbody.empty();
+    }
 }
 function form_y_kien_khac(ty_le) {
-    let Ykienkhac = $("#YkienkhacSurvey");
-    let html = "";
-    Ykienkhac.empty();
-    html = `
+    if (ty_le) {
+        let Ykienkhac = $("#YkienkhacSurvey");
+        let html = "";
+        Ykienkhac.empty();
+        html = `
                 <p style="font-size: 20px; font-weight: bold; color: black;">Ý kiến khác</p>
                 <div class="question-block">
                     <div class="table-responsive">
@@ -840,5 +876,9 @@ function form_y_kien_khac(ty_le) {
                 </div>
                 <hr />
                 `;
-    Ykienkhac.append(html);
+        Ykienkhac.append(html);
+    }
+    else {
+        Ykienkhac.empty();
+    }
 }
