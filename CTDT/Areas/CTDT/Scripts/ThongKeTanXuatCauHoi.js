@@ -26,6 +26,9 @@ $(document).ready(function () {
 $(document).on('click', '#fildata', async function () {
     var id = $("#surveyid").val();
     var hocky = $("#hocky_fil").val();
+    if (id.trim() === "") {
+        alert("Vui lòng")
+    }
     if (id) {
         showLoading();
         try {
