@@ -1,14 +1,7 @@
 ﻿$(document).ready(function () {
     LoadSurvey();
-    load_doi_tuong_by_phieu()
     $("#year").change(function () {
         LoadSurvey();
-    });
-    $('.modal').on('hidden.bs.modal', function () {
-        $('#maLopFilter').val('');
-        $('.thamso-checkbox').prop('checked', false);
-        $('#select-all').prop('checked', false);
-        selectedThamSoGlobal = [];
     });
 });
 var initializing = true;
@@ -34,40 +27,24 @@ function LoadSurvey() {
                     $("#surveyid").val(res.data[0].ma_phieu).trigger('change');
                 } else {
                     $("#surveyid").val(res.data[0].ma_phieu);
-                    LoadDoiTuongBySurvey();
                 }
             }
         }
     });
 }
 
-async function load_doi_tuong_by_phieu() {
-    const res = await $.ajax({
-        url: '/CTDT/ThongKeKetQuaKhaoSatTheoYeuCau/load_doi_tuong_by_phieu',
-        type: 'POST'
-    })
 
+$(document).on('change', '#year_dap_vien_select', function () {
+    load_dap_vien();
+})
+async function load_dap_vien() {
+
+    const res = await $.ajax({
+        url: '/CTDT/ThongKeKetQuaKhaoSatTheoYeuCau/load_doi_tuong',
+        type: 'POST',
+        data: {
+            idnamhoc: 1
+        }   
+    })
     console.log(res);
 }
-
-//$(document).on('click', '#save_doi_tuong', function () {
-//    save_doi_tuong();
-//    load_ty_le()
-//});
-//function save_doi_tuong() {
-//    $('.thamso-checkbox:checked').each(function () {
-//        let value = $(this).val();
-//        if (!selectedThamSoGlobal.includes(value)) {
-//            selectedThamSoGlobal.push(value);
-//        }
-//    });
-//    $('.thamso-checkbox:not(:checked)').each(function () {
-//        let value = $(this).val();
-//        let index = selectedThamSoGlobal.indexOf(value);
-//        if (index !== -1) {
-//            selectedThamSoGlobal.splice(index, 1);
-//        }
-//    });
-//    sessionStorage.setItem('doituong', JSON.stringify(selectedThamSoGlobal));
-//}
-

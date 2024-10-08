@@ -57,7 +57,7 @@ namespace CTDT.Areas.CTDT.Controllers
                     }
                     else if (isStudentBySubject)
                     {
-                        sinh_vien_subject(DataList, user.id_ctdt, survey.surveyID, keyClassList);
+                        sinh_vien_subject(DataList, user.id_ctdt, survey.surveyID, survey.id_hk,keyClassList);
                         tan_xuat_cau_hoi_by_class(MucDoHaiLong, user.id_ctdt, survey.surveyID, keyClassList);
                     }
                 }
@@ -114,7 +114,7 @@ namespace CTDT.Areas.CTDT.Controllers
                     }
                     else if (isStudentBySubject)
                     {
-                        sinh_vien_subject(DataList, user.id_ctdt, survey.surveyID, keyClassList);
+                        sinh_vien_subject(DataList, user.id_ctdt, survey.surveyID,survey.id_hk, keyClassList);
                         tan_xuat_cau_hoi_thong_tu_01(MucDoHaiLong, user.id_ctdt, survey.surveyID, keyClassList);
                     }
                     Survey.Add(new
@@ -157,7 +157,7 @@ namespace CTDT.Areas.CTDT.Controllers
             };
             DataList.Add(DataCTDT);
         }
-        private void sinh_vien_subject(dynamic DataList, int? idctdt, int? idsurvey, List<string> keyClassList)
+        private void sinh_vien_subject(dynamic DataList, int? idctdt, int? idsurvey, int? idhk,List<string> keyClassList)
         {
             var sinhvienQuery = db.sinhvien
                             .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == idctdt);
@@ -167,7 +167,7 @@ namespace CTDT.Areas.CTDT.Controllers
             var TotalIsKhaoSat = db.answer_response
                 .Where(aw => aw.surveyID == idsurvey
                           && aw.id_ctdt == idctdt
-                          && aw.id_hk != null
+                          && aw.id_hk == idhk
                           && aw.id_CBVC != null
                           && aw.id_mh != null
                           && aw.json_answer != null

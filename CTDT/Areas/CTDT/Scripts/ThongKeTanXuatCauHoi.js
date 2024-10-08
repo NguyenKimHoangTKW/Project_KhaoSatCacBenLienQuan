@@ -60,6 +60,9 @@ $(document).on('click', '#fildata', async function () {
             body.show();
             await loc_tan_xuat(id, hocky);
             hideLoading();
+            var type = "success"
+            var message = "Lọc dữ liệu thành công"
+            Toast_alert(type, message)
         } catch (error) {
             body.hide();
             var type = "error"
@@ -101,6 +104,9 @@ function export_excel() {
         }).then((result) => {
             if (result.dismiss === Swal.DismissReason.timer) {
                 ExportExcelKetQuaKhaoSat();
+                var type = "success"
+                var message = "Xuất dữ liệu thành công"
+                Toast_alert(type, message)
             }
         });
     }

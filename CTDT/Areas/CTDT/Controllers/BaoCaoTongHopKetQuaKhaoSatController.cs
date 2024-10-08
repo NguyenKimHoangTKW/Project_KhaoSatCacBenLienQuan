@@ -35,7 +35,7 @@ namespace CTDT.Areas.CTDT.Controllers
                 {
                     ma_phieu = x.surveyID,
                     ten_phieu = x.survey.surveyTitle,
-                    hoc_ky = x.hoc_ky != null ? x.hoc_ky.ten_hk : null
+                    hoc_ky = x.hoc_ky != null ? x.hoc_ky.ten_hk : null,
                 })
                 .Distinct()
                 .ToList()
@@ -140,7 +140,7 @@ namespace CTDT.Areas.CTDT.Controllers
             };
             DataList.Add(DataCTDT);
         }
-        private void sinh_vien_subject(dynamic DataList, int? idctdt, int? idsurvey, List<string> keyClassList)
+        private void sinh_vien_subject(dynamic DataList, int? idctdt, int? idsurvey,List<string> keyClassList)
         {
             var sinhvien = db.sinhvien
                              .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == idctdt);
@@ -149,7 +149,7 @@ namespace CTDT.Areas.CTDT.Controllers
                                 .Any(aw => aw.id_sv == sv.id_sv
                                 && aw.surveyID == idsurvey
                                 && aw.id_ctdt == idctdt
-                                && aw.id_hk != null
+                                && aw.id_hk != null 
                                 && aw.id_CBVC != null
                                 && aw.id_mh != null
                                 && aw.json_answer != null));
