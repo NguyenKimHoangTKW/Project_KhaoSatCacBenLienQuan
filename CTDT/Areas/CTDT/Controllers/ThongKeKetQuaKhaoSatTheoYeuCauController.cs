@@ -189,10 +189,8 @@ namespace CTDT.Areas.CTDT.Controllers
             var survey = db.survey
                 .Where(x => x.id_hedaotao == user.id_hdt && x.id_namhoc == idnamhoc)
                 .ToList();
-
             var data = new List<dynamic>();
             var check_contains = new HashSet<string>();
-
             foreach (var items in survey)
             {
                 bool isStudent = new[] { 1, 2, 4, 6 }.Contains(items.id_loaikhaosat) && (items.is_hocky == false || items.is_hocky == true);
@@ -235,7 +233,6 @@ namespace CTDT.Areas.CTDT.Controllers
                             ctdt = x.ctdt.ten_ctdt,
                         })
                         .ToList();
-
                     var message = "Chọn đáp viên thống kê theo doanh nghiệp";
                     if (!check_contains.Contains(message))
                     {
@@ -260,7 +257,6 @@ namespace CTDT.Areas.CTDT.Controllers
                             thuoc_don_vi = x.id_donvi != null ? x.DonVi.name_donvi : "Không tồn tại đơn vị"
                         })
                         .ToList();
-
                     var message = "Chọn đáp viên thống kê theo cán bộ viên chức trong trường";
                     if (!check_contains.Contains(message))
                     {
@@ -274,7 +270,6 @@ namespace CTDT.Areas.CTDT.Controllers
                     }
                 }
             }
-
             return Json(new { data = data }, JsonRequestBehavior.AllowGet);
         }
 

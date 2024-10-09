@@ -39,7 +39,7 @@
                                         <!--List Phiếu Khảo Sát-->
                                     </select>
                                 </div>
-                            </div>                        
+                            </div>
                             <hr />
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-between">
@@ -95,34 +95,21 @@
                                         }
                                     </select>
                                 </div>
-                                
+
                             </div>
                             <hr />
-
-                            <div class="row">
-                                <div class="col-12 d-flex justify-content-between">
-                                    <button class="btn btn-primary" id="filterData">Lọc dữ liệu</button>
-                                    <button class="btn btn-success" id="exportExcel">Xuất Excel</button>
-                                </div>
-                            </div>
+                            @*<div class="row">
+                                    <div class="col-12 d-flex justify-content-between">
+                                        <button class="btn btn-primary" id="filterData">Lọc dữ liệu</button>
+                                        <button class="btn btn-success" id="exportExcel">Xuất Excel</button>
+                                    </div>
+                                </div>*@
                         </fieldset>
                     </div>
-                    <div class="card">
-                        
-                        <div class="accordion" id="accordion-default">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="card-title">
-                                        <a data-toggle="collapse" href="#collapseOneDefault">
-                                            <span>Collapsible Group Item #1</span>
-                                        </a>
-                                    </h5>
-                                </div>
-                                <div id="collapseOneDefault" class="collapse" data-parent="#accordion-default">
-                                    <div class="card-body">
-                                        ...
-                                    </div>
-                                </div>
+                    <div class="card" id="body" style="display:none">
+                        <div class="accordion" id="accordion-default" >
+                            <div class="card" id="show_title_collapsible">
+                                <!--Load Data Chọn đáp viên-->
                             </div>
                         </div>
                     </div>
