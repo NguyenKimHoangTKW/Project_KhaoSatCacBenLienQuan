@@ -58,10 +58,10 @@ async function load_dap_vien() {
     var select_year = $('#year_dap_vien_select').val();
     var show_body = $('#body');
     const res = await $.ajax({
-        url: '/CTDT/ThongKeKetQuaKhaoSatTheoYeuCau/load_doi_tuong',
+        url: '/api/load_doi_tuong_by_loai_khao_sat',
         type: 'POST',
         data: {
-            idnamhoc: select_year
+            ten_namhoc: select_year
         }
     });
     if (res.data.length >0) {
@@ -143,7 +143,12 @@ function generate_table_business(data, tableId) {
         html += '<td>' + doanhnghiep.ho_ten + '</td>';
         html += '<td>' + doanhnghiep.email + '</td>';
         html += '<td>' + doanhnghiep.ctdt + '</td>';
-        html += '<td>' + doanhnghiep.ctdt + '</td>';
+        html += '<td style="text-align:center;">';
+        html += '<div class="form-check" style="transform: scale(1.5);">';
+        html += '<input class="form-check-input" type="checkbox" id="gridCheck' + i + '" value="' + doanhnghiep.ho_ten + '" onchange="handleCheckboxChange(this)" >';
+        html += '<label class="form-check-label" for="gridCheck' + i + '"></label>';
+        html += '</div>';
+        html += '</td>';
         html += '</tr>';
     });
     html += '</tbody>';
@@ -175,7 +180,12 @@ function generate_table_civilservants(data, tableId) {
         html += '<td>' + cbvc.ho_ten + '</td>';
         html += '<td>' + cbvc.thuoc_ctdt + '</td>';
         html += '<td>' + cbvc.thuoc_don_vi + '</td>';
-        html += '<td>' + cbvc.thuoc_don_vi + '</td>';
+        html += '<td style="text-align:center;">';
+        html += '<div class="form-check" style="transform: scale(1.5);">';
+        html += '<input class="form-check-input" type="checkbox" id="gridCheck' + i + '" value="' + cbvc.ma_cbvc + '" onchange="handleCheckboxChange(this)" >';
+        html += '<label class="form-check-label" for="gridCheck' + i + '"></label>';
+        html += '</div>';
+        html += '</td>';
         html += '</tr>';
     });
     html += '</tbody>';
@@ -188,6 +198,16 @@ var selectedStudents = [];
 function generate_table_student(data, tableId) {
     var html = "";
     html += '<div class="m-t-25">';
+    html += '<div class="col-md-6" style="margin-bottom: 20px;">';
+    html += '<label class="form-label" style="font-size: 16px; font-weight: bold; color: #333; display:block; margin-bottom: 10px;">Lọc theo Lớp</label>';
+    html += '<select class="form-control lop_select" style="padding: 10px; font-size: 14px; width: 100%; height: 45px; border-radius: 5px;" data-table-id="' + tableId + '">';
+    html += '<option value="">Tất cả</option>';
+    var uniqueLops = [...new Set(data.map(nguoihoc => nguoihoc.lop))];
+    uniqueLops.forEach(function (lop) {
+        html += '<option value="' + lop + '">' + lop + '</option>';
+    });
+    html += '</select>';
+    html += '</div>';
     html += '<div class="table-responsive">';
     html += '<table class="table table-bordered" id="' + tableId + '">';
     html += '<thead>';
@@ -206,9 +226,9 @@ function generate_table_student(data, tableId) {
         html += '<td>' + nguoihoc.ho_ten + '</td>';
         html += '<td>' + nguoihoc.ma_nguoi_hoc + '</td>';
         html += '<td>' + nguoihoc.lop + '</td>';
-        html += '<td style="text-align:center;">'; 
-        html += '<div class="form-check" style="transform: scale(1.5);">'; 
-        html += '<input class="form-check-input" type="checkbox" id="gridCheck' + i + '" value="' + nguoihoc.ma_nguoi_hoc + '" onchange="handleCheckboxChange(this)" >';
+        html += '<td style="text-align:center;">';
+        html += '<div class="form-check" style="transform: scale(1.5);">';
+        html += '<input class="form-check-input" type="checkbox" id="gridCheck' + i + '" value="' + nguoihoc.ma_nguoi_hoc + '" onchange="handleCheckboxChange(this)">';
         html += '<label class="form-check-label" for="gridCheck' + i + '"></label>';
         html += '</div>';
         html += '</td>';
@@ -220,6 +240,7 @@ function generate_table_student(data, tableId) {
     html += '</div>';
     return html;
 }
+
 
 function handleCheckboxChange(checkbox) {
     var studentId = checkbox.value;
@@ -233,12 +254,11 @@ function handleCheckboxChange(checkbox) {
     }
     console.log(selectedStudents);
 }
-
 function initializeDataTable(tableId) {
     if ($.fn.DataTable.isDataTable('#' + tableId)) {
         $('#' + tableId).DataTable().clear().destroy();
     }
-    $('#' + tableId).DataTable({
+    var table = $('#' + tableId).DataTable({
         pageLength: 7,
         lengthMenu: [5, 10, 25, 50, 100],
         ordering: true,
@@ -253,5 +273,10 @@ function initializeDataTable(tableId) {
         },
         dom: "Bfrtip",
         buttons: ['csv', 'excel', 'print']
+    });
+
+    $('.lop_select[data-table-id="' + tableId + '"]').on('change', function () {
+        var selectedLop = this.value;
+        table.columns(3).search(selectedLop).draw();
     });
 }

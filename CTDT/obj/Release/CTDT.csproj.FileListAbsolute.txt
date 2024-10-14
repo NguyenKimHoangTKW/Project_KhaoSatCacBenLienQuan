@@ -175,3 +175,12 @@ D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\Microsoft.IdentityModel.Tokens.xml
 D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.IdentityModel.Tokens.Jwt.xml
 D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Text.Encodings.Web.xml
 D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Text.Json.xml
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\Newtonsoft.Json.Bson.dll
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Net.Http.Formatting.dll
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Web.Http.dll
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Web.Http.WebHost.dll
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\Newtonsoft.Json.Bson.pdb
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\Newtonsoft.Json.Bson.xml
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Net.Http.Formatting.xml
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Web.Http.xml
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\System.Web.Http.WebHost.xml

@@ -17,7 +17,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <!-- Core css -->
     <link href="~/Areas/assets/css/app.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link href="~/Areas/assets/css/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Areas/assets/css/buttons.dataTables.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -207,18 +208,8 @@
 
     <!-- Core Vendors JS -->
     @Scripts.Render("~/bundles/jquery")
-
-    <script src="~/Areas/assets/js/vendors.min.js"></script>
-    <script src="~/Areas/assets/vendors/chartjs/Chart.min.js"></script>
-
-    <script src="~/Areas/assets/vendors/select2/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.2.0/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="~/Areas/assets/js/app.min.js"></script>
-    <script src="~/Areas/assets/js/pages/file-manager.js"></script>
-    <script src="~/Areas/assets/js/login-google.js"></script>
+    @Scripts.Render("~/bundles/CTDT/js")
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
     @RenderSection("scriptsCTDT", required: false)
 </body>
 </html>

@@ -51,6 +51,21 @@ html {
 @-ms-viewport {
   width: device-width; }
 
+.scrolling-text-wrapper {
+    width: 300px;
+    text-align: center;
+}
+
+.scrolling-text {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #167ce9;
+    margin-left: 16px;
+}
+
+
+
 article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block; }
 
@@ -63,17 +78,35 @@ body {
   color: #212529;
   text-align: left;
   background-color: #fff; }
-.hero-wrap {
-    background-image: url('/Style/assets/LogoKSCBLQ.png');
-    
-}
 
 @media (max-width: 768px) {
     .hero-wrap {
-        background-image: none;
-        display:none;
+        display: none; 
+    }
+
+    .course .img {
+        display: block;
+        width: 100%; 
+        height: auto; 
+        max-height: 262px; 
+        object-fit: cover; 
+    }
+
+    .scrolling-text-wrapper {
+        width: 100%; 
+        padding-top: 27px;
+        border-bottom: none; 
+        text-align: left; 
+        margin: 10px 0; 
+    }
+
+    .scrolling-text {
+        font-size: 18px;
+        margin-left: 31px;
+        text-align: center;
     }
 }
+
 hr {
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
@@ -85,8 +118,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem; }
 
 p {
-  margin-top: 0;
-  margin-bottom: 1rem; }
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 18px;
+}
 
 abbr[title],
 abbr[data-original-title] {
@@ -479,7 +514,7 @@ pre {
       max-width: 960px; } }
   @media (min-width: 1200px) {
     .container {
-      max-width: 1140px; } }
+      max-width: 1565px; } }
 
 .container-fluid {
   width: 100%;
@@ -4022,11 +4057,14 @@ input[type="button"].btn-block {
   border-radius: 0; }
 
 .alert {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem; }
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    font-size: 19px;
+    font-weight: bold;
+}
 
 .alert-heading {
   color: inherit; }
@@ -7396,9 +7434,9 @@ h1, h2, h3, h4, h5,
     padding-right: 0;
     text-transform: uppercase;
     font-size: 20px;
-    letter-spacing: 2em;
-    padding-top: 20px;
-    padding-right: 48px;
+    letter-spacing: -0.1em;
+    padding-top: 22px;
+    padding-right: 262px;
 }
   .ftco-navbar-light.scrolled {
     position: fixed;
@@ -7483,29 +7521,16 @@ h1, h2, h3, h4, h5,
     font-size: 30px; }
 
 .hero-wrap {
-  width: 100%;
-  height: 750px;
-  position: relative; }
+    width: 100%;
+    height: 550px;
+    position: relative;
+    background-image: url(/Style/assets/LogoKSCBLQ.png);
+    background-size: contain;
+    background-position: center; 
+}
   .hero-wrap.hero-wrap-2 {
-    height: 600px; }
-  /*.hero-wrap .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    content: '';
-    opacity: .7;
-    background: #6a00ff;
-    background: -moz-linear-gradient(left, #6a00ff 0%, #ffd900 100%);
-    background: -webkit-gradient(left top, right top, color-stop(0%, #6a00ff), color-stop(100%, #ffd900));
-    background: -webkit-linear-gradient(left, #6a00ff 0%, #ffd900 100%);
-    background: -o-linear-gradient(left, #6a00ff 0%, #ffd900 100%);
-    background: -ms-linear-gradient(left, #6a00ff 0%, #ffd900 100%);
-    background: -webkit-gradient(linear, left top, right top, from(#6a00ff), to(#ffd900));
-    background: linear-gradient(to right, #6a00ff 0%, #ffd900 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6a00ff', endColorstr='#ffd900', GradientType=1 ); }
-*/
+    height: 600px;
+  }
 .slider-text {
   color: #fff;
   height: 600px; }
@@ -7643,10 +7668,12 @@ h1, h2, h3, h4, h5,
   box-shadow: none !important; }
   .btn:hover, .btn:active, .btn:focus {
     outline: none; }
-  .btn.btn-primary {
-    background: #167ce9;
-    border: 1px solid #167ce9;
-    color: #fff; }
+    .btn.btn-primary {
+        background: #167ce9;
+        border: 1px solid #167ce9;
+        color: #fff;
+        font-size: 20px;
+    }
     .btn.btn-primary:hover {
       border: 1px solid #167ce9;
       background: transparent !important;
@@ -7909,18 +7936,24 @@ h1, h2, h3, h4, h5,
   @media (min-width: 768px) {
     .course {
       margin-bottom: 30px; } }
-  .course .img {
+.course .img {
     display: block;
-    height: 250px; }
+    height: 402px;
+    width: 100%;
+}
   .course .text h3 {
     font-size: 20px; }
     .course .text h3 a {
-      color: #1b212c; }
+        color: #1b212c;
+        font-size: 25px;
+    }
   .course .text p.category {
     display: block; }
     .course .text p.category > span {
-      display: inline-block;
-      border-bottom: 2px solid #eceef3; }
+        display: inline-block;
+        font-size: 22px;
+        border-bottom: 2px solid #eceef3;
+    }
     .course .text p.category .price {
       background: #ffc300;
       border-bottom: transparent;
@@ -8474,7 +8507,7 @@ textarea.form-control {
   margin-bottom: 10px; }
 
 .heading-section h2 {
-  font-size: 30px;
+  font-size: 34px;
   font-weight: 400; }
   @media (max-width: 767.98px) {
     .heading-section h2 {

@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Upload Excel";
+}
+<div style="margin-top:150px">
+    <h2>Upload Excel File</h2>
+    <div>
+        <select id="testselect">
+            <option value="1">Đáp viên không phải phiếu 8</option>
+            <option value="2">Đáp viên phiếu 8</option>
+        </select>
+    </div>
+
+    @using (Html.BeginForm("UploadExcel", "Survey", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="file" />
+        <input type="submit" value="Upload" />
+    }
+
+    <div id="jsonResult"></div>
+</div>
+
+@section ScriptsAdmin {
+    <script>
+        $('form').submit(async function (e) {
+            e.preventDefault();
+
+            var formData = new FormData($(this)[0]);
+            var selectedValue = $("#testselect").val();
+
+            formData.append('CheckDuLieu', selectedValue);
+            Swal.fire({
+                title: 'Đang tải lên...',
+                text: 'Vui lòng chờ trong giây lát.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const data = await $.ajax({
+                    url: '@Url.Action("UploadExcel", "test")',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                });
+
+                Swal.close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tải lên thành công!',
+                    showConfirmButton: true,
+                    timer: 1500
+                });
+
+                $('#jsonResult').html(JSON.stringify(data, null, 2));
+                console.log(data);
+
+            } catch (error) {
+                Swal.close();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Đã xảy ra lỗi khi tải lên tệp tin.',
+                    showConfirmButton: true
+                });
+
+                console.error('Error occurred while uploading the file:', error);
+            }
+        });
+    </script>
+}

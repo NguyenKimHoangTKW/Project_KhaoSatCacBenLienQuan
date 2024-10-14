@@ -18,6 +18,7 @@ namespace CTDT.Models
         public survey()
         {
             this.answer_response = new HashSet<answer_response>();
+            this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
         }
     
         public int surveyID { get; set; }
@@ -43,5 +44,7 @@ namespace CTDT.Models
         public virtual LoaiKhaoSat LoaiKhaoSat { get; set; }
         public virtual NamHoc NamHoc { get; set; }
         public virtual users users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
     }
 }

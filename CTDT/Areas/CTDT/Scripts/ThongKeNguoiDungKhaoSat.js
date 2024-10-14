@@ -34,9 +34,9 @@ $(document).on("change", "#Year", async function () {
 async function LoadChartSurvey() {
     var year = $("#Year").val();
     const res = await $.ajax({
-        url: '/CTDT/ThongKeKhaoSat/load_charts_nguoi_hoc',
+        url: '/api/load_thong_ke_nguoi_hoc',
         type: 'POST',
-        data: { year: year },
+        data: { ten_namhoc: year },
     });
     $('#survey-list').empty();
     if (res.data[0].AllSurvey.length > 0) {
@@ -56,7 +56,7 @@ async function LoadChartSurvey() {
                     <div class="card-body">
                         <div style="align-items: center;">
                             <p style="color:#5029ff;font-weight:bold; position: absolute; top: 0; left: 20px;">${SurveyBySubject}</p>
-                            <a href="" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-maphieu="${survey.IDSurvey}">Xem chi tiết</a>
+                            <a href="" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-tenphieu="${survey.NameSurvey}">Xem chi tiết</a>
                             <hr/>
                             <p style="color:black;font-weight:bold">${TieuDePhieu}</p>
                             <hr/>
@@ -121,20 +121,18 @@ async function LoadChartSurvey() {
 }
 
 $(document).on("click", "#maphieu", function () {
-    var maphieu = $(this).data("maphieu");
+    var maphieu = $(this).data("tenphieu");
     $('#surveyModal').modal('show');
     load_nguoi_hoc(maphieu);
 })
 $('#surveyModal').on('shown.bs.modal', function () {
     $('#data-table-section').show();
 });
-async function load_nguoi_hoc(id) {
+async function load_nguoi_hoc(namesurvey) {
     const res = await $.ajax({
-        url: '/CTDT/ThongKeKhaoSat/load_nguoi_hoc',
+        url: '/api/load_thong_ke_nguoi_hoc_khao_sat',
         type: 'POST',
-        data: {
-            surveyid: id
-        }
+        data: { surveyTitle: namesurvey }
     });
 
     if (res && res.data.length > 0) {

@@ -187,9 +187,9 @@ async function LoadKetQua() {
     var Year = $('#Year').val();
     try {
         const res = await $.ajax({
-            url: '/CTDT/BaoCaoTongHopKetQuaKhaoSat/x_loadbaocaotonghop',
+            url: '/api/bao_cao_tong_hop',
             type: 'POST',
-            data: { id: Year }
+            data: { ten_namhoc: Year }
         });
 
         let body = $('#showdata');

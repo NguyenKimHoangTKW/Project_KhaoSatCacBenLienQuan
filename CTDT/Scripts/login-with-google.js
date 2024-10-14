@@ -21,7 +21,6 @@
         input.setAttribute('value', params[p]);
         form.appendChild(input);
     }
-
     document.body.appendChild(form);
     form.submit();
 
@@ -48,14 +47,12 @@ if (info && info['access_token']) {
     })
         .then((response) => response.json())
         .then((userInfo) => {
-            var family = userInfo.name.split(userInfo.given_name)[1]
-            Session_Login(userInfo.email, userInfo.given_name, family, userInfo.picture)
+            Session_Login(userInfo.email, userInfo.given_name, userInfo.family_name, userInfo.picture)
         })
         .catch((error) => {
             console.error("Error fetching user info:", error);
         });
 }
-
 function Session_Login(email, firstname, lastname, urlimage) {
     $.ajax({
         url: '/Account/Login_Google',

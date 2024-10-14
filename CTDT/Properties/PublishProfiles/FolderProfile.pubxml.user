@@ -5,20 +5,29 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>D:\TTDBCL\Final</_PublishTargetUrl>
-    <History>True|2024-08-23T09:07:52.8739072Z||;False|2024-08-23T16:05:15.8969083+07:00||;False|2024-08-23T16:02:24.3650905+07:00||;</History>
+    <History>True|2024-10-10T03:55:59.1242612Z||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
     <File Include="Areas/Admin/Scripts/BaoCaoTongHop.js">
       <publishTime>08/20/2024 22:30:02</publishTime>
     </File>
+    <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/CanBoVienChuc.js">
+      <publishTime>09/30/2024 10:22:20</publishTime>
+    </File>
+    <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/ChuongTrinhDaoTao.js">
+      <publishTime>09/10/2024 14:24:40</publishTime>
+    </File>
     <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/Khoa.js">
-      <publishTime>07/29/2024 22:25:13</publishTime>
+      <publishTime>09/10/2024 10:23:30</publishTime>
     </File>
     <File Include="Areas/Admin/Scripts/DoiTuongKhaoSat.js">
       <publishTime>07/16/2024 14:17:22</publishTime>
     </File>
-    <File Include="Areas/Admin/Scripts/PhanQuyenNguoiDung.js">
+    <File Include="Areas/Admin/Scripts/PhanQuyen/DanhSachTaiKhoan.js">
+      <publishTime>10/01/2024 10:36:12</publishTime>
+    </File>
+    <File Include="Areas/Admin/Scripts/PhanQuyen/PhanQuyenNguoiDung.js">
       <publishTime>08/21/2024 21:52:36</publishTime>
     </File>
     <File Include="Areas/Admin/Scripts/PhieuKhaoSat.js">
@@ -28,25 +37,28 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/19/2024 09:26:30</publishTime>
     </File>
     <File Include="Areas/Admin/Views/CBVC/ViewCBVC.cshtml">
-      <publishTime>07/06/2024 23:37:39</publishTime>
+      <publishTime>09/10/2024 14:39:53</publishTime>
     </File>
     <File Include="Areas/Admin/Views/CTDT/ViewCTDT.cshtml">
-      <publishTime>07/25/2024 14:29:03</publishTime>
+      <publishTime>09/10/2024 14:28:39</publishTime>
     </File>
     <File Include="Areas/Admin/Views/DoiTuongKhaoSat/ViewDoiTuongKhaoSat.cshtml">
       <publishTime>07/16/2024 14:18:22</publishTime>
     </File>
+    <File Include="Areas/Admin/Views/ImportData/Index.cshtml">
+      <publishTime>09/24/2024 08:55:58</publishTime>
+    </File>
     <File Include="Areas/Admin/Views/Khoa/ViewKhoa.cshtml">
-      <publishTime>07/29/2024 22:26:07</publishTime>
+      <publishTime>09/10/2024 10:23:07</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Lop/ViewLop.cshtml">
-      <publishTime>08/19/2024 16:20:27</publishTime>
+      <publishTime>08/28/2024 11:13:12</publishTime>
     </File>
     <File Include="Areas/Admin/Views/NguoiDung/PhanQuyen.cshtml">
       <publishTime>08/21/2024 21:52:54</publishTime>
     </File>
     <File Include="Areas/Admin/Views/NguoiDung/ViewUser.cshtml">
-      <publishTime>07/30/2024 10:10:44</publishTime>
+      <publishTime>10/01/2024 08:14:37</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PhieuKhaoSat/AddSurvey.cshtml">
       <publishTime>06/06/2024 13:52:24</publishTime>
@@ -70,13 +82,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/20/2024 08:51:41</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_AdminLayout.cshtml">
-      <publishTime>08/20/2024 08:37:37</publishTime>
+      <publishTime>09/10/2024 10:01:42</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_AdminNavPartial.cshtml">
-      <publishTime>08/22/2024 14:31:14</publishTime>
+      <publishTime>09/04/2024 15:12:44</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SinhVien/ViewSinhVien.cshtml">
       <publishTime>08/19/2024 22:36:08</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/test/Index.cshtml">
+      <publishTime>09/24/2024 14:47:59</publishTime>
     </File>
     <File Include="Areas/Admin/Views/ThongKeKhaoSat/ThongKeDoiTuongKhaoSat.cshtml">
       <publishTime>07/26/2024 10:40:10</publishTime>
@@ -92,6 +107,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Areas/assets/css/app.min.css">
       <publishTime>08/23/2024 15:46:34</publishTime>
+    </File>
+    <File Include="Areas/assets/css/buttons.dataTables.min.css">
+      <publishTime>09/22/2024 22:21:37</publishTime>
+    </File>
+    <File Include="Areas/assets/css/sweetalert2.min.css">
+      <publishTime>09/22/2024 22:22:50</publishTime>
     </File>
     <File Include="Areas/assets/es6/app.js">
       <publishTime>06/06/2024 13:52:24</publishTime>
@@ -429,6 +450,24 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Areas/assets/js/app.min.js">
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
+    <File Include="Areas/assets/js/buttons.html5.min.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
+    <File Include="Areas/assets/js/buttons.print.min.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
+    <File Include="Areas/assets/js/dataTables.buttons.min.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
+    <File Include="Areas/assets/js/exceljs.min.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
+    <File Include="Areas/assets/js/FileSaver.min.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
+    <File Include="Areas/assets/js/jszip.min.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
     <File Include="Areas/assets/js/login-google.js">
       <publishTime>08/19/2024 23:34:41</publishTime>
     </File>
@@ -489,8 +528,20 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Areas/assets/js/pages/slider.js">
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
+    <File Include="Areas/assets/js/pdfmake.min.js">
+      <publishTime>09/22/2024 15:36:01</publishTime>
+    </File>
+    <File Include="Areas/assets/js/sweetalert2%4011.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
     <File Include="Areas/assets/js/vendors.min.js">
       <publishTime>06/06/2024 13:52:24</publishTime>
+    </File>
+    <File Include="Areas/assets/js/vfs_fonts.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
+    </File>
+    <File Include="Areas/assets/js/xlsx.full.min.js">
+      <publishTime>09/22/2024 15:33:16</publishTime>
     </File>
     <File Include="Areas/assets/scss/app.scss">
       <publishTime>06/06/2024 13:52:24</publishTime>
@@ -2440,19 +2491,25 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/01/2024 09:35:17</publishTime>
     </File>
     <File Include="Areas/CTDT/Scripts/BaoCaoTongHopKetQuaKhaoSat.js">
-      <publishTime>08/23/2024 15:52:50</publishTime>
+      <publishTime>10/02/2024 08:16:28</publishTime>
     </File>
     <File Include="Areas/CTDT/Scripts/DoiSanhKetQuaKhaoSat.js">
       <publishTime>07/28/2024 22:42:57</publishTime>
     </File>
     <File Include="Areas/CTDT/Scripts/GiamSatKeuQuaKhaoSat.js">
-      <publishTime>08/23/2024 15:48:38</publishTime>
+      <publishTime>10/04/2024 08:44:26</publishTime>
+    </File>
+    <File Include="Areas/CTDT/Scripts/luutru.js">
+      <publishTime>10/04/2024 14:57:34</publishTime>
+    </File>
+    <File Include="Areas/CTDT/Scripts/ThongKeKetQuaKhaoSatTheoYeuCau.js">
+      <publishTime>10/10/2024 10:47:36</publishTime>
     </File>
     <File Include="Areas/CTDT/Scripts/ThongKeNguoiDungKhaoSat.js">
-      <publishTime>08/23/2024 15:49:05</publishTime>
+      <publishTime>10/04/2024 08:44:26</publishTime>
     </File>
     <File Include="Areas/CTDT/Scripts/ThongKeTanXuatCauHoi.js">
-      <publishTime>08/23/2024 15:52:05</publishTime>
+      <publishTime>10/10/2024 10:20:43</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/BaoCaoTongHopKetQuaKhaoSat/Index.cshtml">
       <publishTime>08/23/2024 15:47:41</publishTime>
@@ -2473,22 +2530,25 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/Shared/_CTDTFooterPartial.cshtml">
-      <publishTime>08/20/2024 08:36:04</publishTime>
+      <publishTime>09/18/2024 15:04:13</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/Shared/_CTDTHeaderPartial.cshtml">
       <publishTime>08/23/2024 15:44:22</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/Shared/_CTDTLayout.cshtml">
-      <publishTime>08/19/2024 23:32:17</publishTime>
+      <publishTime>09/22/2024 23:21:57</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/Shared/_CTDTNavPartial.cshtml">
-      <publishTime>08/21/2024 08:18:52</publishTime>
+      <publishTime>10/10/2024 10:49:25</publishTime>
+    </File>
+    <File Include="Areas/CTDT/Views/ThongKeKetQuaKhaoSatTheoYeuCau/Index.cshtml">
+      <publishTime>10/09/2024 14:59:21</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/ThongKeKhaoSat/Index.cshtml">
-      <publishTime>08/23/2024 15:51:41</publishTime>
+      <publishTime>10/01/2024 08:14:37</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/ThongKeKhaoSat/thongketanxuat.cshtml">
-      <publishTime>08/23/2024 15:51:58</publishTime>
+      <publishTime>10/08/2024 08:58:10</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/web.config">
       <publishTime>06/06/2024 13:52:24</publishTime>
@@ -2506,10 +2566,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/06/2024 20:50:35</publishTime>
     </File>
     <File Include="bin/CTDT.dll">
-      <publishTime>08/23/2024 16:07:49</publishTime>
+      <publishTime>10/10/2024 10:55:55</publishTime>
     </File>
     <File Include="bin/CTDT.pdb">
-      <publishTime>08/23/2024 16:07:49</publishTime>
+      <publishTime>10/10/2024 10:55:55</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>06/17/2024 03:46:24</publishTime>
@@ -2667,6 +2727,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>06/06/2024 13:52:25</publishTime>
     </File>
+    <File Include="bin/Newtonsoft.Json.Bson.dll">
+      <publishTime>11/28/2018 06:10:18</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.Bson.pdb">
+      <publishTime>11/28/2018 06:07:54</publishTime>
+    </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/06/2024 13:52:26</publishTime>
     </File>
@@ -2790,6 +2856,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/System.Memory.dll">
       <publishTime>06/06/2024 13:52:26</publishTime>
     </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>10/21/2023 03:33:52</publishTime>
+    </File>
     <File Include="bin/System.Numerics.Vectors.dll">
       <publishTime>06/06/2024 13:52:26</publishTime>
     </File>
@@ -2810,6 +2879,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="bin/System.Web.Helpers.dll">
       <publishTime>06/06/2024 13:52:25</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>10/21/2023 03:34:06</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>10/21/2023 03:34:08</publishTime>
     </File>
     <File Include="bin/System.Web.Mvc.dll">
       <publishTime>06/06/2024 13:52:25</publishTime>
@@ -2947,7 +3022,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
     <File Include="Models/CTDTModel.edmx.diagram">
-      <publishTime>08/21/2024 21:58:35</publishTime>
+      <publishTime>10/10/2024 08:40:10</publishTime>
     </File>
     <File Include="Scripts/bootstrap.bundle.js">
       <publishTime>06/06/2024 13:52:24</publishTime>
@@ -3028,7 +3103,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
     <File Include="Scripts/login-with-google.js">
-      <publishTime>08/23/2024 15:55:04</publishTime>
+      <publishTime>10/10/2024 10:48:48</publishTime>
     </File>
     <File Include="Scripts/LoginVersion.js">
       <publishTime>06/19/2024 16:14:06</publishTime>
@@ -3040,7 +3115,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/21/2024 01:03:04</publishTime>
     </File>
     <File Include="Scripts/User/Hedaotao.js">
-      <publishTime>08/21/2024 01:15:10</publishTime>
+      <publishTime>09/06/2024 10:44:17</publishTime>
     </File>
     <File Include="Scripts/User/KetQuaPKS.js">
       <publishTime>06/25/2024 09:32:57</publishTime>
@@ -3052,7 +3127,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/21/2024 21:14:07</publishTime>
     </File>
     <File Include="Scripts/User/Survey/PhieuKhaoSat/Load_Answer_Phieu_Khao_Sat.js">
-      <publishTime>08/15/2024 14:19:38</publishTime>
+      <publishTime>09/06/2024 14:35:02</publishTime>
     </File>
     <File Include="Scripts/User/Survey/PhieuKhaoSat/Save_Phieu.js">
       <publishTime>08/15/2024 21:19:25</publishTime>
@@ -3127,7 +3202,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/05/2024 08:51:02</publishTime>
     </File>
     <File Include="Style/assets/css/style.css">
-      <publishTime>08/23/2024 15:26:58</publishTime>
+      <publishTime>09/06/2024 10:43:04</publishTime>
     </File>
     <File Include="Style/assets/css/Survey.css">
       <publishTime>08/08/2024 01:05:53</publishTime>
@@ -4123,10 +4198,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>08/20/2024 09:34:02</publishTime>
+      <publishTime>09/26/2024 23:29:48</publishTime>
     </File>
     <File Include="Views/Home/PhieuKhaoSat.cshtml">
-      <publishTime>08/08/2024 00:00:59</publishTime>
+      <publishTime>09/22/2024 23:19:07</publishTime>
     </File>
     <File Include="Views/Home/SurveyedForm.cshtml">
       <publishTime>08/21/2024 00:33:10</publishTime>
@@ -4138,13 +4213,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
     <File Include="Views/Shared/_FooterLayout.cshtml">
-      <publishTime>08/23/2024 15:08:39</publishTime>
+      <publishTime>09/18/2024 15:05:00</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>08/20/2024 20:34:17</publishTime>
+      <publishTime>09/22/2024 23:00:05</publishTime>
     </File>
     <File Include="Views/Shared/_NavLayout.cshtml">
-      <publishTime>08/23/2024 15:33:39</publishTime>
+      <publishTime>09/06/2024 10:29:14</publishTime>
     </File>
     <File Include="Views/Survey/AnswerPKS.cshtml">
       <publishTime>08/15/2024 09:04:17</publishTime>
@@ -4159,7 +4234,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2024 13:52:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/20/2024 09:54:44</publishTime>
+      <publishTime>10/10/2024 10:55:56</publishTime>
     </File>
   </ItemGroup>
 </Project>

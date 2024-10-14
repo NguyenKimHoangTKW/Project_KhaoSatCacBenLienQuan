@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\DBCL\Project_KhaoSatCacBenLienQuan\CTDT\Models\CTDTModel.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\TTDBCL\KhaoSat-DBCL\CTDT\Models\CTDTModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

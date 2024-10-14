@@ -10,9 +10,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Kết quả khảo sát</a>
                 </li>
-                @*<li class="nav-item">
-                    <a class="nav-link" id="check-tab" data-toggle="tab" href="#check" role="tab" aria-controls="check" aria-selected="false">Thống kê theo yêu cầu</a>
-                </li>*@
             </ul>
             <div class="tab-content m-t-15" id="myTabContent">
                 <!-- Thống kê kết quả khảo sát -->
@@ -24,7 +21,7 @@
                             <legend class="float-none w-auto px-3">Chức năng</legend>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo năm học</label>
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
                                     <select class="form-control select2" id="year">
                                         @foreach (var item in ViewBag.Year)
                                         {
@@ -33,23 +30,40 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo phiếu khảo sát</label>
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn phiếu khảo sát</label>
                                     <select class="form-control select2" id="surveyid">
                                         <!---->
                                     </select>
                                 </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="text">
-                                        <button class="btn btn-success m-r-5" id="exportExcel">Xuất Excel</button>
-                                    </div>
+                                <div class="col-md-6" id="hoc_ky" style="display:none">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn học kỳ</label>
+                                    <select class="form-control select2" id="hocky_fil">
+                                        <option value="">Chọn học kỳ</option>
+                                        @foreach (var item in ViewBag.HocKy)
+                                        {
+                                            <option value="@item.Text">@item.Text</option>
+                                        }
+                                    </select>
                                 </div>
                             </div>
+                            <hr />
+
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <button type="button" class="btn btn-info" id="fildata">Lọc dữ liệu</button>
+                                </div>
+                            </div>
+
                         </fieldset>
                     </div>
-                    <div class="m-t-25">
+                    <div class="m-t-25" id="tan_xuat_table" style="display:none">
+                        <div class="row mb-3">
+                            <div class="col-md-6 d-flex align-items-center">       
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                <button class="btn btn-success" id="exportExcel">Xuất Excel</button>
+                            </div>
+                        </div>
                         <div class="table-responsive" id="ThongKeTyLeSurvey">
                             <!--Thống kê tỷ lệ-->
                         </div>
@@ -108,51 +122,14 @@
                         </div>
 
                     </div>
+
                 </div>
                 <!-- End Thống kê -->
-                <!-- Thống kê theo lựa chọn -->
-                <div class="tab-pane fade show" id="check" role="tabpanel" aria-labelledby="check-tab">
-                    <div class="page-header no-gutters">
-                        <div class="col-lg-12">
-                            <div class="mb-4" style="border: 1px solid #9caab9; padding: 15px; border-radius: 8px; background-color: #fcfcfc;">
-                                <p style="font-weight:bold;font-size:25px;text-align:center;color:black">KẾT QUẢ KHẢO SÁT VÀ THỐNG KÊ</p>
-                                <div class="row items-push">
-                                    <div class="col-6">
-                                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo năm học</label>
-                                        <select class="form-control select2" id="yearGiamSat">
-                                            @foreach (var item in ViewBag.Year)
-                                            {
-                                                <option value="@item.Value">@item.Text</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <hr />
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="text">
-                                            <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Xuất excel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <canvas class="chart" id="bar-chart" style="height: 300px;"></canvas>
-                        </div>
-                        <div class="col-md-6">
-                            <canvas class="chart" id="line-chart" style="height: 300px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <!-- End thống kê -->
             </div>
         </div>
     </div>
 </div>
 
 @section scriptsCTDT {
-    <script src="~/Areas/CTDT/Scripts/ThongKeTanXuatCauHoi.js"></script>
+    <script src="@Url.Content("~/Areas/CTDT/Scripts/ThongKeTanXuatCauHoi.js")"></script>
 }

@@ -34,12 +34,12 @@ async function LoadChartFullSurvey() {
     var year = $("#yearGiamSat").val();
 
     try {
-        const response = await fetch('/CTDT/GiamSatKetQuaKhaoSat/load_charts_ty_le', {
+        const response = await fetch('/api/ty_le_khao_sat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ year: year }),
+            body: JSON.stringify({ ten_namhoc: year }),
         });
         const res = await response.json();
 
@@ -272,12 +272,12 @@ async function LoadChartSurveyThongTu01() {
     var year = $("#yearGiamSat").val();
 
     try {
-        const response = await fetch('/CTDT/GiamSatKetQuaKhaoSat/load_charts_ty_le_01', {
+        const response = await fetch('/api/ty_le_khao_sat_thong_tu_01', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ year: year }),
+            body: JSON.stringify({ ten_namhoc: year }),
         });
 
         const res = await response.json();

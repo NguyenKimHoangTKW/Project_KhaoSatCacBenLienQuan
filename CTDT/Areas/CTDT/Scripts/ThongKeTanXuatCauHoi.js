@@ -43,7 +43,6 @@ $(document).on('click', '#fildata', async function () {
     var id = $("#surveyid").val();
     var hocky = $("#hocky_fil").val();
     var check_hocky = $('#hoc_ky');
-
     if (check_hocky.is(":visible")) {
         if (hocky.trim() === "") {
             var type = "error"
@@ -516,11 +515,11 @@ function ExportExcelKetQuaKhaoSat() {
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
 }
-function LoadSurveys(yearId) {
+function LoadSurveys(nameyear) {
     $.ajax({
-        url: "/CTDT/ThongKeKhaoSat/LoadPKSByYear",
+        url: "/api/load_pks_by_year",
         type: "POST",
-        data: { id: yearId },
+        data: { ten_namhoc: nameyear },
         success: function (res) {
             $("#surveyid").empty();
             if (res.success) {
@@ -561,12 +560,12 @@ $(window).on('load', function () {
     initializing = false;
 });
 // Load Câu hỏi
-async function loc_tan_xuat(id, hocky) {
+async function loc_tan_xuat(tenphieu, hocky) {
     const res = await $.ajax({
-        url: '/CTDT/ThongKeKhaoSat/load_tan_xuat',
+        url: '/api/load_tan_xuat_dap_an',
         type: "POST",
         data: {
-            surveyid: id,
+            id_survey: tenphieu,
             name_hoc_ky: hocky
         }
     });

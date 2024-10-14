@@ -1,12 +1,8 @@
 ﻿$(document).ready(function () {
-    var currentPage = 1;
-    var totalPages = 0;
-
-    LoadData(currentPage);
-
     $("#btnSave").click(function () {
         AddKhoa();
     });
+    get_data();
     var debouncedLoadData = debounce(function () {
         var keyword = $('#searchInput').val().toLowerCase();
         LoadData(currentPage, keyword);
@@ -14,113 +10,71 @@
 
     $('#searchInput').on('input', debouncedLoadData);
     $(document).on("click", "#btnEdit", function () {
-        var MaKhoa = $(this).closest("tr").find("td:eq(1)").text();
-        GetByID(MaKhoa);
-    });
+        var id_khoa = $(this).data("id");
+        GetByID(id_khoa);
+    })
 
     $(document).on("click", "#btnDelete", function () {
-        var MaKhoa = $(this).closest("tr").find("td:eq(1)").text();
-        var TenKhoa = $(this).closest("tr").find("td:eq(2)").text();
+        var id_khoa = $(this).data("id");
+        var TenKhoa = $(this).data("name");
         if (confirm("Bạn có chắc muốn xóa khoa '" + TenKhoa + "' không?")) {
-            DelKhoa(MaKhoa);
+            DelKhoa(id_khoa);
         }
     });
 
     $(document).on("click", "#btnSaveChange", function () {
         EditKhoa();
     });
-
-    $(document).on("click", ".page-link", function () {
-        var page = $(this).data("page");
-        if (page > 0 && page <= totalPages) {
-            currentPage = page;
-            var keyword = $('#searchInput').val().toLowerCase();
-            LoadData(currentPage, keyword);
-        }
-    });
-
-    function LoadData(pageNumber, keyword ="") {
-        $.ajax({
-            url: '/Khoa/GetDataKhoa',
-            type: 'GET',
-            data: {
-                pageNumber: pageNumber,
-                keyword: keyword,
-                pageSize: 10
+    function get_data() {
+        $('#khoaTable').DataTable({
+            "processing": true,
+            "serverSide": false,
+            "ajax": {
+                "url": "/Admin/Khoa/load_khoa",
+                "type": "GET",
+                "dataSrc": "data"
             },
-            success: function (res) {
-                var items = res.data;
-                totalPages = res.totalPages;
-                var html = "";
-
-                if (items.length === 0) {
-                    html += "<tr><td colspan='9' class='text-center'>Không có dữ liệu</td></tr>";
-                } else {
-                    for (let i = 0; i < items.length; i++) {
-                        var formattedDate1 = unixTimestampToDate(items[i].NgayCapNhat);
-                        var formattedDate2 = unixTimestampToDate(items[i].NgayTao);
-                        var index = (pageNumber - 1) * 10 + i + 1;
-                        html += "<tr>";
-                        html += "<td>" + index + "</td>";
-                        html += "<td>" + "#" + items[i].IDKhoa + "</td>";
-                        html += "<td>" + items[i].MaKhoa + "</td>";
-                        html += "<td>" + items[i].TenKhoa + "</td>";
-                        html += "<td>" + formattedDate1 + "</td>";
-                        html += "<td>" + formattedDate2 + "</td>";
-                        html += "<td><button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnEdit' data-toggle='modal' data-target='#ModalEditKhoa'><i class='anticon anticon-edit'></i></button><button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnDelete'><i class='anticon anticon-delete'></i></button></td>";
-                        html += "</tr>";
+            "columns": [
+                {
+                    "data": null,
+                    "render": function (data, type, row, meta) {
+                        return meta.row + 1;
+                    },
+                    "title": "Số Thứ Tự"
+                },
+                { "data": "id_khoa" },
+                { "data": "ma_khoa" },
+                { "data": "ten_khoa" },
+                {
+                    "data": "ngay_tao",
+                    "render": function (data, type, row) {
+                        return unixTimestampToDate(data);
                     }
+                },
+                {
+                    "data": "ngay_cap_nhat",
+                    "render": function (data, type, row) {
+                        return unixTimestampToDate(data);
+                    }
+                },
+                {
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return "<button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnEdit' data-toggle='modal' data-target='#ModalEditKhoa' data-id='" + row.id_khoa + "'><i class='anticon anticon-edit'></i></button> " +
+                            "<button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnDelete' data-id='" + row.id_khoa + "' data-name='" + row.ten_khoa + "'><i class='anticon anticon-delete'></i></button>";
+                    },
+                    "orderable": false, 
+                    "title": "Chức Năng"
                 }
-                $('#showdata').html(html);
-                renderPagination(pageNumber, totalPages);
+            ],
+            "destroy": true,
+            "language": {
+                "emptyTable":"Không có dữ liệu tồn tại, vui lòng <b>Thêm mới</b>"
             },
-            error: function () {
-                var html = "<tr><td colspan='7' class='text-center'>Không thể tải dữ liệu</td></tr>";
-                $('#showdata').html(html);
-            }
+            "dom": "Bfrtip",
+            "buttons": ['csv', 'excel', 'pdf', 'print']
         });
     }
-    function debounce(func, delay) {
-        let timeoutId;
-        return function () {
-            const context = this;
-            const args = arguments;
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => func.apply(context, args), delay);
-        };
-    }
-    function renderPagination(currentPage, totalPages) {
-        var html = '<nav aria-label="Page navigation example"><ul class="pagination justify-content-end">';
-
-        var startPage = currentPage - 2;
-        var endPage = currentPage + 2;
-
-        if (startPage < 1) {
-            startPage = 1;
-            endPage = 5;
-        }
-
-        if (endPage > totalPages) {
-            endPage = totalPages;
-            startPage = totalPages - 4;
-        }
-
-        if (startPage < 1) {
-            startPage = 1;
-        }
-
-        html += '<li class="page-item ' + (currentPage == 1 ? 'disabled' : '') + '"><a class="page-link" href="#" data-page="' + (currentPage - 1) + '">Trước</a></li>';
-
-        for (var i = startPage; i <= endPage; i++) {
-            html += '<li class="page-item ' + (currentPage == i ? 'active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>';
-        }
-
-        html += '<li class="page-item ' + (currentPage == totalPages ? 'disabled' : '') + '"><a class="page-link" href="#" data-page="' + (currentPage + 1) + '">Tiếp</a></li>';
-        html += '</ul></nav>';
-
-        $('#pagination').html(html);
-    }
-
     function AddKhoa() {
         var ma_khoa = $("#ma_khoa").val();
         var ten_khoa = $("#ten_khoa").val();
@@ -135,7 +89,7 @@
             }),
             success: function (response) {
                 alert(response.status);
-                LoadData(currentPage);
+                get_data()
             },
             error: function (response) {
                 alert(response.status);
@@ -180,7 +134,7 @@
             data: JSON.stringify(khoa),
             success: function (response) {
                 alert(response.status);
-                LoadData(currentPage);
+                get_data()
             }
         });
     }
@@ -192,7 +146,7 @@
             data: { id: id },
             success: function (response) {
                 alert(response.status);
-                LoadData(currentPage);
+                get_data()
             },
             error: function (response) {
                 alert(response.status);

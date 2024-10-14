@@ -47,7 +47,6 @@ namespace CTDT.Controllers
             }
             db.SaveChanges();
             SessionHelper.SetUser(user);
-
             return Json(new {islogin = true},JsonRequestBehavior.AllowGet);
         }
         

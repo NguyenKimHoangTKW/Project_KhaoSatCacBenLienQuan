@@ -209,6 +209,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="thong_ke_theo_yeu_cau">
+      <EntityTypeMapping TypeName="dbSurveyModel.thong_ke_theo_yeu_cau">
+        <MappingFragment StoreEntitySet="thong_ke_theo_yeu_cau">
+          <ScalarProperty Name="sua_lan_cuoi" ColumnName="sua_lan_cuoi" />
+          <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
+          <ScalarProperty Name="id_nam_hoc" ColumnName="id_nam_hoc" />
+          <ScalarProperty Name="json_thong_ke" ColumnName="json_thong_ke" />
+          <ScalarProperty Name="id_survey" ColumnName="id_survey" />
+          <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
+          <ScalarProperty Name="id_thong_ke" ColumnName="id_thong_ke" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="typeusers">
       <EntityTypeMapping TypeName="dbSurveyModel.typeusers">
         <MappingFragment StoreEntitySet="typeusers">

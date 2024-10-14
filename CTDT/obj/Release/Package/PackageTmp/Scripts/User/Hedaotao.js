@@ -99,7 +99,7 @@ function load_he_dao_tao() {
                         </div>
                     </div>
                     <div class="alert alert-info" style="text-align: center;">
-                        Vui lòng đăng nhập để thực hiện các chức năng
+                        <span style="color:red">Lưu ý :</span> Vui lòng đăng nhập để thực hiện các chức năng
                     </div>
                     <div class="row">
                     `;

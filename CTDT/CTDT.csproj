@@ -317,12 +317,13 @@
     <Compile Include="Areas\Admin\Controllers\ThongKeKhaoSatController.cs" />
     <Compile Include="Areas\CBVC\CBVCAreaRegistration.cs" />
     <Compile Include="Areas\CBVC\Controllers\thongkekhaosatcbvcController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\DoiSanhKetQuaKhaoSatController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\GiamSatKetQuaKhaoSatController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\GiamSatKetQuaKhaoSatAPIController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\InterfaceController.cs" />
     <Compile Include="Areas\CTDT\Controllers\LuuTruBaoCaoKhaoSatController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\ThongKeKetQuaKhaoSatTheoYeuCauController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatAPIController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatTheoYeuCauAPIController.cs" />
     <Compile Include="Areas\CTDT\CTDTAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -365,6 +366,7 @@
     <Compile Include="Models\DonVi.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FindAnswerSurvey.cs" />
     <Compile Include="Models\group_mon_hoc.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -399,6 +401,9 @@
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\thong_ke_theo_yeu_cau.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\typeusers.cs">
@@ -1276,7 +1281,6 @@
     <Content Include="Areas\CTDT\Views\Shared\_CTDTHeaderPartial.cshtml" />
     <Content Include="Areas\CTDT\Views\Shared\_CTDTLayout.cshtml" />
     <Content Include="Areas\CTDT\Views\Shared\_CTDTNavPartial.cshtml" />
-    <Content Include="Areas\CTDT\Views\ThongKeKhaoSat\Index.cshtml" />
     <Content Include="DataExport\Mau\MauUploadSinhVien.xlsx" />
     <Content Include="DataExport\Mau\MauUploadUser.xlsx" />
     <Content Include="Areas\Admin\Views\CBVC\ViewCBVC.cshtml" />
@@ -1288,25 +1292,24 @@
     <Content Include="Areas\CBVC\Views\Shared\_CBVCHeaderPartial.cshtml" />
     <Content Include="Areas\CBVC\Views\Shared\_CBVCLayout.cshtml" />
     <Content Include="Areas\CBVC\Views\Shared\_CBVCNavPartial.cshtml" />
-    <Content Include="Areas\CTDT\Views\ThongKeKhaoSat\thongketanxuat.cshtml" />
     <Content Include="Areas\CBVC\Views\thongkekhaosatcbvc\thongketanxuat.cshtml" />
     <Content Include="Areas\CBVC\Views\thongkekhaosatcbvc\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ThongKeKhaoSat\ThongKeDoiTuongKhaoSat.cshtml" />
     <Content Include="Areas\Admin\Views\ThongKeKhaoSat\ThongKeKetQuaKhaoSat.cshtml" />
     <Content Include="Areas\CTDT\Views\DoiSanhKetQuaKhaoSat\Index.cshtml" />
-    <Content Include="Areas\CTDT\Views\BaoCaoTongHopKetQuaKhaoSat\Index.cshtml" />
     <Content Include="Areas\CTDT\Views\LuuTruBaoCaoKhaoSat\Index.cshtml" />
-    <Content Include="Areas\CTDT\Views\BaoCaoTongHopKetQuaKhaoSat\_SubfoldersPartial.cshtml" />
     <Content Include="Areas\Admin\Views\DoiTuongKhaoSat\ViewDoiTuongKhaoSat.cshtml" />
-    <Content Include="Areas\CTDT\Views\GiamSatKetQuaKhaoSat\Index.cshtml" />
     <Content Include="Areas\Admin\Views\NguoiDung\PhanQuyen.cshtml" />
     <Content Include="Areas\Admin\Views\BaoCaoTongHop\Index.cshtml" />
-    <Content Include="Areas\CTDT\Views\ThongKeKetQuaKhaoSatTheoYeuCau\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ImportData\Index.cshtml" />
     <Content Include="Areas\Admin\Views\test\Index.cshtml" />
+    <Content Include="Areas\CTDT\Views\Interface\bao_cao_tong_hop_ket_qua_khao_sat.cshtml" />
+    <Content Include="Areas\CTDT\Views\Interface\giam_sat_ket_qua_khao_sat.cshtml" />
+    <Content Include="Areas\CTDT\Views\Interface\thong_ke_khao_sat.cshtml" />
+    <Content Include="Areas\CTDT\Views\Interface\thong_ke_tan_xuat.cshtml" />
+    <Content Include="Areas\CTDT\Views\Interface\thong_ke_tan_xuat_theo_yeu_cau.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
-    <Content Include="Scripts\Firebase.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
@@ -1324,7 +1327,6 @@
     <Content Include="Scripts\User\Hedaotao.js" />
     <Content Include="Scripts\User\KetQuaPKS.js" />
     <Content Include="Scripts\User\Phieukhaosat.js" />
-    <Content Include="Scripts\LoginVersion.js" />
     <Content Include="Scripts\User\Survey\PhieuKhaoSat\Load_Answer_Phieu_Khao_Sat.js" />
     <Content Include="Scripts\User\Survey\PhieuKhaoSat\Save_Phieu.js" />
     <Content Include="Scripts\User\Survey\SurveyForm.js" />

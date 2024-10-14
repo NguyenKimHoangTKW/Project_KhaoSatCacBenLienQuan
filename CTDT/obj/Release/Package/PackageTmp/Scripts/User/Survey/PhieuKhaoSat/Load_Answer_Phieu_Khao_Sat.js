@@ -20,6 +20,7 @@ function load_phieu_khao_sat() {
             if (items) {
                 surveyData = JSON.parse(items.phieu_khao_sat);
                 Dap_an = JSON.parse(items.dap_an);
+                console.log(Dap_an)
                 html += `
                 <h2>${surveyData.title}</h2>
                 <p>${surveyData.description}</p>
@@ -134,7 +135,7 @@ function load_phieu_khao_sat() {
                         `;
                                 element.choices.forEach(function (choice) {
                                     var choiceClass = isHorizontal ? 'form-check form-check-inline p-2' : 'form-check p-3';
-                                    let checked = dapan && dapan.response.name === choice.name ? 'checked' : '';
+                                    let checked = dapan && dapan.response.text === choice.text ? 'checked' : '';
                                     html += `
                                 <div class="${choiceClass}">
                                     <input class="form-check-input" type="radio" id="${choice.name}" name="${element.name}" value="${choice.name}" ${checked}>
@@ -154,7 +155,7 @@ function load_phieu_khao_sat() {
                                 <label for="checkboxes">${element.title} <span style="color : ${css_required};">*</span></label>
                         `;
                                 element.choices.forEach(function (choice) {
-                                    let checked = dapan && dapan.response.name.includes(choice.name) ? 'checked' : '';
+                                    let checked = dapan && dapan.response.text.includes(choice.text) ? 'checked' : '';
                                     html += `
                                 <div class="checkbox-group">
                                     <input type="checkbox" id="${choice.name}" name="${element.name}" value="${choice.name}" ${checked}>

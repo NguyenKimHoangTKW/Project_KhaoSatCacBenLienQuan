@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Thống kê tần xuất câu hỏi - TDMU";
+    Layout = "~/Areas/CTDT/Views/Shared/_CTDTLayout.cshtml";
+}
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <div class="col-lg-12">
+                    <h2 class="text-uppercase">Thống kê kết quả khảo sát</h2>
+                    <hr />
+                    <fieldset class="border rounded-3 p-3">
+                        <legend class="float-none w-auto px-3">Chức năng</legend>
+                        <div class="col-md-4">
+                            <!-- Điều chỉnh số lượng cột để thay đổi độ rộng -->
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo năm học</label>
+                            <select class="form-control select2" id="yearGiamSat">
+                                @foreach (var item in ViewBag.Year)
+                                {
+                                    <option value="@item.Text">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <hr />
+                    </fieldset>
+                </div>
+            </div>
+            <div class="container mt-4" id="showchart">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3 class="mt-4">
+                            <span>I. Toàn bộ Phiếu khảo sát theo năm học</span>
+                        </h3>
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4" style="height: 325px;">
+                        <canvas class="chart" id="bar-chart" style="height: 300px;"></canvas>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" onclick="window.location.href='/CTDT/ThongKeKhaoSat/Index'" class="link-info text-center">Xem chi tiết</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4" style="height: 325px;">
+                        <canvas class="chart" id="line-chart" style="height: 300px;"></canvas>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" onclick="window.location.href='/CTDT/ThongKeKhaoSat/thongketanxuat'" class="link-info text-center">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="row">
+                    <div class="col text-center">
+                        <h3 class="mt-4">
+                            <span>II. Theo thông tư 01 của Bộ Giáo Dục và Đào Tạo</span>
+                        </h3>
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4" style="height: 325px;">
+                        <canvas class="chart" id="bar01-chart" style="height: 300px;"></canvas>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <canvas class="chart" id="line01-chart" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="error">
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+@section scriptsCTDT {
+    <script src="~/Areas/CTDT/Scripts/GiamSatKeuQuaKhaoSat.js"></script>
+}

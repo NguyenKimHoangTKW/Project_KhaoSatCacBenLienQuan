@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh Sách Lớp</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <span class="breadcrumb-item active">Danh sách Lớp</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <h2 class="text-uppercase">Kết quả khảo sát</h2>
+                <hr />
+                <fieldset class="border rounded-3 p-3">
+                    <legend class="float-none w-auto px-3">Chức năng</legend>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn file Excel</label>
+                                <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn định dạng dữ liệu</label>
+                            <select class="form-control select2" id="FilterHDT">
+                                <option value="1">Dữ liệu sinh viên ngoài phạm vi phiếu 8</option>
+                                <option value="2">Dữ liệu sinh viên trong phạm vi phiếu 8</option>
+                                <option value="3">Dữ liệu sinh viên ngoài EduShop</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div id="progressContainer" style="display:none;">
+                                <progress id="progressBar" value="0" max="100" style="width:100%;"></progress>
+                                <span id="progressText">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex">
+                            <button type="button" class="btn btn-info" id="importExcelForm" style="margin-top: 10px;">Thêm dữ liệu</button>
+                            <button type="button" class="btn btn-danger ml-2" id="cancelButton" style="display:none;">Ngừng</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scriptsAdmin {
+    <script>
+        $(document).ready(async function () {
+            var xhr; 
+
+            $('#importExcelForm').click(async function () {
+                var checkdulieu = $("#FilterHDT").val();
+                var formData = new FormData();
+                var fileInput = $('#excelFile')[0].files[0];
+
+                if (!fileInput) {
+                    alert("Vui lòng chọn file Excel");
+                    return;
+                }
+                formData.append("excelFile", fileInput);
+                formData.append("CheckDuLieu", checkdulieu);
+                xhr = $.ajax({
+                    url: '/Admin/ImportData/UploadExcel',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    xhr: function () {
+                        var customXhr = new window.XMLHttpRequest();
+
+                        customXhr.upload.addEventListener("progress", function (e) {
+                            if (e.lengthComputable) {
+                                var percentComplete = (e.loaded / e.total) * 100;
+                                $('#progressBar').val(percentComplete);
+                                $('#progressText').text(Math.round(percentComplete) + '%');
+                            }
+                        }, false);
+
+                        customXhr.addEventListener("loadstart", function () {
+                            $('#progressContainer').show();
+                            $('#cancelButton').show();
+                        });
+
+                        customXhr.addEventListener("loadend", function () {
+                            $('#cancelButton').hide();
+                        });
+
+                        return customXhr;
+                    },
+                    success: function (response) {
+                        alert("Tải lên thành công!");
+                        $('#progressContainer').hide();
+                        $('#cancelButton').hide();
+                        $('#progressBar').val(0);
+                        $('#progressText').text('0%');
+                    },
+                    error: function (xhr, status, error) {
+                        if (status === 'abort') {
+                            alert("Tiến trình đã bị ngừng.");
+                        } else {
+                            alert("Đã xảy ra lỗi: " + error);
+                        }
+                        $('#progressContainer').hide();
+                        $('#cancelButton').hide();
+                        $('#progressBar').val(0);
+                        $('#progressText').text('0%');
+                    }
+                });
+            });
+            $('#cancelButton').click(function () {
+                if (xhr) {
+                    xhr.abort();
+                }
+            });
+        });
+
+    </script>
+}

@@ -21,11 +21,6 @@
             <fieldset class="border rounded-3 p-3">
                 <legend class="float-none w-auto px-3">Chức năng</legend>
                 <div class="mb-3 mt-3">
-                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo từ khóa</label>
-                    <input type="text" class="form-control" name="keywordSearch" id="searchInput" placeholder="Nhập từ khóa muốn tìm kiếm ...">
-                </div>
-                <hr />
-                <div class="mb-3 mt-3">
                     <button class="btn btn-primary btn-tone m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Thêm mới</button>
                 </div>
             </fieldset>
@@ -103,24 +98,21 @@
             <!--End Modal Sửa Khoa -->
             <div class="m-t-25">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="khoaTable">
                         <thead>
                             <tr>
-                                <th scope="col">STT</th>
+                                <th scope="col">Số Thứ Tự</th>
                                 <th scope="col">ID Khoa/Viện</th>
                                 <th scope="col">Mã Khoa/Viện</th>
                                 <th scope="col">Tên Khoa/Viện</th>
-                                <th scope="col">Ngày Cập Nhật</th>
-                                <th scope="col">Ngày Tạo</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Ngày cập nhật</th>
                                 <th scope="col">Chức năng</th>
                             </tr>
                         </thead>
-                        <tbody id="showdata">
+                        <tbody>
                         </tbody>
                     </table>
-                </div>
-                <div id="pagination" class="m-t-15 pagination-right">
-                    <!-- Pagination buttons will be inserted here -->
                 </div>
             </div>
         </div>

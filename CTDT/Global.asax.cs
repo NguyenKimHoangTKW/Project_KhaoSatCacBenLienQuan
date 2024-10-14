@@ -25,7 +25,19 @@ namespace CTDT
             BundleTable.EnableOptimizations = true;
             QuartzConfig.ConfigureQuartz();
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Email;
+        }
 
+        protected void Application_PostAuthorizeRequest()
+        {
+            if (IsWebApiRequest())
+            {
+                HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+            }
+        }
+
+        private bool IsWebApiRequest()
+        {
+            return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.StartsWith("~/api");
         }
     }
 }
