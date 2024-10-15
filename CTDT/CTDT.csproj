@@ -315,8 +315,6 @@
     <Compile Include="Areas\Admin\Controllers\testController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeKetQuaKhaoSatController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeKhaoSatController.cs" />
-    <Compile Include="Areas\CBVC\CBVCAreaRegistration.cs" />
-    <Compile Include="Areas\CBVC\Controllers\thongkekhaosatcbvcController.cs" />
     <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\DoiSanhKetQuaKhaoSatController.cs" />
     <Compile Include="Areas\CTDT\Controllers\GiamSatKetQuaKhaoSatAPIController.cs" />
@@ -325,9 +323,12 @@
     <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatTheoYeuCauAPIController.cs" />
     <Compile Include="Areas\CTDT\CTDTAreaRegistration.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\SurveyController.cs" />
+    <Compile Include="Areas\Khoa\KhoaAreaRegistration.cs" />
+    <Compile Include="Controllers\AccountAPIController.cs" />
+    <Compile Include="Controllers\HomeAPIController.cs" />
+    <Compile Include="Controllers\InterfaceClientController.cs" />
+    <Compile Include="Controllers\SurveyAPIController.cs" />
+    <Compile Include="Controllers\XacThucAPIController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -367,6 +368,8 @@
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FindAnswerSurvey.cs" />
+    <Compile Include="Models\FindPKSisSurvey.cs" />
+    <Compile Include="Models\GetNguoiHoc.cs" />
     <Compile Include="Models\group_mon_hoc.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -382,6 +385,7 @@
     <Compile Include="Models\khoa.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LoadAnswerPKS.cs" />
     <Compile Include="Models\LoaiKhaoSat.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -394,6 +398,7 @@
     <Compile Include="Models\NamHoc.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SaveXacThuc.cs" />
     <Compile Include="Models\sinhvien.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -1285,15 +1290,6 @@
     <Content Include="DataExport\Mau\MauUploadUser.xlsx" />
     <Content Include="Areas\Admin\Views\CBVC\ViewCBVC.cshtml" />
     <Content Include="DataExport\Mau\MauUploadCBVC.xlsx" />
-    <Content Include="Areas\CBVC\Views\web.config" />
-    <Content Include="Areas\CBVC\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\CBVC\Views\Shared\Error.cshtml" />
-    <Content Include="Areas\CBVC\Views\Shared\_CBVCFooterPartial.cshtml" />
-    <Content Include="Areas\CBVC\Views\Shared\_CBVCHeaderPartial.cshtml" />
-    <Content Include="Areas\CBVC\Views\Shared\_CBVCLayout.cshtml" />
-    <Content Include="Areas\CBVC\Views\Shared\_CBVCNavPartial.cshtml" />
-    <Content Include="Areas\CBVC\Views\thongkekhaosatcbvc\thongketanxuat.cshtml" />
-    <Content Include="Areas\CBVC\Views\thongkekhaosatcbvc\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ThongKeKhaoSat\ThongKeDoiTuongKhaoSat.cshtml" />
     <Content Include="Areas\Admin\Views\ThongKeKhaoSat\ThongKeKetQuaKhaoSat.cshtml" />
     <Content Include="Areas\CTDT\Views\DoiSanhKetQuaKhaoSat\Index.cshtml" />
@@ -1308,6 +1304,13 @@
     <Content Include="Areas\CTDT\Views\Interface\thong_ke_khao_sat.cshtml" />
     <Content Include="Areas\CTDT\Views\Interface\thong_ke_tan_xuat.cshtml" />
     <Content Include="Areas\CTDT\Views\Interface\thong_ke_tan_xuat_theo_yeu_cau.cshtml" />
+    <Content Include="Areas\Khoa\Views\web.config" />
+    <Content Include="Areas\Khoa\Views\Shared\_KhoaFooterPartial.cshtml" />
+    <Content Include="Areas\Khoa\Views\Shared\_KhoaHeaderPartial.cshtml" />
+    <Content Include="Areas\Khoa\Views\Shared\_KhoaLayout.cshtml" />
+    <Content Include="Areas\Khoa\Views\Shared\_KhoaNavPartial.cshtml" />
+    <Content Include="Areas\Khoa\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Khoa\Views\_ViewStart.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
@@ -1569,7 +1572,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Style\user\bundles\scriptca19" />
     <Content Include="Style\user\Content\font-awesome-4.7.0\fonts\fontawesome-webfont3e6e.eot" />
     <Content Include="Style\user\Content\font-awesome-4.7.0\fonts\fontawesome-webfont3e6e.ttf" />
@@ -1588,9 +1590,6 @@
     <Content Include="Style\user\img\1\Result\Files\5-22-2023-4-00-23-PMT5 KE HOACH XET TOT NGHIEP 2023_43-kh_2023-05-19_1.PDF.pdf" />
     <Content Include="Views\Shared\_FooterLayout.cshtml" />
     <Content Include="Views\Shared\_NavLayout.cshtml" />
-    <Content Include="Views\Survey\Survey.cshtml" />
-    <Content Include="Views\Home\PhieuKhaoSat.cshtml" />
-    <Content Include="Views\Survey\AnswerPKS.cshtml" />
     <Content Include="Style\assets\css\.DS_Store" />
     <Content Include="Style\assets\css\bootstrap\.DS_Store" />
     <Content Include="Style\assets\css\css\.DS_Store" />
@@ -1702,14 +1701,19 @@
     <Content Include="Style\assets\scss\bootstrap\_utilities.scss" />
     <Content Include="Style\assets\scss\bootstrap\_variables.scss" />
     <Content Include="Style\assets\scss\style.scss" />
-    <Content Include="Views\Home\xac_thuc.cshtml" />
-    <Content Include="Views\Home\SurveyedForm.cshtml" />
+    <Content Include="Views\InterfaceClient\Index.cshtml" />
+    <Content Include="Views\InterfaceClient\PhieuKhaoSat.cshtml" />
+    <Content Include="Views\InterfaceClient\xac_thuc.cshtml" />
+    <Content Include="Views\InterfaceClient\Survey.cshtml" />
+    <Content Include="Views\InterfaceClient\AnswerPKS.cshtml" />
+    <Content Include="Views\InterfaceClient\SurveyedForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\CBVC\Data\" />
     <Folder Include="Areas\CTDT\Data\" />
+    <Folder Include="Areas\Khoa\Controllers\" />
+    <Folder Include="Areas\Khoa\Data\" />
     <Folder Include="Content\Exports\" />
     <Folder Include="DataExport\DoiTuongKhaoSat-CTDT\" />
     <Folder Include="DataExport\DoiTuongKhaoSat-DonVi\" />

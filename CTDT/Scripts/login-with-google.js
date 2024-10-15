@@ -55,21 +55,21 @@ if (info && info['access_token']) {
 }
 function Session_Login(email, firstname, lastname, urlimage) {
     $.ajax({
-        url: '/Account/Login_Google',
+        url: '/api/session_login',
         type: 'POST',
         dataType: 'JSON',
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         data: {
             email: email,
-            firstname: firstname,
-            lastname: lastname,
-            urlimage: urlimage
+            firstName: firstname,
+            lastName: lastname,
+            avatarUrl: urlimage
         },
         success: function (res) {
             if (typeof load_he_dao_tao === "function") {
                 load_he_dao_tao();
             }
-            $("#nav-placeholder").load('/Home/load_chuc_nang_nguoi_dung');
+            $("#nav-placeholder").load('/InterfaceClient/load_chuc_nang_nguoi_dung');
         }
     })
 }
@@ -77,7 +77,7 @@ function Session_Login(email, firstname, lastname, urlimage) {
 
 function Logout_Session() {
     $.ajax({
-        url: '/Account/Logout',
+        url: '/api/clear_session',
         type: 'POST',
         success: function (res) {
             if (res.success) {

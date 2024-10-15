@@ -17,7 +17,7 @@ namespace CTDT.Areas.CTDT.Controllers
     {
         dbSurveyEntities db = new dbSurveyEntities();
         [HttpPost]
-        [Route("api/bao_cao_tong_hop")]
+        [Route("api/ctdt/bao_cao_tong_hop")]
         public IHttpActionResult x_loadbaocaotonghop(NamHoc namHoc)
         {
             var user = SessionHelper.GetUser();

@@ -20,7 +20,7 @@ namespace CTDT.Areas.CTDT.Controllers
         dbSurveyEntities db = new dbSurveyEntities();
         #region Thống kê toàn bộ phiếu
         [HttpPost]
-        [Route("api/ty_le_khao_sat")]
+        [Route("api/ctdt/ty_le_khao_sat")]
         public IHttpActionResult load_charts_ty_le(NamHoc namhoc)
         {
             var user = SessionHelper.GetUser();
@@ -83,7 +83,7 @@ namespace CTDT.Areas.CTDT.Controllers
         #endregion
         #region Thống  kê theo thông tư 01
         [HttpPost]
-        [Route("api/ty_le_khao_sat_thong_tu_01")]
+        [Route("api/ctdt/ty_le_khao_sat_thong_tu_01")]
         public IHttpActionResult load_charts_ty_le_01(NamHoc namhoc)
         {
             var user = SessionHelper.GetUser();

@@ -1,38 +1,44 @@
 ﻿$(document).ready(function () {
     load_bo_phieu();
 });
-
+function showLoading() {
+    Swal.fire({
+        title: 'Loading...',
+        text: 'Đang kiểm tra và tải dữ liệu, vui lòng chờ trong giây lát!',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+function hideLoading() {
+    Swal.close();
+}
 $(document).on('change', '#Year', function () {
     load_bo_phieu()
 });
 $(document).on('change', '#Hedaotao', function () {
     load_bo_phieu()
 });
-function load_bo_phieu() {
-    Swal.fire({
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
+async function load_bo_phieu() {
     var year = $('#Year').val();
     var hedaotao = $('#Hedaotao').val();
-    $.ajax({
-        url: '/Home/load_bo_phieu_da_khao_sat',
+    const res = await $.ajax({
+        url: '/api/load_bo_phieu_da_khao_sat',
         type: 'POST',
         data: {
-            year: year,
+            namhoc: year,
             hedaotao: hedaotao
-        },
-        success: function (res) {
-            let body = $('#accordion-default');
-            let html = '';
-            body.empty();
-            if (res.data.survey.length > 0 && res) {
-                res.data.survey.forEach(function (phieu, index) {
-                    let collapseId = `collapse${index}`;
-                    html +=
-                        `
+        }
+    })
+    let body = $('#accordion-default');
+    let html = '';
+    body.empty();
+    if (res.data.survey.length > 0 && res) {
+        res.data.survey.forEach(function (phieu, index) {
+            let collapseId = `collapse${index}`;
+            html +=
+                `
                     <div class="card">
                         <div class="card-header p-2">
                             <h5 class="mb-0">
@@ -44,8 +50,8 @@ function load_bo_phieu() {
                         <div id="${collapseId}" class="collapse" data-parent="#accordion-default">
                             <div class="card-body">
                                 <table class="table table-bordered">`;
-                    if (phieu.is_ctdt) {
-                        html += `<thead style="color:black; text-align:center; font-weight:bold">
+            if (phieu.is_ctdt) {
+                html += `<thead style="color:black; text-align:center; font-weight:bold">
                                         <tr>
                                             <th scope="col">STT</th>
                                             <th scope="col">Email khảo sát</th>
@@ -58,8 +64,8 @@ function load_bo_phieu() {
                                     </thead>
                                     <tbody id="showdata">
                                        `
-                        phieu.bo_phieu.forEach(function (item, index) {
-                            html += ` 
+                phieu.bo_phieu.forEach(function (item, index) {
+                    html += ` 
                              <tr>
                                 <td scope="col" class="formatSo">${index + 1}</td>
                                 <td scope="col" class="formatSo">${item.email}</td>
@@ -69,17 +75,17 @@ function load_bo_phieu() {
                                 <td scope="col" class="formatSo">${item.nam_hoc}</td>
                                 <td scope="col" class="formatSo"><a href="${item.page}">Xem lại câu trả lời</a></td>
                              </tr>`;
-                        })
-                        html += ` 
+                })
+                html += ` 
                                     </tbody>`;
-                        html += `</table>
+                html += `</table>
                             </div>
                         </div>
                     </div>
                     `;
-                    }
-                    else if (phieu.is_student) {
-                        html += `<thead style="color:black; text-align:center; font-weight:bold">
+            }
+            else if (phieu.is_student) {
+                html += `<thead style="color:black; text-align:center; font-weight:bold">
                                         <tr>
                                             <th scope="col">STT</th>
                                             <th scope="col">Email khảo sát</th>
@@ -94,8 +100,8 @@ function load_bo_phieu() {
                                     </thead>
                                     <tbody id="showdata">
                                        `
-                        phieu.bo_phieu.forEach(function (item, index) {
-                            html += ` 
+                phieu.bo_phieu.forEach(function (item, index) {
+                    html += ` 
                              <tr>
                                 <td scope="col" class="formatSo">${index + 1}</td>
                                 <td scope="col" class="formatSo">${item.nguoi_hoc}</td>
@@ -107,17 +113,17 @@ function load_bo_phieu() {
                                 <td scope="col" class="formatSo">${item.nam_hoc}</td>
                                 <td scope="col" class="formatSo"><a href="${item.page}">Xem lại câu trả lời</a></td>
                              </tr>`;
-                        })
-                        html += ` 
+                })
+                html += ` 
                                     </tbody>`;
-                        html += `</table>
+                html += `</table>
                             </div>
                         </div>
                     </div>
                     `;
-                    }
-                    else if (phieu.is_cbvc) {
-                        html += `<thead style="color:black; text-align:center; font-weight:bold">
+            }
+            else if (phieu.is_cbvc) {
+                html += `<thead style="color:black; text-align:center; font-weight:bold">
                                         <tr>
                                             <th scope="col">STT</th>
                                             <th scope="col">Email khảo sát</th>
@@ -131,8 +137,8 @@ function load_bo_phieu() {
                                     </thead>
                                     <tbody id="showdata">
                                        `
-                        phieu.bo_phieu.forEach(function (item, index) {
-                            html += ` 
+                phieu.bo_phieu.forEach(function (item, index) {
+                    html += ` 
                              <tr>
                                 <td scope="col" class="formatSo">${index + 1}</td>
                                 <td scope="col" class="formatSo">${item.email}</td>
@@ -143,33 +149,28 @@ function load_bo_phieu() {
                                 <td scope="col" class="formatSo">${item.nam_hoc}</td>
                                 <td scope="col" class="formatSo"><a href="${item.page}">Xem lại câu trả lời</a></td>
                              </tr>`;
-                        })
-                        html += ` 
+                })
+                html += ` 
                                     </tbody>`;
-                        html += `</table>
+                html += `</table>
                             </div>
                         </div>
                     </div>
                     `;
-                    }
-
-                })
             }
-            else {
-                html = `
+
+        })
+    }
+    else {
+        html = `
                     <div class="container" id="showdata">
                         <div class="alert alert-info" style="text-align: center;">
                             Chưa có biểu mẫu nào đã khảo sát
                         </div>
                     </div>`;
 
-            }
-            body.html(html);
-        },
-        complete: function () {
-            Swal.close();
-        }
-    });
+    }
+    body.html(html);
 };
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);

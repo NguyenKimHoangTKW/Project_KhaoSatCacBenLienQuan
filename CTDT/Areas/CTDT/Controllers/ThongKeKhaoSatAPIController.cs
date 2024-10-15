@@ -20,7 +20,7 @@ namespace CTDT.Areas.CTDT.Controllers
         dbSurveyEntities db = new dbSurveyEntities();
         #region Load Charts người học
         [HttpPost]
-        [Route("api/load_thong_ke_nguoi_hoc")]
+        [Route("api/ctdt/load_thong_ke_nguoi_hoc")]
         public IHttpActionResult load_charts_nguoi_hoc(NamHoc namhoc)
         {
             var user = SessionHelper.GetUser();
@@ -81,7 +81,7 @@ namespace CTDT.Areas.CTDT.Controllers
         #endregion
         #region Load người học
         [HttpPost]
-        [Route("api/load_thong_ke_nguoi_hoc_khao_sat")]
+        [Route("api/ctdt/load_thong_ke_nguoi_hoc_khao_sat")]
         public IHttpActionResult load_nguoi_hoc(survey surVeys)
         {
             var user = SessionHelper.GetUser();
@@ -196,7 +196,7 @@ namespace CTDT.Areas.CTDT.Controllers
         #endregion
         #region Thống kê tần xuất câu hỏi
         [HttpPost]
-        [Route("api/load_pks_by_year")]
+        [Route("api/ctdt/load_pks_by_year")]
         public IHttpActionResult LoadPKSByYear(NamHoc namhoc)
         {
             var user = SessionHelper.GetUser();
@@ -217,7 +217,7 @@ namespace CTDT.Areas.CTDT.Controllers
             return Ok(new { data = sortedSurveys, success = true });
         }
         [HttpPost]
-        [Route("api/load_tan_xuat_dap_an")]
+        [Route("api/ctdt/load_tan_xuat_dap_an")]
         public async Task<IHttpActionResult> load_tan_xuat(FindAnswerSurvey f)
         {
             var user = SessionHelper.GetUser();

@@ -25,9 +25,9 @@ function load_phieu_khao_sat() {
     let TenPhieu = '';
     let get_tempData = '';
     $.ajax({
-        url: '/Survey/load_phieu_khao_sat',
+        url: '/api/load_form_phieu_khao_sat',
         type: 'POST',
-        data: { id: id },
+        data: { surveyID: id },
         success: function (res) {
             let html = '';
             let body = $('#load-title');
@@ -298,7 +298,6 @@ function load_phieu_khao_sat() {
 
                 $(document).on('click', '#save', function () {
                     save_form();
-                    localStorage.removeItem(get_tempData);
                 });
             }
             else {

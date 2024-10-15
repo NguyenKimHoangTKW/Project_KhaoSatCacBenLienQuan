@@ -34,7 +34,7 @@ $(document).on("change", "#Year", async function () {
 async function LoadChartSurvey() {
     var year = $("#Year").val();
     const res = await $.ajax({
-        url: '/api/load_thong_ke_nguoi_hoc',
+        url: '/api/ctdt/load_thong_ke_nguoi_hoc',
         type: 'POST',
         data: { ten_namhoc: year },
     });
@@ -130,7 +130,7 @@ $('#surveyModal').on('shown.bs.modal', function () {
 });
 async function load_nguoi_hoc(namesurvey) {
     const res = await $.ajax({
-        url: '/api/load_thong_ke_nguoi_hoc_khao_sat',
+        url: '/api/ctdt/load_thong_ke_nguoi_hoc_khao_sat',
         type: 'POST',
         data: { surveyTitle: namesurvey }
     });

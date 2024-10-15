@@ -517,7 +517,7 @@ function ExportExcelKetQuaKhaoSat() {
 }
 function LoadSurveys(nameyear) {
     $.ajax({
-        url: "/api/load_pks_by_year",
+        url: "/api/ctdt/load_pks_by_year",
         type: "POST",
         data: { ten_namhoc: nameyear },
         success: function (res) {
@@ -562,7 +562,7 @@ $(window).on('load', function () {
 // Load Câu hỏi
 async function loc_tan_xuat(tenphieu, hocky) {
     const res = await $.ajax({
-        url: '/api/load_tan_xuat_dap_an',
+        url: '/api/ctdt/load_tan_xuat_dap_an',
         type: "POST",
         data: {
             id_survey: tenphieu,

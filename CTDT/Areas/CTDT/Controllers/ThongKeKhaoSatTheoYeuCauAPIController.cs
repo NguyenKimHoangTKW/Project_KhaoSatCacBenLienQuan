@@ -11,7 +11,7 @@ namespace CTDT.Areas.CTDT.Controllers
     {
         dbSurveyEntities db = new dbSurveyEntities();
         [HttpPost]
-        [Route("api/load_doi_tuong_by_loai_khao_sat")]
+        [Route("api/ctdt/load_doi_tuong_by_loai_khao_sat")]
         public IHttpActionResult load_doi_tuong(NamHoc namhoc)
         {
             var user = SessionHelper.GetUser();

@@ -2,38 +2,38 @@
     LoadData();
 });
 
-function LoadData() {
-    var id = $('#id').val();
-    $.ajax({
-        url: '/Home/load_phieu_khao_sat',
+async function LoadData() {
+    var namehdt = $('#namehdt').val();
+    const res = await $.ajax({
+        url: '/api/bo_phieu_khao_sat',
         type: 'POST',
-        data: { id: id },
-        success: function (res) {
-            let items = res.data.survey;
-            let body = $('#showdata');
-            let html = "";
+        data: { ten_hedaotao: namehdt },
+    })
+    let items = res.data.survey;
+    let body = $('#showdata');
+    let html = "";
 
-            if (items.length === 0) {
-                html = `
+    if (items.length === 0) {
+        html = `
                     <div class="container" id="showdata">
                         <div class="alert alert-info" style="text-align: center;">
                             Không có dữ liệu phiếu khảo sát
                         </div>
                     </div>`;
-            } else {
-                items.sort((a, b) => {
-                    var MaPhieuA = a.TenPKS.split('.')[0];
-                    var MaPhieuB = b.TenPKS.split('.')[0];
-                    return MaPhieuA.localeCompare(MaPhieuB, undefined, { numeric: true, sensitivity: 'base' });
-                });
+    } else {
+        items.sort((a, b) => {
+            var MaPhieuA = a.TenPKS.split('.')[0];
+            var MaPhieuB = b.TenPKS.split('.')[0];
+            return MaPhieuA.localeCompare(MaPhieuB, undefined, { numeric: true, sensitivity: 'base' });
+        });
 
-                items.forEach(item => {
-                    var maxChars = 150;
-                    var truncatedText = item.MoTaPhieu.length > maxChars ? item.MoTaPhieu.substring(0, maxChars) + '...' : item.MoTaPhieu;
-                    var MaPhieu = item.TenPKS.split('.')[0];
-                    var TenPhieu = item.TenPKS.split('.')[1];
+        items.forEach(item => {
+            var maxChars = 150;
+            var truncatedText = item.MoTaPhieu.length > maxChars ? item.MoTaPhieu.substring(0, maxChars) + '...' : item.MoTaPhieu;
+            var MaPhieu = item.TenPKS.split('.')[0];
+            var TenPhieu = item.TenPKS.split('.')[1];
 
-                    html += `
+            html += `
                         <div class="col-md-4 d-flex">
                             <div class="blog-entry align-self-stretch">
                                 <a href="javascript:void(0)" class="block-20 btnCheck" data-id="${item.MaPhieu}" style="background-image: url('/Style/assets/survey.png');"></a>
@@ -49,24 +49,41 @@ function LoadData() {
                                 </div>
                             </div>
                         </div>`;
-                });
-            }
-
-            body.html(html);
+        });
+    }
+    body.html(html);
+}
+function showLoading() {
+    Swal.fire({
+        title: 'Loading...',
+        text: 'Đang kiểm tra và tải dữ liệu, vui lòng chờ trong giây lát!',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
         }
     });
 }
-
-$(document).on('click', '.btnCheck', function () {
+function hideLoading() {
+    Swal.close();
+}
+$(document).on('click', '.btnCheck', async function () {
     var id = $(this).data("id");
-    check_xac_thuc(id);
+        showLoading()
+    try {
+        check_xac_thuc(id);
+        hideLoading();
+    }
+    catch {
+
+    }
+    
 });
 
 function check_xac_thuc(id) {
     $.ajax({
-        url: '/Home/check_xac_thuc',
+        url: '/api/check_xac_thuc',
         type: 'POST',
-        data: { id: id },
+        data: { surveyID: id },
         success: function (res) {
             let url = res.data;
             if (res.is_answer) {
@@ -85,19 +102,7 @@ function check_xac_thuc(id) {
                 });
             }
             else if (res.non_survey) {
-                Swal.fire({
-                    title: "Loading...",
-                    text: "Đang load dữ liệu phiếu khảo sát, vui lòng chờ!",
-                    icon: "info",
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();
-                    },
-                    timer: 3000,
-                }).then(() => {
-                    window.location.href = url;
-                });
+                window.location.href = url;
             }
             else if (res.is_clipboard) {
                 window.location.href = url;

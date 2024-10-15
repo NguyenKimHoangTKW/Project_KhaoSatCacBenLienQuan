@@ -58,7 +58,7 @@ async function load_dap_vien() {
     var select_year = $('#year_dap_vien_select').val();
     var show_body = $('#body');
     const res = await $.ajax({
-        url: '/api/load_doi_tuong_by_loai_khao_sat',
+        url: '/api/ctdt/load_doi_tuong_by_loai_khao_sat',
         type: 'POST',
         data: {
             ten_namhoc: select_year
