@@ -18,34 +18,44 @@ namespace CTDT.Controllers
         dbSurveyEntities db = new dbSurveyEntities();
         [HttpPost]
         [Route("api/load_he_dao_tao")]
-        public async Task<IHttpActionResult> load_he_dao_tao()
+        public async Task<IHttpActionResult> LoadHeDaoTao()
         {
-            var check_user = SessionHelper.IsUserLoggedIn();
+            var isUserLoggedIn = SessionHelper.IsUserLoggedIn();
             var user = SessionHelper.GetUser();
+
             var hedaotao = await db.hedaotao
-              .Select(c => new
-              {
-                  MaHDT = c.id_hedaotao,
-                  TenHDT = c.ten_hedaotao,
-              }).ToListAsync();
-            if (check_user && user.id_typeusers == 1)
-            {
-                return Ok(new { data = hedaotao, islogin = true, client = true });
-            }
-            else if (check_user && user.id_typeusers == 2)
-            {
-                return Ok(new { islogin = true, admin = true });
-            }
-            else if (check_user && user.id_typeusers == 3)
-            {
-                return Ok(new { data = hedaotao, islogin = true, ctdt = true });
-            }
-            else
+                .Select(c => new
+                {
+                    MaHDT = c.id_hedaotao,
+                    TenHDT = c.ten_hedaotao
+                }).ToListAsync();
+
+            if (!isUserLoggedIn)
             {
                 var message = "Vui lòng đăng nhập để thực hiện chức năng";
-                return Ok(new { data = hedaotao, message = message, islogin = false });
+                return Ok(new { data = hedaotao, message, islogin = false });
+            }
+
+            var response = new { data = hedaotao, islogin = true };
+
+            switch (user.id_typeusers)
+            {
+                case 1:
+                    return Ok(new { response.data, response.islogin, client = true });
+                case 2:
+                    return Ok(new { response.islogin, admin = true });
+                case 3:
+                    return Ok(new { response.data, response.islogin, ctdt = true });
+                case 5:
+                    return Ok(new { response.data, response.islogin, khoa = true });
+                case 6:
+                    return Ok(new { response.data, response.islogin, hop_tac_doanh_nghiep = true });
+                default:
+                    var message = "Vui lòng đăng nhập để thực hiện chức năng";
+                    return Ok(new { message, islogin = false });
             }
         }
+
         [HttpPost]
         [Route("api/bo_phieu_khao_sat")]
         public async Task<IHttpActionResult> load_phieu_khao_sat(hedaotao hdt)
@@ -58,58 +68,32 @@ namespace CTDT.Controllers
                .Where(c => c.surveyStatus == true && c.hedaotao.ten_hedaotao == hdt.ten_hedaotao).ToListAsync();
             var list_phieu_khao_sat = new List<dynamic>();
             var check_xac_thuc = new List<dynamic>();
-
             foreach (var item in phieukhaosat)
             {
                 var survey = await db.survey.Where(x => x.surveyID == item.surveyID).FirstOrDefaultAsync();
                 bool check_answer_survey = db.answer_response.Any(x => x.surveyID == item.surveyID && x.id_users == user.id_users && x.id_namhoc == item.id_namhoc && x.json_answer != null);
+                bool not_nguoi_hoc = new[] { 2, 5, 6 }.Contains(item.id_loaikhaosat);
+                bool is_nguoi_hoc = new[] { 1, 4 }.Contains(item.id_loaikhaosat);
+                bool is_cbvc = new[] { 3, 8 }.Contains(item.id_loaikhaosat);
 
-
-                if (item.id_loaikhaosat == 5 || item.id_loaikhaosat == 2 || item.id_loaikhaosat == 6)
+                if (not_nguoi_hoc)
                 {
-                    var test = new
-                    {
-                        MaPhieu = item.surveyID,
-                        TenPKS = item.surveyTitle,
-                        MoTaPhieu = item.surveyDescription,
-                        MaHDT = item.id_hedaotao,
-                        TenHDT = item.hedaotao.ten_hedaotao,
-                        TenLoaiKhaoSat = item.LoaiKhaoSat.name_loaikhaosat,
-                    };
-                    list_phieu_khao_sat.Add(test);
+                    AddSurveyToList(list_phieu_khao_sat, survey);
 
                 }
-                else if ((item.id_loaikhaosat == 1 || item.id_loaikhaosat == 4))
+                else if (is_nguoi_hoc)
                 {
-                    var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(survey.key_class);
+                    var keyClassList = DeserializeKeyClass(survey.key_class);
                     if (emailDomain == "student.tdmu.edu.vn" && keyClassList.Contains(get_key_code_learner) && db.sinhvien.Any(x => x.ma_sv == CodeEmail))
                     {
-                        var test = new
-                        {
-                            MaPhieu = item.surveyID,
-                            TenPKS = item.surveyTitle,
-                            MoTaPhieu = item.surveyDescription,
-                            MaHDT = item.id_hedaotao,
-                            TenHDT = item.hedaotao.ten_hedaotao,
-                            TenLoaiKhaoSat = item.LoaiKhaoSat.name_loaikhaosat
-                        };
-                        list_phieu_khao_sat.Add(test);
+                        AddSurveyToList(list_phieu_khao_sat, survey);
                     }
                 }
-                else if (item.id_loaikhaosat == 3 || item.id_loaikhaosat == 8)
+                else if (is_cbvc)
                 {
                     if (db.CanBoVienChuc.Any(x => x.Email == user.email))
                     {
-                        var test = new
-                        {
-                            MaPhieu = item.surveyID,
-                            TenPKS = item.surveyTitle,
-                            MoTaPhieu = item.surveyDescription,
-                            MaHDT = item.id_hedaotao,
-                            TenHDT = item.hedaotao.ten_hedaotao,
-                            TenLoaiKhaoSat = item.LoaiKhaoSat.name_loaikhaosat,
-                        };
-                        list_phieu_khao_sat.Add(test);
+                        AddSurveyToList(list_phieu_khao_sat, survey);
                     }
                 }
             }
@@ -117,7 +101,24 @@ namespace CTDT.Controllers
             {
                 survey = list_phieu_khao_sat,
             };
-            return Ok(new { data = get_data});
+            return Ok(new { data = get_data });
+        }
+        private void AddSurveyToList(List<dynamic> list, dynamic survey)
+        {
+            var surveyDetails = new
+            {
+                MaPhieu = survey.surveyID,
+                TenPKS = survey.surveyTitle,
+                MoTaPhieu = survey.surveyDescription,
+                MaHDT = survey.id_hedaotao,
+                TenHDT = survey.hedaotao.ten_hedaotao,
+                TenLoaiKhaoSat = survey.LoaiKhaoSat.name_loaikhaosat
+            };
+            list.Add(surveyDetails);
+        }
+        private List<string> DeserializeKeyClass(string keyClassJson)
+        {
+            return new JavaScriptSerializer().Deserialize<List<string>>(keyClassJson);
         }
     }
 }

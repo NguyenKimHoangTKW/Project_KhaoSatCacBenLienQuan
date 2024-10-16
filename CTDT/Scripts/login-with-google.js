@@ -53,8 +53,8 @@ if (info && info['access_token']) {
             console.error("Error fetching user info:", error);
         });
 }
-function Session_Login(email, firstname, lastname, urlimage) {
-    $.ajax({
+async function Session_Login(email, firstname, lastname, urlimage) {
+    const res = await $.ajax({
         url: '/api/session_login',
         type: 'POST',
         dataType: 'JSON',
@@ -65,13 +65,11 @@ function Session_Login(email, firstname, lastname, urlimage) {
             lastName: lastname,
             avatarUrl: urlimage
         },
-        success: function (res) {
-            if (typeof load_he_dao_tao === "function") {
-                load_he_dao_tao();
-            }
-            $("#nav-placeholder").load('/InterfaceClient/load_chuc_nang_nguoi_dung');
-        }
     })
+    if (typeof load_he_dao_tao === "function") {
+        load_he_dao_tao();
+    }
+    $("#nav-placeholder").load('/InterfaceClient/load_chuc_nang_nguoi_dung');
 }
 
 

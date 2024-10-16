@@ -43,8 +43,7 @@ namespace CTDT.Controllers
                 user.username = username;
                 user.password = username + "@123";
                 user.avatarUrl = us.avatarUrl;
-                user.ngaycapnhat = unixTimestamp;
-
+                user.dang_nhap_lan_cuoi = unixTimestamp;
             }
             db.SaveChanges();
             SessionHelper.SetUser(user);

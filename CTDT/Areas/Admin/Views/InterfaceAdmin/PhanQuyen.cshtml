@@ -1,0 +1,126 @@
+﻿@model CTDT.Models.users
+
+@{
+    ViewBag.Title = "Phân quyền tài khoản - TDMU";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .vr {
+        border-left: 1px solid #333;
+        height: auto;
+        margin: 0 20px;
+    }
+
+    .accordion--custom .accordion-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        transition: background-color 0.3s ease;
+        min-height: auto;
+        position: relative;
+        margin-top: 15px;
+    }
+
+        .accordion--custom .accordion-header:hover {
+            color: #e9ecef; /* Màu nền khi hover */
+        }
+
+        .accordion--custom .accordion-header .accordion-button {
+            padding-left: 0;
+            background: none;
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .accordion--custom .accordion-button:not(.collapsed) {
+        box-shadow: none;
+        color: #007bff;
+    }
+
+    .accordion--custom .accordion-collapse {
+        padding-left: 1.75rem;
+    }
+
+    .form-check-label {
+        margin-left: 0.5rem;
+    }
+
+    fieldset {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    legend {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    button {
+        text-align: left;
+    }
+</style>
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Phân quyền tài khoản</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <span class="breadcrumb-item active">Phân quyền tài khoản</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <i class="anticon anticon-left-circle"></i>
+            <div class="d-flex">
+                <!-- Element on the left -->
+                <div class="px-4" style="width: 30%;">
+                    <fieldset class="border rounded-3 p-3">
+                        <legend class="float-none w-auto px-3">THÔNG TIN USER</legend>
+                        <p><strong>Họ tên:</strong> @Model.firstName @Model.lastName</p>
+                        <p><strong>Email:</strong> @Model.email</p>
+                    </fieldset>
+                </div>
+
+                <div class="vr"></div>
+
+                <div class="px-4" style="width: 70%;">
+                    <fieldset class="border rounded-3 p-3">
+                        <legend class="float-none w-auto px-3">PHÂN QUYỀN USER</legend>
+                        <!-- "accordion--custom" - custom class for updating default accordion, like example -->
+                        <div class="accordion accordion--custom" id="accordionExample">
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="heading6">
+                                    <input type="checkbox" class="form-check-input program_checkbox" id="program6">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="true" aria-controls="collapse6">ADMIN</button>
+                                </div>
+                                <div id="collapse6" class="accordion-collapse collapse show" aria-labelledby="heading6" data-bs-parent="#accordionExample">
+                                    <div class="checkbox" style="margin: 10px 0px 10px 0px;">
+                                        <input type="checkbox" class="form-check-input file_checkbox program6" id="package243">
+                                        <label class="form-check-label" for="package243">1646756076.zip</label>
+                                    </div>
+                                    <div class="checkbox" style="margin: 10px 0px 10px 0px;">
+                                        <input type="checkbox" class="form-check-input file_checkbox program6" id="scriptundefined">
+                                        <label class="form-check-label" for="scriptundefined">MEER_munger.py</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+@section scriptsAdmin{
+    <a href="~/Areas/Admin/Views/NguoiDung/PhanQuyen.cshtml">~/Areas/Admin/Views/NguoiDung/PhanQuyen.cshtml</a>
+}

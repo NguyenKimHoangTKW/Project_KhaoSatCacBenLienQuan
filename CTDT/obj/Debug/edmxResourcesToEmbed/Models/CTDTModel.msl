@@ -35,6 +35,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="chuc_nang_users">
+      <EntityTypeMapping TypeName="dbSurveyModel.chuc_nang_users">
+        <MappingFragment StoreEntitySet="chuc_nang_users">
+          <ScalarProperty Name="ghi_chu" ColumnName="ghi_chu" />
+          <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />
+          <ScalarProperty Name="ma_chuc_nang" ColumnName="ma_chuc_nang" />
+          <ScalarProperty Name="ten_chuc_nang" ColumnName="ten_chuc_nang" />
+          <ScalarProperty Name="id_chuc_nang" ColumnName="id_chuc_nang" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="ChucVu">
       <EntityTypeMapping TypeName="dbSurveyModel.ChucVu">
         <MappingFragment StoreEntitySet="ChucVu">
@@ -158,6 +169,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="phan_quyen_chuc_nang_users">
+      <EntityTypeMapping TypeName="dbSurveyModel.phan_quyen_chuc_nang_users">
+        <MappingFragment StoreEntitySet="phan_quyen_chuc_nang_users">
+          <ScalarProperty Name="id_chuc_nang" ColumnName="id_chuc_nang" />
+          <ScalarProperty Name="id_users" ColumnName="id_users" />
+          <ScalarProperty Name="id_phan_quyen" ColumnName="id_phan_quyen" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="sinhvien">
       <EntityTypeMapping TypeName="dbSurveyModel.sinhvien">
         <MappingFragment StoreEntitySet="sinhvien">
@@ -225,7 +245,6 @@
     <EntitySetMapping Name="typeusers">
       <EntityTypeMapping TypeName="dbSurveyModel.typeusers">
         <MappingFragment StoreEntitySet="typeusers">
-          <ScalarProperty Name="chuc_nang" ColumnName="chuc_nang" />
           <ScalarProperty Name="name_typeusers" ColumnName="name_typeusers" />
           <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />
         </MappingFragment>
@@ -238,8 +257,10 @@
           <ScalarProperty Name="avatarUrl" ColumnName="avatarUrl" />
           <ScalarProperty Name="set_phan_quyen" ColumnName="set_phan_quyen" />
           <ScalarProperty Name="id_hdt" ColumnName="id_hdt" />
+          <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
           <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
           <ScalarProperty Name="id_donvi" ColumnName="id_donvi" />
+          <ScalarProperty Name="dang_nhap_lan_cuoi" ColumnName="dang_nhap_lan_cuoi" />
           <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
           <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
           <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />

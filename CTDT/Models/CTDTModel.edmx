@@ -37,6 +37,16 @@
           <Property Name="id_namhoc" Type="int" />
           <Property Name="status" Type="bit" />
         </EntityType>
+        <EntityType Name="chuc_nang_users">
+          <Key>
+            <PropertyRef Name="id_chuc_nang" />
+          </Key>
+          <Property Name="id_chuc_nang" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ten_chuc_nang" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ma_chuc_nang" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_typeusers" Type="int" />
+          <Property Name="ghi_chu" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="ChucVu">
           <Key>
             <PropertyRef Name="id_chucvu" />
@@ -148,6 +158,14 @@
           <Property Name="ten_namhoc" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="status" Type="bit" />
         </EntityType>
+        <EntityType Name="phan_quyen_chuc_nang_users">
+          <Key>
+            <PropertyRef Name="id_phan_quyen" />
+          </Key>
+          <Property Name="id_phan_quyen" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_users" Type="int" Nullable="false" />
+          <Property Name="id_chuc_nang" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="sinhvien">
           <Key>
             <PropertyRef Name="id_sv" />
@@ -214,7 +232,6 @@
           </Key>
           <Property Name="id_typeusers" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name_typeusers" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="chuc_nang" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="users">
           <Key>
@@ -223,14 +240,16 @@
           <Property Name="id_users" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="firstName" Type="nvarchar(max)" />
           <Property Name="lastName" Type="nvarchar(max)" />
-          <Property Name="email" Type="nvarchar(max)" />
+          <Property Name="email" Type="nvarchar(max)" Nullable="false" />
           <Property Name="username" Type="nvarchar(max)" />
           <Property Name="password" Type="nvarchar(max)" />
           <Property Name="id_typeusers" Type="int" />
           <Property Name="ngaycapnhat" Type="int" />
           <Property Name="ngaytao" Type="int" />
+          <Property Name="dang_nhap_lan_cuoi" Type="int" />
           <Property Name="id_donvi" Type="int" />
           <Property Name="id_ctdt" Type="int" />
+          <Property Name="id_khoa" Type="int" />
           <Property Name="id_hdt" Type="int" />
           <Property Name="set_phan_quyen" Type="nvarchar(max)" />
           <Property Name="avatarUrl" Type="nvarchar(max)" />
@@ -392,6 +411,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_chuc_nang_users_typeusers">
+          <End Role="typeusers" Type="Self.typeusers" Multiplicity="0..1" />
+          <End Role="chuc_nang_users" Type="Self.chuc_nang_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="typeusers">
+              <PropertyRef Name="id_typeusers" />
+            </Principal>
+            <Dependent Role="chuc_nang_users">
+              <PropertyRef Name="id_typeusers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ctdt_hedaotao">
           <End Role="hedaotao" Type="Self.hedaotao" Multiplicity="0..1" />
           <End Role="ctdt" Type="Self.ctdt" Multiplicity="*" />
@@ -449,6 +480,34 @@
             </Principal>
             <Dependent Role="mon_hoc">
               <PropertyRef Name="id_hoc_phan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_phan_quyen_chuc_nang_users_chuc_nang_users">
+          <End Role="chuc_nang_users" Type="Self.chuc_nang_users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="phan_quyen_chuc_nang_users" Type="Self.phan_quyen_chuc_nang_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chuc_nang_users">
+              <PropertyRef Name="id_chuc_nang" />
+            </Principal>
+            <Dependent Role="phan_quyen_chuc_nang_users">
+              <PropertyRef Name="id_chuc_nang" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_phan_quyen_chuc_nang_users_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="phan_quyen_chuc_nang_users" Type="Self.phan_quyen_chuc_nang_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_users" />
+            </Principal>
+            <Dependent Role="phan_quyen_chuc_nang_users">
+              <PropertyRef Name="id_users" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -572,6 +631,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_users_khoa">
+          <End Role="khoa" Type="Self.khoa" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="khoa">
+              <PropertyRef Name="id_khoa" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_khoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_users_typeusers">
           <End Role="typeusers" Type="Self.typeusers" Multiplicity="0..1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
@@ -587,6 +658,7 @@
         <EntityContainer Name="dbSurveyModelStoreContainer">
           <EntitySet Name="answer_response" EntityType="Self.answer_response" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CanBoVienChuc" EntityType="Self.CanBoVienChuc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="chuc_nang_users" EntityType="Self.chuc_nang_users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChucVu" EntityType="Self.ChucVu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ctdt" EntityType="Self.ctdt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DonVi" EntityType="Self.DonVi" Schema="dbo" store:Type="Tables" />
@@ -599,6 +671,7 @@
           <EntitySet Name="lop" EntityType="Self.lop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mon_hoc" EntityType="Self.mon_hoc" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NamHoc" EntityType="Self.NamHoc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="phan_quyen_chuc_nang_users" EntityType="Self.phan_quyen_chuc_nang_users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sinhvien" EntityType="Self.sinhvien" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="survey" EntityType="Self.survey" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -657,6 +730,10 @@
             <End Role="NamHoc" EntitySet="NamHoc" />
             <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
           </AssociationSet>
+          <AssociationSet Name="FK_chuc_nang_users_typeusers" Association="Self.FK_chuc_nang_users_typeusers">
+            <End Role="typeusers" EntitySet="typeusers" />
+            <End Role="chuc_nang_users" EntitySet="chuc_nang_users" />
+          </AssociationSet>
           <AssociationSet Name="FK_ctdt_hedaotao" Association="Self.FK_ctdt_hedaotao">
             <End Role="hedaotao" EntitySet="hedaotao" />
             <End Role="ctdt" EntitySet="ctdt" />
@@ -676,6 +753,14 @@
           <AssociationSet Name="FK_mon_hoc_hoc_phan" Association="Self.FK_mon_hoc_hoc_phan">
             <End Role="hoc_phan" EntitySet="hoc_phan" />
             <End Role="mon_hoc" EntitySet="mon_hoc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_phan_quyen_chuc_nang_users_chuc_nang_users" Association="Self.FK_phan_quyen_chuc_nang_users_chuc_nang_users">
+            <End Role="chuc_nang_users" EntitySet="chuc_nang_users" />
+            <End Role="phan_quyen_chuc_nang_users" EntitySet="phan_quyen_chuc_nang_users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_phan_quyen_chuc_nang_users_users" Association="Self.FK_phan_quyen_chuc_nang_users_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="phan_quyen_chuc_nang_users" EntitySet="phan_quyen_chuc_nang_users" />
           </AssociationSet>
           <AssociationSet Name="FK_sinhvien_lop" Association="Self.FK_sinhvien_lop">
             <End Role="lop" EntitySet="lop" />
@@ -717,6 +802,10 @@
             <End Role="DonVi" EntitySet="DonVi" />
             <End Role="users" EntitySet="users" />
           </AssociationSet>
+          <AssociationSet Name="FK_users_khoa" Association="Self.FK_users_khoa">
+            <End Role="khoa" EntitySet="khoa" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
           <AssociationSet Name="FK_users_typeusers" Association="Self.FK_users_typeusers">
             <End Role="typeusers" EntitySet="typeusers" />
             <End Role="users" EntitySet="users" />
@@ -729,6 +818,7 @@
         <EntityContainer Name="dbSurveyEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="answer_response" EntityType="dbSurveyModel.answer_response" />
           <EntitySet Name="CanBoVienChuc" EntityType="dbSurveyModel.CanBoVienChuc" />
+          <EntitySet Name="chuc_nang_users" EntityType="dbSurveyModel.chuc_nang_users" />
           <EntitySet Name="ChucVu" EntityType="dbSurveyModel.ChucVu" />
           <EntitySet Name="ctdt" EntityType="dbSurveyModel.ctdt" />
           <EntitySet Name="DonVi" EntityType="dbSurveyModel.DonVi" />
@@ -741,6 +831,7 @@
           <EntitySet Name="lop" EntityType="dbSurveyModel.lop" />
           <EntitySet Name="mon_hoc" EntityType="dbSurveyModel.mon_hoc" />
           <EntitySet Name="NamHoc" EntityType="dbSurveyModel.NamHoc" />
+          <EntitySet Name="phan_quyen_chuc_nang_users" EntityType="dbSurveyModel.phan_quyen_chuc_nang_users" />
           <EntitySet Name="sinhvien" EntityType="dbSurveyModel.sinhvien" />
           <EntitySet Name="survey" EntityType="dbSurveyModel.survey" />
           <EntitySet Name="sysdiagrams" EntityType="dbSurveyModel.sysdiagrams" />
@@ -799,6 +890,14 @@
             <End Role="NamHoc" EntitySet="NamHoc" />
             <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
           </AssociationSet>
+          <AssociationSet Name="FK_chuc_nang_users_typeusers" Association="dbSurveyModel.FK_chuc_nang_users_typeusers">
+            <End Role="typeusers" EntitySet="typeusers" />
+            <End Role="chuc_nang_users" EntitySet="chuc_nang_users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_phan_quyen_chuc_nang_users_chuc_nang_users" Association="dbSurveyModel.FK_phan_quyen_chuc_nang_users_chuc_nang_users">
+            <End Role="chuc_nang_users" EntitySet="chuc_nang_users" />
+            <End Role="phan_quyen_chuc_nang_users" EntitySet="phan_quyen_chuc_nang_users" />
+          </AssociationSet>
           <AssociationSet Name="FK_ctdt_hedaotao" Association="dbSurveyModel.FK_ctdt_hedaotao">
             <End Role="hedaotao" EntitySet="hedaotao" />
             <End Role="ctdt" EntitySet="ctdt" />
@@ -835,6 +934,10 @@
             <End Role="hoc_phan" EntitySet="hoc_phan" />
             <End Role="mon_hoc" EntitySet="mon_hoc" />
           </AssociationSet>
+          <AssociationSet Name="FK_users_khoa" Association="dbSurveyModel.FK_users_khoa">
+            <End Role="khoa" EntitySet="khoa" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
           <AssociationSet Name="FK_survey_LoaiKhaoSat" Association="dbSurveyModel.FK_survey_LoaiKhaoSat">
             <End Role="LoaiKhaoSat" EntitySet="LoaiKhaoSat" />
             <End Role="survey" EntitySet="survey" />
@@ -850,6 +953,10 @@
           <AssociationSet Name="FK_thong_ke_theo_yeu_cau_NamHoc" Association="dbSurveyModel.FK_thong_ke_theo_yeu_cau_NamHoc">
             <End Role="NamHoc" EntitySet="NamHoc" />
             <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
+          </AssociationSet>
+          <AssociationSet Name="FK_phan_quyen_chuc_nang_users_users" Association="dbSurveyModel.FK_phan_quyen_chuc_nang_users_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="phan_quyen_chuc_nang_users" EntitySet="phan_quyen_chuc_nang_users" />
           </AssociationSet>
           <AssociationSet Name="FK_survey_users" Association="dbSurveyModel.FK_survey_users">
             <End Role="users" EntitySet="users" />
@@ -909,6 +1016,18 @@
           <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_CanBoVienChuc_ctdt" FromRole="CanBoVienChuc" ToRole="ctdt" />
           <NavigationProperty Name="DonVi" Relationship="dbSurveyModel.FK_CanBoVienChuc_DonVi" FromRole="CanBoVienChuc" ToRole="DonVi" />
           <NavigationProperty Name="NamHoc" Relationship="dbSurveyModel.FK_CanBoVienChuc_NamHoc" FromRole="CanBoVienChuc" ToRole="NamHoc" />
+        </EntityType>
+        <EntityType Name="chuc_nang_users">
+          <Key>
+            <PropertyRef Name="id_chuc_nang" />
+          </Key>
+          <Property Name="id_chuc_nang" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ten_chuc_nang" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ma_chuc_nang" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_typeusers" Type="Int32" />
+          <Property Name="ghi_chu" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="typeusers" Relationship="dbSurveyModel.FK_chuc_nang_users_typeusers" FromRole="chuc_nang_users" ToRole="typeusers" />
+          <NavigationProperty Name="phan_quyen_chuc_nang_users" Relationship="dbSurveyModel.FK_phan_quyen_chuc_nang_users_chuc_nang_users" FromRole="chuc_nang_users" ToRole="phan_quyen_chuc_nang_users" />
         </EntityType>
         <EntityType Name="ChucVu">
           <Key>
@@ -997,6 +1116,7 @@
           <Property Name="ngaycapnhat" Type="Int32" Nullable="false" />
           <Property Name="ngaytao" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_ctdt_khoa" FromRole="khoa" ToRole="ctdt" />
+          <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_users_khoa" FromRole="khoa" ToRole="users" />
         </EntityType>
         <EntityType Name="LoaiKhaoSat">
           <Key>
@@ -1047,6 +1167,16 @@
           <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_NamHoc" FromRole="NamHoc" ToRole="CanBoVienChuc" />
           <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_NamHoc" FromRole="NamHoc" ToRole="survey" />
           <NavigationProperty Name="thong_ke_theo_yeu_cau" Relationship="dbSurveyModel.FK_thong_ke_theo_yeu_cau_NamHoc" FromRole="NamHoc" ToRole="thong_ke_theo_yeu_cau" />
+        </EntityType>
+        <EntityType Name="phan_quyen_chuc_nang_users">
+          <Key>
+            <PropertyRef Name="id_phan_quyen" />
+          </Key>
+          <Property Name="id_phan_quyen" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_users" Type="Int32" Nullable="false" />
+          <Property Name="id_chuc_nang" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="chuc_nang_users" Relationship="dbSurveyModel.FK_phan_quyen_chuc_nang_users_chuc_nang_users" FromRole="phan_quyen_chuc_nang_users" ToRole="chuc_nang_users" />
+          <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_phan_quyen_chuc_nang_users_users" FromRole="phan_quyen_chuc_nang_users" ToRole="users" />
         </EntityType>
         <EntityType Name="sinhvien">
           <Key>
@@ -1125,7 +1255,7 @@
           </Key>
           <Property Name="id_typeusers" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name_typeusers" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="chuc_nang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="chuc_nang_users" Relationship="dbSurveyModel.FK_chuc_nang_users_typeusers" FromRole="typeusers" ToRole="chuc_nang_users" />
           <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_users_typeusers" FromRole="typeusers" ToRole="users" />
         </EntityType>
         <EntityType Name="users">
@@ -1135,14 +1265,16 @@
           <Property Name="id_users" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="firstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="lastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="id_typeusers" Type="Int32" />
           <Property Name="ngaycapnhat" Type="Int32" />
           <Property Name="ngaytao" Type="Int32" />
+          <Property Name="dang_nhap_lan_cuoi" Type="Int32" />
           <Property Name="id_donvi" Type="Int32" />
           <Property Name="id_ctdt" Type="Int32" />
+          <Property Name="id_khoa" Type="Int32" />
           <Property Name="id_hdt" Type="Int32" />
           <Property Name="set_phan_quyen" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="avatarUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1150,6 +1282,8 @@
           <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_users" FromRole="users" ToRole="answer_response" />
           <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_users_ctdt" FromRole="users" ToRole="ctdt" />
           <NavigationProperty Name="DonVi" Relationship="dbSurveyModel.FK_users_DonVi" FromRole="users" ToRole="DonVi" />
+          <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_users_khoa" FromRole="users" ToRole="khoa" />
+          <NavigationProperty Name="phan_quyen_chuc_nang_users" Relationship="dbSurveyModel.FK_phan_quyen_chuc_nang_users_users" FromRole="users" ToRole="phan_quyen_chuc_nang_users" />
           <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_users" FromRole="users" ToRole="survey" />
           <NavigationProperty Name="typeusers" Relationship="dbSurveyModel.FK_users_typeusers" FromRole="users" ToRole="typeusers" />
         </EntityType>
@@ -1309,6 +1443,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_chuc_nang_users_typeusers">
+          <End Type="dbSurveyModel.typeusers" Role="typeusers" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.chuc_nang_users" Role="chuc_nang_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="typeusers">
+              <PropertyRef Name="id_typeusers" />
+            </Principal>
+            <Dependent Role="chuc_nang_users">
+              <PropertyRef Name="id_typeusers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_phan_quyen_chuc_nang_users_chuc_nang_users">
+          <End Type="dbSurveyModel.chuc_nang_users" Role="chuc_nang_users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="dbSurveyModel.phan_quyen_chuc_nang_users" Role="phan_quyen_chuc_nang_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chuc_nang_users">
+              <PropertyRef Name="id_chuc_nang" />
+            </Principal>
+            <Dependent Role="phan_quyen_chuc_nang_users">
+              <PropertyRef Name="id_chuc_nang" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ctdt_hedaotao">
           <End Type="dbSurveyModel.hedaotao" Role="hedaotao" Multiplicity="0..1" />
           <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="*" />
@@ -1417,6 +1577,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_users_khoa">
+          <End Type="dbSurveyModel.khoa" Role="khoa" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.users" Role="users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="khoa">
+              <PropertyRef Name="id_khoa" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="id_khoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_survey_LoaiKhaoSat">
           <End Type="dbSurveyModel.LoaiKhaoSat" Role="LoaiKhaoSat" Multiplicity="1" />
           <End Type="dbSurveyModel.survey" Role="survey" Multiplicity="*" />
@@ -1462,6 +1634,20 @@
             </Principal>
             <Dependent Role="thong_ke_theo_yeu_cau">
               <PropertyRef Name="id_nam_hoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_phan_quyen_chuc_nang_users_users">
+          <End Type="dbSurveyModel.users" Role="users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="dbSurveyModel.phan_quyen_chuc_nang_users" Role="phan_quyen_chuc_nang_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_users" />
+            </Principal>
+            <Dependent Role="phan_quyen_chuc_nang_users">
+              <PropertyRef Name="id_users" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1538,6 +1724,17 @@
                 <ScalarProperty Name="TenCBVC" ColumnName="TenCBVC" />
                 <ScalarProperty Name="MaCBVC" ColumnName="MaCBVC" />
                 <ScalarProperty Name="id_CBVC" ColumnName="id_CBVC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chuc_nang_users">
+            <EntityTypeMapping TypeName="dbSurveyModel.chuc_nang_users">
+              <MappingFragment StoreEntitySet="chuc_nang_users">
+                <ScalarProperty Name="ghi_chu" ColumnName="ghi_chu" />
+                <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />
+                <ScalarProperty Name="ma_chuc_nang" ColumnName="ma_chuc_nang" />
+                <ScalarProperty Name="ten_chuc_nang" ColumnName="ten_chuc_nang" />
+                <ScalarProperty Name="id_chuc_nang" ColumnName="id_chuc_nang" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1664,6 +1861,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="phan_quyen_chuc_nang_users">
+            <EntityTypeMapping TypeName="dbSurveyModel.phan_quyen_chuc_nang_users">
+              <MappingFragment StoreEntitySet="phan_quyen_chuc_nang_users">
+                <ScalarProperty Name="id_chuc_nang" ColumnName="id_chuc_nang" />
+                <ScalarProperty Name="id_users" ColumnName="id_users" />
+                <ScalarProperty Name="id_phan_quyen" ColumnName="id_phan_quyen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="sinhvien">
             <EntityTypeMapping TypeName="dbSurveyModel.sinhvien">
               <MappingFragment StoreEntitySet="sinhvien">
@@ -1731,7 +1937,6 @@
           <EntitySetMapping Name="typeusers">
             <EntityTypeMapping TypeName="dbSurveyModel.typeusers">
               <MappingFragment StoreEntitySet="typeusers">
-                <ScalarProperty Name="chuc_nang" ColumnName="chuc_nang" />
                 <ScalarProperty Name="name_typeusers" ColumnName="name_typeusers" />
                 <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />
               </MappingFragment>
@@ -1744,8 +1949,10 @@
                 <ScalarProperty Name="avatarUrl" ColumnName="avatarUrl" />
                 <ScalarProperty Name="set_phan_quyen" ColumnName="set_phan_quyen" />
                 <ScalarProperty Name="id_hdt" ColumnName="id_hdt" />
+                <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
                 <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
                 <ScalarProperty Name="id_donvi" ColumnName="id_donvi" />
+                <ScalarProperty Name="dang_nhap_lan_cuoi" ColumnName="dang_nhap_lan_cuoi" />
                 <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
                 <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
                 <ScalarProperty Name="id_typeusers" ColumnName="id_typeusers" />

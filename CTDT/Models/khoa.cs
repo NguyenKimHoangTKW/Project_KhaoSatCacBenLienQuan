@@ -18,6 +18,7 @@ namespace CTDT.Models
         public khoa()
         {
             this.ctdt = new HashSet<ctdt>();
+            this.users = new HashSet<users>();
         }
     
         public int id_khoa { get; set; }
@@ -28,5 +29,7 @@ namespace CTDT.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ctdt> ctdt { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<users> users { get; set; }
     }
 }

@@ -17,13 +17,15 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public typeusers()
         {
+            this.chuc_nang_users = new HashSet<chuc_nang_users>();
             this.users = new HashSet<users>();
         }
     
         public int id_typeusers { get; set; }
         public string name_typeusers { get; set; }
-        public string chuc_nang { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<chuc_nang_users> chuc_nang_users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<users> users { get; set; }
     }

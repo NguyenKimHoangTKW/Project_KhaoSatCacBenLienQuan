@@ -87,8 +87,7 @@ namespace CTDT
                         "~/Areas/assets/js/buttons.print.min.js",
                         "~/Areas/assets/js/login-google.js"));
             //
-
-            
+            // Admi
             BundleTable.EnableOptimizations = true;
         }
     }

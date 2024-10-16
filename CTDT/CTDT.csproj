@@ -307,8 +307,10 @@
     <Compile Include="Areas\Admin\Controllers\CTDTController.cs" />
     <Compile Include="Areas\Admin\Controllers\DoiTuongKhaoSatController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportDataController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InterfaceAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhoaController.cs" />
     <Compile Include="Areas\Admin\Controllers\LopController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatController.cs" />
     <Compile Include="Areas\Admin\Controllers\SinhVienController.cs" />
@@ -337,6 +339,7 @@
     <Compile Include="Helper\SessionHelper.cs" />
     <Compile Include="Helper\UserAuthorizeAttribute.cs" />
     <Compile Include="Helper\VisitorHub.cs" />
+    <Compile Include="Models\Admin\FindDataUsers.cs" />
     <Compile Include="Models\answer_response.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -344,6 +347,9 @@
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChucVu.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\chuc_nang_users.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ctdt.cs">
@@ -396,6 +402,9 @@
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NamHoc.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\phan_quyen_chuc_nang_users.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SaveXacThuc.cs" />
@@ -984,7 +993,6 @@
     <Content Include="Areas\CTDT\Scripts\BaoCaoTongHopKetQuaKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\DoiSanhKetQuaKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\GiamSatKeuQuaKhaoSat.js" />
-    <Content Include="Areas\CTDT\Scripts\luutru.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeKetQuaKhaoSatTheoYeuCau.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeNguoiDungKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeTanXuatCauHoi.js" />
@@ -1311,6 +1319,8 @@
     <Content Include="Areas\Khoa\Views\Shared\_KhoaNavPartial.cshtml" />
     <Content Include="Areas\Khoa\Views\Shared\Error.cshtml" />
     <Content Include="Areas\Khoa\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\UserInterface.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\PhanQuyen.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
