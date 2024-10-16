@@ -165,8 +165,8 @@ namespace CTDT.Areas.Admin.Controllers
         #endregion
 
         #region Phân quyền
-        [HttpPost]
-        [Route("api/load_chuc_nang_phan_quyen")]
+        [HttpGet]
+        [Route("api/admin/load_chuc_nang_phan_quyen")]
         public IHttpActionResult load_chuc_nang_phan_quyen()
         {
             var type_user = db.typeusers.ToList();
@@ -229,7 +229,7 @@ namespace CTDT.Areas.Admin.Controllers
             var ctdt = db.ctdt
                 .Select(x => new
                 {
-                    ma_ctdt = x.ma_ctdt,
+                    ma_ctdt = x.id_ctdt,
                     ten_ctdt = x.ten_ctdt
                 })
                 .ToList();
@@ -246,7 +246,7 @@ namespace CTDT.Areas.Admin.Controllers
             var khoa = db.khoa
                         .Select(x => new
                         {
-                            ma_khoa = x.ma_khoa,
+                            ma_khoa = x.id_khoa,
                             ten_khoa = x.ten_khoa
                         })
                         .ToList();
