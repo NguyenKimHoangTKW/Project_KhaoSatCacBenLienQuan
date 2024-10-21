@@ -58,9 +58,21 @@ namespace CTDT.Controllers
 
         [HttpPost]
         [Route("api/bo_phieu_khao_sat")]
-        public async Task<IHttpActionResult> load_phieu_khao_sat(hedaotao hdt)
+        public async Task<IHttpActionResult> load_phieu_khao_sat([FromBody] hedaotao hdt)
         {
+            if (hdt == null || string.IsNullOrEmpty(hdt.ten_hedaotao))
+            {
+                return BadRequest("Dữ liệu không hợp lệ");
+            }
+            if (!db.hedaotao.Any(x => x.ten_hedaotao == hdt.ten_hedaotao))
+            {
+                return BadRequest("Hệ đào tạo không tồn tại");
+            }
             var user = SessionHelper.GetUser();
+            if (user == null)
+            {
+                return BadRequest("Không thể phân loại được tài khoản");
+            }
             var emailDomain = user.email.Split('@')[1].ToLower();
             var CodeEmail = user.email.Split('@')[0];
             var get_key_code_learner = CodeEmail.ToString().Substring(0, 2);

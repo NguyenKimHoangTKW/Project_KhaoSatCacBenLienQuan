@@ -9,5 +9,6 @@ namespace CTDT.Models
     {
         public int id_survey { get; set; } 
         public string name_hoc_ky { get; set; }
+        public int? id_ctdt { get; set; }
     }
 }

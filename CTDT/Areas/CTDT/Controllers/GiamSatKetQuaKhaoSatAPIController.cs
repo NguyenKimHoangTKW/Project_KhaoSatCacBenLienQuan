@@ -6,11 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
+
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using Microsoft.Ajax.Utilities;
+using CTDT.Models.Khoa;
+using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace CTDT.Areas.CTDT.Controllers
 {
@@ -21,14 +23,19 @@ namespace CTDT.Areas.CTDT.Controllers
         #region Thống kê toàn bộ phiếu
         [HttpPost]
         [Route("api/ctdt/ty_le_khao_sat")]
-        public IHttpActionResult load_charts_ty_le(NamHoc namhoc)
+        public async Task<IHttpActionResult> load_charts_ty_le(FindChartsTyLeKhaoSat find)
         {
             var user = SessionHelper.GetUser();
-            var query = db.answer_response
-                .Where(x => x.survey.id_hedaotao == user.id_hdt && x.NamHoc.ten_namhoc == namhoc.ten_namhoc)
-                .DistinctBy(x => x.surveyID)
-                .ToList();
-
+            var query = await db.answer_response
+                .Where(x => x.id_namhoc == find.id_nam_hoc)
+                .GroupBy(x => x.surveyID)
+                .Select(g => g.FirstOrDefault())
+                .ToListAsync(); 
+            bool is_user_hop_tac_doanh_nghiep = new int?[] { 6 }.Contains(user.id_typeusers);
+            if (is_user_hop_tac_doanh_nghiep)
+            {
+                query = query.Where(x => (x.survey.surveyTitle.Contains("4") || x.survey.surveyTitle.Contains("5"))).ToList();
+            }               
             var DataList = new List<dynamic>();
             var MucDoHaiLong = new List<dynamic>();
             var Survey = new List<dynamic>();

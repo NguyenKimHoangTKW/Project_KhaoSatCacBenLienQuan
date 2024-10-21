@@ -247,7 +247,7 @@ function load_bao_cao() {
                         const tylehailong = mucdohailong ? mucdohailong.ty_le_hai_long : '0';
                         const diemtrungbinh = mucdohailong ? mucdohailong.avgscore : '0';
                         let ketqua = '';
-                        if (tyLeDaTraLoi >= 70 && tylehailong >= 70) {
+                        if (tyLeDaTraLoi >= 75 && tylehailong >= 75) {
                             ketqua = 'Đạt';
                         }
                         else {

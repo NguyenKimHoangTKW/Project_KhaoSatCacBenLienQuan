@@ -325,6 +325,10 @@
     <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatTheoYeuCauAPIController.cs" />
     <Compile Include="Areas\CTDT\CTDTAreaRegistration.cs" />
+    <Compile Include="Areas\Khoa\Controllers\BaoCaoTongHopKetQuaKhaoSatKhoaAPIController.cs" />
+    <Compile Include="Areas\Khoa\Controllers\GiamSatKetQuaKhaoSatKhoaAPIController.cs" />
+    <Compile Include="Areas\Khoa\Controllers\InterfaceKhoaController.cs" />
+    <Compile Include="Areas\Khoa\Controllers\ThongKeKhaoSatKhoaAPIController.cs" />
     <Compile Include="Areas\Khoa\KhoaAreaRegistration.cs" />
     <Compile Include="Controllers\AccountAPIController.cs" />
     <Compile Include="Controllers\HomeAPIController.cs" />
@@ -339,7 +343,7 @@
     <Compile Include="Helper\SessionHelper.cs" />
     <Compile Include="Helper\UserAuthorizeAttribute.cs" />
     <Compile Include="Helper\VisitorHub.cs" />
-    <Compile Include="Models\Admin\FindDataUsers.cs" />
+    <Compile Include="Models\FindDataUsers.cs" />
     <Compile Include="Models\answer_response.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -391,6 +395,7 @@
     <Compile Include="Models\khoa.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FindChartsTyLeKhaoSat.cs" />
     <Compile Include="Models\LoadAnswerPKS.cs" />
     <Compile Include="Models\LoaiKhaoSat.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
@@ -996,6 +1001,10 @@
     <Content Include="Areas\CTDT\Scripts\ThongKeKetQuaKhaoSatTheoYeuCau.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeNguoiDungKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeTanXuatCauHoi.js" />
+    <Content Include="Areas\Khoa\Script\BaoCaoTongHopKetQuaKhaoSat.js" />
+    <Content Include="Areas\Khoa\Script\GiamSatKetQuaKhaoSat.js" />
+    <Content Include="Areas\Khoa\Script\ThongKeNguoiDungKhaoSat.js" />
+    <Content Include="Areas\Khoa\Script\ThongKeTanXuatCauHoi.js" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -1321,6 +1330,11 @@
     <Content Include="Areas\Khoa\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\UserInterface.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\PhanQuyen.cshtml" />
+    <Content Include="Areas\Khoa\Views\InterfaceKhoa\bao_cao_tong_hop_ket_qua_khao_sat.cshtml" />
+    <Content Include="Areas\Khoa\Views\InterfaceKhoa\giam_sat_ket_qua_khao_sat.cshtml" />
+    <Content Include="Areas\Khoa\Views\InterfaceKhoa\thong_ke_khao_sat.cshtml" />
+    <Content Include="Areas\Khoa\Views\InterfaceKhoa\thong_ke_tan_xuat.cshtml" />
+    <Content Include="Areas\Khoa\Views\InterfaceKhoa\thong_ke_tan_xuat_theo_yeu_cau.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
@@ -1722,13 +1736,15 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\CTDT\Data\" />
-    <Folder Include="Areas\Khoa\Controllers\" />
     <Folder Include="Areas\Khoa\Data\" />
+    <Folder Include="Areas\Khoa\Views\ThongKeKhaoSatKhoaAPI\" />
     <Folder Include="Content\Exports\" />
     <Folder Include="DataExport\DoiTuongKhaoSat-CTDT\" />
     <Folder Include="DataExport\DoiTuongKhaoSat-DonVi\" />
     <Folder Include="DataExport\DoiTuongKhaoSat\" />
     <Folder Include="DataExport\KetQuaPKS\" />
+    <Folder Include="Models\Admin\" />
+    <Folder Include="Models\Khoa\" />
     <Folder Include="Scripts\Admin\" />
   </ItemGroup>
   <ItemGroup>

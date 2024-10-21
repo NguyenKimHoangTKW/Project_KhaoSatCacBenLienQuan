@@ -1,5 +1,4 @@
-﻿
-function Loading() {
+﻿function Loading() {
     Swal.fire({
         title: 'Loading...',
         text: 'Đang thống kê dữ liệu, vui lòng chờ trong giây lát !',

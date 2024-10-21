@@ -1,22 +1,30 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\",
+  "WorkspaceRootPath": "D:\\TTDBCL\\KhaoSat-DBCL\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\ctdt\\areas\\admin\\scripts\\phanquyen\\phanquyennguoidung.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\scripts\\phanquyen\\phanquyennguoidung.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\areas\\ctdt\\controllers\\giamsatketquakhaosatapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\controllers\\giamsatketquakhaosatapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\dbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\views\\interfaceadmin\\phanquyen.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\views\\interfaceadmin\\phanquyen.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\models\\findanswersurvey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\models\\findanswersurvey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\ctdt\\areas\\admin\\scripts\\phanquyen\\danhsachtaikhoan.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\scripts\\phanquyen\\danhsachtaikhoan.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\models\\findchartstylekhaosat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\models\\findchartstylekhaosat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\ctdt\\areas\\admin\\controllers\\nguoidungapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\controllers\\nguoidungapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\scripts\\user\\hedaotao.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\scripts\\user\\hedaotao.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\scripts\\user\\phieukhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\scripts\\user\\phieukhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\controllers\\homeapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\controllers\\homeapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,58 +34,84 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FindAnswerSurvey.cs",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Models\\FindAnswerSurvey.cs",
+              "RelativeDocumentMoniker": "CTDT\\Models\\FindAnswerSurvey.cs",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Models\\FindAnswerSurvey.cs",
+              "RelativeToolTip": "CTDT\\Models\\FindAnswerSurvey.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T02:04:16.632Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "DanhSachTaiKhoan.js",
-              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\DanhSachTaiKhoan.js",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\DanhSachTaiKhoan.js",
-              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\DanhSachTaiKhoan.js",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\DanhSachTaiKhoan.js",
-              "ViewState": "AgIAAI4AAAAAAAAAAAAAAKUAAABAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-16T13:19:05.191Z",
+              "Title": "FindChartsTyLeKhaoSat.cs",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Models\\FindChartsTyLeKhaoSat.cs",
+              "RelativeDocumentMoniker": "CTDT\\Models\\FindChartsTyLeKhaoSat.cs",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Models\\FindChartsTyLeKhaoSat.cs",
+              "RelativeToolTip": "CTDT\\Models\\FindChartsTyLeKhaoSat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T02:04:10.248Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PhanQuyenNguoiDung.js",
-              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\PhanQuyenNguoiDung.js",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\PhanQuyenNguoiDung.js",
-              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\PhanQuyenNguoiDung.js",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Scripts\\PhanQuyen\\PhanQuyenNguoiDung.js",
-              "ViewState": "AgIAAAIAAAAAAAAAAAA9wBEAAABMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-16T09:18:26.345Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PhanQuyen.cshtml",
-              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\PhanQuyen.cshtml",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\PhanQuyen.cshtml",
-              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\PhanQuyen.cshtml",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\PhanQuyen.cshtml",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAAAGEAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-16T07:33:05.467Z",
+              "Title": "GiamSatKetQuaKhaoSatAPIController.cs",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Controllers\\GiamSatKetQuaKhaoSatAPIController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Controllers\\GiamSatKetQuaKhaoSatAPIController.cs",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Controllers\\GiamSatKetQuaKhaoSatAPIController.cs",
+              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Controllers\\GiamSatKetQuaKhaoSatAPIController.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAA1wGAAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-18T04:20:17.897Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "NguoiDungAPIController.cs",
-              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\NguoiDungAPIController.cs",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Controllers\\NguoiDungAPIController.cs",
-              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\NguoiDungAPIController.cs",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Controllers\\NguoiDungAPIController.cs",
-              "ViewState": "AgIAAMkAAAAAAAAAAAAiwPgAAAAvAAAAAAAAAA==",
+              "Title": "Hedaotao.js",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Scripts\\User\\Hedaotao.js",
+              "RelativeDocumentMoniker": "CTDT\\Scripts\\User\\Hedaotao.js",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Scripts\\User\\Hedaotao.js",
+              "RelativeToolTip": "CTDT\\Scripts\\User\\Hedaotao.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-10-18T03:08:52.382Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "HomeAPIController.cs",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Controllers\\HomeAPIController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Controllers\\HomeAPIController.cs",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Controllers\\HomeAPIController.cs",
+              "RelativeToolTip": "CTDT\\Controllers\\HomeAPIController.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAAAEIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-16T02:47:41.039Z",
+              "WhenOpened": "2024-10-18T02:55:45.672Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Phieukhaosat.js",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Scripts\\User\\Phieukhaosat.js",
+              "RelativeDocumentMoniker": "CTDT\\Scripts\\User\\Phieukhaosat.js",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Scripts\\User\\Phieukhaosat.js",
+              "RelativeToolTip": "CTDT\\Scripts\\User\\Phieukhaosat.js",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAgwB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-10-18T02:56:04.812Z",
               "EditorCaption": ""
             }
           ]

@@ -196,7 +196,6 @@ namespace CTDT.Areas.Admin.Controllers
             }
             return Ok(new { data = data_list });
         }
-
         private void chuc_nang_quyen_admin(dynamic data_list, int id_typeusers, string name_typeusers)
         {
             var chuc_nang_user = db.chuc_nang_users

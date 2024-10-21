@@ -6,8 +6,9 @@ async function LoadData() {
     var namehdt = $('#namehdt').val();
     const res = await $.ajax({
         url: '/api/bo_phieu_khao_sat',
-        type: 'POST',
-        data: { ten_hedaotao: namehdt },
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ ten_hedaotao: namehdt }) 
     })
     let items = res.data.survey;
     let body = $('#showdata');
