@@ -3,20 +3,44 @@
   "WorkspaceRootPath": "D:\\TTDBCL\\KhaoSat-DBCL\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\areas\\ctdt\\controllers\\giamsatketquakhaosatapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\areas\\ctdt\\controllers\\giamsatketquakhaosatapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\controllers\\giamsatketquakhaosatapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\models\\findanswersurvey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\models\\findanswersurvey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\models\\findchartstylekhaosat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\models\\findchartstylekhaosat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\models\\findchartstylekhaosat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\scripts\\user\\hedaotao.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\models\\findanswersurvey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\models\\findanswersurvey.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\areas\\khoa\\views\\interfacekhoa\\giam_sat_ket_qua_khao_sat.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\khoa\\views\\interfacekhoa\\giam_sat_ket_qua_khao_sat.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\areas\\ctdt\\scripts\\giamsatkeuquakhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\scripts\\giamsatkeuquakhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\areas\\ctdt\\views\\interface\\giam_sat_ket_qua_khao_sat.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\views\\interface\\giam_sat_ket_qua_khao_sat.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\areas\\khoa\\script\\giamsatketquakhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\khoa\\script\\giamsatketquakhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\controllers\\accountapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\controllers\\accountapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\scripts\\user\\hedaotao.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\scripts\\user\\hedaotao.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\khaosat-dbcl\\ctdt\\helper\\sessionhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\helper\\sessionhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\KhaoSat-DBCL\\ctdt\\scripts\\user\\phieukhaosat.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -34,11 +58,89 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
+              "Title": "giam_sat_ket_qua_khao_sat.cshtml",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\Khoa\\Views\\InterfaceKhoa\\giam_sat_ket_qua_khao_sat.cshtml",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\Khoa\\Views\\InterfaceKhoa\\giam_sat_ket_qua_khao_sat.cshtml",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\Khoa\\Views\\InterfaceKhoa\\giam_sat_ket_qua_khao_sat.cshtml",
+              "RelativeToolTip": "CTDT\\Areas\\Khoa\\Views\\InterfaceKhoa\\giam_sat_ket_qua_khao_sat.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-22T09:30:24.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "SessionHelper.cs",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Helper\\SessionHelper.cs",
+              "RelativeDocumentMoniker": "CTDT\\Helper\\SessionHelper.cs",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Helper\\SessionHelper.cs",
+              "RelativeToolTip": "CTDT\\Helper\\SessionHelper.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAcwBMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:39:34.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AccountAPIController.cs",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Controllers\\AccountAPIController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Controllers\\AccountAPIController.cs",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Controllers\\AccountAPIController.cs",
+              "RelativeToolTip": "CTDT\\Controllers\\AccountAPIController.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAnwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T08:35:26.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GiamSatKetQuaKhaoSat.js",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\Khoa\\Script\\GiamSatKetQuaKhaoSat.js",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\Khoa\\Script\\GiamSatKetQuaKhaoSat.js",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\Khoa\\Script\\GiamSatKetQuaKhaoSat.js",
+              "RelativeToolTip": "CTDT\\Areas\\Khoa\\Script\\GiamSatKetQuaKhaoSat.js",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwCAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-10-21T03:39:08.939Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "giam_sat_ket_qua_khao_sat.cshtml",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Views\\Interface\\giam_sat_ket_qua_khao_sat.cshtml",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Views\\Interface\\giam_sat_ket_qua_khao_sat.cshtml",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Views\\Interface\\giam_sat_ket_qua_khao_sat.cshtml",
+              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Views\\Interface\\giam_sat_ket_qua_khao_sat.cshtml",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAABoAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-21T02:39:26.36Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GiamSatKeuQuaKhaoSat.js",
+              "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Scripts\\GiamSatKeuQuaKhaoSat.js",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Scripts\\GiamSatKeuQuaKhaoSat.js",
+              "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Scripts\\GiamSatKeuQuaKhaoSat.js",
+              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Scripts\\GiamSatKeuQuaKhaoSat.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4BAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-10-21T02:39:14.575Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "FindAnswerSurvey.cs",
               "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Models\\FindAnswerSurvey.cs",
               "RelativeDocumentMoniker": "CTDT\\Models\\FindAnswerSurvey.cs",
@@ -51,7 +153,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "FindChartsTyLeKhaoSat.cs",
               "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Models\\FindChartsTyLeKhaoSat.cs",
               "RelativeDocumentMoniker": "CTDT\\Models\\FindChartsTyLeKhaoSat.cs",
@@ -70,14 +172,14 @@
               "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Controllers\\GiamSatKetQuaKhaoSatAPIController.cs",
               "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Areas\\CTDT\\Controllers\\GiamSatKetQuaKhaoSatAPIController.cs",
               "RelativeToolTip": "CTDT\\Areas\\CTDT\\Controllers\\GiamSatKetQuaKhaoSatAPIController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAqwD0AAABtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-18T04:20:17.897Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "Hedaotao.js",
               "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Scripts\\User\\Hedaotao.js",
               "RelativeDocumentMoniker": "CTDT\\Scripts\\User\\Hedaotao.js",
@@ -90,7 +192,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
               "Title": "HomeAPIController.cs",
               "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Controllers\\HomeAPIController.cs",
               "RelativeDocumentMoniker": "CTDT\\Controllers\\HomeAPIController.cs",
@@ -98,21 +200,19 @@
               "RelativeToolTip": "CTDT\\Controllers\\HomeAPIController.cs",
               "ViewState": "AgIAADcAAAAAAAAAAAAAAEIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T02:55:45.672Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T02:55:45.672Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
               "Title": "Phieukhaosat.js",
               "DocumentMoniker": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Scripts\\User\\Phieukhaosat.js",
               "RelativeDocumentMoniker": "CTDT\\Scripts\\User\\Phieukhaosat.js",
               "ToolTip": "D:\\TTDBCL\\KhaoSat-DBCL\\CTDT\\Scripts\\User\\Phieukhaosat.js",
               "RelativeToolTip": "CTDT\\Scripts\\User\\Phieukhaosat.js",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAgwB0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-10-18T02:56:04.812Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T02:56:04.812Z"
             }
           ]
         }

@@ -6,36 +6,39 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using Microsoft.Ajax.Utilities;
 using CTDT.Models.Khoa;
-using System.Threading.Tasks;
-using System.Data.Entity;
-
+using FirebaseAdmin.Auth;
 namespace CTDT.Areas.CTDT.Controllers
 {
-
     public class GiamSatKetQuaKhaoSatAPIController : ApiController
     {
         dbSurveyEntities db = new dbSurveyEntities();
+        private users user;
+        private bool is_user_hop_tac_doanh_nghiep;
+        private bool is_user_ctdt;
+        private bool is_user_khoa;
+        public GiamSatKetQuaKhaoSatAPIController()
+        {
+            user = SessionHelper.GetUser();
+            is_user_hop_tac_doanh_nghiep = new int?[] { 6 }.Contains(user.id_typeusers);
+            is_user_ctdt = new int?[] { 3 }.Contains(user.id_typeusers);
+            is_user_khoa = new int?[] { 5 }.Contains(user.id_typeusers);
+        }
         #region Thống kê toàn bộ phiếu
         [HttpPost]
         [Route("api/ctdt/ty_le_khao_sat")]
-        public async Task<IHttpActionResult> load_charts_ty_le(FindChartsTyLeKhaoSat find)
+        public IHttpActionResult load_charts_ty_le(FindChartsTyLeKhaoSat find)
         {
-            var user = SessionHelper.GetUser();
-            var query = await db.answer_response
-                .Where(x => x.id_namhoc == find.id_nam_hoc)
-                .GroupBy(x => x.surveyID)
-                .Select(g => g.FirstOrDefault())
-                .ToListAsync(); 
-            bool is_user_hop_tac_doanh_nghiep = new int?[] { 6 }.Contains(user.id_typeusers);
-            if (is_user_hop_tac_doanh_nghiep)
-            {
-                query = query.Where(x => (x.survey.surveyTitle.Contains("4") || x.survey.surveyTitle.Contains("5"))).ToList();
-            }               
+            var check_ctdt = find.id_ctdt != 0 ? find.id_ctdt : null;
+            var query = db.answer_response
+                .Where(x => x.id_namhoc == find.id_nam_hoc &&
+                (user.id_ctdt != null ? x.id_ctdt == user.id_ctdt : x.id_ctdt == check_ctdt) &&
+                (user.id_khoa != null ? x.ctdt.id_khoa == user.id_khoa : true))
+                .DistinctBy(x => x.surveyID)
+                .ToList();
             var DataList = new List<dynamic>();
             var MucDoHaiLong = new List<dynamic>();
             var Survey = new List<dynamic>();
@@ -43,23 +46,20 @@ namespace CTDT.Areas.CTDT.Controllers
             foreach (var survey in query)
             {
                 var idphieu = db.survey.Where(x => x.surveyID == survey.surveyID).FirstOrDefault();
-
                 if (!string.IsNullOrEmpty(idphieu.key_class))
                 {
                     var keyClassList = JsonConvert.DeserializeObject<List<string>>(idphieu.key_class);
-
                     bool isStudent = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == false;
                     bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == true;
-
                     if (isStudent)
                     {
-                        sinh_vien(DataList, user.id_ctdt, survey.surveyID, keyClassList);
-                        tan_xuat_cau_hoi_by_class(MucDoHaiLong, user.id_ctdt, survey.surveyID, keyClassList);
+                        sinh_vien(DataList, find.id_ctdt, survey.surveyID, keyClassList);
+                        tan_xuat_cau_hoi_by_class(MucDoHaiLong, find.id_ctdt,survey.surveyID, keyClassList);
                     }
                     else if (isStudentBySubject)
                     {
-                        sinh_vien_subject(DataList, user.id_ctdt, survey.surveyID, survey.id_hk, keyClassList);
-                        tan_xuat_cau_hoi_by_class(MucDoHaiLong, user.id_ctdt, survey.surveyID, keyClassList);
+                        sinh_vien_subject(DataList, find.id_ctdt, survey.surveyID, survey.id_hk, keyClassList);
+                        tan_xuat_cau_hoi_by_class(MucDoHaiLong, find.id_ctdt, survey.surveyID, keyClassList);
                     }
                 }
                 else
@@ -68,8 +68,8 @@ namespace CTDT.Areas.CTDT.Controllers
                     bool isCBVC = new[] { 3, 8 }.Contains(idphieu.id_loaikhaosat);
                     if (isCTDT)
                     {
-                        chuong_trinh_dao_tao(DataList, user.id_ctdt, survey.surveyID);
-                        tan_xuat_cau_hoi_by_class(MucDoHaiLong, user.id_ctdt, survey.surveyID);
+                        chuong_trinh_dao_tao(DataList, find.id_ctdt, survey.surveyID);
+                        tan_xuat_cau_hoi_by_class(MucDoHaiLong, find.id_ctdt,survey.surveyID);
                     }
                 }
                 Survey.Add(new
@@ -88,14 +88,16 @@ namespace CTDT.Areas.CTDT.Controllers
             return Ok(new { data = Alldata, message = "Load dữ liệu thành công" });
         }
         #endregion
-        #region Thống  kê theo thông tư 01
+        #region Thống kê theo thông tư 01
         [HttpPost]
         [Route("api/ctdt/ty_le_khao_sat_thong_tu_01")]
-        public IHttpActionResult load_charts_ty_le_01(NamHoc namhoc)
+        public IHttpActionResult load_charts_ty_le_01(FindChartsTyLeKhaoSat find)
         {
-            var user = SessionHelper.GetUser();
+            var check_ctdt = find.id_ctdt != 0 ? find.id_ctdt : null;
             var query = db.answer_response
-                .Where(x => x.survey.id_hedaotao == user.id_hdt && x.NamHoc.ten_namhoc == namhoc.ten_namhoc && (x.survey.surveyTitle.Contains("7") || x.survey.surveyTitle.Contains("8")))
+                .Where(x => x.id_namhoc == find.id_nam_hoc && (x.survey.surveyTitle.Contains("7") || x.survey.surveyTitle.Contains("8")) &&
+                (user.id_ctdt != null ? x.id_ctdt == user.id_ctdt : x.id_ctdt == check_ctdt) &&
+                (user.id_khoa != null ? x.ctdt.id_khoa == user.id_khoa : true))
                 .DistinctBy(x => x.surveyID)
                 .ToList();
             var DataList = new List<dynamic>();
@@ -112,13 +114,13 @@ namespace CTDT.Areas.CTDT.Controllers
                     bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(idphieu.id_loaikhaosat) && idphieu.is_hocky == true;
                     if (isStudent)
                     {
-                        sinh_vien(DataList, user.id_ctdt, survey.surveyID, keyClassList);
-                        tan_xuat_cau_hoi_thong_tu_01(MucDoHaiLong, user.id_ctdt, survey.surveyID, keyClassList);
+                        sinh_vien(DataList, find.id_ctdt, survey.surveyID, keyClassList);
+                        tan_xuat_cau_hoi_thong_tu_01(MucDoHaiLong, find.id_ctdt, survey.surveyID, keyClassList);
                     }
                     else if (isStudentBySubject)
                     {
-                        sinh_vien_subject(DataList, user.id_ctdt, survey.surveyID, survey.id_hk, keyClassList);
-                        tan_xuat_cau_hoi_thong_tu_01(MucDoHaiLong, user.id_ctdt, survey.surveyID, keyClassList);
+                        sinh_vien_subject(DataList, find.id_ctdt, survey.surveyID, survey.id_hk, keyClassList);
+                        tan_xuat_cau_hoi_thong_tu_01(MucDoHaiLong, find.id_ctdt, survey.surveyID, keyClassList);
                     }
                     Survey.Add(new
                     {
@@ -138,21 +140,22 @@ namespace CTDT.Areas.CTDT.Controllers
         }
         #endregion
         #region Các hàm gọi đối tượng
-        private void chuong_trinh_dao_tao(dynamic DataList, int? idctdt, int? idsurvey)
+        private void chuong_trinh_dao_tao(dynamic DataList, int? idctdt, int? idsurvey = 0)
         {
+            var check_ctdt = idctdt != 0 ? idctdt : null;
             var ctdt = db.answer_response
-                                .Where(x => x.id_ctdt == idctdt &&
-                                            x.id_sv == null &&
+                                .Where(x => x.id_sv == null &&
+                                            (user.id_ctdt != null ? x.id_ctdt == user.id_ctdt : x.id_ctdt == check_ctdt) &&
+                                            (user.id_khoa != null ? x.ctdt.id_khoa == user.id_khoa : true) &&
                                             x.id_mh == null &&
                                             x.id_users != null &&
                                             x.id_hk == null &&
-                                            x.id_CBVC == null)
-                                .Count();
+                                            x.id_CBVC == null);
             var DataCTDT = new
             {
                 IDPhieu = idsurvey,
-                TongKhaoSat = ctdt,
-                TongPhieuDaTraLoi = ctdt,
+                TongKhaoSat = ctdt.Count(),
+                TongPhieuDaTraLoi = ctdt.Count(),
                 TongPhieuChuaTraLoi = 0,
                 TyLeDaTraLoi = 100,
                 TyLeChuaTraLoi = 0,
@@ -162,11 +165,12 @@ namespace CTDT.Areas.CTDT.Controllers
         }
         private void sinh_vien_subject(dynamic DataList, int? idctdt, int? idsurvey, int? idhk, List<string> keyClassList)
         {
+            var check_ctdt = idctdt != 0 ? idctdt : null;
             var sinhvienQuery = db.sinhvien
-                            .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == idctdt);
-
+                            .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k))
+                            && (user.id_ctdt != null ? x.lop.id_ctdt == user.id_ctdt : x.lop.id_ctdt == check_ctdt)
+                            && (user.id_khoa != null ? x.lop.ctdt.id_khoa == user.id_khoa : true));
             var TotalAll = sinhvienQuery.LongCount();
-
             var TotalIsKhaoSat = db.answer_response
                 .Where(aw => aw.surveyID == idsurvey
                           && aw.id_ctdt == idctdt
@@ -192,9 +196,11 @@ namespace CTDT.Areas.CTDT.Controllers
         }
         private void sinh_vien(dynamic DataList, int? idctdt, int? idsurvey, List<string> keyClassList)
         {
+            var check_ctdt = idctdt != 0 ? idctdt : null;
             var sinhvienQuery = db.sinhvien
-                            .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k)) && x.lop.ctdt.id_ctdt == idctdt);
-
+                             .Where(x => keyClassList.Any(k => x.lop.ma_lop.Contains(k))
+                             && (user.id_ctdt != null ? x.lop.id_ctdt == user.id_ctdt : x.lop.id_ctdt == check_ctdt)
+                             && (user.id_khoa != null ? x.lop.ctdt.id_khoa == user.id_khoa : true));
             var TotalAll = sinhvienQuery.LongCount();
 
             var TotalIsKhaoSat = db.answer_response
@@ -222,10 +228,13 @@ namespace CTDT.Areas.CTDT.Controllers
         }
         private void tan_xuat_cau_hoi_thong_tu_01(dynamic MucDoHaiLong, int? idctdt, int? idsurvey, List<string> keyClassList = null)
         {
+            var check_ctdt = idctdt != 0 ? idctdt : null;
             var Mucdohailong = db.answer_response
-                 .Where(d => d.id_ctdt == idctdt && d.surveyID == idsurvey)
+                 .Where(d => d.surveyID == idsurvey)
                  .AsEnumerable()
-                 .Where(d => keyClassList == null || keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k)))
+                 .Where(d => keyClassList == null || keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k))
+                 && (user.id_ctdt != null ? d.id_ctdt == user.id_ctdt : d.id_ctdt == check_ctdt)
+                 && (user.id_khoa != null ? d.ctdt.id_khoa == user.id_khoa : true))
                  .AsQueryable();
             var responses = Mucdohailong
                 .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
@@ -368,14 +377,16 @@ namespace CTDT.Areas.CTDT.Controllers
                 MucDoHaiLong.Add(questionDataList);
             }
         }
-        private void tan_xuat_cau_hoi_by_class(dynamic MucDoHaiLong, int? idctdt, int? idsurvey, List<string> keyClassList = null)
+        private void tan_xuat_cau_hoi_by_class(dynamic MucDoHaiLong, int? ctdt, int? idsurvey, List<string> keyClassList = null)
         {
+            var check_ctdt = ctdt != 0 ? ctdt : null;
             var Mucdohailong = db.answer_response
-                     .Where(d => d.id_ctdt == idctdt && d.surveyID == idsurvey)
-                     .AsEnumerable()
-                     .Where(d => keyClassList == null || keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k)))
-                     .AsQueryable();
-
+                 .Where(d => d.surveyID == idsurvey)
+                 .AsEnumerable()
+                 .Where(d => keyClassList == null || keyClassList.Any(k => d.sinhvien.lop.ma_lop.Contains(k))
+                 && (user.id_ctdt != null ? d.id_ctdt == user.id_ctdt : d.id_ctdt == check_ctdt)
+                 && (user.id_khoa != null ? d.ctdt.id_khoa == user.id_khoa : true))
+                 .AsQueryable();
             var responses = Mucdohailong
                 .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
                 .ToList();

@@ -35,7 +35,7 @@ async function LoadChartFullSurvey() {
     var ctdt = $("#fieldCTDT").val();
 
     try {
-        const response = await fetch('/api/khoa/giam_sat_ty_le_khao_sat', {
+        const response = await fetch('/api/ctdt/ty_le_khao_sat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -278,7 +278,7 @@ async function LoadChartSurveyThongTu01() {
     var ctdt = $("#fieldCTDT").val();
 
     try {
-        const response = await fetch('/api/khoa/giam_sat_ty_le_khao_sat_thong_tu_01', {
+        const response = await fetch('/api/ctdt/ty_le_khao_sat_thong_tu_01', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

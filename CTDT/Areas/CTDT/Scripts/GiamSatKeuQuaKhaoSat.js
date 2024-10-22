@@ -39,7 +39,7 @@ async function LoadChartFullSurvey() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ten_namhoc: year }),
+            body: JSON.stringify({ id_nam_hoc: year }),
         });
         const res = await response.json();
 
@@ -277,7 +277,7 @@ async function LoadChartSurveyThongTu01() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ten_namhoc: year }),
+            body: JSON.stringify({ id_nam_hoc: year }),
         });
 
         const res = await response.json();
