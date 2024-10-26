@@ -48,18 +48,18 @@ namespace CTDT.Controllers
             }
             else if (get_data.id_loaikhaosat == 8)
             {
-                var can_bo_vien_chuc = db.CanBoVienChuc.FirstOrDefault();
+                var can_bo_vien_chuc_obj = db.CanBoVienChuc.FirstOrDefault(x => x.Email == user.email);
 
-                if (can_bo_vien_chuc != null && user.email == can_bo_vien_chuc.Email)
+                if (can_bo_vien_chuc_obj != null)
                 {
-                    var don_vi = can_bo_vien_chuc.DonVi != null ? can_bo_vien_chuc.DonVi.name_donvi : null;
-                    var chuc_vu = can_bo_vien_chuc.ChucVu != null ? can_bo_vien_chuc.ChucVu.name_chucvu : null;
-                    var ctdt = can_bo_vien_chuc.ctdt != null ? can_bo_vien_chuc.ctdt.ten_ctdt : null;
+                    var don_vi = can_bo_vien_chuc_obj.DonVi != null ? can_bo_vien_chuc_obj.DonVi.name_donvi : null;
+                    var chuc_vu = can_bo_vien_chuc_obj.ChucVu != null ? can_bo_vien_chuc_obj.ChucVu.name_chucvu : null;
+                    var ctdt = can_bo_vien_chuc_obj.ctdt != null ? can_bo_vien_chuc_obj.ctdt.ten_ctdt : null;
 
                     var get_thong_tin_can_bo_vien_chuc = new
                     {
                         email = user.email,
-                        ten_cbvc = can_bo_vien_chuc.TenCBVC,
+                        ten_cbvc = can_bo_vien_chuc_obj.TenCBVC,
                         don_vi = don_vi,
                         chuc_vu = chuc_vu,
                         ctdt = ctdt,
@@ -72,6 +72,7 @@ namespace CTDT.Controllers
                 {
                     return Ok(new { is_cbvc = false, message = "Người dùng không có quyền khảo sát phiếu khảo sát này" });
                 }
+
             }
             else if (get_data.id_loaikhaosat == 2 || get_data.id_loaikhaosat == 6)
             {
@@ -90,9 +91,9 @@ namespace CTDT.Controllers
             }
             else if (get_data.id_loaikhaosat == 3)
             {
-                var giang_vien = db.CanBoVienChuc.FirstOrDefault();
+                var giang_vien_obj = db.CanBoVienChuc.FirstOrDefault(x => x.Email == user.email);
 
-                if (giang_vien != null && user.email == giang_vien.Email)
+                if (giang_vien_obj != null)
                 {
                     var id_don_vi = HttpContext.Current.Session["don_vi"] as int?;
                     var id_ctdt = HttpContext.Current.Session["ctdt"] as int?;
@@ -108,9 +109,9 @@ namespace CTDT.Controllers
                     var get_thong_tin_can_bo_vien_chuc = new
                     {
                         email = user.email,
-                        ten_cbvc = giang_vien.TenCBVC,
+                        ten_cbvc = giang_vien_obj.TenCBVC,
                         don_vi = don_vi != null ? don_vi.name_donvi : null,
-                        chuc_vu = giang_vien.ChucVu != null ? giang_vien.ChucVu.name_chucvu : null,
+                        chuc_vu = giang_vien_obj.ChucVu != null ? giang_vien_obj.ChucVu.name_chucvu : null,
                         ctdt = ctdt != null ? ctdt.ten_ctdt : null,
                     };
 

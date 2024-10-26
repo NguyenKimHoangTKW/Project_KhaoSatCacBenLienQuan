@@ -397,7 +397,6 @@ namespace CTDT.Areas.CTDT.Controllers
                     }
                 }) / (double)f.Value.Values.Sum()
             }).ToList();
-
             return results;
         }
         private List<object> cau_hoi_mot_lua_chon(IEnumerable<answer_response> query, int? idctdt, int? idsurvey, List<string> keyClassList = null)

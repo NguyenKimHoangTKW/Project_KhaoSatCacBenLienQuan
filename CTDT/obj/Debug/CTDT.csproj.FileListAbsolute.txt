@@ -556,3 +556,5 @@ D:\TTDBCL\KhaoSat-DBCL\CTDT\obj\Debug\CTDT.csproj.CoreCompileInputs.cache
 D:\TTDBCL\KhaoSat-DBCL\CTDT\obj\Debug\CTDT.csproj.Up2Date
 D:\TTDBCL\KhaoSat-DBCL\CTDT\obj\Debug\CTDT.dll
 D:\TTDBCL\KhaoSat-DBCL\CTDT\obj\Debug\CTDT.pdb
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\Microsoft.Bcl.TimeProvider.dll
+D:\TTDBCL\KhaoSat-DBCL\CTDT\bin\Microsoft.Bcl.TimeProvider.xml
