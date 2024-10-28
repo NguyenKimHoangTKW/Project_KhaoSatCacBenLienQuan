@@ -163,7 +163,7 @@ function save_form() {
 
     if (form.valid) {
         $.ajax({
-            url: '/Survey/save_form',
+            url: '/api/save_form_khao_sat',
             type: 'POST',
             dataType: 'JSON',
             contentType: "application/json; charset=utf-8",
@@ -197,7 +197,7 @@ function save_answer_form() {
 
     if (form.valid) {
         $.ajax({
-            url: '/Survey/save_answer_form',
+            url: '/api/save_answer_form',
             type: 'POST',
             dataType: 'JSON',
             contentType: "application/json; charset=utf-8",

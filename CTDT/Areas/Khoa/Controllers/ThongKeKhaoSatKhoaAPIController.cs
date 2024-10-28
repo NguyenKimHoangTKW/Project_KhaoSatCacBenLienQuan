@@ -87,7 +87,7 @@ namespace CTDT.Areas.Khoa.Controllers
         #endregion
         #region Load người học
         [HttpPost]
-        [Route("api/ctdt/load_thong_ke_nguoi_hoc_khao_sat")]
+        [Route("api/khoa/load_thong_ke_nguoi_hoc_khao_sat")]
         public IHttpActionResult load_nguoi_hoc(survey surVeys)
         {
             var user = SessionHelper.GetUser();

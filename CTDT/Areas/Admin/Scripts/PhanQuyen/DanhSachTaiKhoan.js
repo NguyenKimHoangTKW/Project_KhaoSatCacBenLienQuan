@@ -110,7 +110,7 @@ async function load_data() {
             html += `<td>${items.quyen_han}</td>`;
             html += `<td>${unixTimestampToDate(items.ngay_tao)}</td>`;
             html += `<td>${unixTimestampToDate(items.ngay_cap_nhat)}</td>`;
-            html += `<td>${unixTimestampToDate(items.dang_nhap_lan_cuoi)}</td>`;
+            html += `<td>${items.dang_nhap_lan_cuoi != null ? unixTimestampToDate(items.dang_nhap_lan_cuoi) :""}</td>`;
 
             html += `<td>${items.don_vi}</td>`;
             html += `<td>${items.ctdt}</td>`;

@@ -1,4 +1,5 @@
-﻿function signIn() {
+﻿//https: // localhost:44301/trang-chu
+function signIn() {
     let oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
 
     let form = document.createElement('form');
@@ -7,7 +8,7 @@
 
     let params = {
         "client_id": "183100229430-394rpj38v42o4kfgum7hvnjplnv3ebrl.apps.googleusercontent.com",
-        "redirect_uri": "https://localhost:44301/trang-chu",
+        "redirect_uri": "https://khaosat.tdmu.edu.vn/trang-chu",
         "response_type": "token",
         "scope": "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
         "include_granted_scopes": 'true',

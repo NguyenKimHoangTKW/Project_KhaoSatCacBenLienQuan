@@ -18,13 +18,11 @@
         gap: 1rem;
         padding: 0.75rem 1rem;
         transition: background-color 0.3s ease;
-        min-height: auto;
-        position: relative;
         margin-top: 15px;
     }
 
         .accordion--custom .accordion-header:hover {
-            color: #e9ecef; /* Màu nền khi hover */
+            color: #e9ecef;
         }
 
         .accordion--custom .accordion-header .accordion-button {
@@ -52,7 +50,6 @@
 
     fieldset {
         border: 1px solid #ddd !important;
-        margin: 0;
         padding: 10px;
         border-radius: 4px;
     }
@@ -61,11 +58,8 @@
         font-size: 1.2rem;
         font-weight: bold;
     }
-
-    button {
-        text-align: left;
-    }
 </style>
+
 <div class="main-content">
     <div class="page-header">
         <h2 class="header-title">Phân quyền tài khoản</h2>
@@ -76,12 +70,12 @@
             </nav>
         </div>
     </div>
+
     <div class="card">
         <div class="card-body">
-            <i class="anticon anticon-left-circle"></i>
-            <div class="d-flex">
-                <!-- Element on the left -->
-                <div class="px-4" style="width: 30%;">
+            <div class="d-flex flex-wrap justify-content-between align-items-start">
+                <!-- User Information Section -->
+                <div class="col-12 col-md-5 mb-3">
                     <fieldset class="border rounded-3 p-3">
                         <legend class="float-none w-auto px-3">THÔNG TIN USER</legend>
                         <p><strong>Họ tên:</strong> @Model.firstName @Model.lastName</p>
@@ -89,12 +83,13 @@
                     </fieldset>
                 </div>
 
-                <div class="vr"></div>
+                <!-- Divider for Visual Separation -->
+                <div class="vr d-none d-md-block"></div>
 
-                <div class="px-4" style="width: 70%;">
+                <!-- User Role Section -->
+                <div class="col-12 col-md-6">
                     <fieldset class="border rounded-3 p-3">
                         <legend class="float-none w-auto px-3">PHÂN QUYỀN USER</legend>
-                        <!-- "accordion--custom" - custom class for updating default accordion, like example -->
                         <div class="accordion accordion--custom" id="accordionExample">
                             <div class="accordion-item">
                                 <div class="accordion-header" id="heading6">
@@ -102,11 +97,11 @@
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="true" aria-controls="collapse6">ADMIN</button>
                                 </div>
                                 <div id="collapse6" class="accordion-collapse collapse show" aria-labelledby="heading6" data-bs-parent="#accordionExample">
-                                    <div class="checkbox" style="margin: 10px 0px 10px 0px;">
+                                    <div class="checkbox mt-2">
                                         <input type="checkbox" class="form-check-input file_checkbox program6" id="package243">
                                         <label class="form-check-label" for="package243">1646756076.zip</label>
                                     </div>
-                                    <div class="checkbox" style="margin: 10px 0px 10px 0px;">
+                                    <div class="checkbox mt-2">
                                         <input type="checkbox" class="form-check-input file_checkbox program6" id="scriptundefined">
                                         <label class="form-check-label" for="scriptundefined">MEER_munger.py</label>
                                     </div>

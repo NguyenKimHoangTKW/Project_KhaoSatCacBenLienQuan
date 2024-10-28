@@ -12,6 +12,12 @@ namespace CTDT.Areas.Admin.Controllers
     public class NguoiDungAPIController : ApiController
     {
         dbSurveyEntities db = new dbSurveyEntities();
+        DateTime now = DateTime.UtcNow;
+        public int unixTimestamp;
+        public NguoiDungAPIController()
+        {
+            unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
         #region users
         [HttpPost]
         [Route("api/admin/load_du_lieu_users")]
@@ -173,11 +179,17 @@ namespace CTDT.Areas.Admin.Controllers
             var data_list = new List<dynamic>();
             foreach (var typeusers in type_user)
             {
+
+                var is_nguoi_dung = new[] { 1 }.Contains(typeusers.id_typeusers);
                 var is_Admin = new[] { 2 }.Contains(typeusers.id_typeusers);
                 var is_ctdt = new[] { 3 }.Contains(typeusers.id_typeusers);
                 var is_khoa = new[] { 5 }.Contains(typeusers.id_typeusers);
                 var is_hop_tac_doanh_nghiep = new[] { 6 }.Contains(typeusers.id_typeusers);
-                if (is_Admin)
+                if (is_nguoi_dung)
+                {
+                    chuc_nang_quyen_nguoi_dung(data_list, typeusers.id_typeusers, typeusers.name_typeusers);
+                }
+                else if (is_Admin)
                 {
                     chuc_nang_quyen_admin(data_list, typeusers.id_typeusers, typeusers.name_typeusers);
                 }
@@ -187,11 +199,11 @@ namespace CTDT.Areas.Admin.Controllers
                 }
                 else if (is_khoa)
                 {
-                    chuc_nang_quyen_khoa(data_list, typeusers.name_typeusers);
+                    chuc_nang_quyen_khoa(data_list, typeusers.id_typeusers, typeusers.name_typeusers);
                 }
                 else if (is_hop_tac_doanh_nghiep)
                 {
-                    chuc_nang_quyen_HTDN(data_list, typeusers.name_typeusers);
+                    chuc_nang_quyen_HTDN(data_list, typeusers.id_typeusers, typeusers.name_typeusers);
                 }
             }
             return Ok(new { data = data_list });
@@ -209,6 +221,7 @@ namespace CTDT.Areas.Admin.Controllers
                         .ToList();
             data_list.Add(new
             {
+                id_type = id_typeusers,
                 ten_quyen = name_typeusers,
                 chuc_nang = chuc_nang_user,
                 is_admin = true
@@ -234,13 +247,14 @@ namespace CTDT.Areas.Admin.Controllers
                 .ToList();
             data_list.Add(new
             {
+                id_type = id_typeusers,
                 ten_quyen = name_typeusers,
                 ctdt = ctdt,
                 chuc_nang = chuc_nang_user,
                 is_ctdt = true
             });
         }
-        private void chuc_nang_quyen_khoa(dynamic data_list, string name_typeusers)
+        private void chuc_nang_quyen_khoa(dynamic data_list, int id_typeusers, string name_typeusers)
         {
             var khoa = db.khoa
                         .Select(x => new
@@ -251,18 +265,147 @@ namespace CTDT.Areas.Admin.Controllers
                         .ToList();
             data_list.Add(new
             {
+                id_type = id_typeusers,
                 ten_quyen = name_typeusers,
                 khoa = khoa,
                 is_khoa = true
             });
         }
-        private void chuc_nang_quyen_HTDN(dynamic data_list, string name_typeusers)
+        private void chuc_nang_quyen_HTDN(dynamic data_list, int id_typeusers, string name_typeusers)
         {
             data_list.Add(new
             {
+                id_type = id_typeusers,
                 ten_quyen = name_typeusers,
                 is_hop_tac_doanh_nghiep = true
             });
+        }
+        private void chuc_nang_quyen_nguoi_dung(dynamic data_list, int id_typeusers, string name_typeusers)
+        {
+            data_list.Add(new
+            {
+                id_type = id_typeusers,
+                ten_quyen = name_typeusers,
+                is_nguoi_dung = true
+            });
+        }
+        #endregion
+
+        #region Save phân quyền
+        [HttpPost]
+        [Route("api/admin/save_phan_quyen")]
+        public IHttpActionResult save_phan_quyen(PhanQuyen phanQuyen)
+        {
+            var is_nguoi_dung = new int?[] { 1 }.Contains(phanQuyen.ma_quyen);
+            var is_Admin = new int?[] { 2 }.Contains(phanQuyen.ma_quyen);
+            var is_ctdt = new int?[] { 3 }.Contains(phanQuyen.ma_quyen);
+            var is_khoa = new int?[] { 5 }.Contains(phanQuyen.ma_quyen);
+            var is_hop_tac_doanh_nghiep = new int?[] { 6 }.Contains(phanQuyen.ma_quyen);
+            var us = db.users.Find(phanQuyen.ma_user);
+
+            if (us != null)
+            {
+                if (is_nguoi_dung)
+                {
+                    save_nguoi_dung(us, phanQuyen);
+                }
+                else if (is_hop_tac_doanh_nghiep)
+                {
+                    save_hop_tac_doanh_nghiep(us, phanQuyen);
+                }
+                else if (is_Admin)
+                {
+                    save_admin(us, phanQuyen);
+                }
+                else if (is_ctdt)
+                {
+                    save_ctdt(us, phanQuyen);
+                }
+                else if (is_khoa)
+                {
+                    save_khoa(us, phanQuyen);
+                }
+                return Ok(new { message = "Update thành công." });
+            }
+
+            return NotFound();
+        }
+
+
+        public void save_nguoi_dung(users us, PhanQuyen phanQuyen)
+        {
+            us.id_typeusers = phanQuyen.ma_quyen;
+            us.id_ctdt = null;
+            us.id_khoa = null;
+            us.id_hdt = null;
+            us.ngaycapnhat = unixTimestamp;
+            db.SaveChanges();
+        }
+
+        public void save_hop_tac_doanh_nghiep(users us, PhanQuyen phanQuyen)
+        {
+            us.id_typeusers = phanQuyen.ma_quyen;
+            us.id_ctdt = null;
+            us.id_khoa = null;
+            us.id_hdt = null;
+            us.ngaycapnhat = unixTimestamp;
+            db.SaveChanges();
+        }
+
+        public void save_admin(users us, PhanQuyen phanQuyen)
+        {
+            us.id_typeusers = phanQuyen.ma_quyen;
+            us.id_ctdt = null;
+            us.id_khoa = null;
+            us.id_hdt = null;
+            us.ngaycapnhat = unixTimestamp;
+            db.SaveChanges();
+        }
+
+        public void save_ctdt(users us, PhanQuyen phanQuyen)
+        {
+            var ctdt = db.ctdt.FirstOrDefault(x => x.id_ctdt == phanQuyen.ma_ctdt);
+            us.id_typeusers = phanQuyen.ma_quyen;
+            us.id_ctdt = phanQuyen.ma_ctdt;
+            us.id_khoa = null;
+            us.id_hdt = ctdt?.id_hdt;
+            us.ngaycapnhat = unixTimestamp;
+            db.SaveChanges();
+        }
+
+        public void save_khoa(users us, PhanQuyen phanQuyen)
+        {
+            var khoa = db.khoa.FirstOrDefault(x => x.id_khoa == phanQuyen.ma_khoa);
+            us.id_typeusers = phanQuyen.ma_quyen;
+            us.id_ctdt = phanQuyen.ma_ctdt;
+            us.id_khoa = khoa?.id_khoa;
+            us.id_hdt = khoa?.ctdt.FirstOrDefault()?.id_hdt;
+            us.ngaycapnhat = unixTimestamp;
+            db.SaveChanges();
+        }
+        #endregion
+
+        #region Load phân quyền
+        [HttpPost]
+        [Route("api/admin/load_quyen_user")]
+        public IHttpActionResult LoadUserPermissions(PhanQuyen phanquyen)
+        {
+            var user = db.users.Find(phanquyen.ma_user);
+
+            if (user != null)
+            {
+                var userPermissions = new
+                {
+                    ma_quyen = user.id_typeusers,
+                    ma_ctdt = user.id_ctdt,
+                    ma_khoa = user.id_khoa,
+                    id_hdt = user.id_hdt
+                };
+
+                return Ok(new { data = userPermissions });
+            }
+
+            return NotFound();
         }
         #endregion
     }

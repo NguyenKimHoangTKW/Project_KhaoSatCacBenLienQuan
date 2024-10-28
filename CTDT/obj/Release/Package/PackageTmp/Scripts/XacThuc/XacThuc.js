@@ -5,9 +5,9 @@ function load_select_xac_thuc() {
     var id = $('#hiddenId').val();
     if (id) {
         $.ajax({
-            url: '/Home/load_select_xac_thuc',
+            url: '/api/xac_thuc',
             type: 'POST',
-            data: { id: id },
+            data: { surveyID: id },
             success: function (res) {
                 let body = $('#showdata');
                 body.empty();

@@ -6,11 +6,11 @@ function load_phieu_khao_sat() {
     var id = $("#id").val();
     var surveyid = $("#surveyid").val();
     $.ajax({
-        url: '/Survey/load_answer_phieu_khao_sat',
+        url: '/api/load_dap_an_pks',
         type: 'POST',
         data: {
-            id: id,
-            surveyid: surveyid
+            id_answer: id,
+            id_survey: surveyid
         },
         success: function (res) {
             var items = res.data;

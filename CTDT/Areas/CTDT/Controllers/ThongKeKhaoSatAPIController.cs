@@ -1,5 +1,6 @@
 ﻿using CTDT.Helper;
 using CTDT.Models;
+using CTDT.Models.Khoa;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Linq;
 using System;
@@ -82,11 +83,11 @@ namespace CTDT.Areas.CTDT.Controllers
         #region Load người học
         [HttpPost]
         [Route("api/ctdt/load_thong_ke_nguoi_hoc_khao_sat")]
-        public IHttpActionResult load_nguoi_hoc(survey surVeys)
+        public IHttpActionResult load_nguoi_hoc(FindAnswerSurvey find)
         {
             var user = SessionHelper.GetUser();
             var survey = db.survey
-                .Where(x => x.surveyTitle == surVeys.surveyTitle)
+                .Where(x => x.surveyID == find.id_survey)
                 .ToList();
             var list_data = new List<dynamic>();
 

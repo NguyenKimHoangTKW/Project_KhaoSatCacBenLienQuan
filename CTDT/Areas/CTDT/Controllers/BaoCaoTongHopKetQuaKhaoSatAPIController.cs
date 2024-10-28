@@ -110,7 +110,7 @@ namespace CTDT.Areas.CTDT.Controllers
 
                     if (isCTDT || isCBVC)
                     {
-                        muc_do_hai_long(MucDoHaiLong, user.id_ctdt, item.ma_phieu);
+                        muc_do_hai_long(MucDoHaiLong, find.id_ctdt, item.ma_phieu);
                     }
                 }
 

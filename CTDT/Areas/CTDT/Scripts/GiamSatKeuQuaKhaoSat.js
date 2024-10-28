@@ -8,6 +8,7 @@
         }
     });
 }
+
 function EndLoading() {
     Swal.close();
 }
@@ -239,5 +240,9 @@ async function LoadChartSurveyThongTu01() {
                 }
             }
         });
+        $("#show_charts_01").show();
+    }
+    else {
+        $("#show_charts_01").hide();
     }
 }

@@ -20,7 +20,6 @@ $(document).ready(async function () {
         EndLoading()
     }
 });
-
 $(document).on('click', '#ExportExcel', function () {
     if ($('#bao_cao_tong_hop').text().trim() === 'Không có dữ liệu báo cáo tổng hợp cho năm học này') {
         Swal.fire({
@@ -182,24 +181,20 @@ function ExportExcelBaoCaoTongHop() {
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
 }
-
 async function LoadKetQua() {
     var Year = $('#Year').val();
-    try {
-        const res = await $.ajax({
-            url: '/CTDT/BaoCaoTongHopKetQuaKhaoSat/x_loadbaocaotonghop',
-            type: 'POST',
-            data: { id: Year }
-        });
-
-        let body = $('#showdata');
-        let thead = $('#showthead');
-        body.empty();
-        thead.empty();
-        let html = ``;
-
-        if (res && res.data && res.data.Survey.length > 0) {
-            let title = `
+    const res = await $.ajax({
+        url: '/api/ctdt/bao_cao_tong_hop',
+        type: 'POST',
+        data: { id_nam_hoc: Year }
+    });
+    let body = $('#showdata');
+    let thead = $('#showthead');
+    body.empty();
+    thead.empty();
+    let html = ``;
+    if (res.is_data) {
+        let title = `
                 <tr>
                     <th scope="col">STT</th>
                     <th scope="col">Phiếu khảo sát</th>
@@ -209,44 +204,38 @@ async function LoadKetQua() {
                     <th scope="col">Điểm trung bình</th>
                 </tr>
             `;
-            thead.html(title);
+        thead.html(title);
+        res.data.forEach(function (survey, index) {
+            html += `<tr>`;
+            html += `<td class="formatSo">${index + 1}</td>`;
+            html += `<td>${survey.ten_phieu}</td>`;
+            html += `<td>${survey.hoc_ky || ''}</td>`;
+            survey.ty_le_tham_gia_khao_sat.forEach(function (tylekhaosat) {
+                html += `<td class="formatSo">${tylekhaosat ? tylekhaosat.ty_le : 0}%</td>`;
+            })
+            survey.muc_do_hai_long.forEach(function (mucdohailong) {
+                html += `<td class="formatSo">${mucdohailong ? mucdohailong.avg_ty_le_hai_long : 0}%</td>`;
+                html += `<td class="formatSo">${mucdohailong ? mucdohailong.avg_score : 0}</td>`;
+            })
+            
+            html += `</tr>`;
+        });
 
-            res.data.Survey.forEach(function (survey, index) {
-                html += `<tr>`;
-                html += `<td class="formatSo">${index + 1}</td>`;
-                html += `<td>${survey.ten_phieu}</td>`;
-                html += `<td>${survey.hoc_ky || ''}</td>`;
-
-                const Percent = res.data.PercentageSurvey.find(chil => chil.ma_phieu == survey.ma_phieu);
-                html += `<td class="formatSo">${Percent ? Percent.ty_le : 0}%</td>`;
-
-                const Satisfaction = res.data.SatisfactionLevel.find(chil => chil.ma_phieu == survey.ma_phieu);
-                if (Satisfaction) {
-                    html += `<td class="formatSo">${Satisfaction.ty_le_hai_long}%</td>`;
-                    html += `<td class="formatSo">${Satisfaction.avgscore}</td>`;
-                } else {
-                    html += `<td class="formatSo">0%</td>`;
-                    html += `<td class="formatSo">0</td>`;
-                }
-
-                html += `</tr>`;
-            });
-
-            body.html(html);
-        } else {
-            html = `
-                <div class="alert alert-info" style="text-align: center;">
-                  <strong>Không có dữ liệu báo cáo tổng hợp cho năm học này</strong>
+        body.html(html);
+    } else {
+        html = `
+                <div class="alert alert-info">
+                <div class="d-flex justify-content-start">
+                    <span class="alert-icon m-r-20 font-size-30">
+                        <i class="anticon anticon-close-circle"></i>
+                    </span>
+                    <div>
+                        <h5 class="alert-heading">Opps...</h5>
+                        <p>${res.message}</p>
+                    </div>
                 </div>
-            `;
-            body.html(html);
-        }
-    } catch (error) {
-        console.error('An error occurred:', error);
-        body.html(`
-            <div class="alert alert-danger" style="text-align: center;">
-              <strong>Đã xảy ra lỗi khi tải dữ liệu.</strong>
             </div>
-        `);
+            `;
+        body.html(html);
     }
 }

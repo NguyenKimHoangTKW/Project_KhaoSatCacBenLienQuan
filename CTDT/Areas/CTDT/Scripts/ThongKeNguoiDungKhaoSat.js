@@ -55,7 +55,7 @@ async function LoadChartSurvey() {
                     <div class="card-body">
                         <div style="align-items: center;">
                             <p style="color:#5029ff;font-weight:bold; position: absolute; top: 0; left: 20px;">${SurveyBySubject}</p>
-                            <a href="" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-tenphieu="${survey.NameSurvey}">Xem chi tiết</a>
+                            <a href="" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-tenphieu="${survey.IDSurvey}">Xem chi tiết</a>
                             <hr/>
                             <p style="color:black;font-weight:bold">${TieuDePhieu}</p>
                             <hr/>
@@ -131,7 +131,7 @@ async function load_nguoi_hoc(namesurvey) {
     const res = await $.ajax({
         url: '/api/ctdt/load_thong_ke_nguoi_hoc_khao_sat',
         type: 'POST',
-        data: { surveyTitle: namesurvey }
+        data: { id_survey: namesurvey }
     });
 
     if (res && res.data.length > 0) {

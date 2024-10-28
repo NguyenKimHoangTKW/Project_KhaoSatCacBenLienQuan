@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Thống kê tần xuất câu hỏi - TDMU";
+    Layout = "~/Areas/Khoa/Views/Shared/_KhoaLayout.cshtml";
+}
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Kết quả khảo sát</a>
+                </li>
+            </ul>
+            <div class="tab-content m-t-15" id="myTabContent">
+                <!-- Thống kê kết quả khảo sát -->
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="page-header no-gutters">
+                        <h2 class="text-uppercase">Kết quả khảo sát</h2>
+                        <hr />
+                        <fieldset class="border rounded-3 p-3">
+                            <legend class="float-none w-auto px-3">Chức năng</legend>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
+                                    <select class="form-control select2" id="year">
+                                        @foreach (var item in ViewBag.Year)
+                                        {
+                                            <option value="@item.Text">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
+                                    <select class="form-control select2" id="ctdt_fil">
+                                        <option value="">Tất cả</option>
+                                        @foreach (var item in ViewBag.CTDT)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn phiếu khảo sát</label>
+                                    <select class="form-control select2" id="surveyid">
+                                        <!---->
+                                    </select>
+                                </div>
+                                <div class="col-md-6" id="hoc_ky" style="display:none">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn học kỳ</label>
+                                    <select class="form-control select2" id="hocky_fil">
+                                        <option value="">Chọn học kỳ</option>
+                                        @foreach (var item in ViewBag.HocKy)
+                                        {
+                                            <option value="@item.Text">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <button type="button" class="btn btn-info" id="fildata">Lọc dữ liệu</button>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                    <div class="m-t-25" id="tan_xuat_table" style="display:none">
+                        <div class="row mb-3">
+                            <div class="col-md-6 d-flex align-items-center">
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                <button class="btn btn-success" id="exportExcel">Xuất Excel</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive" id="ThongKeTyLeSurvey">
+                            <!--Thống kê tỷ lệ-->
+                        </div>
+                        <div class="accordion" id="accordion-default" style="display:none">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">
+                                        <a class="collapsed" data-toggle="collapse" href="#collapseTwoDefault">
+                                            <span>Xem chi tiết tần xuất</span>
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwoDefault" class="collapse" data-parent="#accordion-default">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="Tylecauhoi-tab" data-toggle="tab" href="#Tylecauhoi" role="tab" aria-controls="Tylecauhoi" aria-selected="true">Tỷ lệ tần xuất câu hỏi</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="Ykienkhac-tab" data-toggle="tab" href="#Ykienkhac" role="tab" aria-controls="Ykienkhac" aria-selected="false">Ý kiến khác</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content m-t-15" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="Tylecauhoi" role="tabpanel" aria-labelledby="Tylecauhoi-tab">
+                                                <div class="table-responsive" id="surveyContainerSingle">
+                                                    <!--Câu hỏi một lựa chọn-->
+                                                </div>
+                                                <div class="table-responsive" id="surveyContainer">
+                                                    <!--Câu hỏi nhiều lựa chọn-->
+                                                </div>
+                                                <div class="table-responsive" id="Cauhoi5MucContainer">
+                                                    <p id="TitleSurvey" style="font-weight:bold; font-size:20px; color:black; display:none">Tổng hợp tỷ lệ tần xuất 5 mức</p>
+                                                    <table class="table table-bordered" id="showalldata" style="display:none">
+                                                        <thead style="color:black; text-align:center; font-weight:bold" id="showhead">
+                                                            <!---->
+                                                        </thead>
+                                                        <tbody id="showdata">
+                                                        </tbody>
+                                                        <tfoot id="showfoot" style="color:black;font-weight:bold;font-size:15px">
+                                                            <!---->
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <div class="tab-pane fade" id="Ykienkhac" role="tabpanel" aria-labelledby="Ykienkhac-tab">
+                                                <div class="table-responsive" id="YkienkhacSurvey">
+                                                    <!--Ý kiến khác-->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- End Thống kê -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptKhoa {
+    <script src="~/Areas/Khoa/Script/ThongKeTanXuatCauHoi.js"></script>
+}
+

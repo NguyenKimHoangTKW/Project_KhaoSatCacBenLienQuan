@@ -39,10 +39,10 @@ function get_nguoi_hoc_by_key() {
         return;
     }
     $.ajax({
-        url: '/Home/get_nguoi_hoc_by_key',
+        url: '/api/get_nguoi_hoc_by_key',
         type: 'POST',
         data: {
-            id: id_survey,
+            Id: id_survey,
             ma_nguoi_hoc: ma_nguoi_hoc
         },
         success: function (res) {
@@ -51,13 +51,13 @@ function get_nguoi_hoc_by_key() {
                 var get_don_vi = $("#select_don_vi").val();
                 var id_survey = $("#hiddenId").val();
                 var get_data = {
-                    surveyid: id_survey,
+                    Id: id_survey,
                     nguoi_hoc: items.ma_nguoi_hoc,
                     ctdt: items.chuong_trinh_dao_tao,
                     donvi: get_don_vi
                 };
                 $.ajax({
-                    url: '/Home/save_xac_thuc',
+                    url: '/api/save_xac_thuc',
                     type: 'POST',
                     data: JSON.stringify(get_data),
                     contentType: "application/json; charset=utf-8",
@@ -123,14 +123,14 @@ function save_xac_thuc() {
     var get_don_vi = $("#select_don_vi").val();
     var id_survey = $("#hiddenId").val();
     var get_data = {
-        surveyid: id_survey,
+        Id: id_survey,
         nguoi_hoc: get_nguoi_hoc,
         ctdt: get_ctdt,
         donvi: get_don_vi
     };
 
     $.ajax({
-        url: '/Home/save_xac_thuc',
+        url: '/api/save_xac_thuc',
         type: 'POST',
         data: JSON.stringify(get_data),
         contentType: "application/json; charset=utf-8",
@@ -166,9 +166,6 @@ function save_xac_thuc() {
                     }
                 });
             }
-        },
-        error: function (xhr, status, error) {
-            console.error("Có lỗi xảy ra: " + error);
         }
     });
 }
