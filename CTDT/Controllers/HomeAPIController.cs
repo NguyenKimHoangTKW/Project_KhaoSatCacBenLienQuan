@@ -87,8 +87,11 @@ namespace CTDT.Controllers
                 bool not_nguoi_hoc = new[] { 2, 5, 6 }.Contains(item.id_loaikhaosat);
                 bool is_nguoi_hoc = new[] { 1, 4 }.Contains(item.id_loaikhaosat);
                 bool is_cbvc = new[] { 3, 8 }.Contains(item.id_loaikhaosat);
-
-                if (not_nguoi_hoc)
+                if(user.id_ctdt != null || user.id_khoa != null)
+                {
+                    AddSurveyToList(list_phieu_khao_sat, survey);
+                }
+                else if (not_nguoi_hoc)
                 {
                     AddSurveyToList(list_phieu_khao_sat, survey);
 
