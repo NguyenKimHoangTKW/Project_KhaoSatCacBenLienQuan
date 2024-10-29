@@ -4,11 +4,13 @@ using CTDT.Models.Khoa;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 
@@ -27,6 +29,37 @@ namespace CTDT.Areas.CTDT.Controllers
             is_user_hop_tac_doanh_nghiep = new int?[] { 6 }.Contains(user.id_typeusers);
             is_user_ctdt = new int?[] { 3 }.Contains(user.id_typeusers);
             is_user_khoa = new int?[] { 5 }.Contains(user.id_typeusers);
+        }
+        [HttpPost]
+        [Route("api/test")]
+        public async Task<IHttpActionResult> test(FindChartsTyLeKhaoSat find)
+        {
+            var survey = await db.survey.Where(x => x.id_namhoc == 1 && x.id_hedaotao == user.id_hdt).ToListAsync();
+            var List_data = new List<dynamic>();
+            foreach (var item_survey in survey)
+            {
+                var json = new List<dynamic>();
+                var answer_response = db.answer_response
+                .Where(x => x.surveyID == item_survey.surveyID && x.id_namhoc == find.id_nam_hoc && x.survey.id_hedaotao == user.id_hdt);
+                {
+                    answer_response = answer_response.Where(x => x.id_ctdt == user.id_ctdt);
+                }
+                var query = await answer_response.ToListAsync();
+                foreach (var item in query)
+                {
+                    json.Add(new
+                    {
+                        json = item.json_answer
+                    });
+                }
+                List_data.Add(new
+                {
+                    ten = item_survey.surveyTitle,
+                    json = json
+                });
+                
+            }
+            return Ok(new { data = List_data, is_data = true });
         }
         [HttpPost]
         [Route("api/ctdt/bao_cao_tong_hop")]
@@ -468,5 +501,6 @@ namespace CTDT.Areas.CTDT.Controllers
             };
             MucDoHaiLong.Add(GetDataMucDoHaiLong);
         }
+
     }
 }

@@ -217,7 +217,7 @@ async function LoadKetQua() {
                 html += `<td class="formatSo">${mucdohailong ? mucdohailong.avg_ty_le_hai_long : 0}%</td>`;
                 html += `<td class="formatSo">${mucdohailong ? mucdohailong.avg_score : 0}</td>`;
             })
-            
+
             html += `</tr>`;
         });
 
@@ -238,4 +238,15 @@ async function LoadKetQua() {
             `;
         body.html(html);
     }
+}
+
+test()
+async function test() {
+    var Year = $('#Year').val();
+    const res = await $.ajax({
+        url: '/api/test',
+        type: 'POST',
+        data: { id_nam_hoc: 1 }
+    });
+    console.log(res)
 }
