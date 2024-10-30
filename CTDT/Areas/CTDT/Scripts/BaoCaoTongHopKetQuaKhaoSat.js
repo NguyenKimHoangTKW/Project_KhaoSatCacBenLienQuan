@@ -184,7 +184,7 @@ function ExportExcelBaoCaoTongHop() {
 async function LoadKetQua() {
     var Year = $('#Year').val();
     const res = await $.ajax({
-        url: '/api/ctdt/bao_cao_tong_hop',
+        url: '/api/bao_cao_tong_hop_ket_qua_khao_sat',
         type: 'POST',
         data: { id_nam_hoc: Year }
     });
@@ -193,34 +193,41 @@ async function LoadKetQua() {
     body.empty();
     thead.empty();
     let html = ``;
+    const data = res.data;
     if (res.is_data) {
-        let title = `
-                <tr>
-                    <th scope="col">STT</th>
-                    <th scope="col">Phiếu khảo sát</th>
-                    <th scope="col">Học kỳ</th>
-                    <th scope="col">Tỷ lệ tham gia khảo sát</th>
-                    <th scope="col">Mức độ hài lòng</th>
-                    <th scope="col">Điểm trung bình</th>
-                </tr>
-            `;
-        thead.html(title);
-        res.data.forEach(function (survey, index) {
-            html += `<tr>`;
-            html += `<td class="formatSo">${index + 1}</td>`;
-            html += `<td>${survey.ten_phieu}</td>`;
-            html += `<td>${survey.hoc_ky || ''}</td>`;
-            survey.ty_le_tham_gia_khao_sat.forEach(function (tylekhaosat) {
-                html += `<td class="formatSo">${tylekhaosat ? tylekhaosat.ty_le : 0}%</td>`;
-            })
-            survey.muc_do_hai_long.forEach(function (mucdohailong) {
-                html += `<td class="formatSo">${mucdohailong ? mucdohailong.avg_ty_le_hai_long : 0}%</td>`;
-                html += `<td class="formatSo">${mucdohailong ? mucdohailong.avg_score : 0}</td>`;
-            })
-
-            html += `</tr>`;
+        data.sort((a, b) => {
+            const idA = a.ten_phieu.split(".")[0];
+            const idB = b.ten_phieu.split(".")[0];
+            return idA.localeCompare(idB, undefined, { numeric: true });
         });
-
+        let title = `
+    <tr>
+        <th scope="col">STT</th>
+        <th scope="col">Phiếu khảo sát</th>
+        <th scope="col">Học kỳ</th>
+        <th scope="col">Tỷ lệ tham gia khảo sát</th>
+        <th scope="col">Mức độ hài lòng</th>
+        <th scope="col">Điểm trung bình</th>
+    </tr>
+`;
+        thead.html(title);
+        data.forEach(function (survey, index) {
+            survey.thong_ke_ty_le.forEach(function (tylekhaosat) {
+                html += `<tr>`;
+                html += `<td class="formatSo">${index + 1}</td>`;
+                html += `<td>${survey.ten_phieu}</td>`;
+                let hocKy = tylekhaosat.hoc_ky ? tylekhaosat.hoc_ky : "";
+                html += `<td>${hocKy}</td>`;
+                let ty_le_da_tra_loi = tylekhaosat.ty_le_tham_gia_khao_sat ? tylekhaosat.ty_le_tham_gia_khao_sat.ty_le_da_tra_loi : 0;
+                html += `<td class="formatSo">${ty_le_da_tra_loi}%</td>`;
+                let muc_do_hai_long = tylekhaosat.ty_le_hai_long[0]; 
+                let avg_ty_le_hai_long = muc_do_hai_long ? muc_do_hai_long.avg_ty_le_hai_long : 0;
+                let avg_score = muc_do_hai_long ? muc_do_hai_long.avg_score : 0;
+                html += `<td class="formatSo">${avg_ty_le_hai_long}%</td>`;
+                html += `<td class="formatSo">${avg_score}</td>`;
+                html += `</tr>`;
+            });
+        });
         body.html(html);
     } else {
         html = `
@@ -238,15 +245,4 @@ async function LoadKetQua() {
             `;
         body.html(html);
     }
-}
-
-test()
-async function test() {
-    var Year = $('#Year').val();
-    const res = await $.ajax({
-        url: '/api/test',
-        type: 'POST',
-        data: { id_nam_hoc: 1 }
-    });
-    console.log(res)
 }

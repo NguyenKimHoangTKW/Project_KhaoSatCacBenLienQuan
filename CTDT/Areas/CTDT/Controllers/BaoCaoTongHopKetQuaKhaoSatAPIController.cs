@@ -32,12 +32,11 @@ namespace CTDT.Areas.CTDT.Controllers
             is_user_khoa = new int?[] { 5 }.Contains(user.id_typeusers);
         }
         [HttpPost]
-        [Route("api/test")]
-        public async Task<IHttpActionResult> test(FindChartsTyLeKhaoSat find)
+        [Route("api/bao_cao_tong_hop_ket_qua_khao_sat")]
+        public async Task<IHttpActionResult> load_bao_cao_tong_hop(FindChartsTyLeKhaoSat find)
         {
-            var survey = await db.survey.Where(x => x.id_namhoc == 1 && x.id_hedaotao == user.id_hdt).ToListAsync();
-            var List_data = new List<dynamic>();
-            
+            var survey = await db.survey.Where(x => x.id_namhoc == find.id_nam_hoc && x.id_hedaotao == user.id_hdt).ToListAsync();
+            var List_data = new List<dynamic>();  
             foreach (var item_survey in survey)
             {
                 var DataList = new List<dynamic>();
@@ -46,10 +45,8 @@ namespace CTDT.Areas.CTDT.Controllers
                 bool isCTDT = new[] { 5 }.Contains(item_survey.id_loaikhaosat);
                 bool isCBVC = new[] { 3, 8 }.Contains(item_survey.id_loaikhaosat);
                 var json = new List<dynamic>();
-
                 var answer_response = db.answer_response
                     .Where(x => x.surveyID == item_survey.surveyID && x.id_namhoc == find.id_nam_hoc && x.survey.id_hedaotao == user.id_hdt);
-
                 answer_response = answer_response.Where(x => x.id_ctdt == user.id_ctdt);
 
                 var query = await answer_response.OrderBy(x => x.surveyID).Distinct().ToListAsync();
@@ -65,7 +62,6 @@ namespace CTDT.Areas.CTDT.Controllers
                     {
                         sinh_vien_subject(DataList, find.id_ctdt, item_survey.surveyID, keyClassList);
                     }
-
                 }
                 else
                 {
@@ -86,122 +82,19 @@ namespace CTDT.Areas.CTDT.Controllers
                     thong_ke_ty_le = DataList,
                 });
             }
-            
-            return Ok(new { data = List_data, is_data = List_data.Count > 0 });
-        }
-
-        [HttpPost]
-        [Route("api/ctdt/bao_cao_tong_hop")]
-        public IHttpActionResult x_loadbaocaotonghop(FindChartsTyLeKhaoSat find)
-        {
-            var survey = db.answer_response
-                .Where(x => x.id_namhoc == find.id_nam_hoc && x.survey.id_hedaotao == user.id_hdt);
-            if (user.id_ctdt != null)
+            if (List_data.Count > 0)
             {
-                survey = survey.Where(x => x.id_ctdt == user.id_ctdt);
+                return Ok(new { data = List_data, is_data = List_data.Count > 0 });
             }
-            else if (user.id_khoa != null)
-            {
-                if (find.id_ctdt != 0)
-                {
-                    survey = survey.Where(x => x.ctdt.id_khoa == user.id_khoa && x.id_ctdt == find.id_ctdt);
-                }
-                else
-                {
-                    survey = survey.Where(x => x.ctdt.id_khoa == user.id_khoa);
-                }
-            }
-            var query = survey.Select(x => new
-            {
-                ma_phieu = x.surveyID,
-                ten_phieu = x.survey.surveyTitle,
-                hoc_ky = x.hoc_ky != null ? x.id_hk : null,
-            })
-                .Distinct()
-                .ToList()
-                .Select(x => new
-                {
-                    x.ma_phieu,
-                    x.ten_phieu,
-                    x.hoc_ky,
-                    so_phieu = int.TryParse(Regex.Match(x.ten_phieu, @"\d+").Value, out var number) ? number : 0
-                })
-                .OrderBy(x => x.so_phieu)
-                .ToList();
-
-            var GetData = new List<dynamic>();
-            foreach (var item in query)
-            {
-                var DataList = new List<dynamic>();
-                var MucDoHaiLong = new List<dynamic>();
-
-                var CheckKey = db.survey.Where(x => x.surveyID == item.ma_phieu).FirstOrDefault();
-                if (!string.IsNullOrEmpty(CheckKey.key_class))
-                {
-                    var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(CheckKey.key_class);
-                    bool isStudent = new[] { 1, 2, 4, 6 }.Contains(CheckKey.id_loaikhaosat) && CheckKey.is_hocky == false;
-                    bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(CheckKey.id_loaikhaosat) && CheckKey.is_hocky == true;
-
-                    if (isStudent)
-                    {
-                        sinh_vien(DataList, find.id_ctdt, item.ma_phieu, keyClassList);
-                    }
-                    else if (isStudentBySubject)
-                    {
-                        sinh_vien_subject(DataList, find.id_ctdt, item.ma_phieu, keyClassList);
-                    }
-
-                }
-                else
-                {
-                    bool isCTDT = new[] { 5 }.Contains(CheckKey.id_loaikhaosat);
-                    bool isCBVC = new[] { 3, 8 }.Contains(CheckKey.id_loaikhaosat);
-
-                    if (isCTDT)
-                    {
-                        chuong_trinh_dao_tao(DataList, find.id_ctdt, item.ma_phieu);
-                    }
-                    else if (isCBVC)
-                    {
-                        can_bo_vien_chuc(DataList, find.id_ctdt, item.ma_phieu);
-                    }
-
-      
-                }
-
-                var surveyData = new
-                {
-                    ma_phieu = item.ma_phieu,
-                    ten_phieu = item.ten_phieu,
-                    hoc_ky = item.hoc_ky,
-                    so_phieu = item.so_phieu,
-                    ty_le_tham_gia_khao_sat = DataList.Select(x => new
-                    {
-                        ma_phieu = x.IDPhieu,
-                        ty_le = x.TyLeDaTraLoi
-                    }).ToList(),
-                    muc_do_hai_long = MucDoHaiLong.Select(x => new
-                    {
-                        x.ma_phieu,
-                        x.ty_le_muc_do_hai_long,
-                        x.count_phieu,
-                        x.avg_ty_le_hai_long,
-                        x.avg_score
-                    }).ToList()
-                };
-                GetData.Add(surveyData);
-            }
-            if (GetData == null || !GetData.Any())
+            else
             {
                 return Ok(new { message = "No Data Avalible", is_data = false });
-            }
-            return Ok(new { data = GetData, is_data = true });
+            }       
         }
-
-
         private void can_bo_vien_chuc(dynamic DataList, int? idctdt, int? idsurvey)
         {
             var cbvc = db.CanBoVienChuc.AsQueryable();
+
             if (user.id_ctdt != null)
             {
                 cbvc = cbvc.Where(x => x.id_chuongtrinhdaotao == user.id_ctdt);
@@ -217,26 +110,24 @@ namespace CTDT.Areas.CTDT.Controllers
                     cbvc = cbvc.Where(x => x.ctdt.id_khoa == user.id_khoa);
                 }
             }
+
             var mucDoHaiLongData = new List<dynamic>();
             muc_do_hai_long(mucDoHaiLongData, idctdt, idsurvey, null, null);
-            var TotalAll = cbvc.Count();
             var DataCBVC = new
             {
-                TongKhaoSat = TotalAll,
-                TongPhieuDaTraLoi = TotalAll,
-                TongPhieuChuaTraLoi = 0,
-                TyLeDaTraLoi = 100,
-                TyLeChuaTraLoi = 0
+                ty_le_da_tra_loi = cbvc.Count() > 0  ? 100 : 0,
             };
+
             DataList.Add(new
             {
                 ty_le_tham_gia_khao_sat = DataCBVC,
                 ty_le_hai_long = mucDoHaiLongData
             });
         }
+
         private void chuong_trinh_dao_tao(dynamic DataList, int? idctdt, int? idsurvey)
         {
-            var ctdt = db.answer_response
+            var ctdt =  db.answer_response
                                 .Where(x =>
                                 x.surveyID == idsurvey &&
                                 x.id_sv == null &&
@@ -261,13 +152,10 @@ namespace CTDT.Areas.CTDT.Controllers
             }
             var mucDoHaiLongData = new List<dynamic>();
             muc_do_hai_long(mucDoHaiLongData, idctdt, idsurvey, null, null);
+
             var DataCTDT = new
             {
-                TongKhaoSat = ctdt.Count(),
-                TongPhieuDaTraLoi = ctdt.Count(),
-                TongPhieuChuaTraLoi = 0,
-                TyLeDaTraLoi = 100,
-                TyLeChuaTraLoi = 0
+                ty_le_da_tra_loi = ctdt.Count() > 0 ? 100 : 0,
             };
             DataList.Add(new
             {
@@ -316,11 +204,7 @@ namespace CTDT.Areas.CTDT.Controllers
                 muc_do_hai_long(mucDoHaiLongData, idctdt, idsurvey, item.id_hk, keyClassList);
                 var DataStudent = new
                 {
-                    TongKhaoSat = totalStudents,
-                    TongPhieuDaTraLoi = totalAnswered,
-                    TongPhieuChuaTraLoi = totalStudents - totalAnswered,
-                    TyLeDaTraLoi = percentage,
-                    TyLeChuaTraLoi = Math.Round(100 - percentage, 2),
+                    ty_le_da_tra_loi = percentage
                 };
                 DataList.Add(new
                 {
@@ -370,11 +254,7 @@ namespace CTDT.Areas.CTDT.Controllers
             muc_do_hai_long(mucDoHaiLongData, idctdt, idsurvey, null, keyClassList);
             var DataStudent = new
             {
-                TongKhaoSat = totalStudents,
-                TongPhieuDaTraLoi = totalAnswered,
-                TongPhieuChuaTraLoi = totalStudents - totalAnswered,
-                TyLeDaTraLoi = percentage,
-                TyLeChuaTraLoi = Math.Round(100 - percentage, 2),
+                ty_le_da_tra_loi = percentage,
             };
             DataList.Add(new
             {
@@ -553,11 +433,8 @@ namespace CTDT.Areas.CTDT.Controllers
             var totalMucDoHaiLong = questionDataList.Sum(x => x.MucDoHaiLong);
             var totalPhieu = questionDataList.Count();
             var totalAverageScore = questionDataList.Sum(x => x.AverageScore);
-            var maphieu = db.survey.Where(x => x.surveyID == idsurvey).FirstOrDefault();
             var GetDataMucDoHaiLong = new
             {
-                ty_le_muc_do_hai_long = totalMucDoHaiLong,
-                count_phieu = totalPhieu,
                 avg_ty_le_hai_long = totalPhieu > 0 ? Math.Round(((double)totalMucDoHaiLong / totalPhieu), 2) : 0,
                 avg_score = totalPhieu > 0 ? Math.Round(((double)totalAverageScore / totalPhieu), 2) : 0
             };

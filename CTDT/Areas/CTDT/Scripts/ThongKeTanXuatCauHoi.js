@@ -517,9 +517,9 @@ function ExportExcelKetQuaKhaoSat() {
 }
 function LoadSurveys(nameyear) {
     $.ajax({
-        url: "/api/ctdt/load_pks_by_year",
+        url: "/api/load_pks_by_year",
         type: "POST",
-        data: { ten_namhoc: nameyear },
+        data: { id_nam_hoc: nameyear },
         success: function (res) {
             $("#surveyid").empty();
             if (res.success) {
@@ -562,11 +562,11 @@ $(window).on('load', function () {
 // Load Câu hỏi
 async function loc_tan_xuat(tenphieu, hocky) {
     const res = await $.ajax({
-        url: '/api/ctdt/load_tan_xuat_dap_an',
+        url: '/api/load_tan_xuat_dap_an',
         type: "POST",
         data: {
             id_survey: tenphieu,
-            name_hoc_ky: hocky
+            id_hoc_ky: hocky
         }
     });
     await form_ty_le(res.rate);
@@ -604,11 +604,11 @@ function form_ty_le(ty_le) {
             html += `
             <tr>
                 <td>${item.CTDT}</td>
-                <td class="formatSo">${item.TongKhaoSat}</td>
-                <td class="formatSo">${item.TongPhieuDaTraLoi}</td>
-                <td class="formatSo">${item.TongPhieuChuaTraLoi}</td>
-                <td class="formatSo">${item.TyLeDaTraLoi}%</td>
-                <td class="formatSo">${item.TyLeChuaTraLoi}%</td>
+                <td class="formatSo">${item.tong_khao_sat}</td>
+                <td class="formatSo">${item.tong_phieu_da_tra_loi}</td>
+                <td class="formatSo">${item.tong_phieu_chua_tra_loi}</td>
+                <td class="formatSo">${item.ty_le_da_tra_loi}%</td>
+                <td class="formatSo">${item.ty_le_chua_tra_loi}%</td>
             </tr>
         `;
         });

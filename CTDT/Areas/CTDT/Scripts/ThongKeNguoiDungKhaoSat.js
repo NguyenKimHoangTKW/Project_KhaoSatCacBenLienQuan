@@ -33,52 +33,55 @@ $(document).on("change", "#Year", async function () {
 async function LoadChartSurvey() {
     var year = $("#Year").val();
     const res = await $.ajax({
-        url: '/api/ctdt/load_thong_ke_nguoi_hoc',
+        url: '/api/giam_sat_thong_ke_nguoi_hoc',
         type: 'POST',
-        data: { ten_namhoc: year },
+        data: { id_nam_hoc: year },
     });
+
     $('#survey-list').empty();
-    if (res.data[0].AllSurvey.length > 0) {
-        res.data[0].AllSurvey.sort((a, b) => {
-            let idA = (typeof a.NameSurvey === 'string') ? a.NameSurvey.split(".")[0] : '';
-            let idB = (typeof b.NameSurvey === 'string') ? b.NameSurvey.split(".")[0] : '';
+    const surveys = res.data;
+
+    if (res.is_data) {
+        surveys.sort((a, b) => {
+            const idA = a.ten_phieu.split(".")[0];
+            const idB = b.ten_phieu.split(".")[0];
             return idA.localeCompare(idB, undefined, { numeric: true });
         });
 
-        res.data[0].AllSurvey.forEach(async function (survey) {
-            const MaPhieu = survey.NameSurvey.split(".")[0].toUpperCase();
-            const TieuDePhieu = survey.NameSurvey.split(".")[1];
-            const surveyData = res.data[0].ChartSurvey.find(chil => chil.IDPhieu === survey.IDSurvey);
-            const SurveyBySubject = survey.HocKy != null ? MaPhieu + " - " + (survey.HocKy ?? MaPhieu) : MaPhieu;
+        surveys.forEach(function (survey) {
+            const MaPhieu = survey.ten_phieu.split(".")[0].toUpperCase();
+            const TieuDePhieu = survey.ten_phieu.split(".")[1];
+            const thongKeTyLe = survey.thong_ke_ty_le.length > 0 ? survey.thong_ke_ty_le[0].ty_le_tham_gia_khao_sat : null;
             const card = `
                 <div class="card survey-card">
                     <div class="card-body">
                         <div style="align-items: center;">
-                            <p style="color:#5029ff;font-weight:bold; position: absolute; top: 0; left: 20px;">${SurveyBySubject}</p>
-                            <a href="" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-tenphieu="${survey.IDSurvey}">Xem chi tiết</a>
+                            <p style="color:#5029ff;font-weight:bold; position: absolute; top: 0; left: 20px;">${MaPhieu}</p>
+                            <a href="#" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-tenphieu="${survey.ma_phieu}">Xem chi tiết</a>
                             <hr/>
                             <p style="color:black;font-weight:bold">${TieuDePhieu}</p>
                             <hr/>
                         </div>
-                        <canvas class="chart" id="donut-chart-${survey.IDSurvey}"></canvas>
-                        <p id="surveyedInfo-${survey.IDSurvey}" style="margin: 0; color: red;"></p>
+                        <canvas class="chart" id="donut-chart-${MaPhieu}"></canvas>
+                        <p id="surveyedInfo-${MaPhieu}" style="margin: 0; color: red;"></p>
                         <hr />
                         <div style="display: flex; justify-content: space-between; align-items: center; font-weight:bold">
-                            <p style="margin: 0; color: black;">${surveyData ? "Tổng phiếu: " + surveyData.TongKhaoSat : ''}</p>
-                            <p style="margin: 0; color:#ebb000;">${surveyData ? "Đã thu về: " + surveyData.TongPhieuDaTraLoi : ''}</p>
-                            <p style="margin: 0; color:#5029ff;">${surveyData ? "Chưa thu về: " + surveyData.TongPhieuChuaTraLoi : ''}</p>
+                            <p style="margin: 0; color: black;">${thongKeTyLe ? "Tổng phiếu: " + thongKeTyLe.tong_khao_sat : ''}</p>
+                            <p style="margin: 0; color:#ebb000;">${thongKeTyLe ? "Đã thu về: " + thongKeTyLe.tong_phieu_da_tra_loi : ''}</p>
+                            <p style="margin: 0; color:#5029ff;">${thongKeTyLe ? "Chưa thu về: " + thongKeTyLe.tong_phieu_chua_tra_loi : ''}</p>
                         </div>
                     </div>
                 </div>`;
 
             $('#survey-list').append(card);
-            if (!surveyData) {
-                $(`#surveyedInfo-${survey.IDSurvey}`).text('Không có dữ liệu');
+
+            if (!thongKeTyLe) {
+                $(`#surveyedInfo-${MaPhieu}`).text('Không có dữ liệu');
             } else {
-                const datas = [surveyData.TongPhieuChuaTraLoi, surveyData.TongPhieuDaTraLoi];
+                const datas = [thongKeTyLe.tong_phieu_chua_tra_loi, thongKeTyLe.tong_phieu_da_tra_loi];
                 const colors = ['#007bff', '#ffc107'];
 
-                const donutCtx = document.getElementById(`donut-chart-${survey.IDSurvey}`).getContext('2d');
+                const donutCtx = document.getElementById(`donut-chart-${MaPhieu}`).getContext('2d');
                 const donutData = {
                     labels: ['Số phiếu chưa trả lời', 'Số phiếu đã thu'],
                     datasets: [{
@@ -118,6 +121,7 @@ async function LoadChartSurvey() {
         $('.chart').hide();
     }
 }
+
 
 $(document).on("click", "#maphieu", function () {
     var maphieu = $(this).data("tenphieu");

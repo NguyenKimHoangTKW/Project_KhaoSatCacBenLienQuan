@@ -33,7 +33,7 @@ $(document).on("change", "#yearGiamSat", async function () {
 });
 async function LoadChartFullSurvey() {
     var year = $("#yearGiamSat").val();
-    const response = await fetch('/api/ctdt/ty_le_khao_sat', {
+    const response = await fetch('/api/giam_sat_ty_le_khao_sat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -47,13 +47,31 @@ async function LoadChartFullSurvey() {
     const lineChartCanvas = document.getElementById('line-chart').getContext('2d');
 
     if (res.is_data) {
-        let labels = res.data.map(item => item.hoc_ky ? `${item.ten_phieu.split('.')[0]} - ${item.hoc_ky}` : item.ten_phieu.split('.')[0]);
-        let participationData = res.data.map(item => item.ty_le_tham_gia_khao_sat.length > 0 ? item.ty_le_tham_gia_khao_sat[0].ty_le : 0);
-        let satisfactionData = res.data.map(item => item.muc_do_hai_long.length > 0 ? item.muc_do_hai_long[0].avg_ty_le_hai_long : 0);
+        let labels = [];
+        let participationData = [];
+        let satisfactionData = [];
+        res.data.forEach((survey) => {
+            survey.thong_ke_ty_le.forEach((tyleKhaoSat, index) => {
+                let label = `${survey.ten_phieu.split('.')[0]}`;
+                if (tyleKhaoSat.hoc_ky) {
+                    label += ` - ${tyleKhaoSat.hoc_ky}`;
+                }
+                labels.push(label);
+
+                let ty_le_tham_gia = tyleKhaoSat.ty_le_tham_gia_khao_sat
+                    ? tyleKhaoSat.ty_le_tham_gia_khao_sat.ty_le_da_tra_loi
+                    : 0;
+                participationData.push(ty_le_tham_gia);
+
+                let avg_ty_le_hai_long = tyleKhaoSat.ty_le_hai_long.length > 0
+                    ? tyleKhaoSat.ty_le_hai_long[0].avg_ty_le_hai_long
+                    : 0;
+                satisfactionData.push(avg_ty_le_hai_long);
+            });
+        });
 
         if (window.barChart) window.barChart.destroy();
         if (window.lineChart) window.lineChart.destroy();
-
         window.barChart = new Chart(barChartCanvas, {
             type: 'bar',
             data: {
@@ -129,8 +147,7 @@ async function LoadChartFullSurvey() {
         });
         $('#showchart').show();
         $('#error').hide();
-    }
-    else {
+    } else {
         let html =
             `<div class="alert alert-info">
                 <div class="d-flex justify-content-start">
@@ -138,7 +155,7 @@ async function LoadChartFullSurvey() {
                         <i class="anticon anticon-close-circle"></i>
                     </span>
                     <div>
-                        <h5 class="alert-heading">Opps...</h5>
+                        <h5 class="alert-heading">Oops...</h5>
                         <p>${res.message}</p>
                     </div>
                 </div>
@@ -148,9 +165,10 @@ async function LoadChartFullSurvey() {
         $('#error').show();
     }
 }
+
 async function LoadChartSurveyThongTu01() {
     var year = $("#yearGiamSat").val();
-    const response = await fetch('/api/ctdt/ty_le_khao_sat_thong_tu_01', {
+    const response = await fetch('/api/giam_sat_ty_le_khao_sat_thong_tu_01', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -161,9 +179,28 @@ async function LoadChartSurveyThongTu01() {
     const barChartCtx = document.getElementById('bar01-chart').getContext('2d');
     const lineChartCtx = document.getElementById('line01-chart').getContext('2d');
     if (res.is_data) {
-        let labels = res.data.map(item => item.hoc_ky ? `${item.ten_phieu.split('.')[0]} - ${item.hoc_ky}` : item.ten_phieu.split('.')[0]);
-        let participationData = res.data.map(item => item.ty_le_tham_gia_khao_sat.length > 0 ? item.ty_le_tham_gia_khao_sat[0].ty_le : 0);
-        let satisfactionData = res.data.map(item => item.muc_do_hai_long.length > 0 ? item.muc_do_hai_long[0].avg_ty_le_hai_long : 0);
+        let labels = [];
+        let participationData = [];
+        let satisfactionData = [];
+        res.data.forEach((survey) => {
+            survey.thong_ke_ty_le.forEach((tyleKhaoSat, index) => {
+                let label = `${survey.ten_phieu.split('.')[0]}`;
+                if (tyleKhaoSat.hoc_ky) {
+                    label += ` - ${tyleKhaoSat.hoc_ky}`;
+                }
+                labels.push(label);
+
+                let ty_le_tham_gia = tyleKhaoSat.ty_le_tham_gia_khao_sat
+                    ? tyleKhaoSat.ty_le_tham_gia_khao_sat.ty_le_da_tra_loi
+                    : 0;
+                participationData.push(ty_le_tham_gia);
+
+                let avg_ty_le_hai_long = tyleKhaoSat.ty_le_hai_long.length > 0
+                    ? tyleKhaoSat.ty_le_hai_long[0].avg_ty_le_hai_long
+                    : 0;
+                satisfactionData.push(avg_ty_le_hai_long);
+            });
+        });
 
         if (window.bar01Chart) window.bar01Chart.destroy();
         if (window.line01Chart) window.line01Chart.destroy();
