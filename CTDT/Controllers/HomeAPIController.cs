@@ -3,6 +3,7 @@ using CTDT.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,6 +17,52 @@ namespace CTDT.Controllers
     public class HomeAPIController : ApiController
     {
         dbSurveyEntities db = new dbSurveyEntities();
+        [HttpGet]
+        [Route("api/test")]
+        public async Task<IHttpActionResult> load_sv_by_ngay()
+        {
+            try
+            {
+                string startDateString = "01/03/2022";
+                string endDateString = "30/12/2023";
+                DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                var sinhVienList = (await db.sinhvien
+                    .ToListAsync())
+                    .Where(sv =>
+                    {
+                        return DateTime.TryParseExact(
+                                   "01/" + sv.namtotnghiep,
+                                   "dd/MM/yyyy",
+                                   CultureInfo.InvariantCulture,
+                                   DateTimeStyles.None,
+                                   out DateTime namtotnghiepDate) &&
+                               namtotnghiepDate >= startDate &&
+                               namtotnghiepDate <= endDate;
+                    })
+                    .Select(sv => new
+                    {
+                        sv.id_lop,
+                        sv.ma_sv,
+                        sv.hovaten,
+                        sv.ngaysinh,
+                        sv.sodienthoai,
+                        sv.diachi,
+                        sv.phai,
+                        sv.namtotnghiep,
+                        sv.ngaycapnhat,
+                        sv.ngaytao,
+                        sv.status
+                    })
+                    .ToList();
+
+                return Ok(sinhVienList);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
         [HttpPost]
         [Route("api/load_he_dao_tao")]
         public async Task<IHttpActionResult> LoadHeDaoTao()

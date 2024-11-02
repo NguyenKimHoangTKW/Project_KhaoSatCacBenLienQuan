@@ -178,7 +178,7 @@
           <Property Name="sodienthoai" Type="nvarchar" MaxLength="15" />
           <Property Name="diachi" Type="nvarchar" MaxLength="200" />
           <Property Name="phai" Type="nvarchar" MaxLength="50" />
-          <Property Name="namtotnghiep" Type="text" />
+          <Property Name="namtotnghiep" Type="nvarchar" MaxLength="100" />
           <Property Name="ngaycapnhat" Type="int" />
           <Property Name="ngaytao" Type="int" />
           <Property Name="status" Type="bit" />
@@ -1190,7 +1190,7 @@
           <Property Name="sodienthoai" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="diachi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="phai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="namtotnghiep" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="namtotnghiep" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ngaycapnhat" Type="Int32" />
           <Property Name="ngaytao" Type="Int32" />
           <Property Name="status" Type="Boolean" />

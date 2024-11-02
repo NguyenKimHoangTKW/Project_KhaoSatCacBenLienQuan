@@ -7,12 +7,16 @@ using System.Web;
 using System.Web.Mvc;
 using Google.Cloud.Translation.V2;
 using CTDT.Helper;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using System.Globalization;
 namespace CTDT.Areas.Admin.Controllers
 {
     [UserAuthorize(2)]
     public class SinhVienController : Controller
     {
         dbSurveyEntities db = new dbSurveyEntities();
+
         // GET: Admin/SinhVien
         public ActionResult ViewSinhVien()
         {
@@ -20,7 +24,7 @@ namespace CTDT.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult LoadSinhVien(int pageNumber = 1, int pageSize = 10, int filterlop = 0,string keyword = "")
+        public ActionResult LoadSinhVien(int pageNumber = 1, int pageSize = 10, int filterlop = 0, string keyword = "")
         {
             try
             {
@@ -68,20 +72,16 @@ namespace CTDT.Areas.Admin.Controllers
                 return Json(new { status = "Không tìm thấy sinh viên" }, JsonRequestBehavior.AllowGet);
             }
         }
-        private int MapMaLopToIDLop(string malop)
-        {
-            var lop = db.lop.FirstOrDefault(dt => dt.ma_lop == malop);
-            return lop?.id_lop ?? 0;
-        }
+
         [HttpPost]
-        public ActionResult UploadExcel(HttpPostedFileBase excelFile)
+        public async Task<ActionResult> UploadExcel(HttpPostedFileBase excelFile, HashSet<string> truong_duy_nhat)
         {
             if (excelFile != null && excelFile.ContentLength > 0)
             {
                 try
                 {
+                    long unixTimestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-                    DateTime now = DateTime.UtcNow;
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                     using (var package = new ExcelPackage(excelFile.InputStream))
                     {
@@ -90,33 +90,65 @@ namespace CTDT.Areas.Admin.Controllers
                         {
                             return Json(new { status = "Không tìm thấy worksheet trong file Excel" }, JsonRequestBehavior.AllowGet);
                         }
-                        int unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
                         for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
                         {
-                            string tenLop = worksheet.Cells[row, 10].Value.ToString();
-                            int malop = MapMaLopToIDLop(tenLop);
+                            var ms_nguoi_hoc = worksheet.Cells[row, 1].Text;
+                            var ten_nguoi_hoc = worksheet.Cells[row, 2].Text;
+                            var sdt = worksheet.Cells[row, 4].Text;
+                            var dia_chi = worksheet.Cells[row, 5].Text;
+                            var gioi_tinh = worksheet.Cells[row, 6].Text;
+                            var ctdt = worksheet.Cells[row, 7].Text;
+                            var lop = worksheet.Cells[row, 8].Text;
+                            var nam_tot_nghiep = worksheet.Cells[row, 9].Text;
+                            var kiem_tra_truong_duy_nhat = $"{ms_nguoi_hoc}-{ten_nguoi_hoc}-{lop}";
 
-                            var sinhVien = new sinhvien
+                            var get_lop = await db.lop.FirstOrDefaultAsync(x => x.ma_lop == lop);
+                            var get_ctdt = await db.ctdt.FirstOrDefaultAsync(x => x.ten_ctdt == ctdt);
+                            var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == ms_nguoi_hoc && x.hovaten == ten_nguoi_hoc);
+
+                            if (get_lop == null)
                             {
+                                get_lop = new lop
+                                {
+                                    id_ctdt = get_ctdt.id_ctdt,
+                                    ma_lop = lop,
+                                    ngaycapnhat = (int)unixTimestamp,
+                                    ngaytao = (int)unixTimestamp,
+                                    status = true
+                                };
+                                db.lop.Add(get_lop);
+                                await db.SaveChangesAsync();
+                            }
 
-                                ma_sv = worksheet.Cells[row, 1].Text,
-                                hovaten = worksheet.Cells[row, 2].Text,
-                                ngaysinh = DateTime.Parse(worksheet.Cells[row, 3].Text),
-                                sodienthoai = worksheet.Cells[row, 4].Text,
-                                diachi = worksheet.Cells[row, 5].Text,
-                                phai = worksheet.Cells[row, 6].Text,
-                                namtotnghiep = worksheet.Cells[row, 7].Text,
-                                id_lop = malop,
-                                ngaytao = unixTimestamp,
-                                ngaycapnhat = unixTimestamp
-                            };
-
-                            db.sinhvien.Add(sinhVien);
+                            if (sinh_vien == null)
+                            {
+                                sinh_vien = new sinhvien
+                                {
+                                    id_lop = get_lop.id_lop,
+                                    ma_sv = ms_nguoi_hoc,
+                                    hovaten = ten_nguoi_hoc,
+                                    ngaysinh = null,
+                                    sodienthoai = sdt,
+                                    diachi = dia_chi,
+                                    phai = gioi_tinh,
+                                    namtotnghiep = nam_tot_nghiep,
+                                    ngaycapnhat = (int)unixTimestamp,
+                                    ngaytao = (int)unixTimestamp,
+                                    status = true
+                                };
+                                db.sinhvien.Add(sinh_vien);
+                                await db.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                sinh_vien.namtotnghiep = nam_tot_nghiep;
+                                sinh_vien.ngaycapnhat = (int)unixTimestamp;
+                                await db.SaveChangesAsync();
+                            }
                         }
 
-                        db.SaveChanges();
-
-                        return Json(new { status = "Thêm sinh viên thành công" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = "Import dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 catch (Exception ex)
@@ -126,48 +158,6 @@ namespace CTDT.Areas.Admin.Controllers
             }
 
             return Json(new { status = "Vui lòng chọn file Excel" }, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult AddNewSV(sinhvien sv)
-        {
-            if(ModelState.IsValid)
-            {
-                if (string.IsNullOrEmpty(sv.ma_sv))
-                {
-                    return Json(new { success = false, message = "MSSV không được bỏ trống" }, JsonRequestBehavior.AllowGet);
-                }
-                else if (string.IsNullOrEmpty(sv.hovaten))
-                {
-                    return Json(new { success = false, message = "Họ và tên không được bỏ trống" }, JsonRequestBehavior.AllowGet);
-                }
-                else if (string.IsNullOrEmpty(sv.sodienthoai))
-                {
-                    return Json(new { success = false, message = "Số điện thoại không được bỏ trống" }, JsonRequestBehavior.AllowGet);
-                }
-                else if (string.IsNullOrEmpty(sv.diachi))
-                {
-                    return Json(new { success = false, message = "Địa chỉ không được bỏ trống" }, JsonRequestBehavior.AllowGet);
-                }
-                else if (string.IsNullOrEmpty(sv.phai))
-                {
-                    return Json(new { success = false, message = "Giới tính không được bỏ trống" }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    DateTime now = DateTime.UtcNow;
-                    int unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-                    sv.ngaycapnhat = unixTimestamp;
-                    sv.ngaytao = unixTimestamp;
-                    db.sinhvien.Add(sv);
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Thêm mới dữ liệu thành công" }, JsonRequestBehavior.AllowGet);
-                }
-
-            }
-            else
-            {
-                return Json(new { success = false, message = "Có lỗi trong quá trình thêm dữ liệu"}, JsonRequestBehavior.AllowGet);
-            } 
         }
     }
 }
