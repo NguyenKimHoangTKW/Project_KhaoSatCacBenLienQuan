@@ -36,7 +36,9 @@ namespace CTDT.Models
         public Nullable<int> id_namhoc { get; set; }
         public Nullable<bool> is_hocky { get; set; }
         public string key_class { get; set; }
-        public string doi_tuong_dat_biet { get; set; }
+        public string thang_tot_nghiep { get; set; }
+        public string thang_nhap_hoc { get; set; }
+        public string hoc_phan { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }

@@ -17,52 +17,6 @@ namespace CTDT.Controllers
     public class HomeAPIController : ApiController
     {
         dbSurveyEntities db = new dbSurveyEntities();
-        [HttpGet]
-        [Route("api/test")]
-        public async Task<IHttpActionResult> load_sv_by_ngay()
-        {
-            try
-            {
-                string startDateString = "01/03/2022";
-                string endDateString = "30/12/2023";
-                DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                var sinhVienList = (await db.sinhvien
-                    .ToListAsync())
-                    .Where(sv =>
-                    {
-                        return DateTime.TryParseExact(
-                                   "01/" + sv.namtotnghiep,
-                                   "dd/MM/yyyy",
-                                   CultureInfo.InvariantCulture,
-                                   DateTimeStyles.None,
-                                   out DateTime namtotnghiepDate) &&
-                               namtotnghiepDate >= startDate &&
-                               namtotnghiepDate <= endDate;
-                    })
-                    .Select(sv => new
-                    {
-                        sv.id_lop,
-                        sv.ma_sv,
-                        sv.hovaten,
-                        sv.ngaysinh,
-                        sv.sodienthoai,
-                        sv.diachi,
-                        sv.phai,
-                        sv.namtotnghiep,
-                        sv.ngaycapnhat,
-                        sv.ngaytao,
-                        sv.status
-                    })
-                    .ToList();
-
-                return Ok(sinhVienList);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
         [HttpPost]
         [Route("api/load_he_dao_tao")]
         public async Task<IHttpActionResult> LoadHeDaoTao()
@@ -105,7 +59,7 @@ namespace CTDT.Controllers
 
         [HttpPost]
         [Route("api/bo_phieu_khao_sat")]
-        public async Task<IHttpActionResult> load_phieu_khao_sat([FromBody] hedaotao hdt)
+        public async Task<IHttpActionResult> load_phieu_khao_sat(hedaotao hdt)
         {
             if (hdt == null || string.IsNullOrEmpty(hdt.ten_hedaotao))
             {
@@ -120,44 +74,12 @@ namespace CTDT.Controllers
             {
                 return BadRequest("Không thể phân loại được tài khoản");
             }
-            var emailDomain = user.email.Split('@')[1].ToLower();
-            var CodeEmail = user.email.Split('@')[0];
-            var get_key_code_learner = CodeEmail.ToString().Substring(0, 2);
             var phieukhaosat = await db.survey
                .Where(c => c.surveyStatus == true && c.hedaotao.ten_hedaotao == hdt.ten_hedaotao).ToListAsync();
             var list_phieu_khao_sat = new List<dynamic>();
-            var check_xac_thuc = new List<dynamic>();
             foreach (var item in phieukhaosat)
             {
-                var survey = await db.survey.Where(x => x.surveyID == item.surveyID).FirstOrDefaultAsync();
-                bool check_answer_survey = db.answer_response.Any(x => x.surveyID == item.surveyID && x.id_users == user.id_users && x.id_namhoc == item.id_namhoc && x.json_answer != null);
-                bool not_nguoi_hoc = new[] { 2, 5, 6 }.Contains(item.id_loaikhaosat);
-                bool is_nguoi_hoc = new[] { 1, 4 }.Contains(item.id_loaikhaosat);
-                bool is_cbvc = new[] { 3, 8 }.Contains(item.id_loaikhaosat);
-                if(user.id_ctdt != null || user.id_khoa != null)
-                {
-                    AddSurveyToList(list_phieu_khao_sat, survey);
-                }
-                else if (not_nguoi_hoc)
-                {
-                    AddSurveyToList(list_phieu_khao_sat, survey);
-
-                }
-                else if (is_nguoi_hoc)
-                {
-                    var keyClassList = DeserializeKeyClass(survey.key_class);
-                    if (emailDomain == "student.tdmu.edu.vn" && keyClassList.Contains(get_key_code_learner) && db.sinhvien.Any(x => x.ma_sv == CodeEmail))
-                    {
-                        AddSurveyToList(list_phieu_khao_sat, survey);
-                    }
-                }
-                else if (is_cbvc)
-                {
-                    if (db.CanBoVienChuc.Any(x => x.Email == user.email))
-                    {
-                        AddSurveyToList(list_phieu_khao_sat, survey);
-                    }
-                }
+                AddSurveyToList(list_phieu_khao_sat, item.surveyID);
             }
             var get_data = new
             {
@@ -165,8 +87,9 @@ namespace CTDT.Controllers
             };
             return Ok(new { data = get_data });
         }
-        private void AddSurveyToList(List<dynamic> list, dynamic survey)
+        private void AddSurveyToList(List<dynamic> list, int? surveyid)
         {
+            var survey = db.survey.FirstOrDefault(x => x.surveyID == surveyid);
             var surveyDetails = new
             {
                 MaPhieu = survey.surveyID,
@@ -177,10 +100,6 @@ namespace CTDT.Controllers
                 TenLoaiKhaoSat = survey.LoaiKhaoSat.name_loaikhaosat
             };
             list.Add(surveyDetails);
-        }
-        private List<string> DeserializeKeyClass(string keyClassJson)
-        {
-            return new JavaScriptSerializer().Deserialize<List<string>>(keyClassJson);
         }
     }
 }

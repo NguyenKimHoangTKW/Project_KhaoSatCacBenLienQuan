@@ -18,6 +18,7 @@ namespace CTDT.Models
         public sinhvien()
         {
             this.answer_response = new HashSet<answer_response>();
+            this.nguoi_hoc_dang_co_hoc_phan = new HashSet<nguoi_hoc_dang_co_hoc_phan>();
         }
     
         public int id_sv { get; set; }
@@ -28,6 +29,7 @@ namespace CTDT.Models
         public string sodienthoai { get; set; }
         public string diachi { get; set; }
         public string phai { get; set; }
+        public string namnhaphoc { get; set; }
         public string namtotnghiep { get; set; }
         public Nullable<int> ngaycapnhat { get; set; }
         public Nullable<int> ngaytao { get; set; }
@@ -36,5 +38,7 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }
         public virtual lop lop { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
     }
 }

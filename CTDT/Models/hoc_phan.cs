@@ -18,6 +18,7 @@ namespace CTDT.Models
         public hoc_phan()
         {
             this.mon_hoc = new HashSet<mon_hoc>();
+            this.nguoi_hoc_dang_co_hoc_phan = new HashSet<nguoi_hoc_dang_co_hoc_phan>();
         }
     
         public int id_hoc_phan { get; set; }
@@ -27,5 +28,7 @@ namespace CTDT.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<mon_hoc> mon_hoc { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
     }
 }

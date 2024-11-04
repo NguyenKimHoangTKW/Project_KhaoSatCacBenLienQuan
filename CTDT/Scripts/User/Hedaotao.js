@@ -23,15 +23,6 @@ async function load_he_dao_tao() {
         form_no_login(res.data)
     }
 }
-test()
-async function test() {
-    const res = await $.ajax({
-        url: '/api/test',
-        type: 'GET',
-
-    })
-    console.log(res)
-}
 
 function form_no_login(check) {
     let body = $('#showdata');

@@ -40,6 +40,7 @@ namespace CTDT.Models
         public virtual DbSet<lop> lop { get; set; }
         public virtual DbSet<mon_hoc> mon_hoc { get; set; }
         public virtual DbSet<NamHoc> NamHoc { get; set; }
+        public virtual DbSet<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
         public virtual DbSet<phan_quyen_chuc_nang_users> phan_quyen_chuc_nang_users { get; set; }
         public virtual DbSet<sinhvien> sinhvien { get; set; }
         public virtual DbSet<survey> survey { get; set; }

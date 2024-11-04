@@ -412,6 +412,9 @@
     <Compile Include="Models\NamHoc.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\nguoi_hoc_dang_co_hoc_phan.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PhanQuyen.cs" />
     <Compile Include="Models\phan_quyen_chuc_nang_users.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>

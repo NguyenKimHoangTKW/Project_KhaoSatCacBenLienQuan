@@ -105,11 +105,8 @@ function check_xac_thuc(id) {
             else if (res.non_survey) {
                 window.location.href = url;
             }
-            else if (res.is_clipboard) {
-                window.location.href = url;
-            }
             else {
-                window.location.href = url;
+                alert(res.message);
             }
         }
     });
