@@ -190,7 +190,6 @@ namespace CTDT.Controllers
             var email_String = user.email.Split('@');
             var mssv_by_email = email_String[0];
             var check_mail_student = email_String[1];
-
             //Kiểm tra dữ liệu đầu vào của phiếu khảo sát
             bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(survey.id_loaikhaosat);
             bool cuu_hoc_vien = new[] { 6 }.Contains(survey.id_loaikhaosat);
@@ -202,7 +201,6 @@ namespace CTDT.Controllers
             // Nếu chưa có câu trả lời khảo sát
             if (answer_survey == null)
             {
-               
                 if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep)
                 {
                     // Xóa session của bộ phiếu 4 và 5
@@ -276,7 +274,7 @@ namespace CTDT.Controllers
                         return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
                     }
                 }
-                if (hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
+                else if (hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
                 {
                     // Xóa session của bộ phiếu 4 và 5
                     ClearSessionData();
@@ -321,7 +319,46 @@ namespace CTDT.Controllers
                 }
                 else if (hoc_vien_co_hoc_phan_dang_hoc_tai_truong)
                 {
+                    // Xóa session của bộ phiếu 4 và 5
+                    ClearSessionData();
+                    // Tách chuỗi và xác thực mã người học
+                    var tach_chuoi_hoc_phan = survey.hoc_phan.Split('-');
+                    string startDateString = "01/" + tach_chuoi_hoc_phan[0].PadLeft(2, '0');
+                    string endDateString = "30/" + tach_chuoi_hoc_phan[1].PadLeft(2, '0');
+                    DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    var isEligible = (await db.sinhvien.ToListAsync())
+                        .Where(sv =>
+                        {
+                            if (sv.namtotnghiep != null)
+                            {
+                                var formattedNamTotNghiep = sv.namtotnghiep.Split('/');
+                                if (formattedNamTotNghiep.Length == 2)
+                                {
+                                    string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
 
+                                    return DateTime.TryParseExact(
+                                               formattedDate,
+                                               "dd/MM/yyyy",
+                                               CultureInfo.InvariantCulture,
+                                               DateTimeStyles.None,
+                                               out DateTime namtotnghiepDate) &&
+                                           namtotnghiepDate >= startDate &&
+                                           namtotnghiepDate <= endDate;
+                                }
+                            }
+                            return false;
+                        })
+                        .FirstOrDefault(sv => sv.ma_sv == mssv_by_email);
+                    if (isEligible != null && check_mail_student == "student.tdmu.edu.vn")
+                    {
+                        url = "/phieu-khao-sat/" + survey.surveyID;
+                        return Ok(new { data = url, non_survey = true });
+                    }
+                    else
+                    {
+                        return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học có quyết định tốt nghiệp " + survey.thang_tot_nghiep });
+                    }
                 }
                 else
                 {
@@ -329,6 +366,8 @@ namespace CTDT.Controllers
                     return Ok(new { data = url , non_survey = true });
                 }
             }
+
+            // Nếu đã có câu trả lời khảo sát
             bool check_answer_survey = db.answer_response.Any(x => x.surveyID == answer_survey.surveyID && x.id_users == user.id_users && x.id_namhoc == survey.id_namhoc && x.json_answer != null);
             if (check_answer_survey)
             {
@@ -345,7 +384,7 @@ namespace CTDT.Controllers
                 else
                 {
                     url = "/xac_thuc/" + Sv.surveyID;
-                    return Ok(new { data = url });
+                    return Ok(new { data = url , is_answer = true });
                 }
             }
             return BadRequest("Null");
