@@ -232,7 +232,7 @@ namespace CTDT.Controllers
             if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep)
             {
                 ClearSessionData();
-                if(check_mail_student == "student.tdmu.edu.vn")
+                if (check_mail_student == "student.tdmu.edu.vn")
                 {
                     var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
                     var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
@@ -242,10 +242,13 @@ namespace CTDT.Controllers
                         url = "/phieu-khao-sat/" + survey.surveyID;
                         return Ok(new { data = url, non_survey = true });
                     }
+                    {
+                        return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
+                    }
                 }
                 else
                 {
-                    return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
+                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
             }
             else if (hoc_vien_nhap_hoc)
@@ -261,30 +264,42 @@ namespace CTDT.Controllers
                         url = "/phieu-khao-sat/" + survey.surveyID;
                         return Ok(new { data = url, non_survey = true });
                     }
+                    else
+                    {
+                        return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
+                    }
                 }
                 else
                 {
-                    return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
+                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
             }
             else if (giang_vien || can_bo_vien_chuc)
             {
                 ClearSessionData();
-                bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
-                if (check_giang_vien)
+                if (check_mail_student == "tdmu.edu.vn")
                 {
-                    url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/" + survey.surveyID;
-                    return Ok(new { data = url, non_survey = true });
+                    bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
+                    if (check_giang_vien)
+                    {
+                        url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/" + survey.surveyID;
+                        return Ok(new { data = url, non_survey = true });
+                    }
+                    else
+                    {
+                        return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
+                    }
                 }
                 else
                 {
-                    return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
+                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
+
             }
             else if (hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
             {
                 ClearSessionData();
-                if(check_mail_student == "student.tdmu.edu.vn")
+                if (check_mail_student == "student.tdmu.edu.vn")
                 {
                     var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
                     var isEligible = await convert_nguoi_hoc(survey.thang_tot_nghiep, sinh_vien.namtotnghiep, mssv_by_email);
@@ -293,16 +308,20 @@ namespace CTDT.Controllers
                         url = "/phieu-khao-sat/" + survey.surveyID;
                         return Ok(new { data = url, non_survey = true });
                     }
+                    else
+                    {
+                        return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học có quyết định tốt nghiệp " + survey.thang_tot_nghiep });
+                    }
                 }
                 else
                 {
-                    return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học có quyết định tốt nghiệp " + survey.thang_tot_nghiep });
+                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
             }
             else if (hoc_vien_co_hoc_phan_dang_hoc_tai_truong)
             {
                 ClearSessionData();
-                if(check_mail_student == "student.tdmu.edu.vn")
+                if (check_mail_student == "student.tdmu.edu.vn")
                 {
 
                 }
