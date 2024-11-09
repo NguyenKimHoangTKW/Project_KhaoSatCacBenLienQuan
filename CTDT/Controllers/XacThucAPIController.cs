@@ -224,7 +224,7 @@ namespace CTDT.Controllers
             bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(survey.id_loaikhaosat);
             bool cuu_hoc_vien = new[] { 6 }.Contains(survey.id_loaikhaosat);
             bool hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep = new[] { 9 }.Contains(survey.id_loaikhaosat);
-            bool hoc_vien_co_hoc_phan_dang_hoc_tai_truong = new[] { 11 }.Contains(survey.id_loaikhaosat);
+            bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11, 13, 14 }.Contains(survey.id_loaikhaosat);
             bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(survey.id_loaikhaosat);
             bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
             bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
@@ -318,12 +318,17 @@ namespace CTDT.Controllers
                     return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
             }
-            else if (hoc_vien_co_hoc_phan_dang_hoc_tai_truong)
+            else if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
             {
                 ClearSessionData();
                 if (check_mail_student == "student.tdmu.edu.vn")
                 {
-
+                    var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
+                    var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
+                }
+                else
+                {
+                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
             }
             return Ok(new { data = "/xac_thuc/" + survey.surveyID, non_survey = true });

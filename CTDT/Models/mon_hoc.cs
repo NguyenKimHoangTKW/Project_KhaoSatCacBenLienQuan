@@ -18,6 +18,7 @@ namespace CTDT.Models
         public mon_hoc()
         {
             this.answer_response = new HashSet<answer_response>();
+            this.nguoi_hoc_dang_co_hoc_phan = new HashSet<nguoi_hoc_dang_co_hoc_phan>();
         }
     
         public int id_mon_hoc { get; set; }
@@ -32,5 +33,7 @@ namespace CTDT.Models
         public virtual ICollection<answer_response> answer_response { get; set; }
         public virtual group_mon_hoc group_mon_hoc { get; set; }
         public virtual hoc_phan hoc_phan { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
     }
 }

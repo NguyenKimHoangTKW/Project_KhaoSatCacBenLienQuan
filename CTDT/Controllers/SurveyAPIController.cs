@@ -25,6 +25,13 @@ namespace CTDT.Controllers
             var get_data = db.survey.Where(x => x.surveyID == Sv.surveyID).FirstOrDefault();
             var js_data = get_data.surveyData;
             var list_thong_tin = new List<dynamic>();
+            bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(get_data.id_loaikhaosat);
+            bool cuu_hoc_vien = new[] { 6 }.Contains(get_data.id_loaikhaosat);
+            bool hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep = new[] { 9 }.Contains(get_data.id_loaikhaosat);
+            bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11, 13, 14 }.Contains(get_data.id_loaikhaosat);
+            bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(get_data.id_loaikhaosat);
+            bool giang_vien = new[] { 3 }.Contains(get_data.id_loaikhaosat);
+            bool can_bo_vien_chuc = new[] { 8 }.Contains(get_data.id_loaikhaosat);
             if (get_data.id_loaikhaosat == 1 || get_data.id_loaikhaosat == 4)
             {
                 if (domainGmail.Equals("student.tdmu.edu.vn"))

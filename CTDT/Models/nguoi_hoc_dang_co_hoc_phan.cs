@@ -15,11 +15,12 @@ namespace CTDT.Models
     public partial class nguoi_hoc_dang_co_hoc_phan
     {
         public int id_nguoi_hoc_by_hoc_phan { get; set; }
-        public int id_hoc_phan { get; set; }
+        public int id_mon_hoc { get; set; }
         public int id_sinh_vien { get; set; }
         public string thang_by_hoc_phan { get; set; }
+        public Nullable<int> da_khao_sat { get; set; }
     
-        public virtual hoc_phan hoc_phan { get; set; }
+        public virtual mon_hoc mon_hoc { get; set; }
         public virtual sinhvien sinhvien { get; set; }
     }
 }

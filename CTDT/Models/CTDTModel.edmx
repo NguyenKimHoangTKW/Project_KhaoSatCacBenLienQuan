@@ -163,9 +163,10 @@
             <PropertyRef Name="id_nguoi_hoc_by_hoc_phan" />
           </Key>
           <Property Name="id_nguoi_hoc_by_hoc_phan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="id_hoc_phan" Type="int" Nullable="false" />
+          <Property Name="id_mon_hoc" Type="int" Nullable="false" />
           <Property Name="id_sinh_vien" Type="int" Nullable="false" />
           <Property Name="thang_by_hoc_phan" Type="nvarchar" MaxLength="20" />
+          <Property Name="da_khao_sat" Type="int" />
         </EntityType>
         <EntityType Name="phan_quyen_chuc_nang_users">
           <Key>
@@ -495,15 +496,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan">
-          <End Role="hoc_phan" Type="Self.hoc_phan" Multiplicity="1" />
+        <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
+          <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="1" />
           <End Role="nguoi_hoc_dang_co_hoc_phan" Type="Self.nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="hoc_phan">
-              <PropertyRef Name="id_hoc_phan" />
+            <Principal Role="mon_hoc">
+              <PropertyRef Name="id_mon_hoc" />
             </Principal>
             <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
-              <PropertyRef Name="id_hoc_phan" />
+              <PropertyRef Name="id_mon_hoc" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -791,8 +792,8 @@
             <End Role="hoc_phan" EntitySet="hoc_phan" />
             <End Role="mon_hoc" EntitySet="mon_hoc" />
           </AssociationSet>
-          <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan">
-            <End Role="hoc_phan" EntitySet="hoc_phan" />
+          <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
             <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
           </AssociationSet>
           <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_sinhvien" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_sinhvien">
@@ -980,10 +981,6 @@
             <End Role="hoc_phan" EntitySet="hoc_phan" />
             <End Role="mon_hoc" EntitySet="mon_hoc" />
           </AssociationSet>
-          <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan" Association="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan">
-            <End Role="hoc_phan" EntitySet="hoc_phan" />
-            <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
-          </AssociationSet>
           <AssociationSet Name="FK_users_khoa" Association="dbSurveyModel.FK_users_khoa">
             <End Role="khoa" EntitySet="khoa" />
             <End Role="users" EntitySet="users" />
@@ -995,6 +992,10 @@
           <AssociationSet Name="FK_sinhvien_lop" Association="dbSurveyModel.FK_sinhvien_lop">
             <End Role="lop" EntitySet="lop" />
             <End Role="sinhvien" EntitySet="sinhvien" />
+          </AssociationSet>
+          <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc" Association="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
+            <End Role="mon_hoc" EntitySet="mon_hoc" />
+            <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
           </AssociationSet>
           <AssociationSet Name="FK_survey_NamHoc" Association="dbSurveyModel.FK_survey_NamHoc">
             <End Role="NamHoc" EntitySet="NamHoc" />
@@ -1159,7 +1160,6 @@
           <Property Name="ngay_tao" Type="Int32" Nullable="false" />
           <Property Name="ngay_cap_nhat" Type="Int32" Nullable="false" />
           <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_hoc_phan" FromRole="hoc_phan" ToRole="mon_hoc" />
-          <NavigationProperty Name="nguoi_hoc_dang_co_hoc_phan" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan" FromRole="hoc_phan" ToRole="nguoi_hoc_dang_co_hoc_phan" />
         </EntityType>
         <EntityType Name="khoa">
           <Key>
@@ -1210,6 +1210,7 @@
           <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_mon_hoc" FromRole="mon_hoc" ToRole="answer_response" />
           <NavigationProperty Name="group_mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_group_mon_hoc" FromRole="mon_hoc" ToRole="group_mon_hoc" />
           <NavigationProperty Name="hoc_phan" Relationship="dbSurveyModel.FK_mon_hoc_hoc_phan" FromRole="mon_hoc" ToRole="hoc_phan" />
+          <NavigationProperty Name="nguoi_hoc_dang_co_hoc_phan" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc" FromRole="mon_hoc" ToRole="nguoi_hoc_dang_co_hoc_phan" />
         </EntityType>
         <EntityType Name="NamHoc">
           <Key>
@@ -1228,10 +1229,11 @@
             <PropertyRef Name="id_nguoi_hoc_by_hoc_phan" />
           </Key>
           <Property Name="id_nguoi_hoc_by_hoc_phan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_hoc_phan" Type="Int32" Nullable="false" />
+          <Property Name="id_mon_hoc" Type="Int32" Nullable="false" />
           <Property Name="id_sinh_vien" Type="Int32" Nullable="false" />
           <Property Name="thang_by_hoc_phan" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="hoc_phan" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan" FromRole="nguoi_hoc_dang_co_hoc_phan" ToRole="hoc_phan" />
+          <Property Name="da_khao_sat" Type="Int32" />
+          <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc" FromRole="nguoi_hoc_dang_co_hoc_phan" ToRole="mon_hoc" />
           <NavigationProperty Name="sinhvien" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_sinhvien" FromRole="nguoi_hoc_dang_co_hoc_phan" ToRole="sinhvien" />
         </EntityType>
         <EntityType Name="phan_quyen_chuc_nang_users">
@@ -1647,18 +1649,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_hoc_phan">
-          <End Type="dbSurveyModel.hoc_phan" Role="hoc_phan" Multiplicity="1" />
-          <End Type="dbSurveyModel.nguoi_hoc_dang_co_hoc_phan" Role="nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hoc_phan">
-              <PropertyRef Name="id_hoc_phan" />
-            </Principal>
-            <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
-              <PropertyRef Name="id_hoc_phan" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_users_khoa">
           <End Type="dbSurveyModel.khoa" Role="khoa" Multiplicity="0..1" />
           <End Type="dbSurveyModel.users" Role="users" Multiplicity="*" />
@@ -1692,6 +1682,18 @@
             </Principal>
             <Dependent Role="sinhvien">
               <PropertyRef Name="id_lop" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
+          <End Type="dbSurveyModel.mon_hoc" Role="mon_hoc" Multiplicity="1" />
+          <End Type="dbSurveyModel.nguoi_hoc_dang_co_hoc_phan" Role="nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mon_hoc">
+              <PropertyRef Name="id_mon_hoc" />
+            </Principal>
+            <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
+              <PropertyRef Name="id_mon_hoc" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1958,9 +1960,10 @@
           <EntitySetMapping Name="nguoi_hoc_dang_co_hoc_phan">
             <EntityTypeMapping TypeName="dbSurveyModel.nguoi_hoc_dang_co_hoc_phan">
               <MappingFragment StoreEntitySet="nguoi_hoc_dang_co_hoc_phan">
+                <ScalarProperty Name="da_khao_sat" ColumnName="da_khao_sat" />
                 <ScalarProperty Name="thang_by_hoc_phan" ColumnName="thang_by_hoc_phan" />
                 <ScalarProperty Name="id_sinh_vien" ColumnName="id_sinh_vien" />
-                <ScalarProperty Name="id_hoc_phan" ColumnName="id_hoc_phan" />
+                <ScalarProperty Name="id_mon_hoc" ColumnName="id_mon_hoc" />
                 <ScalarProperty Name="id_nguoi_hoc_by_hoc_phan" ColumnName="id_nguoi_hoc_by_hoc_phan" />
               </MappingFragment>
             </EntityTypeMapping>
