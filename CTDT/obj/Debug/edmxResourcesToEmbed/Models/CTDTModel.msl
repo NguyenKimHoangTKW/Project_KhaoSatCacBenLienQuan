@@ -76,6 +76,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="group_loaikhaosat">
+      <EntityTypeMapping TypeName="dbSurveyModel.group_loaikhaosat">
+        <MappingFragment StoreEntitySet="group_loaikhaosat">
+          <ScalarProperty Name="name_gr_loaikhaosat" ColumnName="name_gr_loaikhaosat" />
+          <ScalarProperty Name="id_gr_loaikhaosat" ColumnName="id_gr_loaikhaosat" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="group_mon_hoc">
       <EntityTypeMapping TypeName="dbSurveyModel.group_mon_hoc">
         <MappingFragment StoreEntitySet="group_mon_hoc">
@@ -130,6 +138,7 @@
         <MappingFragment StoreEntitySet="LoaiKhaoSat">
           <ScalarProperty Name="TimeUpdate" ColumnName="TimeUpdate" />
           <ScalarProperty Name="TimeMake" ColumnName="TimeMake" />
+          <ScalarProperty Name="id_gr_loaikhaosat" ColumnName="id_gr_loaikhaosat" />
           <ScalarProperty Name="name_loaikhaosat" ColumnName="name_loaikhaosat" />
           <ScalarProperty Name="id_loaikhaosat" ColumnName="id_loaikhaosat" />
         </MappingFragment>

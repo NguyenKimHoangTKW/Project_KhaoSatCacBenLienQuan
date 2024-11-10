@@ -74,6 +74,13 @@
           <Property Name="ma_donvi" Type="nvarchar" MaxLength="10" />
           <Property Name="name_donvi" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="group_loaikhaosat">
+          <Key>
+            <PropertyRef Name="id_gr_loaikhaosat" />
+          </Key>
+          <Property Name="id_gr_loaikhaosat" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_gr_loaikhaosat" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="group_mon_hoc">
           <Key>
             <PropertyRef Name="id_group_mh" />
@@ -124,6 +131,7 @@
           </Key>
           <Property Name="id_loaikhaosat" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name_loaikhaosat" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_gr_loaikhaosat" Type="int" />
           <Property Name="TimeMake" Type="int" />
           <Property Name="TimeUpdate" Type="int" />
         </EntityType>
@@ -460,6 +468,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LoaiKhaoSat_group_loaikhaosat">
+          <End Role="group_loaikhaosat" Type="Self.group_loaikhaosat" Multiplicity="0..1" />
+          <End Role="LoaiKhaoSat" Type="Self.LoaiKhaoSat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group_loaikhaosat">
+              <PropertyRef Name="id_gr_loaikhaosat" />
+            </Principal>
+            <Dependent Role="LoaiKhaoSat">
+              <PropertyRef Name="id_gr_loaikhaosat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_lop_ctdt">
           <End Role="ctdt" Type="Self.ctdt" Multiplicity="1" />
           <End Role="lop" Type="Self.lop" Multiplicity="*" />
@@ -699,6 +719,7 @@
           <EntitySet Name="ChucVu" EntityType="Self.ChucVu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ctdt" EntityType="Self.ctdt" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DonVi" EntityType="Self.DonVi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="group_loaikhaosat" EntityType="Self.group_loaikhaosat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="group_mon_hoc" EntityType="Self.group_mon_hoc" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hedaotao" EntityType="Self.hedaotao" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="hoc_ky" EntityType="Self.hoc_ky" Schema="dbo" store:Type="Tables" />
@@ -779,6 +800,10 @@
           <AssociationSet Name="FK_ctdt_khoa" Association="Self.FK_ctdt_khoa">
             <End Role="khoa" EntitySet="khoa" />
             <End Role="ctdt" EntitySet="ctdt" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoaiKhaoSat_group_loaikhaosat" Association="Self.FK_LoaiKhaoSat_group_loaikhaosat">
+            <End Role="group_loaikhaosat" EntitySet="group_loaikhaosat" />
+            <End Role="LoaiKhaoSat" EntitySet="LoaiKhaoSat" />
           </AssociationSet>
           <AssociationSet Name="FK_lop_ctdt" Association="Self.FK_lop_ctdt">
             <End Role="ctdt" EntitySet="ctdt" />
@@ -868,6 +893,7 @@
           <EntitySet Name="ChucVu" EntityType="dbSurveyModel.ChucVu" />
           <EntitySet Name="ctdt" EntityType="dbSurveyModel.ctdt" />
           <EntitySet Name="DonVi" EntityType="dbSurveyModel.DonVi" />
+          <EntitySet Name="group_loaikhaosat" EntityType="dbSurveyModel.group_loaikhaosat" />
           <EntitySet Name="group_mon_hoc" EntityType="dbSurveyModel.group_mon_hoc" />
           <EntitySet Name="hedaotao" EntityType="dbSurveyModel.hedaotao" />
           <EntitySet Name="hoc_ky" EntityType="dbSurveyModel.hoc_ky" />
@@ -968,6 +994,10 @@
           <AssociationSet Name="FK_users_DonVi" Association="dbSurveyModel.FK_users_DonVi">
             <End Role="DonVi" EntitySet="DonVi" />
             <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoaiKhaoSat_group_loaikhaosat" Association="dbSurveyModel.FK_LoaiKhaoSat_group_loaikhaosat">
+            <End Role="group_loaikhaosat" EntitySet="group_loaikhaosat" />
+            <End Role="LoaiKhaoSat" EntitySet="LoaiKhaoSat" />
           </AssociationSet>
           <AssociationSet Name="FK_mon_hoc_group_mon_hoc" Association="dbSurveyModel.FK_mon_hoc_group_mon_hoc">
             <End Role="group_mon_hoc" EntitySet="group_mon_hoc" />
@@ -1122,6 +1152,14 @@
           <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_DonVi" FromRole="DonVi" ToRole="CanBoVienChuc" />
           <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_users_DonVi" FromRole="DonVi" ToRole="users" />
         </EntityType>
+        <EntityType Name="group_loaikhaosat">
+          <Key>
+            <PropertyRef Name="id_gr_loaikhaosat" />
+          </Key>
+          <Property Name="id_gr_loaikhaosat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_gr_loaikhaosat" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LoaiKhaoSat" Relationship="dbSurveyModel.FK_LoaiKhaoSat_group_loaikhaosat" FromRole="group_loaikhaosat" ToRole="LoaiKhaoSat" />
+        </EntityType>
         <EntityType Name="group_mon_hoc">
           <Key>
             <PropertyRef Name="id_group_mh" />
@@ -1179,8 +1217,10 @@
           </Key>
           <Property Name="id_loaikhaosat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name_loaikhaosat" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_gr_loaikhaosat" Type="Int32" />
           <Property Name="TimeMake" Type="Int32" />
           <Property Name="TimeUpdate" Type="Int32" />
+          <NavigationProperty Name="group_loaikhaosat" Relationship="dbSurveyModel.FK_LoaiKhaoSat_group_loaikhaosat" FromRole="LoaiKhaoSat" ToRole="group_loaikhaosat" />
           <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_LoaiKhaoSat" FromRole="LoaiKhaoSat" ToRole="survey" />
         </EntityType>
         <EntityType Name="lop">
@@ -1613,6 +1653,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LoaiKhaoSat_group_loaikhaosat">
+          <End Type="dbSurveyModel.group_loaikhaosat" Role="group_loaikhaosat" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.LoaiKhaoSat" Role="LoaiKhaoSat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="group_loaikhaosat">
+              <PropertyRef Name="id_gr_loaikhaosat" />
+            </Principal>
+            <Dependent Role="LoaiKhaoSat">
+              <PropertyRef Name="id_gr_loaikhaosat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_mon_hoc_group_mon_hoc">
           <End Type="dbSurveyModel.group_mon_hoc" Role="group_mon_hoc" Multiplicity="1" />
           <End Type="dbSurveyModel.mon_hoc" Role="mon_hoc" Multiplicity="*" />
@@ -1864,6 +1916,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="group_loaikhaosat">
+            <EntityTypeMapping TypeName="dbSurveyModel.group_loaikhaosat">
+              <MappingFragment StoreEntitySet="group_loaikhaosat">
+                <ScalarProperty Name="name_gr_loaikhaosat" ColumnName="name_gr_loaikhaosat" />
+                <ScalarProperty Name="id_gr_loaikhaosat" ColumnName="id_gr_loaikhaosat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="group_mon_hoc">
             <EntityTypeMapping TypeName="dbSurveyModel.group_mon_hoc">
               <MappingFragment StoreEntitySet="group_mon_hoc">
@@ -1918,6 +1978,7 @@
               <MappingFragment StoreEntitySet="LoaiKhaoSat">
                 <ScalarProperty Name="TimeUpdate" ColumnName="TimeUpdate" />
                 <ScalarProperty Name="TimeMake" ColumnName="TimeMake" />
+                <ScalarProperty Name="id_gr_loaikhaosat" ColumnName="id_gr_loaikhaosat" />
                 <ScalarProperty Name="name_loaikhaosat" ColumnName="name_loaikhaosat" />
                 <ScalarProperty Name="id_loaikhaosat" ColumnName="id_loaikhaosat" />
               </MappingFragment>

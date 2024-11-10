@@ -7,6 +7,7 @@
     <EntitySet Name="ChucVu" EntityType="dbSurveyModel.ChucVu" />
     <EntitySet Name="ctdt" EntityType="dbSurveyModel.ctdt" />
     <EntitySet Name="DonVi" EntityType="dbSurveyModel.DonVi" />
+    <EntitySet Name="group_loaikhaosat" EntityType="dbSurveyModel.group_loaikhaosat" />
     <EntitySet Name="group_mon_hoc" EntityType="dbSurveyModel.group_mon_hoc" />
     <EntitySet Name="hedaotao" EntityType="dbSurveyModel.hedaotao" />
     <EntitySet Name="hoc_ky" EntityType="dbSurveyModel.hoc_ky" />
@@ -107,6 +108,10 @@
     <AssociationSet Name="FK_users_DonVi" Association="dbSurveyModel.FK_users_DonVi">
       <End Role="DonVi" EntitySet="DonVi" />
       <End Role="users" EntitySet="users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LoaiKhaoSat_group_loaikhaosat" Association="dbSurveyModel.FK_LoaiKhaoSat_group_loaikhaosat">
+      <End Role="group_loaikhaosat" EntitySet="group_loaikhaosat" />
+      <End Role="LoaiKhaoSat" EntitySet="LoaiKhaoSat" />
     </AssociationSet>
     <AssociationSet Name="FK_mon_hoc_group_mon_hoc" Association="dbSurveyModel.FK_mon_hoc_group_mon_hoc">
       <End Role="group_mon_hoc" EntitySet="group_mon_hoc" />
@@ -261,6 +266,14 @@
     <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_DonVi" FromRole="DonVi" ToRole="CanBoVienChuc" />
     <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_users_DonVi" FromRole="DonVi" ToRole="users" />
   </EntityType>
+  <EntityType Name="group_loaikhaosat">
+    <Key>
+      <PropertyRef Name="id_gr_loaikhaosat" />
+    </Key>
+    <Property Name="id_gr_loaikhaosat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name_gr_loaikhaosat" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="LoaiKhaoSat" Relationship="dbSurveyModel.FK_LoaiKhaoSat_group_loaikhaosat" FromRole="group_loaikhaosat" ToRole="LoaiKhaoSat" />
+  </EntityType>
   <EntityType Name="group_mon_hoc">
     <Key>
       <PropertyRef Name="id_group_mh" />
@@ -318,8 +331,10 @@
     </Key>
     <Property Name="id_loaikhaosat" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="name_loaikhaosat" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="id_gr_loaikhaosat" Type="Int32" />
     <Property Name="TimeMake" Type="Int32" />
     <Property Name="TimeUpdate" Type="Int32" />
+    <NavigationProperty Name="group_loaikhaosat" Relationship="dbSurveyModel.FK_LoaiKhaoSat_group_loaikhaosat" FromRole="LoaiKhaoSat" ToRole="group_loaikhaosat" />
     <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_LoaiKhaoSat" FromRole="LoaiKhaoSat" ToRole="survey" />
   </EntityType>
   <EntityType Name="lop">
@@ -749,6 +764,18 @@
       </Principal>
       <Dependent Role="users">
         <PropertyRef Name="id_donvi" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LoaiKhaoSat_group_loaikhaosat">
+    <End Type="dbSurveyModel.group_loaikhaosat" Role="group_loaikhaosat" Multiplicity="0..1" />
+    <End Type="dbSurveyModel.LoaiKhaoSat" Role="LoaiKhaoSat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="group_loaikhaosat">
+        <PropertyRef Name="id_gr_loaikhaosat" />
+      </Principal>
+      <Dependent Role="LoaiKhaoSat">
+        <PropertyRef Name="id_gr_loaikhaosat" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

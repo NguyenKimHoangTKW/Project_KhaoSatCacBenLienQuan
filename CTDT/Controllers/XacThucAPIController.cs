@@ -217,65 +217,82 @@ namespace CTDT.Controllers
             //        return Ok(new { data = url, is_answer = true });
             //    }
             //}
-            return BadRequest("Null");
+            return BadRequest("Không thể gửi yêu cầu");
         }
         private async Task<IHttpActionResult> Is_Non_Answer_Survey(survey survey, string mssv_by_email, string check_mail_student)
         {
-            bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(survey.id_loaikhaosat);
-            bool cuu_hoc_vien = new[] { 6 }.Contains(survey.id_loaikhaosat);
-            bool hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep = new[] { 9 }.Contains(survey.id_loaikhaosat);
-            bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11, 13, 14 }.Contains(survey.id_loaikhaosat);
-            bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(survey.id_loaikhaosat);
-            bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
-            bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
+
+
+
             var url = "";
-            if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep)
+            var check_group_loaikhaosat = await db.LoaiKhaoSat.FirstOrDefaultAsync(x => x.id_loaikhaosat == survey.id_loaikhaosat);
+            // Check phiếu thuộc học viên
+            if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu học viên")
             {
-                ClearSessionData();
+                bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(survey.id_loaikhaosat);
+                bool cuu_hoc_vien = new[] { 6 }.Contains(survey.id_loaikhaosat);
+                bool hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep = new[] { 9 }.Contains(survey.id_loaikhaosat);
+                bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(survey.id_loaikhaosat);
                 if (check_mail_student == "student.tdmu.edu.vn")
                 {
-                    var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
-                    var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
-
-                    if (isEligible != null && isEligible.namtotnghiep == null)
+                    ClearSessionData();
+                    if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep)
                     {
-                        url = "/phieu-khao-sat/" + survey.surveyID;
-                        return Ok(new { data = url, non_survey = true });
+                        var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
+                        var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
+                        if (isEligible != null && isEligible.namtotnghiep == null)
+                        {
+                            url = "/phieu-khao-sat/" + survey.surveyID;
+                            return Ok(new { data = url, non_survey = true });
+                        }
+                        {
+                            return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
+                        }
                     }
+                    else if (hoc_vien_nhap_hoc)
                     {
-                        return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
+                        var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
+                        var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
+                        if (isEligible != null)
+                        {
+                            url = "/phieu-khao-sat/" + survey.surveyID;
+                            return Ok(new { data = url, non_survey = true });
+                        }
+                        else
+                        {
+                            return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
+                        }
                     }
+                    else if (hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
+                    {
+                        var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
+                        var isEligible = await convert_nguoi_hoc(survey.thang_tot_nghiep, sinh_vien.namtotnghiep, mssv_by_email);
+                        if (isEligible != null)
+                        {
+                            url = "/phieu-khao-sat/" + survey.surveyID;
+                            return Ok(new { data = url, non_survey = true });
+                        }
+                        else
+                        {
+                            return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học có quyết định tốt nghiệp " + survey.thang_tot_nghiep });
+                        }
+                    }
+                }
+                else if (cuu_hoc_vien)
+                {
+                    url = "/xac_thuc/" + survey.surveyID;
+                    return Ok(new { data = url, non_survey = true });
                 }
                 else
                 {
                     return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
             }
-            else if (hoc_vien_nhap_hoc)
+            // Check phiếu thuộc giảng viên
+            else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
-                ClearSessionData();
-                if (check_mail_student == "student.tdmu.edu.vn")
-                {
-                    var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
-                    var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
-
-                    if (isEligible != null)
-                    {
-                        url = "/phieu-khao-sat/" + survey.surveyID;
-                        return Ok(new { data = url, non_survey = true });
-                    }
-                    else
-                    {
-                        return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học trong khoảng " + survey.thang_nhap_hoc });
-                    }
-                }
-                else
-                {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
-                }
-            }
-            else if (giang_vien || can_bo_vien_chuc)
-            {
+                bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
+                bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
                 ClearSessionData();
                 if (check_mail_student == "tdmu.edu.vn")
                 {
@@ -294,44 +311,54 @@ namespace CTDT.Controllers
                 {
                     return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
+            }
+            else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
+            {
+                bool doanh_nghiep = new[] { 5 }.Contains(survey.id_loaikhaosat);
+                if (doanh_nghiep)
+                {
+                    url = "/xac_thuc/" + survey.surveyID;
+                    return Ok(new { data = url, non_survey = true });
+                }
+            }
+            else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+            {
+                if (check_mail_student == "student.tdmu.edu.vn")
+                {
+                    bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11 }.Contains(survey.id_loaikhaosat);
+                    bool hoc_vien_co_hoc_phan_tot_nghiep = new[] { 13 }.Contains(survey.id_loaikhaosat);
+                    var check_hoc_vien_co_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan?.FirstOrDefaultAsync(x => x.sinhvien.ma_sv == mssv_by_email && x.thang_by_hoc_phan == survey.hoc_phan);
+                    if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
+                    {
+                        if(check_hoc_vien_co_hoc_phan != null && check_hoc_vien_co_hoc_phan.mon_hoc.hoc_phan.ten_hoc_phan == "Lý thuyết")
+                        {
 
-            }
-            else if (hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
-            {
-                ClearSessionData();
-                if (check_mail_student == "student.tdmu.edu.vn")
-                {
-                    var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
-                    var isEligible = await convert_nguoi_hoc(survey.thang_tot_nghiep, sinh_vien.namtotnghiep, mssv_by_email);
-                    if (isEligible != null)
-                    {
-                        url = "/phieu-khao-sat/" + survey.surveyID;
-                        return Ok(new { data = url, non_survey = true });
+                        }
+                        else
+                        {
+                            return Ok(new { message = "Bạn không tồn tại học phần lý thuyết nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                        }
                     }
-                    else
+                    else if (hoc_vien_co_hoc_phan_tot_nghiep)
                     {
-                        return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho người học nhập học có quyết định tốt nghiệp " + survey.thang_tot_nghiep });
+                        if (check_hoc_vien_co_hoc_phan != null && check_hoc_vien_co_hoc_phan.mon_hoc.hoc_phan.ten_hoc_phan == "Báo cáo tốt nghiệp")
+                        {
+
+                        }
+                        else
+                        {
+                            return Ok(new { message = "Bạn không tồn tại học phần khóa luận tốt nghiệp nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                        }
                     }
                 }
                 else
                 {
                     return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
+                
+                
             }
-            else if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
-            {
-                ClearSessionData();
-                if (check_mail_student == "student.tdmu.edu.vn")
-                {
-                    var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
-                    var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
-                }
-                else
-                {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
-                }
-            }
-            return Ok(new { data = "/xac_thuc/" + survey.surveyID, non_survey = true });
+            return BadRequest("Không thể gửi yêu cầu");
         }
         public async Task<bool> convert_giang_vien(int? idnamhoc)
         {

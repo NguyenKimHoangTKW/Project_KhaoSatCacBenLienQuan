@@ -106,7 +106,11 @@ function check_xac_thuc(id) {
                 window.location.href = url;
             }
             else {
-                alert(res.message);
+                Swal.fire({
+                    title: "Thông báo",
+                    text: res.message,
+                    icon: "warning"
+                });
             }
         }
     });

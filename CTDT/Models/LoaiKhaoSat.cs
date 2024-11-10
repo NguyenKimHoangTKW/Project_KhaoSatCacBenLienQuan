@@ -22,9 +22,11 @@ namespace CTDT.Models
     
         public int id_loaikhaosat { get; set; }
         public string name_loaikhaosat { get; set; }
+        public Nullable<int> id_gr_loaikhaosat { get; set; }
         public Nullable<int> TimeMake { get; set; }
         public Nullable<int> TimeUpdate { get; set; }
     
+        public virtual group_loaikhaosat group_loaikhaosat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<survey> survey { get; set; }
     }

@@ -8,25 +8,26 @@
         <EntityTypeShape EntityType="dbSurveyModel.answer_response" Width="1.5" PointX="3" PointY="7.125" />
         <EntityTypeShape EntityType="dbSurveyModel.CanBoVienChuc" Width="1.5" PointX="3" PointY="1.75" />
         <EntityTypeShape EntityType="dbSurveyModel.chuc_nang_users" Width="1.5" PointX="3.75" PointY="23.875" />
-        <EntityTypeShape EntityType="dbSurveyModel.ChucVu" Width="1.5" PointX="0.75" PointY="24.75" />
-        <EntityTypeShape EntityType="dbSurveyModel.ctdt" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="dbSurveyModel.DonVi" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="dbSurveyModel.group_mon_hoc" Width="1.5" PointX="1.5" PointY="37.375" />
-        <EntityTypeShape EntityType="dbSurveyModel.hedaotao" Width="1.5" PointX="1.5" PointY="21.25" />
+        <EntityTypeShape EntityType="dbSurveyModel.ChucVu" Width="1.5" PointX="0.75" PointY="12.5" />
+        <EntityTypeShape EntityType="dbSurveyModel.ctdt" Width="1.5" PointX="0.75" PointY="15.5" />
+        <EntityTypeShape EntityType="dbSurveyModel.DonVi" Width="1.5" PointX="0.75" PointY="4.625" />
+        <EntityTypeShape EntityType="dbSurveyModel.group_loaikhaosat" Width="1.5" PointX="1.5" PointY="34.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.group_mon_hoc" Width="1.5" PointX="1.5" PointY="54.875" />
+        <EntityTypeShape EntityType="dbSurveyModel.hedaotao" Width="1.5" PointX="1.5" PointY="24" />
         <EntityTypeShape EntityType="dbSurveyModel.hoc_ky" Width="1.5" PointX="0.75" PointY="1.625" />
-        <EntityTypeShape EntityType="dbSurveyModel.hoc_phan" Width="1.5" PointX="1.5" PointY="40" />
-        <EntityTypeShape EntityType="dbSurveyModel.khoa" Width="1.5" PointX="1.5" PointY="18.125" />
-        <EntityTypeShape EntityType="dbSurveyModel.LoaiKhaoSat" Width="1.5" PointX="3.75" PointY="13.5" />
-        <EntityTypeShape EntityType="dbSurveyModel.lop" Width="1.5" PointX="1.5" PointY="48.5" />
-        <EntityTypeShape EntityType="dbSurveyModel.mon_hoc" Width="1.5" PointX="0.75" PointY="33.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.hoc_phan" Width="1.5" PointX="1.5" PointY="52.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.khoa" Width="1.5" PointX="1.5" PointY="20.875" />
+        <EntityTypeShape EntityType="dbSurveyModel.LoaiKhaoSat" Width="1.5" PointX="3.75" PointY="33.625" />
+        <EntityTypeShape EntityType="dbSurveyModel.lop" Width="1.5" PointX="1.5" PointY="43.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.mon_hoc" Width="1.5" PointX="0.75" PointY="48" />
         <EntityTypeShape EntityType="dbSurveyModel.NamHoc" Width="1.5" PointX="0.75" PointY="8.5" />
-        <EntityTypeShape EntityType="dbSurveyModel.nguoi_hoc_dang_co_hoc_phan" Width="1.5" PointX="4" PointY="38.875" />
-        <EntityTypeShape EntityType="dbSurveyModel.phan_quyen_chuc_nang_users" Width="1.5" PointX="6" PointY="29" />
-        <EntityTypeShape EntityType="dbSurveyModel.sinhvien" Width="1.5" PointX="0.75" PointY="42.75" />
+        <EntityTypeShape EntityType="dbSurveyModel.nguoi_hoc_dang_co_hoc_phan" Width="1.5" PointX="4" PointY="43" />
+        <EntityTypeShape EntityType="dbSurveyModel.phan_quyen_chuc_nang_users" Width="1.5" PointX="6" PointY="29.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.sinhvien" Width="1.5" PointX="0.75" PointY="37.375" />
         <EntityTypeShape EntityType="dbSurveyModel.survey" Width="1.5" PointX="6" PointY="6.875" />
         <EntityTypeShape EntityType="dbSurveyModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="dbSurveyModel.thong_ke_theo_yeu_cau" Width="1.5" PointX="8.25" PointY="8.25" />
-        <EntityTypeShape EntityType="dbSurveyModel.typeusers" Width="1.5" PointX="1.5" PointY="29.125" />
+        <EntityTypeShape EntityType="dbSurveyModel.typeusers" Width="1.5" PointX="1.5" PointY="29.25" />
         <EntityTypeShape EntityType="dbSurveyModel.users" Width="1.5" PointX="3.75" PointY="27.25" />
         <AssociationConnector Association="dbSurveyModel.FK_answer_response_CanBoVienChuc" />
         <AssociationConnector Association="dbSurveyModel.FK_answer_response_ctdt" />
@@ -49,6 +50,7 @@
         <AssociationConnector Association="dbSurveyModel.FK_thong_ke_theo_yeu_cau_ctdt" />
         <AssociationConnector Association="dbSurveyModel.FK_users_ctdt" />
         <AssociationConnector Association="dbSurveyModel.FK_users_DonVi" />
+        <AssociationConnector Association="dbSurveyModel.FK_LoaiKhaoSat_group_loaikhaosat" />
         <AssociationConnector Association="dbSurveyModel.FK_mon_hoc_group_mon_hoc" />
         <AssociationConnector Association="dbSurveyModel.FK_survey_hedaotao" />
         <AssociationConnector Association="dbSurveyModel.FK_mon_hoc_hoc_phan" />

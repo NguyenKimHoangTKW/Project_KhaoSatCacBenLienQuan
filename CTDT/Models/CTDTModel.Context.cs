@@ -31,6 +31,7 @@ namespace CTDT.Models
         public virtual DbSet<ChucVu> ChucVu { get; set; }
         public virtual DbSet<ctdt> ctdt { get; set; }
         public virtual DbSet<DonVi> DonVi { get; set; }
+        public virtual DbSet<group_loaikhaosat> group_loaikhaosat { get; set; }
         public virtual DbSet<group_mon_hoc> group_mon_hoc { get; set; }
         public virtual DbSet<hedaotao> hedaotao { get; set; }
         public virtual DbSet<hoc_ky> hoc_ky { get; set; }

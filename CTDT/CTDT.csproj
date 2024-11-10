@@ -383,6 +383,9 @@
     <Compile Include="Models\FindAnswerSurvey.cs" />
     <Compile Include="Models\FindPKSisSurvey.cs" />
     <Compile Include="Models\GetNguoiHoc.cs" />
+    <Compile Include="Models\group_loaikhaosat.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\group_mon_hoc.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
