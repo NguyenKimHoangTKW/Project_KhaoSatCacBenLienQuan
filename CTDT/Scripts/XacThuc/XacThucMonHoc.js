@@ -39,14 +39,13 @@ async function load_mon_hoc() {
 }
 $('#show-data').on('click', 'tr', function () {
     const items = $(this).data('items');
-   
     var maphieu = items.ma_phieu;
     var mamonhoc = items.id_mon_hoc;
     var get_data = {
         Id: maphieu ,
         id_nguoi_hoc_by_mon_hoc: mamonhoc
     };
-
+    localStorage.setItem("xacthucstorage", JSON.stringify(get_data));
     $.ajax({
         url: '/api/save_xac_thuc',
         type: 'POST',

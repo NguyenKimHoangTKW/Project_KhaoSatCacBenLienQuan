@@ -21,17 +21,24 @@ $(document).ready(function () {
 
 function load_phieu_khao_sat() {
     var get_info = [];
-    var id = $('#id').val();
+    let load_data = localStorage.getItem("xacthucstorage");
+    load_data = load_data ? JSON.parse(load_data) : {};
     let TenPhieu = '';
     let get_tempData = '';
     $.ajax({
         url: '/api/load_form_phieu_khao_sat',
         type: 'POST',
-        data: { surveyID: id },
+        data: {
+            Id: load_data.Id,
+            id_nguoi_hoc_by_mon_hoc: load_data.id_nguoi_hoc_by_mon_hoc,
+            ctdt: load_data.ctdt,
+            nguoi_hoc: load_data.nguoi_hoc
+        },
         success: function (res) {
             let html = '';
             let body = $('#load-title');
             body.empty();
+            test(res.info)
 
             if (res.data) {
                 surveyData = JSON.parse(res.data);
@@ -309,4 +316,8 @@ function load_phieu_khao_sat() {
             alert("Có lỗi xảy ra khi tải dữ liệu.");
         }
     });
+}
+
+function test(items) {
+    console.log(items[0].ten_nguoi_hoc)
 }

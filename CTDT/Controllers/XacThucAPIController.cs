@@ -177,12 +177,7 @@ namespace CTDT.Controllers
                 return BadRequest("Survey not found");
             }
         }
-        public void ClearSessionData()
-        {
-            HttpContext.Current.Session.Remove("nguoi_hoc");
-            HttpContext.Current.Session.Remove("ctdt");
-            HttpContext.Current.Session.Remove("don_vi");
-        }
+
         [HttpPost]
         [Route("api/check_xac_thuc")]
         public async Task<IHttpActionResult> check_xac_thuc(survey Sv)
@@ -220,7 +215,6 @@ namespace CTDT.Controllers
                 bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(survey.id_loaikhaosat);
                 if (check_mail_student == "student.tdmu.edu.vn")
                 {
-                    ClearSessionData();
                     if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep || hoc_vien_nhap_hoc || hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
                     {
                         url = "/phieu-khao-sat/dap-an/" + answer_survey.id + "/" + answer_survey.surveyID;
@@ -244,7 +238,6 @@ namespace CTDT.Controllers
             {
                 bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
                 bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
-                ClearSessionData();
                 if (check_mail_student == "tdmu.edu.vn")
                 {
                     url = "/phieu-khao-sat/dap-an/" + answer_survey.id + "/" + answer_survey.surveyID;
@@ -293,7 +286,6 @@ namespace CTDT.Controllers
                 bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(survey.id_loaikhaosat);
                 if (check_mail_student == "student.tdmu.edu.vn")
                 {
-                    ClearSessionData();
                     if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep)
                     {
                         var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
@@ -353,7 +345,6 @@ namespace CTDT.Controllers
             {
                 bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
                 bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
-                ClearSessionData();
                 if (check_mail_student == "tdmu.edu.vn")
                 {
                     bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
@@ -472,14 +463,6 @@ namespace CTDT.Controllers
         [Route("api/save_xac_thuc")]
         public IHttpActionResult save_xac_thuc(SaveXacThuc saveXacThuc)
         {
-            // Xóa session cũ
-            HttpContext.Current.Session.Remove("nguoi_hoc");
-            HttpContext.Current.Session.Remove("ctdt");
-            HttpContext.Current.Session.Remove("don_vi");
-            HttpContext.Current.Session["nguoi_hoc"] = saveXacThuc?.nguoi_hoc;
-            HttpContext.Current.Session["ctdt"] = saveXacThuc?.ctdt;
-            HttpContext.Current.Session["don_vi"] = saveXacThuc?.donvi;
-
             // Lấy thông tin khảo sát
             var survey = db.survey.FirstOrDefault(x => x.surveyID == saveXacThuc.Id);
             if (survey == null)

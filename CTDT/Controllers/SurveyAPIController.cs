@@ -23,118 +23,127 @@ namespace CTDT.Controllers
         }
         [HttpPost]
         [Route("api/load_form_phieu_khao_sat")]
-        public async Task<IHttpActionResult> load_phieu_khao_sat(survey Sv)
+        public async Task<IHttpActionResult> load_phieu_khao_sat(SaveXacThuc sxt)
         {
             var domainGmail = user.email.Split('@')[1];
             var ms_nguoi_hoc = user.email.Split('@')[0];
-            var get_data = await db.survey.Where(x => x.surveyID == Sv.surveyID).FirstOrDefaultAsync();
+            var get_data = await db.survey.FirstOrDefaultAsync(x => x.surveyID == sxt.Id);
             var js_data = get_data.surveyData;
             var list_thong_tin = new List<dynamic>();
-            if (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu học viên")
+            switch (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
             {
-                if (domainGmail.Equals("student.tdmu.edu.vn"))
-                {
-                    var id_nguoi_hoc = (int?)HttpContext.Current.Session["nguoi_hoc"];
-                    var tach_chuoi_nam_tot_nghiep = get_data.thang_tot_nghiep != null ? get_data.thang_tot_nghiep.Split('-') : get_data.thang_nhap_hoc.Split('-');
-                    string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(2, '0');
-                    string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(2, '0');
-                    DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    var nguoi_hoc = (await db.sinhvien.Where(x => id_nguoi_hoc != null ? x.id_sv == id_nguoi_hoc : x.ma_sv == ms_nguoi_hoc).ToListAsync())
-                            .Where(sv =>
-                            {
-                                var formattedNamTotNghiep = get_data.thang_tot_nghiep != null ? sv.namtotnghiep.Split('/') : sv.namnhaphoc.Split('/');
-                                if (formattedNamTotNghiep.Length == 2)
-                                {
-                                    string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
-
-                                    return DateTime.TryParseExact(
-                                               formattedDate,
-                                               "dd/MM/yyyy",
-                                               CultureInfo.InvariantCulture,
-                                               DateTimeStyles.None,
-                                               out DateTime namtotnghiepDate) &&
-                                           namtotnghiepDate >= startDate &&
-                                           namtotnghiepDate <= endDate;
-                                }
-                                return false;
-                            })
-                            .Select(x => new
-                            {
-                                email = user.email,
-                                ma_so_nguoi_hoc = x.ma_sv,
-                                ten_nguoi_hoc = x.hovaten,
-                                khoa = x.lop.ctdt.khoa.ten_khoa,
-                                nganh_dao_tao = x.lop.ctdt.ten_ctdt,
-                            })
-                            .FirstOrDefault(x => x.ma_so_nguoi_hoc == ms_nguoi_hoc);
-                    list_thong_tin.Add(nguoi_hoc);
-                    return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
-                }
-                else
-                {
-                    return Ok(new { is_nguoi_hoc = false, message = "Người dùng không có quyền khảo sát phiếu khảo sát này" });
-                }
-            }
-            else if (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
-            {
-                var can_bo_vien_chuc_obj = db.CanBoVienChuc.FirstOrDefault(x => x.Email == user.email);
-                var append_list_cbvc = new List<dynamic>();
-                if (can_bo_vien_chuc_obj != null)
-                {
-                    var id_don_vi = HttpContext.Current.Session["don_vi"] as int?;
-                    var id_ctdt = HttpContext.Current.Session["ctdt"] as int?;
-                    var don_vi = can_bo_vien_chuc_obj.DonVi != null ? can_bo_vien_chuc_obj.DonVi.name_donvi : null;
-                    var chuc_vu = can_bo_vien_chuc_obj.ChucVu != null ? can_bo_vien_chuc_obj.ChucVu.name_chucvu : null;
-                    var ctdt = can_bo_vien_chuc_obj.ctdt != null ? can_bo_vien_chuc_obj.ctdt.ten_ctdt : null;
-                    if (id_don_vi != null || id_ctdt != null)
+                case "Phiếu học viên":
+                    if (domainGmail.Equals("student.tdmu.edu.vn"))
                     {
-                        var don_vi_select = db.DonVi.FirstOrDefault(x => x.id_donvi == id_don_vi);
-                        var ctdt_select = db.ctdt.FirstOrDefault(x => x.id_ctdt == id_ctdt);
-                        append_list_cbvc.Add(new
-                        {
-                            email = user.email,
-                            ten_cbvc = can_bo_vien_chuc_obj.TenCBVC,
-                            don_vi = don_vi_select != null ? don_vi_select.name_donvi : null,
-                            chuc_vu = can_bo_vien_chuc_obj.ChucVu != null ? can_bo_vien_chuc_obj.ChucVu.name_chucvu : null,
-                            ctdt = ctdt_select != null ? ctdt_select.ten_ctdt : null,
-                        });
+                        var tach_chuoi_nam_tot_nghiep = get_data.thang_tot_nghiep != null ? get_data.thang_tot_nghiep.Split('-') : get_data.thang_nhap_hoc.Split('-');
+                        string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(2, '0');
+                        string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(2, '0');
+                        DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        var nguoi_hoc = (await db.sinhvien.Where(x => sxt.nguoi_hoc != null ? x.id_sv == sxt.nguoi_hoc : x.ma_sv == ms_nguoi_hoc).ToListAsync())
+                                .Where(sv =>
+                                {
+                                    var formattedNamTotNghiep = get_data.thang_tot_nghiep != null ? sv.namtotnghiep.Split('/') : sv.namnhaphoc.Split('/');
+                                    if (formattedNamTotNghiep.Length == 2)
+                                    {
+                                        string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
+
+                                        return DateTime.TryParseExact(
+                                                   formattedDate,
+                                                   "dd/MM/yyyy",
+                                                   CultureInfo.InvariantCulture,
+                                                   DateTimeStyles.None,
+                                                   out DateTime namtotnghiepDate) &&
+                                               namtotnghiepDate >= startDate &&
+                                               namtotnghiepDate <= endDate;
+                                    }
+                                    return false;
+                                })
+                                .Select(x => new
+                                {
+                                    email = user.email,
+                                    ma_so_nguoi_hoc = x.ma_sv,
+                                    ten_nguoi_hoc = x.hovaten,
+                                    khoa = x.lop.ctdt.khoa.ten_khoa,
+                                    nganh_dao_tao = x.lop.ctdt.ten_ctdt,
+                                })
+                                .FirstOrDefault(x => x.ma_so_nguoi_hoc == ms_nguoi_hoc);
+                        list_thong_tin.Add(nguoi_hoc);
+                        return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
                     }
                     else
                     {
-                        append_list_cbvc.Add(new
-                        {
-                            email = user.email,
-                            ten_cbvc = can_bo_vien_chuc_obj.TenCBVC,
-                            don_vi = don_vi,
-                            chuc_vu = chuc_vu,
-                            ctdt = ctdt,
-                        });
+                        return Ok(new { is_nguoi_hoc = false, message = "Người dùng không có quyền khảo sát phiếu khảo sát này" });
                     }
-                    return Ok(new { data = js_data, info = append_list_cbvc, is_cbvc = true });
-                }
-                else
-                {
-                    return Ok(new { is_cbvc = false, message = "Người dùng không có quyền khảo sát phiếu khảo sát này" });
-                }
 
+                case "Phiếu giảng viên":
+                    var can_bo_vien_chuc_obj = db.CanBoVienChuc.FirstOrDefault(x => x.Email == user.email);
+                    var append_list_cbvc = new List<dynamic>();
+                    if (can_bo_vien_chuc_obj != null)
+                    {
+
+                        var don_vi = can_bo_vien_chuc_obj.DonVi != null ? can_bo_vien_chuc_obj.DonVi.name_donvi : null;
+                        var chuc_vu = can_bo_vien_chuc_obj.ChucVu != null ? can_bo_vien_chuc_obj.ChucVu.name_chucvu : null;
+                        var ctdt_giang_vien = can_bo_vien_chuc_obj.ctdt != null ? can_bo_vien_chuc_obj.ctdt.ten_ctdt : null;
+
+                        if (sxt.donvi != null || sxt.ctdt != null)
+                        {
+                            var don_vi_select = db.DonVi.FirstOrDefault(x => x.id_donvi == sxt.donvi);
+                            var ctdt_select = db.ctdt.FirstOrDefault(x => x.id_ctdt == sxt.ctdt);
+                            append_list_cbvc.Add(new
+                            {
+                                email = user.email,
+                                ten_cbvc = can_bo_vien_chuc_obj.TenCBVC,
+                                don_vi = don_vi_select != null ? don_vi_select.name_donvi : null,
+                                chuc_vu = can_bo_vien_chuc_obj.ChucVu != null ? can_bo_vien_chuc_obj.ChucVu.name_chucvu : null,
+                                ctdt = ctdt_select != null ? ctdt_select.ten_ctdt : null,
+                            });
+                        }
+                        else
+                        {
+                            append_list_cbvc.Add(new
+                            {
+                                email = user.email,
+                                ten_cbvc = can_bo_vien_chuc_obj.TenCBVC,
+                                don_vi = don_vi,
+                                chuc_vu = chuc_vu,
+                                ctdt = ctdt_giang_vien,
+                            });
+                        }
+                        return Ok(new { data = js_data, info = append_list_cbvc, is_cbvc = true });
+                    }
+                    else
+                    {
+                        return Ok(new { is_cbvc = false, message = "Người dùng không có quyền khảo sát phiếu khảo sát này" });
+                    }
+
+                case "Phiếu doanh nghiệp":
+                    var ctdt_doanh_nghiep = db.ctdt.FirstOrDefault(x => x.id_ctdt == sxt.ctdt);
+                    var get_thong_tin_doanh_nghiep = new
+                    {
+                        email = user.email,
+                        ctdt = ctdt_doanh_nghiep.ten_ctdt,
+                    };
+                    list_thong_tin.Add(get_thong_tin_doanh_nghiep);
+                    return Ok(new { data = js_data, info = list_thong_tin, is_doanh_nghiep = true });
+
+                case "Phiếu người học có học phần":
+                    var check_mon_hoc = db.nguoi_hoc_dang_co_hoc_phan.FirstOrDefault(x => x.id_nguoi_hoc_by_hoc_phan == sxt.id_nguoi_hoc_by_mon_hoc);
+                    var get_thong_tin_mon_hoc = new
+                    {
+                        email = user.email,
+                        ten_giang_vien = check_mon_hoc.CanBoVienChuc.TenCBVC,
+                        ma_nguoi_hoc = check_mon_hoc.sinhvien.ma_sv,
+                        ten_nguoi_hoc = check_mon_hoc.sinhvien.hovaten,
+                        mon_hoc = check_mon_hoc.mon_hoc.ten_mon_hoc,
+                        hoc_phan = check_mon_hoc.mon_hoc.hoc_phan.ten_hoc_phan,
+
+                    };
+                    list_thong_tin.Add(get_thong_tin_mon_hoc);
+                    return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
             }
-            else if (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
-            {
-                var id_ctdt = (int)HttpContext.Current.Session["ctdt"];
-                var ctdt = db.ctdt.Where(x => x.id_ctdt == id_ctdt).FirstOrDefault();
-                var get_thong_tin_doanh_nghiep = new
-                {
-                    email = user.email,
-                    ctdt = ctdt.ten_ctdt,
-                };
-                list_thong_tin.Add(get_thong_tin_doanh_nghiep);
-                return Ok(new { data = js_data, info = list_thong_tin, is_doanh_nghiep = true });
-            }
-            else
-            {
-                return Ok(new { message = "Vui lòng xác thực để thực hiện khảo sát" });
-            }
+
+            return Ok(new { message = "Vui lòng xác thực để thực hiện khảo sát" });
         }
         [HttpPost]
         [Route("api/save_form_khao_sat")]

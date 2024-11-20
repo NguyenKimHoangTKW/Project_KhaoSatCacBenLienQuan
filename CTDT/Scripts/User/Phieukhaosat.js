@@ -86,7 +86,7 @@ async function check_xac_thuc(id) {
             type: 'POST',
             data: { surveyID: id },
         });
-
+        localStorage.setItem("xacthucstorage", JSON.stringify({ Id: id }));
         let url = res.data;
 
         if (res.is_answer) {
