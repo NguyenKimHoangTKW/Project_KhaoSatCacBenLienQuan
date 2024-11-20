@@ -18,6 +18,7 @@ namespace CTDT.Models
         public CanBoVienChuc()
         {
             this.answer_response = new HashSet<answer_response>();
+            this.nguoi_hoc_dang_co_hoc_phan = new HashSet<nguoi_hoc_dang_co_hoc_phan>();
         }
     
         public int id_CBVC { get; set; }
@@ -37,5 +38,7 @@ namespace CTDT.Models
         public virtual ctdt ctdt { get; set; }
         public virtual DonVi DonVi { get; set; }
         public virtual NamHoc NamHoc { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
     }
 }

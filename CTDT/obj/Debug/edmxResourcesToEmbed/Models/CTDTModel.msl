@@ -183,6 +183,7 @@
         <MappingFragment StoreEntitySet="nguoi_hoc_dang_co_hoc_phan">
           <ScalarProperty Name="da_khao_sat" ColumnName="da_khao_sat" />
           <ScalarProperty Name="thang_by_hoc_phan" ColumnName="thang_by_hoc_phan" />
+          <ScalarProperty Name="id_giang_vvien" ColumnName="id_giang_vvien" />
           <ScalarProperty Name="id_sinh_vien" ColumnName="id_sinh_vien" />
           <ScalarProperty Name="id_mon_hoc" ColumnName="id_mon_hoc" />
           <ScalarProperty Name="id_nguoi_hoc_by_hoc_phan" ColumnName="id_nguoi_hoc_by_hoc_phan" />

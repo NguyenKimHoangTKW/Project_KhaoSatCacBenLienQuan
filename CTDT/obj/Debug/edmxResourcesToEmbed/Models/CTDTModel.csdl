@@ -77,6 +77,10 @@
       <End Role="NamHoc" EntitySet="NamHoc" />
       <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
     </AssociationSet>
+    <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc" Association="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc">
+      <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+      <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
+    </AssociationSet>
     <AssociationSet Name="FK_chuc_nang_users_typeusers" Association="dbSurveyModel.FK_chuc_nang_users_typeusers">
       <End Role="typeusers" EntitySet="typeusers" />
       <End Role="chuc_nang_users" EntitySet="chuc_nang_users" />
@@ -215,6 +219,7 @@
     <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_CanBoVienChuc_ctdt" FromRole="CanBoVienChuc" ToRole="ctdt" />
     <NavigationProperty Name="DonVi" Relationship="dbSurveyModel.FK_CanBoVienChuc_DonVi" FromRole="CanBoVienChuc" ToRole="DonVi" />
     <NavigationProperty Name="NamHoc" Relationship="dbSurveyModel.FK_CanBoVienChuc_NamHoc" FromRole="CanBoVienChuc" ToRole="NamHoc" />
+    <NavigationProperty Name="nguoi_hoc_dang_co_hoc_phan" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc" FromRole="CanBoVienChuc" ToRole="nguoi_hoc_dang_co_hoc_phan" />
   </EntityType>
   <EntityType Name="chuc_nang_users">
     <Key>
@@ -385,8 +390,10 @@
     <Property Name="id_nguoi_hoc_by_hoc_phan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="id_mon_hoc" Type="Int32" Nullable="false" />
     <Property Name="id_sinh_vien" Type="Int32" Nullable="false" />
+    <Property Name="id_giang_vvien" Type="Int32" />
     <Property Name="thang_by_hoc_phan" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="da_khao_sat" Type="Int32" />
+    <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc" FromRole="nguoi_hoc_dang_co_hoc_phan" ToRole="CanBoVienChuc" />
     <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc" FromRole="nguoi_hoc_dang_co_hoc_phan" ToRole="mon_hoc" />
     <NavigationProperty Name="sinhvien" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_sinhvien" FromRole="nguoi_hoc_dang_co_hoc_phan" ToRole="sinhvien" />
   </EntityType>
@@ -666,6 +673,18 @@
       </Principal>
       <Dependent Role="CanBoVienChuc">
         <PropertyRef Name="id_namhoc" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc">
+    <End Type="dbSurveyModel.CanBoVienChuc" Role="CanBoVienChuc" Multiplicity="0..1" />
+    <End Type="dbSurveyModel.nguoi_hoc_dang_co_hoc_phan" Role="nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CanBoVienChuc">
+        <PropertyRef Name="id_CBVC" />
+      </Principal>
+      <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
+        <PropertyRef Name="id_giang_vvien" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

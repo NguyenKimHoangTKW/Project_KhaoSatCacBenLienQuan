@@ -1370,6 +1370,7 @@
     <Content Include="Scripts\User\Survey\PhieuKhaoSat\LoadPhieuKhaoSat.js" />
     <Content Include="Scripts\XacThuc\save_xac_thuc.js" />
     <Content Include="Scripts\XacThuc\XacThuc.js" />
+    <Content Include="Scripts\XacThuc\XacThucMonHoc.js" />
     <Content Include="Style\assets\css\ajax-loader.gif" />
     <Content Include="Style\assets\css\animate.css" />
     <Content Include="Style\assets\css\aos.css" />
@@ -1741,6 +1742,7 @@
     <Content Include="Views\InterfaceClient\Survey.cshtml" />
     <Content Include="Views\InterfaceClient\AnswerPKS.cshtml" />
     <Content Include="Views\InterfaceClient\SurveyedForm.cshtml" />
+    <Content Include="Views\InterfaceClient\Xac_thuc_mon_hoc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

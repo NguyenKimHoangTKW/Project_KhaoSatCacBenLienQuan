@@ -13,6 +13,8 @@ namespace CTDT
     {
         public static void Register(HttpConfiguration config)
         {
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
                 name: "AreaApi",

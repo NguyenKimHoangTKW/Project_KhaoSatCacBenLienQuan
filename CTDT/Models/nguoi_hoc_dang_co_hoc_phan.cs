@@ -17,9 +17,11 @@ namespace CTDT.Models
         public int id_nguoi_hoc_by_hoc_phan { get; set; }
         public int id_mon_hoc { get; set; }
         public int id_sinh_vien { get; set; }
+        public Nullable<int> id_giang_vvien { get; set; }
         public string thang_by_hoc_phan { get; set; }
         public Nullable<int> da_khao_sat { get; set; }
     
+        public virtual CanBoVienChuc CanBoVienChuc { get; set; }
         public virtual mon_hoc mon_hoc { get; set; }
         public virtual sinhvien sinhvien { get; set; }
     }

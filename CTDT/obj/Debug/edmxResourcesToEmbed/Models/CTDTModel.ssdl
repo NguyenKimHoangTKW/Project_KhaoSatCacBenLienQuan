@@ -168,6 +168,7 @@
     <Property Name="id_nguoi_hoc_by_hoc_phan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="id_mon_hoc" Type="int" Nullable="false" />
     <Property Name="id_sinh_vien" Type="int" Nullable="false" />
+    <Property Name="id_giang_vvien" Type="int" />
     <Property Name="thang_by_hoc_phan" Type="nvarchar" MaxLength="20" />
     <Property Name="da_khao_sat" Type="int" />
   </EntityType>
@@ -511,6 +512,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc">
+    <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="0..1" />
+    <End Role="nguoi_hoc_dang_co_hoc_phan" Type="Self.nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CanBoVienChuc">
+        <PropertyRef Name="id_CBVC" />
+      </Principal>
+      <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
+        <PropertyRef Name="id_giang_vvien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
     <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="1" />
     <End Role="nguoi_hoc_dang_co_hoc_phan" Type="Self.nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
@@ -811,6 +824,10 @@
     <AssociationSet Name="FK_mon_hoc_hoc_phan" Association="Self.FK_mon_hoc_hoc_phan">
       <End Role="hoc_phan" EntitySet="hoc_phan" />
       <End Role="mon_hoc" EntitySet="mon_hoc" />
+    </AssociationSet>
+    <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc">
+      <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+      <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
     </AssociationSet>
     <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
       <End Role="mon_hoc" EntitySet="mon_hoc" />

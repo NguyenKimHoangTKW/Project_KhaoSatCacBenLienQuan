@@ -49,6 +49,11 @@
     <script src="~/Scripts/login-with-google.js"></script>
     @Scripts.Render("~/bundles/signalr")
     <script src="~/signalr/hubs"></script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

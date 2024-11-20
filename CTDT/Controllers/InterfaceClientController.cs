@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace CTDT.Controllers
 {
+   
     public class InterfaceClientController : Controller
     {
         dbSurveyEntities db = new dbSurveyEntities();
@@ -37,27 +38,30 @@ namespace CTDT.Controllers
             }
             return View(phieukhaosat);
         }
-
         [CheckLoginHelper]
         public ActionResult xac_thuc(int id)
         {
             ViewBag.id = id;
             return View();
         }
-
+        [CheckLoginHelper]
         public ActionResult Survey(int id)
         {
             ViewBag.id = id;
             return View();
         }
-
+        [CheckLoginHelper]
         public ActionResult AnswerPKS(int id, int surveyid)
         {
             ViewBag.SurveyId = surveyid;
             ViewBag.Id = id;
             return View();
         }
-
+        [CheckLoginHelper]
+        public ActionResult Xac_thuc_mon_hoc()
+        {
+            return View();
+        }
         [CheckLoginHelper]
         public ActionResult SurveyedForm()
         {

@@ -45,6 +45,11 @@ namespace CTDT
                defaults: new { controller = "InterfaceClient", action = "SurveyedForm" }
             );
             routes.MapRoute(
+               name: "XacThucMonHoc",
+               url: "xac-thuc-mon-hoc",
+               defaults: new { controller = "InterfaceClient", action = "Xac_thuc_mon_hoc" }
+            );
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "InterfaceClient", action = "Index", id = UrlParameter.Optional }
