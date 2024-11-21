@@ -416,11 +416,11 @@
     <Property Name="ma_sv" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="hovaten" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ngaysinh" Type="DateTime" Precision="0" />
-    <Property Name="sodienthoai" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="sodienthoai" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="diachi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="phai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="namnhaphoc" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="namtotnghiep" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="namnhaphoc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="namtotnghiep" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="ngaycapnhat" Type="Int32" />
     <Property Name="ngaytao" Type="Int32" />
     <Property Name="status" Type="Boolean" />

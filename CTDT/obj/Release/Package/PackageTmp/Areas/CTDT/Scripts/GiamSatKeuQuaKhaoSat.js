@@ -45,12 +45,17 @@ async function LoadChartFullSurvey() {
 
     const barChartCanvas = document.getElementById('bar-chart').getContext('2d');
     const lineChartCanvas = document.getElementById('line-chart').getContext('2d');
-
+    const surveys = res.data;
     if (res.is_data) {
+        surveys.sort((a, b) => {
+            const idA = a.ten_phieu.split(".")[0];
+            const idB = b.ten_phieu.split(".")[0];
+            return idA.localeCompare(idB, undefined, { numeric: true });
+        });
         let labels = [];
         let participationData = [];
         let satisfactionData = [];
-        res.data.forEach((survey) => {
+        surveys.forEach((survey) => {
             survey.thong_ke_ty_le.forEach((tyleKhaoSat, index) => {
                 let label = `${survey.ten_phieu.split('.')[0]}`;
                 if (tyleKhaoSat.hoc_ky) {

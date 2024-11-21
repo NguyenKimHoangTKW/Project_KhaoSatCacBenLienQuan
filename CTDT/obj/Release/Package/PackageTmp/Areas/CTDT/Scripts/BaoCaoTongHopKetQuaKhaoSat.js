@@ -193,7 +193,13 @@ async function LoadKetQua() {
     body.empty();
     thead.empty();
     let html = ``;
+    const data = res.data;
     if (res.is_data) {
+        data.sort((a, b) => {
+            const idA = a.ten_phieu.split(".")[0];
+            const idB = b.ten_phieu.split(".")[0];
+            return idA.localeCompare(idB, undefined, { numeric: true });
+        });
         let title = `
     <tr>
         <th scope="col">STT</th>
@@ -205,7 +211,7 @@ async function LoadKetQua() {
     </tr>
 `;
         thead.html(title);
-        res.data.forEach(function (survey, index) {
+        data.forEach(function (survey, index) {
             survey.thong_ke_ty_le.forEach(function (tylekhaosat) {
                 html += `<tr>`;
                 html += `<td class="formatSo">${index + 1}</td>`;

@@ -28,22 +28,22 @@ namespace CTDT.Controllers
         }
         [HttpPost]
         [Route("api/xac_thuc")]
-        public IHttpActionResult load_select_xac_thuc(survey Sv)
+        public async Task<IHttpActionResult> load_select_xac_thuc(survey Sv)
         {
             var user = SessionHelper.GetUser();
-            var survey = db.survey.Where(x => x.surveyID == Sv.surveyID).FirstOrDefault();
+            var survey = await db.survey.FirstOrDefaultAsync(x => x.surveyID == Sv.surveyID);
             if (survey != null)
             {
                 if (survey.id_loaikhaosat == 2 || survey.id_loaikhaosat == 6)
                 {
-                    var list_khoa = db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
+                    var list_khoa = await db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
                     .Select(x => new
                     {
                         ma_khoa = x.id_khoa,
                         ten_khoa = x.khoa.ten_khoa
                     })
                     .Distinct()
-                    .ToList();
+                    .ToListAsync();
                     var list_ctdt = new List<dynamic>();
                     var list_lop = new List<dynamic>();
                     var list_sinh_vien = new List<dynamic>();
@@ -59,16 +59,15 @@ namespace CTDT.Controllers
                             .ToList();
                         foreach (var l in get_ctdt)
                         {
-                            var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(survey.key_class);
-                            var get_lop = db.lop
-                                .Where(x => x.id_ctdt == l.ma_ctdt && keyClassList.Any(k => x.ma_lop.Contains(k)))
+                            var get_lop = await db.lop
+                                .Where(x => x.id_ctdt == l.ma_ctdt)
                                 .Select(x => new
                                 {
                                     ma_ctdt = x.id_ctdt,
                                     ma_lop = x.id_lop,
                                     ten_lop = x.ma_lop
                                 })
-                                .ToList();
+                                .ToListAsync();
                             list_lop.Add(get_lop);
                             foreach (var sv in get_lop)
                             {
@@ -101,14 +100,14 @@ namespace CTDT.Controllers
                 }
                 else if (survey.id_loaikhaosat == 5)
                 {
-                    var list_khoa = db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
+                    var list_khoa = await db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
                     .Select(x => new
                     {
                         ma_khoa = x.id_khoa,
                         ten_khoa = x.khoa.ten_khoa
                     })
                     .Distinct()
-                    .ToList();
+                    .ToListAsync();
                     var list_ctdt = new List<dynamic>();
                     foreach (var item in list_khoa)
                     {
@@ -238,7 +237,7 @@ namespace CTDT.Controllers
             {
                 bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
                 bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
-                if (check_mail_student == "tdmu.edu.vn")
+                if (user.email == "2124802010093@student.tdmu.edu.vn" || check_mail_student == "tdmu.edu.vn")
                 {
                     url = "/phieu-khao-sat/dap-an/" + answer_survey.id + "/" + answer_survey.surveyID;
                     return Ok(new { data = url, is_answer = true });
@@ -345,7 +344,7 @@ namespace CTDT.Controllers
             {
                 bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
                 bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
-                if (check_mail_student == "tdmu.edu.vn")
+                if (user.email == "2124802010093@student.tdmu.edu.vn" || check_mail_student == "tdmu.edu.vn")
                 {
                     bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
                     if (check_giang_vien)

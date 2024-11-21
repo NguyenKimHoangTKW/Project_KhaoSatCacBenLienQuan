@@ -1,5 +1,6 @@
-﻿//https: // localhost:44301/trang-chu
-function signIn() {
+﻿// https://localhost:44301/trang-chu
+function signIn(event) {
+    if (event) event.preventDefault(); // Prevent default click behavior
     let oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
 
     let form = document.createElement('form');
@@ -15,7 +16,7 @@ function signIn() {
         "state": 'pass-through-value'
     };
 
-    for (var p in params) {
+    for (let p in params) {
         let input = document.createElement('input');
         input.setAttribute('type', 'hidden');
         input.setAttribute('name', p);
@@ -24,8 +25,8 @@ function signIn() {
     }
     document.body.appendChild(form);
     form.submit();
-
 }
+
 let params = {};
 let regex = /([^&=]+)=([^&]*)/g, m;
 while (m = regex.exec(location.href)) {
@@ -34,9 +35,8 @@ while (m = regex.exec(location.href)) {
 
 if (Object.keys(params).length > 0) {
     localStorage.setItem('authInfo', JSON.stringify(params));
+    window.history.replaceState({}, document.title, "/trang-chu"); // Avoid hard reload by using replaceState
 }
-
-window.history.pushState({}, document.title);
 
 let info = JSON.parse(localStorage.getItem('authInfo'));
 
@@ -48,12 +48,13 @@ if (info && info['access_token']) {
     })
         .then((response) => response.json())
         .then((userInfo) => {
-            Session_Login(userInfo.email, userInfo.given_name, userInfo.family_name, userInfo.picture)
+            Session_Login(userInfo.email, userInfo.given_name, userInfo.family_name, userInfo.picture);
         })
         .catch((error) => {
             console.error("Error fetching user info:", error);
         });
 }
+
 async function Session_Login(email, firstname, lastname, urlimage) {
     const res = await $.ajax({
         url: '/api/session_login',
@@ -66,13 +67,12 @@ async function Session_Login(email, firstname, lastname, urlimage) {
             lastName: lastname,
             avatarUrl: urlimage
         },
-    })
+    });
     if (typeof load_he_dao_tao === "function") {
         load_he_dao_tao();
     }
     $("#nav-placeholder").load('/InterfaceClient/load_chuc_nang_nguoi_dung');
 }
-
 
 function Logout_Session() {
     $.ajax({
@@ -81,23 +81,29 @@ function Logout_Session() {
         success: function (res) {
             if (res.success) {
                 localStorage.removeItem('authInfo');
-                location.href = "/";
+                location.replace("/");
             }
         }
-    })
+    });
 }
 
 function logout() {
-    fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'], {
-        method: 'POST',
-        headers: {
-            "Content-type": 'application/x-www-form-urlencoded'
-        }
-    })
-        .then(() => {
-            Logout_Session();
+    if (info && info['access_token']) {
+        fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'], {
+            method: 'POST',
+            headers: {
+                "Content-type": 'application/x-www-form-urlencoded'
+            }
         })
-        .catch((error) => {
-            console.error("Error during logout:", error);
-        });
+            .then(() => {
+                Logout_Session();
+            })
+            .catch((error) => {
+                console.error("Error during logout:", error);
+                Logout_Session(); // Clear session even if token revocation fails
+            });
+    } else {
+        console.error("No access token available for logout.");
+        Logout_Session();
+    }
 }

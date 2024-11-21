@@ -128,6 +128,7 @@ function save_xac_thuc() {
         ctdt: get_ctdt,
         donvi: get_don_vi
     };
+    localStorage.setItem("xacthucstorage", JSON.stringify(get_data));
 
     $.ajax({
         url: '/api/save_xac_thuc',

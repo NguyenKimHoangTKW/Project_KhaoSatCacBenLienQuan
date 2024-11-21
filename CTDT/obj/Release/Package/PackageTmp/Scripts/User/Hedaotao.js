@@ -23,6 +23,7 @@ async function load_he_dao_tao() {
         form_no_login(res.data)
     }
 }
+
 function form_no_login(check) {
     let body = $('#showdata');
     let html = '';

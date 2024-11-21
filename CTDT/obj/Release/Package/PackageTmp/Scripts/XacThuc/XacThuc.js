@@ -154,7 +154,7 @@ function load_select_xac_thuc() {
                                 var ngaySinh = new Date(parseInt(chil.ngay_sinh.substr(6)));
                                 var formattedNgaySinh = ngaySinh.toLocaleDateString("en-US");
                                 if (chil.ma_lop == id) {
-                                    option += `<option value="${chil.id_nguoi_hoc}">${chil.ten_nguoi_hoc} - ${chil.ma_nguoi_hoc} - ${formattedNgaySinh}</option>`;
+                                    option += `<option value="${chil.id_nguoi_hoc}">${chil.ten_nguoi_hoc}- ${formattedNgaySinh}</option>`;
                                 }
                             });
                         });

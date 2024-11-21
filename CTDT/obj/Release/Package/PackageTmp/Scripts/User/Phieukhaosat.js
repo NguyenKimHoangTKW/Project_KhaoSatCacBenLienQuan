@@ -8,7 +8,7 @@ async function LoadData() {
         url: '/api/bo_phieu_khao_sat',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ ten_hedaotao: namehdt }) 
+        data: JSON.stringify({ ten_hedaotao: namehdt })
     })
     let items = res.data.survey;
     let body = $('#showdata');
@@ -57,7 +57,7 @@ async function LoadData() {
 function showLoading() {
     Swal.fire({
         title: 'Loading...',
-        text: 'Đang kiểm tra và tải dữ liệu, vui lòng chờ trong giây lát!',
+        text: 'Đang kiểm tra và tải biểu mẫu, vui lòng chờ trong giây lát!',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -69,48 +69,56 @@ function hideLoading() {
 }
 $(document).on('click', '.btnCheck', async function () {
     var id = $(this).data("id");
-        showLoading()
+    showLoading()
     try {
         check_xac_thuc(id);
+    }
+    finally {
         hideLoading();
     }
-    catch {
 
-    }
-    
 });
 
-function check_xac_thuc(id) {
-    $.ajax({
-        url: '/api/check_xac_thuc',
-        type: 'POST',
-        data: { surveyID: id },
-        success: function (res) {
-            let url = res.data;
-            if (res.is_answer) {
-                Swal.fire({
-                    title: "Bạn đã khảo sát phiếu khảo sát này !",
-                    text: "Bạn có muốn xem lại đáp án?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Xem lại"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
-                });
-            }
-            else if (res.non_survey) {
-                window.location.href = url;
-            }
-            else if (res.is_clipboard) {
-                window.location.href = url;
-            }
-            else {
-                window.location.href = url;
-            }
+async function check_xac_thuc(id) {
+    try {
+        const res = await $.ajax({
+            url: '/api/check_xac_thuc',
+            type: 'POST',
+            data: { surveyID: id },
+        });
+        localStorage.setItem("xacthucstorage", JSON.stringify({ Id: id }));
+        let url = res.data;
+
+        if (res.is_answer) {
+            Swal.fire({
+                title: "Bạn đã khảo sát phiếu khảo sát này!",
+                text: "Bạn có muốn xem lại đáp án?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Xem lại"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.href = url;
+                }
+            });
+        } else if (res.non_survey) {
+            location.href = url;
+        } else {
+            Swal.fire({
+                title: "Thông báo",
+                text: res.message,
+                icon: "warning"
+            });
         }
-    });
+    } catch (error) {
+        console.error("Error during AJAX call:", error);
+        Swal.fire({
+            title: "Lỗi",
+            text: "Đã xảy ra lỗi trong quá trình xác thực. Vui lòng thử lại.",
+            icon: "error"
+        });
+    }
 }
+

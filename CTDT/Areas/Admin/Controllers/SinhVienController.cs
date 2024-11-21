@@ -10,6 +10,8 @@ using CTDT.Helper;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Globalization;
+using GoogleApi.Entities.Common.Enums;
+using System.Web.Helpers;
 namespace CTDT.Areas.Admin.Controllers
 {
     [UserAuthorize(2)]
@@ -95,17 +97,19 @@ namespace CTDT.Areas.Admin.Controllers
                         {
                             var ms_nguoi_hoc = worksheet.Cells[row, 1].Text;
                             var ten_nguoi_hoc = worksheet.Cells[row, 2].Text;
+                            var ngaysinh = worksheet.Cells[row, 3].Text;
                             var sdt = worksheet.Cells[row, 4].Text;
                             var dia_chi = worksheet.Cells[row, 5].Text;
                             var gioi_tinh = worksheet.Cells[row, 6].Text;
                             var ctdt = worksheet.Cells[row, 7].Text;
                             var lop = worksheet.Cells[row, 8].Text;
                             var nam_tot_nghiep = worksheet.Cells[row, 9].Text;
+                            var nam_nhap_hoc = worksheet.Cells[row, 10].Text;
                             var kiem_tra_truong_duy_nhat = $"{ms_nguoi_hoc}-{ten_nguoi_hoc}-{lop}";
 
                             var get_lop = await db.lop.FirstOrDefaultAsync(x => x.ma_lop == lop);
-                            var get_ctdt = await db.ctdt.FirstOrDefaultAsync(x => x.ten_ctdt == ctdt);
-                            var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == ms_nguoi_hoc && x.hovaten == ten_nguoi_hoc);
+                            var get_ctdt = await db.ctdt.FirstOrDefaultAsync(x => x.ten_ctdt.ToLower().Trim() == ctdt.ToLower().Trim());
+                            var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == ms_nguoi_hoc && x.hovaten.Trim() == ten_nguoi_hoc.Trim());
 
                             if (get_lop == null)
                             {
@@ -121,6 +125,15 @@ namespace CTDT.Areas.Admin.Controllers
                                 await db.SaveChangesAsync();
                             }
 
+                            DateTime? parsedNgaySinh = null;
+                            if (!string.IsNullOrWhiteSpace(ngaysinh))
+                            {
+                                // Thử parse ngày sinh, format "dd/MM/yyyy"
+                                if (DateTime.TryParseExact(ngaysinh, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime tempNgaySinh))
+                                {
+                                    parsedNgaySinh = tempNgaySinh;
+                                }
+                            }
                             if (sinh_vien == null)
                             {
                                 sinh_vien = new sinhvien
@@ -128,11 +141,12 @@ namespace CTDT.Areas.Admin.Controllers
                                     id_lop = get_lop.id_lop,
                                     ma_sv = ms_nguoi_hoc,
                                     hovaten = ten_nguoi_hoc,
-                                    ngaysinh = null,
+                                    ngaysinh = parsedNgaySinh,
                                     sodienthoai = sdt,
                                     diachi = dia_chi,
                                     phai = gioi_tinh,
-                                    namtotnghiep = nam_tot_nghiep,
+                                    namnhaphoc = string.IsNullOrWhiteSpace(nam_nhap_hoc) ? null : nam_nhap_hoc,
+                                    namtotnghiep = string.IsNullOrWhiteSpace(nam_tot_nghiep) ? null : nam_tot_nghiep,
                                     ngaycapnhat = (int)unixTimestamp,
                                     ngaytao = (int)unixTimestamp,
                                     status = true
@@ -142,7 +156,8 @@ namespace CTDT.Areas.Admin.Controllers
                             }
                             else
                             {
-                                sinh_vien.namtotnghiep = nam_tot_nghiep;
+                                sinh_vien.namnhaphoc = string.IsNullOrWhiteSpace(nam_nhap_hoc) ? null : nam_nhap_hoc;
+                                sinh_vien.namtotnghiep = string.IsNullOrWhiteSpace(nam_tot_nghiep) ? null : nam_tot_nghiep;
                                 sinh_vien.ngaycapnhat = (int)unixTimestamp;
                                 await db.SaveChangesAsync();
                             }

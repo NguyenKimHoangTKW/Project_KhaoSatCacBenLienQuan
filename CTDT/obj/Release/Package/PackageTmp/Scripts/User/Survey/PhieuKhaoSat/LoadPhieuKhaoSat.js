@@ -21,18 +21,23 @@ $(document).ready(function () {
 
 function load_phieu_khao_sat() {
     var get_info = [];
-    var id = $('#id').val();
+    let load_data = localStorage.getItem("xacthucstorage");
+    load_data = load_data ? JSON.parse(load_data) : {};
     let TenPhieu = '';
     let get_tempData = '';
     $.ajax({
         url: '/api/load_form_phieu_khao_sat',
         type: 'POST',
-        data: { surveyID: id },
+        data: {
+            Id: load_data.Id,
+            id_nguoi_hoc_by_mon_hoc: load_data.id_nguoi_hoc_by_mon_hoc,
+            ctdt: load_data.ctdt,
+            nguoi_hoc: load_data.nguoi_hoc
+        },
         success: function (res) {
             let html = '';
             let body = $('#load-title');
             body.empty();
-
             if (res.data) {
                 surveyData = JSON.parse(res.data);
                 TenPhieu = surveyData.title;
@@ -297,7 +302,8 @@ function load_phieu_khao_sat() {
                 });
 
                 $(document).on('click', '#save', function () {
-                    save_form();
+                    save_form(res.info);
+                    localStorage.removeItem(get_tempData);
                 });
             }
             else {
@@ -309,4 +315,46 @@ function load_phieu_khao_sat() {
             alert("Có lỗi xảy ra khi tải dữ liệu.");
         }
     });
+}
+function save_form(items) {
+    console.log(items);
+    var id = $('#id').val();
+    var form = save_phieu_khao_sat();
+    if (form.valid) {
+        $.ajax({
+            url: '/api/save_form_khao_sat',
+            type: 'POST',
+            dataType: 'JSON',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                idsurvey: id,
+                id_mon_hoc: items[0].ma_mon_hoc,
+                ma_nguoi_hoc: items[0].ma_nguoi_hoc,
+                don_vi: items[0].don_vi,
+                chuc_vu: items[0].chuc_vu,
+                ctdt: items[0].ctdt, 
+                json_answer: JSON.stringify(form.data)
+            }),
+            success: function (res) {
+                Swal.fire({
+                    title: "Khảo sát thành công",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    goBack();
+                });
+            },
+        });
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Vui lòng điền đầy đủ thông tin bắt buộc"
+        });
+    }
+}
+
+function test(items) {
+    console.log(items[0].ten_nguoi_hoc)
 }

@@ -233,29 +233,31 @@
             var filterLop = $("#FilterLop").val();
             LoadData(currentPage, filterLop ,keyword);
         });
-        $('#importExcelForm').on('submit', function (e) {
+        $('#importExcelForm').on('submit', async function (e) {
             e.preventDefault();
             var formData = new FormData(this);
-            $.ajax({
-                url: '/Admin/SinhVien/UploadExcel',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    if (response.status.includes('Thành công')) {
-                        alert(response.status);
-                        $('#importExcelModal').modal('hide');
-                        LoadData(currentPage);
-                    } else {
-                        alert(response.status);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert('Đã xảy ra lỗi: ' + error);
+
+            try {
+                let response = await $.ajax({
+                    url: '/Admin/SinhVien/UploadExcel',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+
+                if (response.status.includes('Thành công')) {
+                    alert(response.status);
+                    $('#importExcelModal').modal('hide');
+                    LoadData(currentPage);
+                } else {
+                    alert(response.status);
                 }
-            });
+            } catch (error) {
+                alert('Đã xảy ra lỗi: ' + error.statusText);
+            }
         });
+
 
 
         $('#pagination').on('click', 'a.page-link', function (e) {
