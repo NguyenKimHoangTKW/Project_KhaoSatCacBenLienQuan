@@ -2,6 +2,7 @@
 using CTDT.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
@@ -62,12 +63,12 @@ namespace CTDT.Controllers
                                 .Select(x => new
                                 {
                                     email = user.email,
-                                    ma_so_nguoi_hoc = x.ma_sv,
+                                    ma_nguoi_hoc = x.ma_sv,
                                     ten_nguoi_hoc = x.hovaten,
                                     khoa = x.lop.ctdt.khoa.ten_khoa,
-                                    nganh_dao_tao = x.lop.ctdt.ten_ctdt,
+                                    ctdt = x.lop.ctdt.ten_ctdt,
                                 })
-                                .FirstOrDefault(x => x.ma_so_nguoi_hoc == ms_nguoi_hoc);
+                                .FirstOrDefault(x => x.ma_nguoi_hoc == ms_nguoi_hoc);
                         list_thong_tin.Add(nguoi_hoc);
                         return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
                     }
@@ -132,6 +133,8 @@ namespace CTDT.Controllers
                     var get_thong_tin_mon_hoc = new
                     {
                         email = user.email,
+                        ma_mon_hoc = check_mon_hoc.id_nguoi_hoc_by_hoc_phan,
+                        ma_giang_vien = check_mon_hoc.id_giang_vvien,
                         ten_giang_vien = check_mon_hoc.CanBoVienChuc.TenCBVC,
                         ma_nguoi_hoc = check_mon_hoc.sinhvien.ma_sv,
                         ten_nguoi_hoc = check_mon_hoc.sinhvien.hovaten,
@@ -142,75 +145,115 @@ namespace CTDT.Controllers
                     list_thong_tin.Add(get_thong_tin_mon_hoc);
                     return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
             }
-
             return Ok(new { message = "Vui lòng xác thực để thực hiện khảo sát" });
         }
         [HttpPost]
         [Route("api/save_form_khao_sat")]
-        public async Task<IHttpActionResult> save_form(answer_response aw)
+        public async Task<IHttpActionResult> save_form(SaveForm saveForm)
         {
             var user = SessionHelper.GetUser();
             var domainGmail = user.email.Split('@')[1];
             var ms_nguoi_hoc = user.email.Split('@')[0];
             DateTime now = DateTime.UtcNow;
             int unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            var survey = await db.survey.FirstOrDefaultAsync(x => x.surveyID == aw.surveyID);
+
+            var survey = await db.survey.FirstOrDefaultAsync(x => x.surveyID == saveForm.idsurvey);
+            if (survey == null)
+            {
+                return BadRequest("Khảo sát không tồn tại");
+            }
+
             if (ModelState.IsValid)
             {
-                if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu học viên")
-                {
-                    var id_nguoi_hoc = (int?)HttpContext.Current.Session["nguoi_hoc"];
-                    var nguoi_hoc = await db.sinhvien.FirstOrDefaultAsync(x => id_nguoi_hoc != null ? x.id_sv == id_nguoi_hoc : x.ma_sv == ms_nguoi_hoc);
-                    aw.time = unixTimestamp;
-                    aw.id_users = user.id_users;
-                    aw.id_namhoc = survey.id_namhoc;
-                    aw.id_sv = nguoi_hoc.id_sv;
-                    aw.id_ctdt = nguoi_hoc.lop.ctdt.id_ctdt;
-                    db.answer_response.Add(aw);
-                }
-                else if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
-                {
-                    var can_bo_vien_chuc = await db.CanBoVienChuc.FirstOrDefaultAsync(x => user.email == x.Email);
-                    var id_don_vi = HttpContext.Current.Session["don_vi"] as int?;
-                    var id_ctdt = HttpContext.Current.Session["ctdt"] as int?;
-                    if (id_don_vi != null || id_ctdt != null)
-                    {
-                        var don_vi_select = await db.DonVi.FirstOrDefaultAsync(x => x.id_donvi == id_don_vi);
-                        var ctdt_select = await db.ctdt.FirstOrDefaultAsync(x => x.id_ctdt == id_ctdt);
+                answer_response aw = null;
 
-                        aw.time = unixTimestamp;
-                        aw.id_users = user.id_users;
-                        aw.id_namhoc = survey.id_namhoc;
-                        aw.id_CBVC = can_bo_vien_chuc.id_CBVC;
-                        aw.id_ctdt = ctdt_select != null ? ctdt_select.id_ctdt : (int?)null;
-                        aw.id_donvi = don_vi_select != null ? don_vi_select.id_donvi : (int?)null;
-                        db.answer_response.Add(aw);
-                    }
-                    else
-                    {
-                        aw.time = unixTimestamp;
-                        aw.id_users = user.id_users;
-                        aw.id_namhoc = survey.id_namhoc;
-                        aw.id_CBVC = can_bo_vien_chuc.id_CBVC;
-                        aw.id_ctdt = can_bo_vien_chuc.ctdt?.id_ctdt ?? null;
-                        aw.id_donvi = can_bo_vien_chuc.DonVi?.id_donvi ?? null;
-                        db.answer_response.Add(aw);
-                    }
-                }
-                else if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
+                switch (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
                 {
-                    var id_ctdt = (int)HttpContext.Current.Session["ctdt"];
-                    var ctdt = await db.ctdt.FirstOrDefaultAsync(x => x.id_ctdt == id_ctdt);
-                    aw.time = unixTimestamp;
-                    aw.id_users = user.id_users;
-                    aw.id_namhoc = survey.id_namhoc;
-                    aw.id_ctdt = ctdt.id_ctdt;
-                    db.answer_response.Add(aw);
+                    case "Phiếu học viên":
+                        var nguoi_hoc = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == saveForm.ma_nguoi_hoc);
+                        aw = new answer_response()
+                        {
+                            time = unixTimestamp,
+                            id_users = user.id_users,
+                            id_namhoc = survey.id_namhoc,
+                            id_sv = nguoi_hoc.id_sv,
+                            id_ctdt = nguoi_hoc.lop.ctdt.id_ctdt,
+                            surveyID = survey.surveyID,
+                            json_answer = saveForm.json_answer
+                        };
+                        break;
+
+                    case "Phiếu giảng viên":
+                        var can_bo_vien_chuc = await db.CanBoVienChuc.FirstOrDefaultAsync(x => user.email == x.Email);
+                        var don_vi_select = await db.DonVi?.FirstOrDefaultAsync(x => x.name_donvi == saveForm.don_vi);
+                        var ctdt_select = await db.ctdt?.FirstOrDefaultAsync(x => x.ten_ctdt == saveForm.ctdt);
+                        if(don_vi_select == null || ctdt_select == null)
+                        {
+                            aw = new answer_response()
+                            {
+                                time = unixTimestamp,
+                                id_users = user.id_users,
+                                id_namhoc = survey.id_namhoc,
+                                id_CBVC = can_bo_vien_chuc.id_CBVC,
+                                id_ctdt = ctdt_select != null ? ctdt_select.id_ctdt : (int?)null,
+                                id_donvi = don_vi_select != null ? don_vi_select.id_donvi : (int?)null,
+                                surveyID = survey.surveyID,
+                                json_answer = saveForm.json_answer
+                            };
+                        }
+                        else
+                        {
+                            aw = new answer_response()
+                            {
+                                time = unixTimestamp,
+                                id_users = user.id_users,
+                                id_namhoc = survey.id_namhoc,
+                                id_CBVC = can_bo_vien_chuc.id_CBVC,
+                                id_ctdt = can_bo_vien_chuc.ctdt?.id_ctdt ?? null,
+                                id_donvi = can_bo_vien_chuc.DonVi?.id_donvi ?? null,
+                                surveyID = survey.surveyID,
+                                json_answer = saveForm.json_answer
+                            };
+                        }
+                        break;
+
+                    case "Phiếu doanh nghiệp":
+                        var ctdt = await db.ctdt.FirstOrDefaultAsync(x => x.ten_ctdt == saveForm.ctdt);
+                        aw = new answer_response()
+                        {
+                            time = unixTimestamp,
+                            id_users = user.id_users,
+                            id_namhoc = survey.id_namhoc,
+                            id_ctdt = ctdt.id_ctdt,
+                            surveyID = survey.surveyID,
+                            json_answer = saveForm.json_answer
+                        };
+                        break;
+
+                    case "Phiếu người học có học phần":
+                        var get_mon_hoc = await db.nguoi_hoc_dang_co_hoc_phan.FirstOrDefaultAsync(x => x.id_nguoi_hoc_by_hoc_phan == saveForm.id_mon_hoc);
+                        aw = new answer_response()
+                        {
+                            time = unixTimestamp,
+                            id_users = user.id_users,
+                            id_namhoc = survey.id_namhoc,
+                            id_ctdt = get_mon_hoc.sinhvien.lop.id_ctdt,
+                            id_donvi = get_mon_hoc.CanBoVienChuc?.id_donvi,
+                            id_CBVC = get_mon_hoc.id_giang_vvien,
+                            id_mh = get_mon_hoc.id_mon_hoc,
+                            id_sv = get_mon_hoc.id_sinh_vien,
+                            surveyID = survey.surveyID,
+                            json_answer = saveForm.json_answer
+                        };
+                        get_mon_hoc.da_khao_sat = 1;
+                        break;
                 }
+                db.answer_response.Add(aw);
                 await db.SaveChangesAsync();
-
+                return Ok(new { success = true, message = "Khảo sát thành công" });
             }
-            return Ok(new { success = true, message = "Khảo sát thành công" });
+
+            return BadRequest("Không thể lưu khảo sát");
         }
 
         [HttpPost]

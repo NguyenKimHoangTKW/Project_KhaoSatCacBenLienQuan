@@ -422,6 +422,7 @@
     <Compile Include="Models\phan_quyen_chuc_nang_users.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SaveForm.cs" />
     <Compile Include="Models\SaveXacThuc.cs" />
     <Compile Include="Models\sinhvien.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
