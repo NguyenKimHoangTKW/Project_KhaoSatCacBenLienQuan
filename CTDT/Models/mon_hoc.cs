@@ -24,10 +24,11 @@ namespace CTDT.Models
         public int id_mon_hoc { get; set; }
         public string ma_mon_hoc { get; set; }
         public string ten_mon_hoc { get; set; }
-        public int id_hoc_phan { get; set; }
-        public int id_group_mh { get; set; }
-        public int ngay_tao { get; set; }
-        public int ngay_cap_nhat { get; set; }
+        public Nullable<int> id_lop { get; set; }
+        public Nullable<int> id_hoc_phan { get; set; }
+        public Nullable<int> id_group_mh { get; set; }
+        public Nullable<int> ngay_tao { get; set; }
+        public Nullable<int> ngay_cap_nhat { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }

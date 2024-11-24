@@ -163,6 +163,7 @@
           <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
           <ScalarProperty Name="id_group_mh" ColumnName="id_group_mh" />
           <ScalarProperty Name="id_hoc_phan" ColumnName="id_hoc_phan" />
+          <ScalarProperty Name="id_lop" ColumnName="id_lop" />
           <ScalarProperty Name="ten_mon_hoc" ColumnName="ten_mon_hoc" />
           <ScalarProperty Name="ma_mon_hoc" ColumnName="ma_mon_hoc" />
           <ScalarProperty Name="id_mon_hoc" ColumnName="id_mon_hoc" />

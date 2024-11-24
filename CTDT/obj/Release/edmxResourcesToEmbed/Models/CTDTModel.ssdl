@@ -148,8 +148,9 @@
     <Property Name="id_mon_hoc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ma_mon_hoc" Type="nvarchar" MaxLength="10" Nullable="false" />
     <Property Name="ten_mon_hoc" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="id_lop" Type="int" />
     <Property Name="id_hoc_phan" Type="int" Nullable="false" />
-    <Property Name="id_group_mh" Type="int" Nullable="false" />
+    <Property Name="id_group_mh" Type="int" />
     <Property Name="ngay_tao" Type="int" Nullable="false" />
     <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
   </EntityType>
@@ -489,7 +490,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_mon_hoc_group_mon_hoc">
-    <End Role="group_mon_hoc" Type="Self.group_mon_hoc" Multiplicity="1" />
+    <End Role="group_mon_hoc" Type="Self.group_mon_hoc" Multiplicity="0..1" />
     <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="group_mon_hoc">

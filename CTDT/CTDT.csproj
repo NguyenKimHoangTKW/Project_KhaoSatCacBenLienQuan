@@ -308,6 +308,7 @@
     <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopController.cs" />
     <Compile Include="Areas\Admin\Controllers\CBVCController.cs" />
     <Compile Include="Areas\Admin\Controllers\CTDTController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DanhSachMonHocHocVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\DoiTuongKhaoSatController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportDataController.cs" />
     <Compile Include="Areas\Admin\Controllers\InterfaceAdminController.cs" />
@@ -448,6 +449,7 @@
     <Content Include="Areas\Admin\Scripts\BaoCaoTongHop.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\CanBoVienChuc.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChuongTrinhDaoTao.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\DanhSachMonHocHocVien.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Khoa.js" />
     <Content Include="Areas\Admin\Scripts\DoiTuongKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\PhanQuyen\DanhSachTaiKhoan.js" />
@@ -1346,6 +1348,7 @@
     <Content Include="Areas\Khoa\Views\InterfaceKhoa\thong_ke_khao_sat.cshtml" />
     <Content Include="Areas\Khoa\Views\InterfaceKhoa\thong_ke_tan_xuat.cshtml" />
     <Content Include="Areas\Khoa\Views\InterfaceKhoa\thong_ke_tan_xuat_theo_yeu_cau.cshtml" />
+    <Content Include="Areas\Admin\Views\DanhSachMonHocHocVien\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

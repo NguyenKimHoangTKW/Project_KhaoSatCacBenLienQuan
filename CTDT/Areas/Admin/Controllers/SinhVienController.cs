@@ -106,7 +106,12 @@ namespace CTDT.Areas.Admin.Controllers
                             var nam_tot_nghiep = worksheet.Cells[row, 9].Text;
                             var nam_nhap_hoc = worksheet.Cells[row, 10].Text;
                             var kiem_tra_truong_duy_nhat = $"{ms_nguoi_hoc}-{ten_nguoi_hoc}-{lop}";
+                            if (truong_duy_nhat.Contains(kiem_tra_truong_duy_nhat))
+                            {
+                                return Json(new { status = $"Dữ liệu trùng lặp: {kiem_tra_truong_duy_nhat}" }, JsonRequestBehavior.AllowGet);
+                            }
 
+                            truong_duy_nhat.Add(kiem_tra_truong_duy_nhat);
                             var get_lop = await db.lop.FirstOrDefaultAsync(x => x.ma_lop == lop);
                             var get_ctdt = await db.ctdt.FirstOrDefaultAsync(x => x.ten_ctdt.ToLower().Trim() == ctdt.ToLower().Trim());
                             var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == ms_nguoi_hoc && x.hovaten.Trim() == ten_nguoi_hoc.Trim());
@@ -128,7 +133,6 @@ namespace CTDT.Areas.Admin.Controllers
                             DateTime? parsedNgaySinh = null;
                             if (!string.IsNullOrWhiteSpace(ngaysinh))
                             {
-                                // Thử parse ngày sinh, format "dd/MM/yyyy"
                                 if (DateTime.TryParseExact(ngaysinh, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime tempNgaySinh))
                                 {
                                     parsedNgaySinh = tempNgaySinh;
