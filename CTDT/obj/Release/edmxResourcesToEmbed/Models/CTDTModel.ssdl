@@ -146,13 +146,13 @@
       <PropertyRef Name="id_mon_hoc" />
     </Key>
     <Property Name="id_mon_hoc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ma_mon_hoc" Type="nvarchar" MaxLength="10" Nullable="false" />
-    <Property Name="ten_mon_hoc" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="ma_mon_hoc" Type="nvarchar" MaxLength="50" />
+    <Property Name="ten_mon_hoc" Type="nvarchar" MaxLength="200" />
     <Property Name="id_lop" Type="int" />
-    <Property Name="id_hoc_phan" Type="int" Nullable="false" />
+    <Property Name="id_hoc_phan" Type="int" />
     <Property Name="id_group_mh" Type="int" />
-    <Property Name="ngay_tao" Type="int" Nullable="false" />
-    <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
+    <Property Name="ngay_tao" Type="int" />
+    <Property Name="ngay_cap_nhat" Type="int" />
   </EntityType>
   <EntityType Name="NamHoc">
     <Key>
@@ -502,7 +502,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_mon_hoc_hoc_phan">
-    <End Role="hoc_phan" Type="Self.hoc_phan" Multiplicity="1" />
+    <End Role="hoc_phan" Type="Self.hoc_phan" Multiplicity="0..1" />
     <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="hoc_phan">

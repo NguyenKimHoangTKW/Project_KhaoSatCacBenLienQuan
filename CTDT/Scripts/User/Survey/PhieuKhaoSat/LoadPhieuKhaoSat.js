@@ -44,7 +44,7 @@ function load_phieu_khao_sat() {
                 if (res.is_nguoi_hoc) {
                     let ten_nguoi_hoc = res.info[0];
                     get_info.push(ten_nguoi_hoc);
-                    get_tempData = TenPhieu + "_" + get_info[0].email + "_" + get_info[0].ma_so_nguoi_hoc + "_" + get_info[0].nganh_dao_tao;
+                    get_tempData = TenPhieu + "_" + get_info[0].email + "_" + get_info[0].ma_nguoi_hoc + "_" + get_info[0].nganh_dao_tao;
                 }
                 else if (res.is_cbvc) {
                     let ten_cbvc = res.info[0];
@@ -54,7 +54,7 @@ function load_phieu_khao_sat() {
                 else if (res.is_cuu_nguoi_hoc) {
                     let ten_nguoi_hoc = res.info[0];
                     get_info.push(ten_nguoi_hoc);
-                    get_tempData = TenPhieu + "_" + get_info[0].email + "_" + get_info[0].ma_so_nguoi_hoc + "_" + get_info[0].ten_nguoi_hoc + "_" + get_info[0].nganh_dao_tao;
+                    get_tempData = TenPhieu + "_" + get_info[0].email + "_" + get_info[0].ma_nguoi_hoc + "_" + get_info[0].ten_nguoi_hoc + "_" + get_info[0].nganh_dao_tao;
                 }
                 else if (res.is_giang_vien) {
                     let ten_giang_vien = res.info[0];
@@ -66,11 +66,10 @@ function load_phieu_khao_sat() {
                     get_info.push(doang_nghiep);
                     get_tempData = TenPhieu + "_" + get_info[0].email + "_" + get_info[0].ctdt;
                 }
-                else {
-                    html = `<div class="alert alert-info" style="text-align: center;">
-                        ${res.message}
-                    </div>`
-                    body.html(html);
+                else if (res.is_hoc_phan_nguoi_hoc) {
+                    let hocphan = res.info[0];
+                    get_info.push(hocphan);
+                    get_tempData = TenPhieu + "_" + get_info[0].ma_mon_hoc + "_" + get_info[0].ma_giang_vien + "_" + get_info[0].ma_nguoi_hoc;
                 }
                 let tempData = localStorage.getItem(get_tempData);
                 tempData = tempData ? JSON.parse(tempData) : {};
@@ -78,6 +77,18 @@ function load_phieu_khao_sat() {
                 <h2>${surveyData.title}</h2>
                 <p>${surveyData.description}</p>
                 <hr />
+                <h4>THÔNG TIN CHUNG</h4>`;
+                if (res.is_hoc_phan_nguoi_hoc) {
+                    res.info.forEach(function (items) {
+                        html += `<p><b>Email</b> : ${items.email}</p>`;
+                        html += `<p><b>Tên giảng viên</b> : ${items.ten_giang_vien}</p>`;
+                        html += `<p><b>Tên môn học</b> : ${items.mon_hoc}</p>`;
+                        html += `<p><b>Học phần</b> : ${items.hoc_phan}</p>`;
+                        html += `<p><b>Tên người học</b> : ${items.ten_nguoi_hoc}</p>`;
+                        html += `<p><b>Mã số</b> : ${items.ma_nguoi_hoc}</p>`;
+                    });
+                }
+                html += `<hr />
                 <form>
             `;
 
@@ -116,7 +127,7 @@ function load_phieu_khao_sat() {
                                 html += `
                                 <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
                                     <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].ma_so_nguoi_hoc}">
+                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].ma_nguoi_hoc}">
                                     <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
                                 </div>
                             `;
@@ -134,7 +145,7 @@ function load_phieu_khao_sat() {
                                 html += `
                                 <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
                                     <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].nganh_dao_tao}">
+                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].ctdt}">
                                     <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
                                 </div>
                             `;
@@ -304,6 +315,7 @@ function load_phieu_khao_sat() {
                 $(document).on('click', '#save', function () {
                     save_form(res.info);
                     localStorage.removeItem(get_tempData);
+                    localStorage.removeItem("xacthucstorage");
                 });
             }
             else {

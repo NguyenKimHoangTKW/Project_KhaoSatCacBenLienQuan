@@ -360,13 +360,13 @@
       <PropertyRef Name="id_mon_hoc" />
     </Key>
     <Property Name="id_mon_hoc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ma_mon_hoc" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-    <Property Name="ten_mon_hoc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ma_mon_hoc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ten_mon_hoc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="id_lop" Type="Int32" />
-    <Property Name="id_hoc_phan" Type="Int32" Nullable="false" />
+    <Property Name="id_hoc_phan" Type="Int32" />
     <Property Name="id_group_mh" Type="Int32" />
-    <Property Name="ngay_tao" Type="Int32" Nullable="false" />
-    <Property Name="ngay_cap_nhat" Type="Int32" Nullable="false" />
+    <Property Name="ngay_tao" Type="Int32" />
+    <Property Name="ngay_cap_nhat" Type="Int32" />
     <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_mon_hoc" FromRole="mon_hoc" ToRole="answer_response" />
     <NavigationProperty Name="group_mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_group_mon_hoc" FromRole="mon_hoc" ToRole="group_mon_hoc" />
     <NavigationProperty Name="hoc_phan" Relationship="dbSurveyModel.FK_mon_hoc_hoc_phan" FromRole="mon_hoc" ToRole="hoc_phan" />
@@ -824,7 +824,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_mon_hoc_hoc_phan">
-    <End Type="dbSurveyModel.hoc_phan" Role="hoc_phan" Multiplicity="1" />
+    <End Type="dbSurveyModel.hoc_phan" Role="hoc_phan" Multiplicity="0..1" />
     <End Type="dbSurveyModel.mon_hoc" Role="mon_hoc" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="hoc_phan">

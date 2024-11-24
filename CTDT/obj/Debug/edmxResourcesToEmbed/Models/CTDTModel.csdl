@@ -360,7 +360,7 @@
       <PropertyRef Name="id_mon_hoc" />
     </Key>
     <Property Name="id_mon_hoc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ma_mon_hoc" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="ma_mon_hoc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ten_mon_hoc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="id_lop" Type="Int32" />
     <Property Name="id_hoc_phan" Type="Int32" />

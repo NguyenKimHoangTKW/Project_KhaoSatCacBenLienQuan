@@ -146,7 +146,7 @@
       <PropertyRef Name="id_mon_hoc" />
     </Key>
     <Property Name="id_mon_hoc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ma_mon_hoc" Type="nvarchar" MaxLength="10" />
+    <Property Name="ma_mon_hoc" Type="nvarchar" MaxLength="50" />
     <Property Name="ten_mon_hoc" Type="nvarchar" MaxLength="200" />
     <Property Name="id_lop" Type="int" />
     <Property Name="id_hoc_phan" Type="int" />

@@ -1,6 +1,5 @@
 ﻿select *
 from answer_response
-where surveyID = 2
 order by(id) desc
 
 SELECT *
@@ -16,6 +15,9 @@ AND id_sv IN (
 ORDER BY id_sv, id DESC;
 
 
+select *
+from CanBoVienChuc
+where Email = N'yendt@tdmu.edu.vn'
 
 SELECT ar.*
 FROM answer_response ar
@@ -68,7 +70,11 @@ and ct.ten_ctdt = N'NGÔN NGỮ ANH (THS)'
 
 select *
 from sinhvien
-where ma_sv = N'238340201010'
+where ma_sv = N'2124802010093'
+
+update sinhvien
+set namtotnghiep = N'09/2023'
+where id_sv = 1592
 
 select *
 from sinhvien
@@ -92,3 +98,34 @@ WHERE id_sv IN (
 delete from answer_response
 where id = 203
 
+--Check môn hoc--
+select *
+from mon_hoc
+order by (id_mon_hoc) desc
+
+select *
+from nguoi_hoc_dang_co_hoc_phan
+where id_sinh_vien = 1592
+
+update nguoi_hoc_dang_co_hoc_phan
+set thang_by_hoc_phan = N'10/2023-08/2024'
+where id_nguoi_hoc_by_hoc_phan = 1
+
+select cbvc.MaCBVC,cbvc.TenCBVC,mh.ma_mon_hoc, mh.ten_mon_hoc,l.ma_lop,t.thang_by_hoc_phan,sv.ma_sv,sv.hovaten
+from nguoi_hoc_dang_co_hoc_phan t, mon_hoc mh, sinhvien sv, CanBoVienChuc cbvc, lop l
+where t.id_mon_hoc = mh.id_mon_hoc
+and t.id_sinh_vien = sv.id_sv
+and t.id_giang_vvien = cbvc.id_CBVC
+and l.id_lop = mh.id_lop
+
+
+select *
+from CanBoVienChuc
+where TenCBVC = N'Nguyễn Thị Thanh Tâm' 
+
+select *
+from lop
+where ma_lop= N'CH24QL01'
+
+select *
+from users

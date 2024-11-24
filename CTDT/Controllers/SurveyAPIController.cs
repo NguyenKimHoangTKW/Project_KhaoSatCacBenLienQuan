@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -143,7 +144,7 @@ namespace CTDT.Controllers
 
                     };
                     list_thong_tin.Add(get_thong_tin_mon_hoc);
-                    return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
+                    return Ok(new { data = js_data, info = list_thong_tin, is_hoc_phan_nguoi_hoc = true });
             }
             return Ok(new { message = "Vui lòng xác thực để thực hiện khảo sát" });
         }
@@ -262,12 +263,55 @@ namespace CTDT.Controllers
         {
             var answer_responses = await db.answer_response
                 .FirstOrDefaultAsync(x => x.id == loadAnswerPKS.id_answer && x.surveyID == loadAnswerPKS.id_survey);
-            var get_data = new
+            var list_info = new List<dynamic>();
+            switch (answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
             {
-                phieu_khao_sat = answer_responses.survey.surveyData,
-                dap_an = answer_responses.json_answer,
-            };
-            return Ok(new { data = get_data, success = true });
+                case "Phiếu học viên":
+                    var data_hoc_vien = new
+                    {
+                        phieu_khao_sat = answer_responses.survey.surveyData,
+                        dap_an = answer_responses.json_answer
+                    };
+                    list_info.Add(new
+                    {
+                        email = answer_responses.users.email,
+                        ten_nguoi_hoc = answer_responses.sinhvien.hovaten,
+                        ma_nguoi_hoc = answer_responses.sinhvien.ma_sv,
+                        lop = answer_responses.sinhvien.lop.ma_lop,
+                        ctdt = answer_responses.ctdt.ten_ctdt,
+                        khao_sat_lan_cuoi = answer_responses.time
+                    });
+                    return Ok(new { data = data_hoc_vien,info = list_info, is_nguoi_hoc = true });
+                case "Phiếu giảng viên":
+                    
+                    break;
+
+                case "Phiếu doanh nghiệp":
+                    
+                    break;
+
+                case "Phiếu người học có học phần":
+                    var data_ho_vien_mon_hoc = new
+                    {
+                        phieu_khao_sat = answer_responses.survey.surveyData,
+                        dap_an = answer_responses.json_answer
+                    };
+                    list_info.Add(new
+                    {
+                        email = answer_responses.users.email,
+                        ten_nguoi_hoc = answer_responses.sinhvien.hovaten,
+                        ma_nguoi_hoc = answer_responses.sinhvien.ma_sv,
+                        lop = answer_responses.sinhvien.lop.ma_lop,
+                        ctdt = answer_responses.ctdt.ten_ctdt,
+                        khoa = answer_responses.ctdt.khoa.ten_khoa,
+                        mon_hoc = answer_responses.mon_hoc.ten_mon_hoc,
+                        hoc_phan = answer_responses.mon_hoc.hoc_phan.ten_hoc_phan,
+                        ten_giang_vien = answer_responses.CanBoVienChuc.TenCBVC,
+                        khao_sat_lan_cuoi = answer_responses.time
+                    });
+                    return Ok(new { data = data_ho_vien_mon_hoc,info = list_info,is_hoc_phan_nguoi_hoc = true });
+            }         
+            return BadRequest();
         }
         [HttpPost]
         [Route("api/save_answer_form")]

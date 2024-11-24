@@ -1,34 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\",
+  "WorkspaceRootPath": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\models\\ctdtmodel.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\models\\ctdtmodel.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\dbcl\\project_khaosatcacbenlienquan\\ctdt\\scripts\\login-with-google.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\scripts\\login-with-google.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\controllers\\sinhviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\controllers\\sinhviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\dbcl\\project_khaosatcacbenlienquan\\ctdt\\controllers\\surveyapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\controllers\\surveyapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\controllers\\danhsachmonhochocviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\controllers\\danhsachmonhochocviencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\views\\sinhvien\\viewsinhvien.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\views\\sinhvien\\viewsinhvien.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\danhsachmonhochocvien.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\danhsachmonhochocvien.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\views\\danhsachmonhochocvien\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\views\\danhsachmonhochocvien\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\dbcl\\project_khaosatcacbenlienquan\\ctdt\\controllers\\xacthucapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\controllers\\xacthucapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,96 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 241,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SurveyAPIController.cs",
+              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Controllers\\SurveyAPIController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Controllers\\SurveyAPIController.cs",
+              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Controllers\\SurveyAPIController.cs",
+              "RelativeToolTip": "CTDT\\Controllers\\SurveyAPIController.cs",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-24T16:23:07.979Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CTDTModel.edmx [Diagram1]",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Models\\CTDTModel.edmx",
-              "RelativeDocumentMoniker": "CTDT\\Models\\CTDTModel.edmx",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Models\\CTDTModel.edmx [Diagram1]",
-              "RelativeToolTip": "CTDT\\Models\\CTDTModel.edmx [Diagram1]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
-              "WhenOpened": "2024-11-23T08:34:44.421Z",
-              "EditorCaption": " [Diagram1]"
+              "Title": "login-with-google.js",
+              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Scripts\\login-with-google.js",
+              "RelativeDocumentMoniker": "CTDT\\Scripts\\login-with-google.js",
+              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Scripts\\login-with-google.js",
+              "RelativeToolTip": "CTDT\\Scripts\\login-with-google.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-11-24T16:22:28.234Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "testController.cs",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\testController.cs",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Controllers\\testController.cs",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\testController.cs",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Controllers\\testController.cs",
-              "ViewState": "AgIAAEYAAAAAAAAAAAAqwF0AAAAMAAAAAAAAAA==",
+              "Title": "XacThucAPIController.cs",
+              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Controllers\\XacThucAPIController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Controllers\\XacThucAPIController.cs",
+              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Controllers\\XacThucAPIController.cs",
+              "RelativeToolTip": "CTDT\\Controllers\\XacThucAPIController.cs",
+              "ViewState": "AgIAAMICAAAAAAAAAAAYwNsCAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-23T07:53:09.28Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SinhVienController.cs",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\SinhVienController.cs",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Controllers\\SinhVienController.cs",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\SinhVienController.cs",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Controllers\\SinhVienController.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAvwHEAAABKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-23T07:52:31.595Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ViewSinhVien.cshtml",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\SinhVien\\ViewSinhVien.cshtml",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Views\\SinhVien\\ViewSinhVien.cshtml",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\SinhVien\\ViewSinhVien.cshtml",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Views\\SinhVien\\ViewSinhVien.cshtml",
-              "ViewState": "AgIAANkAAAAAAAAAAAAAAAIBAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-23T07:46:58.468Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\DanhSachMonHocHocVien\\Index.cshtml",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Views\\DanhSachMonHocHocVien\\Index.cshtml",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\DanhSachMonHocHocVien\\Index.cshtml",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Views\\DanhSachMonHocHocVien\\Index.cshtml",
-              "ViewState": "AgIAACUAAAAAAAAAAAAAAHQAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-23T07:46:05.554Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "DanhSachMonHocHocVien.js",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\DanhSachMonHocHocVien.js",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\DanhSachMonHocHocVien.js",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\DanhSachMonHocHocVien.js",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\DanhSachMonHocHocVien.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-11-23T07:45:59.582Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DanhSachMonHocHocVienController.cs",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\DanhSachMonHocHocVienController.cs",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Controllers\\DanhSachMonHocHocVienController.cs",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\DanhSachMonHocHocVienController.cs",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Controllers\\DanhSachMonHocHocVienController.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAowGQAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-23T07:34:04.768Z",
+              "WhenOpened": "2024-11-24T16:20:33.623Z",
               "EditorCaption": ""
             }
           ]
