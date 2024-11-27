@@ -128,4 +128,9 @@ from lop
 where ma_lop= N'CH24QL01'
 
 select *
-from users
+from sinhvien
+where ma_sv = N'2124802010093'
+
+update sinhvien
+set namnhaphoc = N'06/2022'
+where id_sv = 1592

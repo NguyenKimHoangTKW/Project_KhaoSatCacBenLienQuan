@@ -267,16 +267,16 @@ namespace CTDT.Controllers
                     // Tách chuỗi học phần survey
                     var check_hoc_vien_co_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan?.Where(x => x.sinhvien.ma_sv == mssv_by_email).ToListAsync();
                     var tach_chuoi_hoc_phan_survey = survey.hoc_phan.Split('-');
-                    string startDateString = "01/" + tach_chuoi_hoc_phan_survey[0].PadLeft(2, '0');
-                    string endDateString = "30/" + tach_chuoi_hoc_phan_survey[1].PadLeft(2, '0');
+                    string startDateString = "01/" + tach_chuoi_hoc_phan_survey[0].PadLeft(7, '0');
+                    string endDateString = "30/" + tach_chuoi_hoc_phan_survey[1].PadLeft(7, '0');
                     DateTime surveyStartDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     DateTime surveyEndDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     // Chạy vòng lặp kiểm tra
                     foreach (var items in check_hoc_vien_co_hoc_phan)
                     {
                         var tach_chuoi_hoc_phan_mon_hoc = items.thang_by_hoc_phan.Split('-');
-                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(2, '0');
-                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(2, '0');
+                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
                         DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
@@ -284,8 +284,9 @@ namespace CTDT.Controllers
                             if (check_hoc_vien_co_hoc_phan != null
                                 && items.mon_hoc.hoc_phan.ten_hoc_phan != "Báo cáo tốt nghiệp"
                                 // Kiểm tra học phần nằm trong khoảng survey
-                                && hocPhanStartDate >= surveyStartDate
-                                && hocPhanEndDate <= surveyEndDate)
+                                && (hocPhanStartDate >= surveyStartDate
+                                && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
+                                && hocPhanEndDate <= surveyEndDate))
                             {
                                 url = "/xac-thuc-mon-hoc";
                                 return Ok(new { data = url, non_survey = true });
@@ -334,7 +335,7 @@ namespace CTDT.Controllers
                     {
                         var sinh_vien = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == mssv_by_email);
                         var isEligible = await convert_nguoi_hoc(survey.thang_nhap_hoc, sinh_vien.namnhaphoc, mssv_by_email);
-                        if (isEligible != null && isEligible.namtotnghiep == null)
+                        if (isEligible != null/* && isEligible.namtotnghiep == null*/)
                         {
                             url = "/phieu-khao-sat/" + survey.surveyID;
                             return Ok(new { data = url, non_survey = true });
@@ -425,16 +426,16 @@ namespace CTDT.Controllers
                     // Tách chuỗi học phần survey
                     var check_hoc_vien_co_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan?.Where(x => x.sinhvien.ma_sv == mssv_by_email).ToListAsync();
                     var tach_chuoi_hoc_phan_survey = survey.hoc_phan.Split('-');
-                    string startDateString = "01/" + tach_chuoi_hoc_phan_survey[0].PadLeft(2, '0');
-                    string endDateString = "30/" + tach_chuoi_hoc_phan_survey[1].PadLeft(2, '0');
+                    string startDateString = "01/" + tach_chuoi_hoc_phan_survey[0].PadLeft(7, '0');
+                    string endDateString = "30/" + tach_chuoi_hoc_phan_survey[1].PadLeft(7, '0');
                     DateTime surveyStartDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     DateTime surveyEndDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     // Chạy vòng lặp kiểm tra
                     foreach (var items in check_hoc_vien_co_hoc_phan)
                     {
                         var tach_chuoi_hoc_phan_mon_hoc = items.thang_by_hoc_phan.Split('-');
-                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(2, '0');
-                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(2, '0');
+                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
                         DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
@@ -442,8 +443,9 @@ namespace CTDT.Controllers
                             if (check_hoc_vien_co_hoc_phan != null
                                 && items.mon_hoc.hoc_phan.ten_hoc_phan == "Lý thuyết"
                                 // Kiểm tra học phần nằm trong khoảng survey
-                                && hocPhanStartDate >= surveyStartDate
-                                && hocPhanEndDate <= surveyEndDate)
+                                && (hocPhanStartDate >= surveyStartDate
+                                && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
+                                && hocPhanEndDate <= surveyEndDate))
                             {
                                 HttpContext.Current.Session["Surveyid"] = survey.surveyID;
                                 url = "/xac-thuc-mon-hoc";
@@ -721,16 +723,16 @@ namespace CTDT.Controllers
                 var tach_chuoi_hoc_phan_mon_hoc = item.thang_by_hoc_phan.Split('-');
                 if (tach_chuoi_hoc_phan_mon_hoc.Length < 2) continue;
 
-                string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(2, '0');
-                string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(2, '0');
+                string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
 
                 DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong &&
-                    hocPhanStartDate >= surveyStartDate &&
-                    hocPhanEndDate <= surveyEndDate
-                    && item.mon_hoc.hoc_phan.ten_hoc_phan != "Báo cáo tốt nghiệp")
+                if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong && (hocPhanStartDate >= surveyStartDate
+                                && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
+                                && hocPhanEndDate <= surveyEndDate) && item.mon_hoc.hoc_phan.ten_hoc_phan != "Báo cáo tốt nghiệp")
+                   
                 {
                     data_list.Add(new
                     {
