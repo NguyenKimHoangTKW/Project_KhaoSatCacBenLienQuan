@@ -56,14 +56,17 @@ function get_nguoi_hoc_by_key() {
                     ctdt: items.chuong_trinh_dao_tao,
                     donvi: get_don_vi
                 };
+                localStorage.setItem("xacthucstorage", JSON.stringify(get_data));
                 $.ajax({
                     url: '/api/save_xac_thuc',
                     type: 'POST',
                     data: JSON.stringify(get_data),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+
                     success: function (response) {
                         if (response.success) {
+
                             Swal.fire({
                                 title: "Xác thực thành công",
                                 text: "Đang tải dữ liệu phiếu khảo sát, vui lòng chờ!",

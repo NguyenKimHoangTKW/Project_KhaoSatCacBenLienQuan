@@ -10,6 +10,9 @@ using System.Drawing;
 using System.IO;
 using CTDT.Helper;
 using System.Drawing.Printing;
+using System.Threading.Tasks;
+using System.Data.Entity;
+using System.Globalization;
 namespace CTDT.Areas.Admin.Controllers
 {
     [UserAuthorize(2)]
@@ -38,104 +41,316 @@ namespace CTDT.Areas.Admin.Controllers
                                 .ToList();
             return Json(new { data = sortedSurveys, success = true }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult LoadFullSurvey(int year = 0, int hdt = 0)
+        public async Task<ActionResult>  LoadFullSurvey(int year = 0, int hdt = 0)
         {
             var user = SessionHelper.GetUser();
 
-            var query = db.survey.AsEnumerable();
-            if (year != 0)
-            {
-                query = query.Where(x => x.id_namhoc == year);
-            }
-            if(hdt != 0)
-            {
-                query = query.Where(x => x.id_hedaotao == hdt);
-            }
-            var GetAllSurvey = query
-                .Where(x => x.surveyStatus == true)
-                .Select(x => new
-                {
-                    IDSurvey = x.surveyID,
-                    NameSurvey = x.surveyTitle,
-                    Year = x.NamHoc.ten_namhoc
-                }).ToList();
-            var ChartSurvey = new List<dynamic>();
+            var survey = await db.survey.Where(x => x.id_namhoc == year && x.id_hedaotao == hdt).ToListAsync();
 
-            foreach (var survey in GetAllSurvey)
+            var List_data = new List<dynamic>();
+            foreach (var items in survey)
             {
-                bool isStudent = db.answer_response.Any(aw => aw.id_sv != null && aw.id_ctdt != null && aw.surveyID == survey.IDSurvey && aw.json_answer != null);
-                bool isCTDT = db.answer_response.Any(aw => aw.id_sv == null && aw.id_ctdt != null && aw.surveyID == survey.IDSurvey && aw.json_answer != null);
-                bool isCBVC = db.answer_response.Any(aw => aw.id_CBVC != null && aw.id_donvi != null && aw.surveyID == survey.IDSurvey && aw.json_answer != null);
-                if (isStudent)
+                if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu học viên")
                 {
-                    var sinhvien = db.sinhvien.Where(x => x.lop.status == true).AsQueryable();
-                    var TotalAll = sinhvien.Count();
-                    var TotalIsKhaoSat = sinhvien.Count(sv => db.answer_response
-                                        .Any(aw => aw.id_sv == sv.id_sv
-                                        && aw.surveyID == survey.IDSurvey
-                                        && aw.id_ctdt != null
-                                        && aw.json_answer != null));
-                    var idphieu = db.survey.Where(x => x.surveyID == survey.IDSurvey).FirstOrDefault();
-                    double percentage = Math.Round(((double)TotalIsKhaoSat / TotalAll) * 100, 2);
-                    var DataStudent = new
+                    bool cuu_hoc_vien = new[] { 6 }.Contains(items.id_loaikhaosat);
+                    bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(items.id_loaikhaosat);
+                    bool hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep = new[] { 9 }.Contains(items.id_loaikhaosat);
+                    bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(items.id_loaikhaosat);
+                    if (cuu_hoc_vien)
                     {
-                        IDPhieu = idphieu.surveyID,
-                        TongKhaoSat = TotalAll,
-                        TongPhieuDaTraLoi = TotalIsKhaoSat,
-                        TongPhieuChuaTraLoi = (TotalAll - TotalIsKhaoSat),
-                        TyLeDaTraLoi = percentage,
-                        TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
-                    };
-                    ChartSurvey.Add(DataStudent);
-                }
-                else if (isCTDT)
-                {
-                    var ctdt = db.answer_response
-                        .Where(x => x.id_ctdt != null && x.id_sv == null)
-                        .AsQueryable();
-                    var TotalAll = ctdt.Count();
-                    var idphieu = db.survey.Where(x => x.surveyID == survey.IDSurvey).FirstOrDefault();
-                    var DataCTDT = new
+                        var tach_chuoi_hoc_phan_mon_hoc = items.thang_tot_nghiep.Split('-');
+                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                        DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        var get_sv = (await db.sinhvien.ToListAsync())
+                               .Where(sv =>
+                               {
+                                   if (!string.IsNullOrEmpty(sv.namtotnghiep))
+                                   {
+                                       var formattedNamTotNghiep = sv.namtotnghiep.Split('/');
+                                       if (formattedNamTotNghiep.Length == 2)
+                                       {
+                                           string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
+
+                                           DateTime namtotnghiepDate;
+                                           if (DateTime.TryParseExact(formattedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out namtotnghiepDate))
+                                           {
+                                               return namtotnghiepDate >= hocPhanStartDate && namtotnghiepDate <= hocPhanEndDate;
+                                           }
+                                       }
+                                   }
+                                   return false;
+                               })
+                               .ToList();
+                        var TotalIsKhaoSat = get_sv.Count(sv => db.answer_response
+                            .Any(aw => aw.id_sv == sv.id_sv
+                            && aw.surveyID == items.surveyID
+                            && aw.id_ctdt != null
+                            && aw.json_answer != null));
+                        double percentage = Math.Round(((double)TotalIsKhaoSat / get_sv.Count) * 100, 2);
+
+                        var DataStudent = new
+                        {
+                            IDPhieu = items.surveyID,
+                            TenPhieu = items.surveyTitle,
+                            TongKhaoSat = get_sv.Count,
+                            TongPhieuDaTraLoi = TotalIsKhaoSat,
+                            TongPhieuChuaTraLoi = (get_sv.Count - TotalIsKhaoSat),
+                            TyLeDaTraLoi = percentage,
+                            TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
+                        };
+
+                        List_data.Add(DataStudent);
+                    }
+                    else if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep)
                     {
-                        IDPhieu = idphieu.surveyID,
-                        TongKhaoSat = TotalAll,
-                        TongPhieuDaTraLoi = TotalAll,
-                        TongPhieuChuaTraLoi = 0,
-                        TyLeDaTraLoi = 100,
-                        TyLeChuaTraLoi = 0
-                    };
-                    ChartSurvey.Add(DataCTDT);
+                        var tach_chuoi_hoc_phan_mon_hoc = items.thang_nhap_hoc.Split('-');
+                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                        DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        var get_sv = (await db.sinhvien.ToListAsync())
+                               .Where(sv =>
+                               {
+                                   if (!string.IsNullOrEmpty(sv.namnhaphoc))
+                                   {
+                                       var formattedNamTotNghiep = sv.namnhaphoc.Split('/');
+                                       if (formattedNamTotNghiep.Length == 2)
+                                       {
+                                           string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
+
+                                           DateTime namtotnghiepDate;
+                                           if (DateTime.TryParseExact(formattedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out namtotnghiepDate))
+                                           {
+                                               return namtotnghiepDate >= hocPhanStartDate && namtotnghiepDate <= hocPhanEndDate;
+                                           }
+                                       }
+                                   }
+                                   return false;
+                               })
+                               .ToList();
+                        var TotalIsKhaoSat = get_sv.Count(sv => db.answer_response
+                            .Any(aw => aw.id_sv == sv.id_sv
+                            && aw.surveyID == items.surveyID
+                            && aw.id_ctdt != null
+                            && aw.json_answer != null));
+                        double percentage = Math.Round(((double)TotalIsKhaoSat / get_sv.Count) * 100, 2);
+
+                        var DataStudent = new
+                        {
+                            IDPhieu = items.surveyID,
+                            TenPhieu = items.surveyTitle,
+                            TongKhaoSat = get_sv.Count,
+                            TongPhieuDaTraLoi = TotalIsKhaoSat,
+                            TongPhieuChuaTraLoi = (get_sv.Count - TotalIsKhaoSat),
+                            TyLeDaTraLoi = percentage,
+                            TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
+                        };
+
+                        List_data.Add(DataStudent);
+                    }
+                    else if (hoc_vien_nhap_hoc)
+                    {
+                        var tach_chuoi_hoc_phan_mon_hoc = items.thang_nhap_hoc.Split('-');
+                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                        DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        var get_sv = (await db.sinhvien.ToListAsync())
+                               .Where(sv =>
+                               {
+                                   if (!string.IsNullOrEmpty(sv.namnhaphoc))
+                                   {
+                                       var formattedNamTotNghiep = sv.namnhaphoc.Split('/');
+                                       if (formattedNamTotNghiep.Length == 2)
+                                       {
+                                           string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
+
+                                           DateTime namtotnghiepDate;
+                                           if (DateTime.TryParseExact(formattedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out namtotnghiepDate))
+                                           {
+                                               return namtotnghiepDate >= hocPhanStartDate && namtotnghiepDate <= hocPhanEndDate;
+                                           }
+                                       }
+                                   }
+                                   return false;
+                               })
+                               .ToList();
+                        var TotalIsKhaoSat = get_sv.Count(sv => db.answer_response
+                            .Any(aw => aw.id_sv == sv.id_sv
+                            && aw.surveyID == items.surveyID
+                            && aw.id_ctdt != null
+                            && aw.json_answer != null));
+                        double percentage = Math.Round(((double)TotalIsKhaoSat / get_sv.Count) * 100, 2);
+
+                        var DataStudent = new
+                        {
+                            IDPhieu = items.surveyID,
+                            TenPhieu = items.surveyTitle,
+                            TongKhaoSat = get_sv.Count,
+                            TongPhieuDaTraLoi = TotalIsKhaoSat,
+                            TongPhieuChuaTraLoi = (get_sv.Count - TotalIsKhaoSat),
+                            TyLeDaTraLoi = percentage,
+                            TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
+                        };
+
+                        List_data.Add(DataStudent);
+                    }
+                    else if (hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
+                    {
+                        var tach_chuoi_hoc_phan_mon_hoc = items.thang_tot_nghiep.Split('-');
+                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                        DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        var get_sv = (await db.sinhvien.ToListAsync())
+                               .Where(sv =>
+                               {
+                                   if (!string.IsNullOrEmpty(sv.namtotnghiep))
+                                   {
+                                       var formattedNamTotNghiep = sv.namtotnghiep.Split('/');
+                                       if (formattedNamTotNghiep.Length == 2)
+                                       {
+                                           string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
+
+                                           DateTime namtotnghiepDate;
+                                           if (DateTime.TryParseExact(formattedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out namtotnghiepDate))
+                                           {
+                                               return namtotnghiepDate >= hocPhanStartDate && namtotnghiepDate <= hocPhanEndDate;
+                                           }
+                                       }
+                                   }
+                                   return false;
+                               })
+                               .ToList();
+                        var TotalIsKhaoSat = get_sv.Count(sv => db.answer_response
+                            .Any(aw => aw.id_sv == sv.id_sv
+                            && aw.surveyID == items.surveyID
+                            && aw.id_ctdt != null
+                            && aw.json_answer != null));
+                        double percentage = Math.Round(((double)TotalIsKhaoSat / get_sv.Count) * 100, 2);
+
+                        var DataStudent = new
+                        {
+                            IDPhieu = items.surveyID,
+                            TenPhieu = items.surveyTitle,
+                            TongKhaoSat = get_sv.Count,
+                            TongPhieuDaTraLoi = TotalIsKhaoSat,
+                            TongPhieuChuaTraLoi = (get_sv.Count - TotalIsKhaoSat),
+                            TyLeDaTraLoi = percentage,
+                            TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
+                        };
+
+                        List_data.Add(DataStudent);
+                    }
                 }
-                else if (isCBVC)
+                // Check phiếu thuộc giảng viên
+                else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
                 {
                     var cbvc = db.CanBoVienChuc
                         .AsQueryable();
                     var TotalAll = cbvc.Count();
                     var TotalDaKhaoSat = cbvc.Count(sv => db.answer_response
                                         .Any(aw => aw.id_CBVC == sv.id_CBVC
-                                        && (survey.IDSurvey == 0 || aw.surveyID == survey.IDSurvey)
+                                        && (items.surveyID == 0 || aw.surveyID == items.surveyID)
                                         && aw.json_answer != null));
-                    var idphieu = db.survey.Where(x => x.surveyID == survey.IDSurvey).FirstOrDefault();
+                    var idphieu = db.survey.Where(x => x.surveyID == items.surveyID).FirstOrDefault();
                     double percentage = Math.Round(((double)TotalDaKhaoSat / TotalAll) * 100, 2);
-
                     var DataCBVC = new
                     {
                         IDPhieu = idphieu.surveyID,
+                        TenPhieu = items.surveyTitle,
                         TongKhaoSat = TotalAll,
                         TongPhieuDaTraLoi = TotalDaKhaoSat,
                         TongPhieuChuaTraLoi = (TotalAll - TotalDaKhaoSat),
                         TyLeDaTraLoi = percentage,
                         TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
                     };
-                    ChartSurvey.Add(DataCBVC);
+                    List_data.Add(DataCBVC);
+                }
+                else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
+                {
+                    var ctdt = db.answer_response
+                      .Where(x => x.id_ctdt != null && x.id_sv == null)
+                      .AsQueryable();
+                    var TotalAll = ctdt.Count();
+                    var idphieu = db.survey.Where(x => x.surveyID == items.surveyID).FirstOrDefault();
+                    var DataCTDT = new
+                    {
+                        IDPhieu = idphieu.surveyID,
+                        TenPhieu = items.surveyTitle,
+                        TongKhaoSat = TotalAll,
+                        TongPhieuDaTraLoi = TotalAll,
+                        TongPhieuChuaTraLoi = 0,
+                        TyLeDaTraLoi = 100,
+                        TyLeChuaTraLoi = 0
+                    };
+                    List_data.Add(DataCTDT);
+                }
+                else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+                {
+                    bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11 }.Contains(items.id_loaikhaosat);
+                    bool hoc_vien_co_hoc_phan_tot_nghiep = new[] { 13 }.Contains(items.id_loaikhaosat);
+                    var check_hoc_vien_co_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan.ToListAsync();
+                    // Tách chuỗi học phần survey
+                    var tach_chuoi_hoc_phan_mon_hoc = items.hoc_phan.Split('-');
+                    string hocphanstart = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                    string hocphanend = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                    DateTime hocPhanStartDate = DateTime.ParseExact(hocphanstart, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    DateTime hocPhanEndDate = DateTime.ParseExact(hocphanend, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    // Chạy vòng lặp kiểm tra
+                    string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                    string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                    DateTime hocPhanStartDatee = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    DateTime hocPhanEndDatee = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
+                    {
+                        var check_hp_lt = check_hoc_vien_co_hoc_phan.Where(e => e.mon_hoc.hoc_phan.ten_hoc_phan != "Báo cáo tốt nghiệp"
+                            && (hocPhanStartDatee >= hocPhanStartDate
+                            && hocPhanStartDatee <= hocPhanEndDate) || (hocPhanEndDatee >= hocPhanStartDate
+                            && hocPhanEndDatee <= hocPhanEndDate)).ToList();
+                        var total = check_hp_lt.Count;
+                        var TotalIsKhaoSat = check_hp_lt.Where(x=> x.da_khao_sat == 1).ToList().Count;
+                        double percentage = Math.Round(((double)TotalIsKhaoSat / total) * 100, 2);
+                        var DataStudent = new
+                        {
+                            IDPhieu = items.surveyID,
+                            TenPhieu = items.surveyTitle,
+                            TongKhaoSat = total,
+                            TongPhieuDaTraLoi = TotalIsKhaoSat,
+                            TongPhieuChuaTraLoi = (total - TotalIsKhaoSat),
+                            TyLeDaTraLoi = percentage,
+                            TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
+                        };
+                        List_data.Add(DataStudent);
+                    }
+                    else if (hoc_vien_co_hoc_phan_tot_nghiep)
+                    {
+                        var check_hp_bctn = check_hoc_vien_co_hoc_phan.Where(e => e.mon_hoc.hoc_phan.ten_hoc_phan == "Báo cáo tốt nghiệp"
+                            && (hocPhanStartDatee >= hocPhanStartDate
+                            && hocPhanStartDatee <= hocPhanEndDate) || (hocPhanEndDatee >= hocPhanStartDate
+                            && hocPhanEndDatee <= hocPhanEndDate)).ToList();
+                        var total = check_hp_bctn.Count;
+                        var TotalIsKhaoSat = check_hp_bctn.Where(x => x.da_khao_sat == 1).ToList().Count;
+                        double percentage = Math.Round(((double)TotalIsKhaoSat / total) * 100, 2);
+                        var DataStudent = new
+                        {
+                            IDPhieu = items.surveyID,
+                            TenPhieu = items.surveyTitle,
+                            TongKhaoSat = total,
+                            TongPhieuDaTraLoi = TotalIsKhaoSat,
+                            TongPhieuChuaTraLoi = (total - TotalIsKhaoSat),
+                            TyLeDaTraLoi = percentage,
+                            TyLeChuaTraLoi = Math.Round(((double)100 - percentage), 2),
+                        };
+                        List_data.Add(DataStudent);
+                    }
                 }
             }
-            var Alldata = new
-            {
-                AllSurvey = GetAllSurvey,
-                ChartSurvey = ChartSurvey,
-            };
-            return Json(new { data = Alldata }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { data = List_data }, JsonRequestBehavior.AllowGet);
+
         }
         [HttpGet]
         public ActionResult LoadSurveyDetail(int surveyid)

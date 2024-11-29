@@ -30,7 +30,6 @@ namespace CTDT.Controllers
         [Route("api/xac_thuc")]
         public async Task<IHttpActionResult> load_select_xac_thuc(survey Sv)
         {
-            var user = SessionHelper.GetUser();
             var survey = await db.survey.FirstOrDefaultAsync(x => x.surveyID == Sv.surveyID);
             if (survey != null)
             {
@@ -71,7 +70,11 @@ namespace CTDT.Controllers
                             list_lop.Add(get_lop);
                             foreach (var sv in get_lop)
                             {
-
+                                var tach_chuoi_nam_tot_nghiep = survey.thang_tot_nghiep.Split('-');
+                                string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(7, '0');
+                                string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(7, '0');
+                                DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                                 var get_sv = db.sinhvien
                                     .Where(x => x.id_lop == sv.ma_lop)
                                     .Select(x => new
@@ -212,6 +215,11 @@ namespace CTDT.Controllers
                 bool cuu_hoc_vien = new[] { 6 }.Contains(survey.id_loaikhaosat);
                 bool hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep = new[] { 9 }.Contains(survey.id_loaikhaosat);
                 bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(survey.id_loaikhaosat);
+                if (cuu_hoc_vien)
+                {
+                    url = "/xac_thuc/" + survey.surveyID;
+                    return Ok(new { data = url, non_survey = true });
+                }
                 if (check_mail_student == "student.tdmu.edu.vn")
                 {
                     if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep || hoc_vien_nhap_hoc || hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep)
@@ -220,11 +228,6 @@ namespace CTDT.Controllers
                         return Ok(new { data = url, is_answer = true });
                     }
                 }
-                else if (cuu_hoc_vien)
-                {
-                    url = "/xac_thuc/" + survey.surveyID;
-                    return Ok(new { data = url, is_answer = true });
-                }
                 else
                 {
                     return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
@@ -232,6 +235,7 @@ namespace CTDT.Controllers
 
 
             }
+
             // Check phiếu thuộc giảng viên
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
@@ -272,44 +276,52 @@ namespace CTDT.Controllers
                     DateTime surveyStartDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     DateTime surveyEndDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     // Chạy vòng lặp kiểm tra
-                    foreach (var items in check_hoc_vien_co_hoc_phan)
+                    if (check_hoc_vien_co_hoc_phan.Any())
                     {
-                        var tach_chuoi_hoc_phan_mon_hoc = items.thang_by_hoc_phan.Split('-');
-                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
-                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
-                        DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
+                        foreach (var items in check_hoc_vien_co_hoc_phan)
                         {
-                            if (check_hoc_vien_co_hoc_phan != null
-                                && items.mon_hoc.hoc_phan.ten_hoc_phan != "Báo cáo tốt nghiệp"
-                                // Kiểm tra học phần nằm trong khoảng survey
-                                && (hocPhanStartDate >= surveyStartDate
-                                && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
-                                && hocPhanEndDate <= surveyEndDate))
+                            var tach_chuoi_hoc_phan_mon_hoc = items.thang_by_hoc_phan.Split('-');
+                            string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                            string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                            DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                            DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                            if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
                             {
-                                url = "/xac-thuc-mon-hoc";
-                                return Ok(new { data = url, non_survey = true });
+                                if (check_hoc_vien_co_hoc_phan != null
+                                    && items.mon_hoc.hoc_phan.ten_hoc_phan != "Báo cáo tốt nghiệp"
+                                    // Kiểm tra học phần nằm trong khoảng survey
+                                    && (hocPhanStartDate >= surveyStartDate
+                                    && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
+                                    && hocPhanEndDate <= surveyEndDate))
+                                {
+                                    url = "/xac-thuc-mon-hoc";
+                                    return Ok(new { data = url, non_survey = true });
+                                }
+                                else
+                                {
+                                    return Ok(new { message = "Bạn không tồn tại học phần nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                                }
                             }
-                            else
+                            else if (hoc_vien_co_hoc_phan_tot_nghiep)
                             {
-                                return Ok(new { message = "Bạn không tồn tại học phần lý thuyết nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
-                            }
-                        }
-                        else if (hoc_vien_co_hoc_phan_tot_nghiep)
-                        {
-                            if (check_hoc_vien_co_hoc_phan != null && items.mon_hoc.hoc_phan.ten_hoc_phan == "Báo cáo tốt nghiệp" && hocPhanStartDate >= surveyStartDate && hocPhanEndDate <= surveyEndDate)
-                            {
-                                HttpContext.Current.Session["Surveyid"] = survey.surveyID;
-                                url = "/xac-thuc-mon-hoc";
-                                return Ok(new { data = url, non_survey = true });
-                            }
-                            else
-                            {
-                                return Ok(new { message = "Bạn không tồn tại học phần khóa luận tốt nghiệp nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                                if (check_hoc_vien_co_hoc_phan != null && items.mon_hoc.hoc_phan.ten_hoc_phan == "Báo cáo tốt nghiệp" && hocPhanStartDate >= surveyStartDate && hocPhanEndDate <= surveyEndDate)
+                                {
+                                    HttpContext.Current.Session["Surveyid"] = survey.surveyID;
+                                    url = "/xac-thuc-mon-hoc";
+                                    return Ok(new { data = url, non_survey = true });
+                                }
+                                else
+                                {
+                                    return Ok(new { message = "Bạn không tồn tại học phần nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        return Ok(new { message = "Bạn không tồn tại học phần nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                    }
+                    
                 }
                 else
                 {
@@ -322,13 +334,20 @@ namespace CTDT.Controllers
         {
             var url = "";
             var check_group_loaikhaosat = await db.LoaiKhaoSat.FirstOrDefaultAsync(x => x.id_loaikhaosat == survey.id_loaikhaosat);
+
             // Check phiếu thuộc học viên
             if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu học viên")
             {
-                bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(survey.id_loaikhaosat);
                 bool cuu_hoc_vien = new[] { 6 }.Contains(survey.id_loaikhaosat);
+
+                bool hoc_vien_nhap_hoc = new[] { 4 }.Contains(survey.id_loaikhaosat);
                 bool hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep = new[] { 9 }.Contains(survey.id_loaikhaosat);
                 bool hoc_vien_cuoi_khoa_co_quyet_dinh_tot_nghiep = new[] { 12 }.Contains(survey.id_loaikhaosat);
+                if (cuu_hoc_vien)
+                {
+                    url = "/xac_thuc/" + survey.surveyID;
+                    return Ok(new { data = url, non_survey = true });
+                }
                 if (check_mail_student == "student.tdmu.edu.vn")
                 {
                     if (hoc_vien_nhap_hoc_khong_co_thoi_gian_tot_nghiep)
@@ -378,12 +397,6 @@ namespace CTDT.Controllers
                 {
                     return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
                 }
-
-                if (cuu_hoc_vien)
-                {
-                    url = "/xac_thuc/" + survey.surveyID;
-                    return Ok(new { data = url, non_survey = true });
-                }
             }
             // Check phiếu thuộc giảng viên
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
@@ -431,45 +444,61 @@ namespace CTDT.Controllers
                     DateTime surveyStartDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     DateTime surveyEndDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     // Chạy vòng lặp kiểm tra
-                    foreach (var items in check_hoc_vien_co_hoc_phan)
+                    if (check_hoc_vien_co_hoc_phan.Any())
                     {
-                        var tach_chuoi_hoc_phan_mon_hoc = items.thang_by_hoc_phan.Split('-');
-                        string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
-                        string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
-                        DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
+                        foreach (var items in check_hoc_vien_co_hoc_phan)
                         {
-                            if (check_hoc_vien_co_hoc_phan != null
-                                && items.mon_hoc.hoc_phan.ten_hoc_phan == "Lý thuyết"
-                                // Kiểm tra học phần nằm trong khoảng survey
-                                && (hocPhanStartDate >= surveyStartDate
-                                && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
-                                && hocPhanEndDate <= surveyEndDate))
+                            if (items != null)
                             {
-                                HttpContext.Current.Session["Surveyid"] = survey.surveyID;
-                                url = "/xac-thuc-mon-hoc";
-                                return Ok(new { data = url, non_survey = true });
+                                var tach_chuoi_hoc_phan_mon_hoc = items.thang_by_hoc_phan.Split('-');
+                                string hocPhanStartDateString = "01/" + tach_chuoi_hoc_phan_mon_hoc[0].PadLeft(7, '0');
+                                string hocPhanEndDateString = "30/" + tach_chuoi_hoc_phan_mon_hoc[1].PadLeft(7, '0');
+                                DateTime hocPhanStartDate = DateTime.ParseExact(hocPhanStartDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                DateTime hocPhanEndDate = DateTime.ParseExact(hocPhanEndDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
+                                {
+                                    if (check_hoc_vien_co_hoc_phan != null
+                                        && items.mon_hoc.hoc_phan.ten_hoc_phan == "Lý thuyết"
+                                        // Kiểm tra học phần nằm trong khoảng survey
+                                        && (hocPhanStartDate >= surveyStartDate
+                                        && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
+                                        && hocPhanEndDate <= surveyEndDate))
+                                    {
+                                        HttpContext.Current.Session["Surveyid"] = survey.surveyID;
+                                        url = "/xac-thuc-mon-hoc";
+                                        return Ok(new { data = url, non_survey = true });
+                                    }
+                                    else
+                                    {
+                                        return Ok(new { message = "Bạn không tồn tại học phần nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                                    }
+
+                                }
+                                else if (hoc_vien_co_hoc_phan_tot_nghiep)
+                                {
+                                    if (check_hoc_vien_co_hoc_phan != null && items.mon_hoc.hoc_phan.ten_hoc_phan == "Báo cáo tốt nghiệp" && (hocPhanStartDate >= surveyStartDate
+                                        && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
+                                        && hocPhanEndDate <= surveyEndDate))
+                                    {
+                                        HttpContext.Current.Session["Surveyid"] = survey.surveyID;
+                                        url = "/xac-thuc-mon-hoc";
+                                        return Ok(new { data = url, non_survey = true });
+                                    }
+                                    else
+                                    {
+                                        return Ok(new { message = "Bạn không tồn tại học phần nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                                    }
+
+                                }
                             }
-                            else
-                            {
-                                return Ok(new { message = "Bạn không tồn tại học phần lý thuyết nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
-                            }
-                        }
-                        else if (hoc_vien_co_hoc_phan_tot_nghiep)
-                        {
-                            if (check_hoc_vien_co_hoc_phan != null && items.mon_hoc.hoc_phan.ten_hoc_phan == "Báo cáo tốt nghiệp" && hocPhanStartDate >= surveyStartDate&& hocPhanEndDate <= surveyEndDate)
-                            {
-                                HttpContext.Current.Session["Surveyid"] = survey.surveyID;
-                                url = "/xac-thuc-mon-hoc";
-                                return Ok(new { data = url, non_survey = true });
-                            }
-                            else
-                            {
-                                return Ok(new { message = "Bạn không tồn tại học phần khóa luận tốt nghiệp nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
-                            }
+                           
                         }
                     }
+                    else
+                    {
+                        return Ok(new { message = "Bạn không tồn tại học phần nào, vui lòng liên hệ với người phụ trách để biết thêm chi tiết" });
+                    }
+
                 }
                 else
                 {
@@ -485,8 +514,8 @@ namespace CTDT.Controllers
         {
             var survey = db.survey.FirstOrDefault(x => x.surveyID == getNguoiHoc.Id);
             var tach_chuoi_nam_tot_nghiep = survey.thang_tot_nghiep.Split('-');
-            string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(2, '0');
-            string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(2, '0');
+            string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(7, '0');
+            string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(7, '0');
             DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             if (survey.id_loaikhaosat == 2 || survey.id_loaikhaosat == 6)
@@ -554,7 +583,7 @@ namespace CTDT.Controllers
 
                     if (checkIsAnswerDoanhNghiep != null)
                     {
-                        var url = "/Survey/AnswerPKS?id=" + checkIsAnswerDoanhNghiep.id + "&surveyid=" + checkIsAnswerDoanhNghiep.surveyID;
+                        var url = "phieu-khao-sat/dap-an/" + checkIsAnswerDoanhNghiep.id + "/" + checkIsAnswerDoanhNghiep.surveyID;
                         return Ok(new { is_answer = true, message = "Tài khoản này đã thực hiện khảo sát cho chương trình đào tạo này", info = url });
                     }
                     break;
@@ -572,7 +601,7 @@ namespace CTDT.Controllers
 
                     if (checkIsAnswerHocVien != null)
                     {
-                        var url = "/Survey/AnswerPKS?id=" + checkIsAnswerHocVien.id + "&surveyid=" + checkIsAnswerHocVien.surveyID;
+                        var url = "phieu-khao-sat/dap-an/" + checkIsAnswerHocVien.id + "/" + checkIsAnswerHocVien.surveyID;
                         return Ok(new { is_answer = true, message = "Tài khoản này đã thực hiện khảo sát cho sinh viên này !", info = url });
                     }
                     break;
@@ -644,8 +673,8 @@ namespace CTDT.Controllers
         public async Task<sinhvien> convert_nguoi_hoc(string thangstring, string namstring, string mssv)
         {
             var tach_chuoi_nam_tot_nghiep = thangstring.Split('-');
-            string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(2, '0');
-            string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(2, '0');
+            string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(7, '0');
+            string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(7, '0');
             DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
@@ -657,7 +686,7 @@ namespace CTDT.Controllers
                         var formattedNamTotNghiep = namstring.Split('/');
                         if (formattedNamTotNghiep.Length == 2)
                         {
-                            string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
+                            string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(7, '0') + "/" + formattedNamTotNghiep[1];
 
                             return DateTime.TryParseExact(
                                        formattedDate,
@@ -732,7 +761,7 @@ namespace CTDT.Controllers
                 if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong && (hocPhanStartDate >= surveyStartDate
                                 && hocPhanStartDate <= surveyEndDate) || (hocPhanEndDate >= surveyStartDate
                                 && hocPhanEndDate <= surveyEndDate) && item.mon_hoc.hoc_phan.ten_hoc_phan != "Báo cáo tốt nghiệp")
-                   
+
                 {
                     data_list.Add(new
                     {
@@ -745,12 +774,13 @@ namespace CTDT.Controllers
                         tinh_trang_khao_sat = item.da_khao_sat == 1 ? "Đã khảo sát" : "Chưa khảo sát"
                     });
                 }
+                else
+                {
+                    return Ok(new { message = "Không tồn tại học phần lý thuyết nào trong khoảng thời gian của khảo sát.", success = false });
+                }
             }
 
-            if (data_list.Count == 0)
-            {
-                return Ok(new { message = "Không tồn tại học phần lý thuyết nào trong khoảng thời gian của khảo sát.", success = false });
-            }
+
             return Ok(new { data = data_list, success = true });
         }
     }

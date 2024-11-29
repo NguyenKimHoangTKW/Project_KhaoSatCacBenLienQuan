@@ -203,12 +203,8 @@ function load_bao_cao() {
             let body = $('#accordion-default');
             let html = '';
             body.empty();
-            if (res.success && res && res.data && res.data.phieu_khao_sat.length > 0) {
-                res.data.phieu_khao_sat.forEach(function (phieu, index) {
-                    const ctdt = res.data.chuong_trinh_dao_tao.find(ctdtGroup => {
-                        return ctdtGroup.some(ctdtItem => ctdtItem.ma_phieu === phieu.ma_phieu);
-                    });
-
+            if (res.success) {
+                res.data.forEach(function (phieu, index) {
                     let collapseId = `collapse${index}`;
                     html += `
                     <div class="card">
@@ -234,35 +230,18 @@ function load_bao_cao() {
                                 </thead>
                                 <tbody id="showdata">
                                     `;
-                    ctdt.forEach(function (chuongtrinhdaotao, ctdtIndex) {
-                        const tylethamgiakhaosat = res.data.ty_le_tham_gia_khao_sat.find(khao_sat =>
-                            khao_sat.ma_phieu === chuongtrinhdaotao.ma_phieu &&
-                            khao_sat.ma_ctdt === chuongtrinhdaotao.ma_ctdt
-                        );
-                        const mucdohailong = res.data.muc_do_hai_long.find(khao_sat =>
-                            khao_sat.ma_phieu === chuongtrinhdaotao.ma_phieu &&
-                            khao_sat.ma_ctdt === chuongtrinhdaotao.ma_ctdt
-                        );
-                        const tyLeDaTraLoi = tylethamgiakhaosat ? tylethamgiakhaosat.ty_le_da_tra_loi : '0';
-                        const tylehailong = mucdohailong ? mucdohailong.ty_le_hai_long : '0';
-                        const diemtrungbinh = mucdohailong ? mucdohailong.avgscore : '0';
-                        let ketqua = '';
-                        if (tyLeDaTraLoi >= 75 && tylehailong >= 75) {
-                            ketqua = 'Đạt';
-                        }
-                        else {
-                            ketqua = 'Chưa Đạt';
-                        }
-                        html += `
-                        <tr>
-                            <td scope="col" class="formatSo">${ctdtIndex + 1}</td>
-                            <td scope="col">${chuongtrinhdaotao.ten_ctdt}</td>
-                            <td scope="col" class="formatSo">${tyLeDaTraLoi}%</td>
-                            <td scope="col" class="formatSo">${tylehailong}%</td>
-                            <td scope="col" class="formatSo">${diemtrungbinh}</td>
-                            <td scope="col" class="formatSo">${ketqua}</td>
-                        </tr>`;
-                    });
+                    //ctdt.forEach(function (chuongtrinhdaotao, ctdtIndex) {
+                        
+                    //    html += `
+                    //    <tr>
+                    //        <td scope="col" class="formatSo">${ctdtIndex + 1}</td>
+                    //        <td scope="col">${chuongtrinhdaotao.ten_ctdt}</td>
+                    //        <td scope="col" class="formatSo">${tyLeDaTraLoi}%</td>
+                    //        <td scope="col" class="formatSo">${tylehailong}%</td>
+                    //        <td scope="col" class="formatSo">${diemtrungbinh}</td>
+                    //        <td scope="col" class="formatSo">${ketqua}</td>
+                    //    </tr>`;
+                    //});
 
                     html += `
                                 </tbody>
@@ -287,11 +266,3 @@ function load_bao_cao() {
         }
     });
 }
-
-$(document).on('change', '#hedaotao', function () {
-    load_bao_cao();
-});
-
-$(document).on('change', '#year', function () {
-    load_bao_cao();
-});

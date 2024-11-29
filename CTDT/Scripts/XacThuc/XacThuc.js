@@ -142,7 +142,6 @@ function load_select_xac_thuc() {
                         select_lop.trigger('change');
                     });
 
-                    // Load Người học by Lớp
                     $(document).on('change', '#select_lop', function () {
                         var select_nguoi_hoc = $("#select_nguoi_hoc");
                         var id = $(this).val();
@@ -151,16 +150,17 @@ function load_select_xac_thuc() {
 
                         res.data.list_nguoi_hoc.forEach(function (nguoiHocList) {
                             nguoiHocList.forEach(function (chil) {
-                                var ngaySinh = new Date(parseInt(chil.ngay_sinh.substr(6)));
-                                var formattedNgaySinh = ngaySinh.toLocaleDateString("en-US");
+                                var ngaySinh = new Date(chil.ngay_sinh); 
+                                var formattedNgaySinh = ngaySinh.toLocaleDateString("en-US")
                                 if (chil.ma_lop == id) {
-                                    option += `<option value="${chil.id_nguoi_hoc}">${chil.ten_nguoi_hoc}- ${formattedNgaySinh}</option>`;
+                                    option += `<option value="${chil.id_nguoi_hoc}">${chil.ten_nguoi_hoc} - ${formattedNgaySinh}</option>`;
                                 }
                             });
                         });
 
                         select_nguoi_hoc.html(option);
                     });
+
 
                     $('#select_khoa').trigger('change');
 

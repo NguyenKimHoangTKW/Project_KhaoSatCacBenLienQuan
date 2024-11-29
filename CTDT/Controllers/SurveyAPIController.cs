@@ -35,48 +35,19 @@ namespace CTDT.Controllers
             switch (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
             {
                 case "Phiếu học viên":
-                    if (domainGmail.Equals("student.tdmu.edu.vn"))
-                    {
-                        var tach_chuoi_nam_tot_nghiep = get_data.thang_tot_nghiep != null ? get_data.thang_tot_nghiep.Split('-') : get_data.thang_nhap_hoc.Split('-');
-                        string startDateString = "01/" + tach_chuoi_nam_tot_nghiep[0].PadLeft(2, '0');
-                        string endDateString = "30/" + tach_chuoi_nam_tot_nghiep[1].PadLeft(2, '0');
-                        DateTime startDate = DateTime.ParseExact(startDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        DateTime endDate = DateTime.ParseExact(endDateString, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        var nguoi_hoc = (await db.sinhvien.Where(x => sxt.nguoi_hoc != null ? x.id_sv == sxt.nguoi_hoc : x.ma_sv == ms_nguoi_hoc).ToListAsync())
-                                .Where(sv =>
-                                {
-                                    var formattedNamTotNghiep = get_data.thang_tot_nghiep != null ? sv.namtotnghiep.Split('/') : sv.namnhaphoc.Split('/');
-                                    if (formattedNamTotNghiep.Length == 2)
-                                    {
-                                        string formattedDate = "01/" + formattedNamTotNghiep[0].PadLeft(2, '0') + "/" + formattedNamTotNghiep[1];
-
-                                        return DateTime.TryParseExact(
-                                                   formattedDate,
-                                                   "dd/MM/yyyy",
-                                                   CultureInfo.InvariantCulture,
-                                                   DateTimeStyles.None,
-                                                   out DateTime namtotnghiepDate) &&
-                                               namtotnghiepDate >= startDate &&
-                                               namtotnghiepDate <= endDate;
-                                    }
-                                    return false;
-                                })
-                                .Select(x => new
-                                {
-                                    email = user.email,
-                                    ma_nguoi_hoc = x.ma_sv,
-                                    ten_nguoi_hoc = x.hovaten,
-                                    khoa = x.lop.ctdt.khoa.ten_khoa,
-                                    ctdt = x.lop.ctdt.ten_ctdt,
-                                })
-                                .FirstOrDefault(x => x.ma_nguoi_hoc == ms_nguoi_hoc);
-                        list_thong_tin.Add(nguoi_hoc);
-                        return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
-                    }
-                    else
-                    {
-                        return Ok(new { is_nguoi_hoc = false, message = "Người dùng không có quyền khảo sát phiếu khảo sát này" });
-                    }
+                    var nguoi_hoc = await db.sinhvien
+                        .Where(x => sxt.nguoi_hoc != null ? x.id_sv == sxt.nguoi_hoc : x.ma_sv == ms_nguoi_hoc)
+                        .Select(x => new
+                        {
+                            email = user.email,
+                            ma_nguoi_hoc = x.ma_sv,
+                            ten_nguoi_hoc = x.hovaten,
+                            khoa = x.lop.ctdt.khoa.ten_khoa,
+                            ctdt = x.lop.ctdt.ten_ctdt,
+                        })
+                        .FirstOrDefaultAsync();
+                    list_thong_tin.Add(nguoi_hoc);
+                    return Ok(new { data = js_data, info = list_thong_tin, is_nguoi_hoc = true });
 
                 case "Phiếu giảng viên":
                     var can_bo_vien_chuc_obj = db.CanBoVienChuc.FirstOrDefault(x => x.Email == user.email);
@@ -188,7 +159,7 @@ namespace CTDT.Controllers
                         var can_bo_vien_chuc = await db.CanBoVienChuc.FirstOrDefaultAsync(x => user.email == x.Email);
                         var don_vi_select = await db.DonVi?.FirstOrDefaultAsync(x => x.name_donvi == saveForm.don_vi);
                         var ctdt_select = await db.ctdt?.FirstOrDefaultAsync(x => x.ten_ctdt == saveForm.ctdt);
-                        if(don_vi_select == null || ctdt_select == null)
+                        if (don_vi_select == null || ctdt_select == null)
                         {
                             aw = new answer_response()
                             {
@@ -281,13 +252,13 @@ namespace CTDT.Controllers
                         ctdt = answer_responses.ctdt.ten_ctdt,
                         khao_sat_lan_cuoi = answer_responses.time
                     });
-                    return Ok(new { data = data_hoc_vien,info = list_info, is_nguoi_hoc = true });
+                    return Ok(new { data = data_hoc_vien, info = list_info, is_nguoi_hoc = true });
                 case "Phiếu giảng viên":
-                    
+
                     break;
 
                 case "Phiếu doanh nghiệp":
-                    
+
                     break;
 
                 case "Phiếu người học có học phần":
@@ -309,8 +280,8 @@ namespace CTDT.Controllers
                         ten_giang_vien = answer_responses.CanBoVienChuc.TenCBVC,
                         khao_sat_lan_cuoi = answer_responses.time
                     });
-                    return Ok(new { data = data_ho_vien_mon_hoc,info = list_info,is_hoc_phan_nguoi_hoc = true });
-            }         
+                    return Ok(new { data = data_ho_vien_mon_hoc, info = list_info, is_hoc_phan_nguoi_hoc = true });
+            }
             return BadRequest();
         }
         [HttpPost]

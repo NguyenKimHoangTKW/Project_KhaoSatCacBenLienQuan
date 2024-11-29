@@ -35,7 +35,7 @@ while (m = regex.exec(location.href)) {
 
 if (Object.keys(params).length > 0) {
     localStorage.setItem('authInfo', JSON.stringify(params));
-    window.history.replaceState({}, document.title, "/trang-chu"); // Avoid hard reload by using replaceState
+    window.history.replaceState({}, document.title, "/trang-chu");
 }
 
 let info = JSON.parse(localStorage.getItem('authInfo'));
