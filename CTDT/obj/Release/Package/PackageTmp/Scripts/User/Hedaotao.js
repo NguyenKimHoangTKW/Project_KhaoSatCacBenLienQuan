@@ -131,12 +131,12 @@ function form_ctdt(check) {
                     <div class="row">
                     <div class="col-md-12">
                             <div class="course align-self-stretch">
-                                <a href="javascript:void(0)" onclick='window.location.href="/ctdt/giam-sat-ket-qua-khao-sat"' class="img" style="background-image: url(/Style/assets/ctdt.png)"></a>
+                                <a href="javascript:void(0)" onclick='Alert()' class="img" style="background-image: url(/Style/assets/ctdt.png)"></a>
                                 <div class="text p-4">
                                     <p class="category"><span>KHẢO SÁT CÁC BÊN LIÊN QUAN</span></p>
-                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='window.location.href="/ctdt/giam-sat-ket-qua-khao-sat"'>DÀNH CHO HỆ CHƯƠNG TRÌNH ĐÀO TẠO</a></h3>
+                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='Alert()'>DÀNH CHO HỆ CHƯƠNG TRÌNH ĐÀO TẠO</a></h3>
                                     <p>Thống kê kết quả khảo sát ý kiến, đánh giá, góp ý của Cán Bộ Viên Chức Giảng viên, Sinh viên, Cựu Sinh Viên, Doanh Nghiệp theo Chương trình đào tạo ...</p>
-                                    <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick='window.location.href="/ctdt/giam-sat-ket-qua-khao-sat"' class="btn btn-primary">Đi đến</a></p>
+                                    <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick='Alert()' class="btn btn-primary">Đi đến</a></p>
                                 </div>
                             </div>
                         </div>
@@ -193,4 +193,15 @@ function form_khoa(check) {
                     </div>
                     `;
     body.html(html);
+}
+function Alert() {
+    Swal.fire({
+        title: "Hiện tại xem kết quả đang được bảo trì và thống kê",
+        text: "Vui lòng quay trở lại khi có thông báo",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "OK"
+    });
 }

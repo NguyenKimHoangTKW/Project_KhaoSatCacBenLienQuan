@@ -239,12 +239,18 @@ namespace CTDT.Controllers
             // Check phiếu thuộc giảng viên
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
-                bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
-                bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
+                bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
                 if (user.email == "2124802010093@student.tdmu.edu.vn" || check_mail_student == "tdmu.edu.vn")
                 {
-                    url = "/phieu-khao-sat/dap-an/" + answer_survey.id + "/" + answer_survey.surveyID;
-                    return Ok(new { data = url, is_answer = true });
+                    if (check_giang_vien)
+                    {
+                        url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/dap-an/" + answer_survey.id + "/" + answer_survey.surveyID;
+                        return Ok(new { data = url, non_survey = true });
+                    }
+                    else
+                    {
+                        return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
+                    }
                 }
                 else
                 {
@@ -601,7 +607,7 @@ namespace CTDT.Controllers
 
                     if (checkIsAnswerHocVien != null)
                     {
-                        var url = "phieu-khao-sat/dap-an/" + checkIsAnswerHocVien.id + "/" + checkIsAnswerHocVien.surveyID;
+                        var url = "/phieu-khao-sat/dap-an/" + checkIsAnswerHocVien.id + "/" + checkIsAnswerHocVien.surveyID;
                         return Ok(new { is_answer = true, message = "Tài khoản này đã thực hiện khảo sát cho sinh viên này !", info = url });
                     }
                     break;
@@ -623,7 +629,7 @@ namespace CTDT.Controllers
                         if (checkIsAnswerGiangVien != null)
                         {
 
-                            var url = "phieu-khao-sat/dap-an/" + checkIsAnswerGiangVien.id + "/" + checkIsAnswerGiangVien.surveyID;
+                            var url = "/phieu-khao-sat/dap-an/" + checkIsAnswerGiangVien.id + "/" + checkIsAnswerGiangVien.surveyID;
                             return Ok(new { is_answer = true, message = "Tài khoản này đã thực hiện khảo sát cho chương trình đào tạo và đơn vị này !", info = url });
                         }
                     }
@@ -651,7 +657,7 @@ namespace CTDT.Controllers
 
                         if (CheckMonHocByHocVien != null)
                         {
-                            var url = "phieu-khao-sat/dap-an/" + CheckMonHocByHocVien.id + "/" + CheckMonHocByHocVien.surveyID;
+                            var url = "/phieu-khao-sat/dap-an/" + CheckMonHocByHocVien.id + "/" + CheckMonHocByHocVien.surveyID;
                             return Ok(new { is_answer = true, message = "Bạn đã khảo sát môn học này, bạn có muốn chỉnh sửa lại đáp án không?", info = url });
                         }
                     }

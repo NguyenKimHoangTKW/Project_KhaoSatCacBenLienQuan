@@ -69,6 +69,13 @@
     <Property Name="ma_donvi" Type="nvarchar" MaxLength="10" />
     <Property Name="name_donvi" Type="nvarchar" MaxLength="200" />
   </EntityType>
+  <EntityType Name="DotKhaoSat">
+    <Key>
+      <PropertyRef Name="id_dot_khao_sat" />
+    </Key>
+    <Property Name="id_dot_khao_sat" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ten_dot_khao_sat" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="group_loaikhaosat">
     <Key>
       <PropertyRef Name="id_gr_loaikhaosat" />
@@ -167,10 +174,12 @@
       <PropertyRef Name="id_nguoi_hoc_by_hoc_phan" />
     </Key>
     <Property Name="id_nguoi_hoc_by_hoc_phan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="surveyID" Type="int" />
     <Property Name="id_mon_hoc" Type="int" Nullable="false" />
     <Property Name="id_sinh_vien" Type="int" Nullable="false" />
     <Property Name="id_giang_vvien" Type="int" />
     <Property Name="thang_by_hoc_phan" Type="nvarchar" MaxLength="20" />
+    <Property Name="id_dot_khao_sat" Type="int" />
     <Property Name="da_khao_sat" Type="int" />
   </EntityType>
   <EntityType Name="phan_quyen_chuc_nang_users">
@@ -221,6 +230,7 @@
     <Property Name="thang_tot_nghiep" Type="nvarchar" MaxLength="20" />
     <Property Name="thang_nhap_hoc" Type="nvarchar" MaxLength="20" />
     <Property Name="hoc_phan" Type="nvarchar" MaxLength="20" />
+    <Property Name="id_dot_khao_sat" Type="int" />
   </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
@@ -525,6 +535,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_DotKhaoSat">
+    <End Role="DotKhaoSat" Type="Self.DotKhaoSat" Multiplicity="0..1" />
+    <End Role="nguoi_hoc_dang_co_hoc_phan" Type="Self.nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DotKhaoSat">
+        <PropertyRef Name="id_dot_khao_sat" />
+      </Principal>
+      <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
+        <PropertyRef Name="id_dot_khao_sat" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
     <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="1" />
     <End Role="nguoi_hoc_dang_co_hoc_phan" Type="Self.nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
@@ -546,6 +568,18 @@
       </Principal>
       <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
         <PropertyRef Name="id_sinh_vien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_survey">
+    <End Role="survey" Type="Self.survey" Multiplicity="0..1" />
+    <End Role="nguoi_hoc_dang_co_hoc_phan" Type="Self.nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="survey">
+        <PropertyRef Name="surveyID" />
+      </Principal>
+      <Dependent Role="nguoi_hoc_dang_co_hoc_phan">
+        <PropertyRef Name="surveyID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -586,6 +620,18 @@
       </Principal>
       <Dependent Role="sinhvien">
         <PropertyRef Name="id_lop" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_survey_DotKhaoSat">
+    <End Role="DotKhaoSat" Type="Self.DotKhaoSat" Multiplicity="0..1" />
+    <End Role="survey" Type="Self.survey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DotKhaoSat">
+        <PropertyRef Name="id_dot_khao_sat" />
+      </Principal>
+      <Dependent Role="survey">
+        <PropertyRef Name="id_dot_khao_sat" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -728,6 +774,7 @@
     <EntitySet Name="ChucVu" EntityType="Self.ChucVu" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ctdt" EntityType="Self.ctdt" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DonVi" EntityType="Self.DonVi" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DotKhaoSat" EntityType="Self.DotKhaoSat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="group_loaikhaosat" EntityType="Self.group_loaikhaosat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="group_mon_hoc" EntityType="Self.group_mon_hoc" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hedaotao" EntityType="Self.hedaotao" Schema="dbo" store:Type="Tables" />
@@ -830,12 +877,20 @@
       <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
       <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
     </AssociationSet>
+    <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_DotKhaoSat" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_DotKhaoSat">
+      <End Role="DotKhaoSat" EntitySet="DotKhaoSat" />
+      <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
+    </AssociationSet>
     <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_mon_hoc">
       <End Role="mon_hoc" EntitySet="mon_hoc" />
       <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
     </AssociationSet>
     <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_sinhvien" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_sinhvien">
       <End Role="sinhvien" EntitySet="sinhvien" />
+      <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_survey" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_survey">
+      <End Role="survey" EntitySet="survey" />
       <End Role="nguoi_hoc_dang_co_hoc_phan" EntitySet="nguoi_hoc_dang_co_hoc_phan" />
     </AssociationSet>
     <AssociationSet Name="FK_phan_quyen_chuc_nang_users_chuc_nang_users" Association="Self.FK_phan_quyen_chuc_nang_users_chuc_nang_users">
@@ -849,6 +904,10 @@
     <AssociationSet Name="FK_sinhvien_lop" Association="Self.FK_sinhvien_lop">
       <End Role="lop" EntitySet="lop" />
       <End Role="sinhvien" EntitySet="sinhvien" />
+    </AssociationSet>
+    <AssociationSet Name="FK_survey_DotKhaoSat" Association="Self.FK_survey_DotKhaoSat">
+      <End Role="DotKhaoSat" EntitySet="DotKhaoSat" />
+      <End Role="survey" EntitySet="survey" />
     </AssociationSet>
     <AssociationSet Name="FK_survey_hedaotao" Association="Self.FK_survey_hedaotao">
       <End Role="hedaotao" EntitySet="hedaotao" />

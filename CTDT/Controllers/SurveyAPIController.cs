@@ -254,12 +254,21 @@ namespace CTDT.Controllers
                     });
                     return Ok(new { data = data_hoc_vien, info = list_info, is_nguoi_hoc = true });
                 case "Phiếu giảng viên":
+                    var data_cbvc = new
+                    {
+                        phieu_khao_sat = answer_responses.survey.surveyData,
+                        dap_an = answer_responses.json_answer
+                    };
 
-                    break;
+                    return Ok(new { data = data_cbvc, info = list_info });
 
                 case "Phiếu doanh nghiệp":
-
-                    break;
+                    var data_doanh_nghiep = new
+                    {
+                        phieu_khao_sat = answer_responses.survey.surveyData,
+                        dap_an = answer_responses.json_answer
+                    };
+                    return Ok(new { data = data_doanh_nghiep, info = list_info });
 
                 case "Phiếu người học có học phần":
                     var data_ho_vien_mon_hoc = new

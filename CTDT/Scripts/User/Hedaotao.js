@@ -194,3 +194,15 @@ function form_khoa(check) {
                     `;
     body.html(html);
 }
+
+function Alert() {
+    Swal.fire({
+        title: "Hiện tại xem kết quả đang được bảo trì và thống kê",
+        text: "Vui lòng quay trở lại khi có thông báo",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Xem lại"
+    })
+}
