@@ -35,6 +35,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="cbvc_khao_sat">
+      <EntityTypeMapping TypeName="dbSurveyModel.cbvc_khao_sat">
+        <MappingFragment StoreEntitySet="cbvc_khao_sat">
+          <ScalarProperty Name="is_khao_sat" ColumnName="is_khao_sat" />
+          <ScalarProperty Name="id_cbvc" ColumnName="id_cbvc" />
+          <ScalarProperty Name="surveyID" ColumnName="surveyID" />
+          <ScalarProperty Name="id_cbvc_khao_sat" ColumnName="id_cbvc_khao_sat" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="chuc_nang_users">
       <EntityTypeMapping TypeName="dbSurveyModel.chuc_nang_users">
         <MappingFragment StoreEntitySet="chuc_nang_users">
@@ -76,9 +86,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="DotKhaoSat">
-      <EntityTypeMapping TypeName="dbSurveyModel.DotKhaoSat">
-        <MappingFragment StoreEntitySet="DotKhaoSat">
+    <EntitySetMapping Name="dot_khao_sat">
+      <EntityTypeMapping TypeName="dbSurveyModel.dot_khao_sat">
+        <MappingFragment StoreEntitySet="dot_khao_sat">
           <ScalarProperty Name="ten_dot_khao_sat" ColumnName="ten_dot_khao_sat" />
           <ScalarProperty Name="id_dot_khao_sat" ColumnName="id_dot_khao_sat" />
         </MappingFragment>
@@ -191,13 +201,23 @@
       <EntityTypeMapping TypeName="dbSurveyModel.nguoi_hoc_dang_co_hoc_phan">
         <MappingFragment StoreEntitySet="nguoi_hoc_dang_co_hoc_phan">
           <ScalarProperty Name="da_khao_sat" ColumnName="da_khao_sat" />
-          <ScalarProperty Name="id_dot_khao_sat" ColumnName="id_dot_khao_sat" />
           <ScalarProperty Name="thang_by_hoc_phan" ColumnName="thang_by_hoc_phan" />
           <ScalarProperty Name="id_giang_vvien" ColumnName="id_giang_vvien" />
+          <ScalarProperty Name="id_dot_khao_sat" ColumnName="id_dot_khao_sat" />
           <ScalarProperty Name="id_sinh_vien" ColumnName="id_sinh_vien" />
           <ScalarProperty Name="id_mon_hoc" ColumnName="id_mon_hoc" />
           <ScalarProperty Name="surveyID" ColumnName="surveyID" />
           <ScalarProperty Name="id_nguoi_hoc_by_hoc_phan" ColumnName="id_nguoi_hoc_by_hoc_phan" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="nguoi_hoc_khao_sat">
+      <EntityTypeMapping TypeName="dbSurveyModel.nguoi_hoc_khao_sat">
+        <MappingFragment StoreEntitySet="nguoi_hoc_khao_sat">
+          <ScalarProperty Name="is_khao_sat" ColumnName="is_khao_sat" />
+          <ScalarProperty Name="id_sv" ColumnName="id_sv" />
+          <ScalarProperty Name="surveyID" ColumnName="surveyID" />
+          <ScalarProperty Name="id_nguoi_hoc_khao_sat" ColumnName="id_nguoi_hoc_khao_sat" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -232,12 +252,13 @@
     <EntitySetMapping Name="survey">
       <EntityTypeMapping TypeName="dbSurveyModel.survey">
         <MappingFragment StoreEntitySet="survey">
-          <ScalarProperty Name="id_dot_khao_sat" ColumnName="id_dot_khao_sat" />
+          <ScalarProperty Name="mo_thong_ke" ColumnName="mo_thong_ke" />
           <ScalarProperty Name="hoc_phan" ColumnName="hoc_phan" />
           <ScalarProperty Name="thang_nhap_hoc" ColumnName="thang_nhap_hoc" />
           <ScalarProperty Name="thang_tot_nghiep" ColumnName="thang_tot_nghiep" />
           <ScalarProperty Name="key_class" ColumnName="key_class" />
           <ScalarProperty Name="is_hocky" ColumnName="is_hocky" />
+          <ScalarProperty Name="id_dot_khao_sat" ColumnName="id_dot_khao_sat" />
           <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
           <ScalarProperty Name="creator" ColumnName="creator" />
           <ScalarProperty Name="id_loaikhaosat" ColumnName="id_loaikhaosat" />

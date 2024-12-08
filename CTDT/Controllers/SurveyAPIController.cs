@@ -187,6 +187,11 @@ namespace CTDT.Controllers
                                 json_answer = saveForm.json_answer
                             };
                         }
+                        var check_khao_sat = await db.cbvc_khao_sat.FirstOrDefaultAsync(x => x.id_cbvc == can_bo_vien_chuc.id_CBVC && x.surveyID == survey.surveyID);
+                        if (check_khao_sat != null)
+                        {
+                            check_khao_sat.is_khao_sat = 1;
+                        }
                         break;
 
                     case "Phiếu doanh nghiệp":

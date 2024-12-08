@@ -230,7 +230,7 @@ namespace CTDT.Controllers
                 }
                 else
                 {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
+                    return Ok(new { message = "Bạn đang đăng nhập Email cá nhân, vui lòng đăng nhập lại bằng Email người học để thực hiện khảo sát" });
                 }
 
 
@@ -240,22 +240,17 @@ namespace CTDT.Controllers
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
                 bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
-                if (user.email == "2124802010093@student.tdmu.edu.vn" || check_mail_student == "tdmu.edu.vn")
+                bool check_mail_cbvc = await db.CanBoVienChuc.AnyAsync(x => x.Email == user.email);
+                if (check_mail_cbvc)
                 {
-                    if (check_giang_vien)
-                    {
-                        url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/dap-an/" + answer_survey.id + "/" + answer_survey.surveyID;
-                        return Ok(new { data = url, non_survey = true });
-                    }
-                    else
-                    {
-                        return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
-                    }
+                    url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/dap-an/" + answer_survey.id + "/" + answer_survey.surveyID;
+                    return Ok(new { data = url, non_survey = true });                    
                 }
                 else
                 {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
+                    return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
                 }
+
             }
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
             {
@@ -331,7 +326,7 @@ namespace CTDT.Controllers
                 }
                 else
                 {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
+                    return Ok(new { message = "Bạn đang đăng nhập Email cá nhân, vui lòng đăng nhập lại bằng Email người học để thực hiện khảo sát." });
                 }
             }
             return BadRequest("Không thể gửi yêu cầu");
@@ -401,7 +396,7 @@ namespace CTDT.Controllers
 
                 else
                 {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
+                    return Ok(new { message = "Bạn đang đăng nhập Email cá nhân, vui lòng đăng nhập lại bằng Email người học để thực hiện khảo sát." });
                 }
             }
             // Check phiếu thuộc giảng viên
@@ -409,23 +404,19 @@ namespace CTDT.Controllers
             {
                 bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
                 bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
-                if (user.email == "2124802010093@student.tdmu.edu.vn" || check_mail_student == "tdmu.edu.vn")
+                bool check_mail_cbvc = await db.CanBoVienChuc.AnyAsync(x => x.Email == user.email);
+                if (check_mail_cbvc)
                 {
-                    bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
-                    if (check_giang_vien)
-                    {
-                        url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/" + survey.surveyID;
-                        return Ok(new { data = url, non_survey = true });
-                    }
-                    else
-                    {
-                        return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
-                    }
+                    url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/" + survey.surveyID;
+                    return Ok(new { data = url, non_survey = true });
+                    
+                    
                 }
                 else
                 {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
+                    return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
                 }
+
             }
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
             {
@@ -508,7 +499,7 @@ namespace CTDT.Controllers
                 }
                 else
                 {
-                    return Ok(new { message = "Tài khoản của bạn đang sử dụng không có quyền thực hiện khảo sát phiếu này, vui lòng kiểm tra lại." });
+                    return Ok(new { message = "Bạn đang đăng nhập Email cá nhân, vui lòng đăng nhập lại bằng Email người học để thực hiện khảo sát" });
                 }
             }
             return BadRequest("Không thể gửi yêu cầu");

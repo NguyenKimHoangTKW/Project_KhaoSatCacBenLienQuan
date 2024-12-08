@@ -41,6 +41,11 @@ namespace CTDT.Areas.CTDT
                 new { controller = "Interface", action = "bao_cao_tong_hop_ket_qua_khao_sat" }
             );
             context.MapRoute(
+                "CTDT_XemChiTietThongKe",
+                "ctdt/xem-chi-tiet-thong-ke-khao-sat/{id}",
+                new { controller = "Interface", action = "xem_thong_ke_nguoi_khao_sat", id = UrlParameter.Optional }
+            );
+            context.MapRoute(
                 "CTDT_default",
                 "CTDT/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }

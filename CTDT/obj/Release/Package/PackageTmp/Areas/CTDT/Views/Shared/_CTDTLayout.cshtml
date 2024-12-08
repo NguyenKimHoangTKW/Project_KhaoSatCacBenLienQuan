@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>@ViewBag.Title</title>
+    <title>Ban khảo thí, kiểm định và đảm bảo chất lượng - TDMU</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="https://tdmu.edu.vn/hinh/Icon.png">
 
@@ -17,8 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <!-- Core css -->
     <link href="~/Areas/assets/css/app.min.css" rel="stylesheet" />
-    <link href="~/Areas/assets/css/sweetalert2.min.css" rel="stylesheet" />
-    <link href="~/Areas/assets/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Areas/assets/vendors/datatables/dataTables.bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -210,6 +209,11 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/CTDT/js")
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+    <script>
+    function goBack() {
+        window.history.back();
+    }
+    </script>
     @RenderSection("scriptsCTDT", required: false)
 </body>
 </html>

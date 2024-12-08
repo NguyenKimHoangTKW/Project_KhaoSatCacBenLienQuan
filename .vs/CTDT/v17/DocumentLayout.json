@@ -1,14 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\",
+  "WorkspaceRootPath": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\ctdt\\controllers\\thongkekhaosatapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\ctdt\\controllers\\thongkekhaosatapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\models\\ctdtmodel.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\models\\ctdtmodel.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\dbcl\\project_khaosatcacbenlienquan\\ctdt\\scripts\\login-with-google.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\scripts\\login-with-google.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,31 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 313,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CTDTModel.edmx [Diagram1]",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Models\\CTDTModel.edmx",
-              "RelativeDocumentMoniker": "CTDT\\Models\\CTDTModel.edmx",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Models\\CTDTModel.edmx [Diagram1]",
-              "RelativeToolTip": "CTDT\\Models\\CTDTModel.edmx [Diagram1]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
-              "WhenOpened": "2024-12-06T06:39:52.666Z",
-              "EditorCaption": " [Diagram1]"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ThongKeKhaoSatAPIController.cs",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatAPIController.cs",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatAPIController.cs",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatAPIController.cs",
-              "RelativeToolTip": "CTDT\\Areas\\CTDT\\Controllers\\ThongKeKhaoSatAPIController.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAswFUAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-06T02:51:12.731Z",
+              "Title": "login-with-google.js",
+              "DocumentMoniker": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Scripts\\login-with-google.js",
+              "RelativeDocumentMoniker": "CTDT\\Scripts\\login-with-google.js",
+              "ToolTip": "D:\\DBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Scripts\\login-with-google.js",
+              "RelativeToolTip": "CTDT\\Scripts\\login-with-google.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-12-08T12:44:10.097Z",
               "EditorCaption": ""
             }
           ]

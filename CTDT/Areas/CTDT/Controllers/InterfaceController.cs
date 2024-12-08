@@ -48,5 +48,11 @@ namespace CTDT.Areas.CTDT.Controllers
             ViewBag.Lop = new SelectList(db.lop.Where(x => x.id_ctdt == user.id_ctdt).OrderBy(x => x.id_lop), "ma_lop", "ma_lop");
             return View();
         }
+
+        public ActionResult xem_thong_ke_nguoi_khao_sat(int id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
     }
 }

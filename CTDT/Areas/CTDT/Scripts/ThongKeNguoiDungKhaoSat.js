@@ -39,25 +39,32 @@ async function LoadChartSurvey() {
     });
 
     $('#survey-list').empty();
-    const surveys = res.data;
 
-    if (res.is_data) {
+    if (res.success && res.data.length > 0) {
+        const surveys = res.data;
         surveys.sort((a, b) => {
-            const idA = a.ten_phieu.split(".")[0];
-            const idB = b.ten_phieu.split(".")[0];
-            return idA.localeCompare(idB, undefined, { numeric: true });
+            const idA = a.ten_phieu.split(".")[0].replace(/\D/g, "");
+            const idB = b.ten_phieu.split(".")[0].replace(/\D/g, "");
+            return parseInt(idA) - parseInt(idB);
         });
 
-        surveys.forEach(function (survey) {
-            const MaPhieu = survey.ten_phieu.split(".")[0].toUpperCase();
-            const TieuDePhieu = survey.ten_phieu.split(".")[1];
-            const thongKeTyLe = survey.thong_ke_ty_le.length > 0 ? survey.thong_ke_ty_le[0].ty_le_tham_gia_khao_sat : null;
+        surveys.forEach((survey) => {
+            const tenPhieuParts = survey.ten_phieu.split(".");
+            const MaPhieu = tenPhieuParts[0].toUpperCase();
+            const TieuDePhieu = tenPhieuParts[1]?.trim() || "Không có tiêu đề";
+
+            const thongKeTyLe = {
+                tong_khao_sat: survey.tong_khao_sat,
+                tong_phieu_da_tra_loi: survey.tong_phieu_da_tra_loi,
+                tong_phieu_chua_tra_loi: survey.tong_phieu_chua_tra_loi,
+            };
+
             const card = `
                 <div class="card survey-card">
                     <div class="card-body">
                         <div style="align-items: center;">
                             <p style="color:#5029ff;font-weight:bold; position: absolute; top: 0; left: 20px;">${MaPhieu}</p>
-                            <a href="#" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-tenphieu="${survey.ma_phieu}">Xem chi tiết</a>
+                            <a href="#" style="color:#5029ff;font-weight:bold; position: absolute; top: 14px; right: 20px;" data-toggle="modal" data-target=".bd-example-modal-lg" id="maphieu" data-tenphieu="${survey.id_phieu}">Xem chi tiết</a>
                             <hr/>
                             <p style="color:black;font-weight:bold">${TieuDePhieu}</p>
                             <hr/>
@@ -66,22 +73,21 @@ async function LoadChartSurvey() {
                         <p id="surveyedInfo-${MaPhieu}" style="margin: 0; color: red;"></p>
                         <hr />
                         <div style="display: flex; justify-content: space-between; align-items: center; font-weight:bold">
-                            <p style="margin: 0; color: black;">${thongKeTyLe ? "Tổng phiếu: " + thongKeTyLe.tong_khao_sat : ''}</p>
-                            <p style="margin: 0; color:#ebb000;">${thongKeTyLe ? "Đã thu về: " + thongKeTyLe.tong_phieu_da_tra_loi : ''}</p>
-                            <p style="margin: 0; color:#5029ff;">${thongKeTyLe ? "Chưa thu về: " + thongKeTyLe.tong_phieu_chua_tra_loi : ''}</p>
+                            <p style="margin: 0; color: black;">Tổng phiếu: ${thongKeTyLe.tong_khao_sat || '0'}</p>
+                            <p style="margin: 0; color:#ebb000;">Đã thu về: ${thongKeTyLe.tong_phieu_da_tra_loi || '0'}</p>
+                            <p style="margin: 0; color:#5029ff;">Chưa thu về: ${thongKeTyLe.tong_phieu_chua_tra_loi || '0'}</p>
                         </div>
                     </div>
                 </div>`;
 
             $('#survey-list').append(card);
 
-            if (!thongKeTyLe) {
-                $(`#surveyedInfo-${MaPhieu}`).text('Không có dữ liệu');
-            } else {
-                const datas = [thongKeTyLe.tong_phieu_chua_tra_loi, thongKeTyLe.tong_phieu_da_tra_loi];
-                const colors = ['#007bff', '#ffc107'];
+            const donutCtx = document.getElementById(`donut-chart-${MaPhieu}`).getContext('2d');
 
-                const donutCtx = document.getElementById(`donut-chart-${MaPhieu}`).getContext('2d');
+            if (thongKeTyLe.tong_khao_sat > 0) {
+                const datas = [thongKeTyLe.tong_phieu_chua_tra_loi, thongKeTyLe.tong_phieu_da_tra_loi];
+                const colors = ['#ffc107', '#007bff'];
+
                 const donutData = {
                     labels: ['Số phiếu chưa trả lời', 'Số phiếu đã thu'],
                     datasets: [{
@@ -101,141 +107,44 @@ async function LoadChartSurvey() {
                         cutoutPercentage: 45
                     }
                 });
+            } else {
+                const donutData = {
+                    labels: ['Không có dữ liệu'],
+                    datasets: [{
+                        fill: true,
+                        backgroundColor: ['#d3d3d3'], 
+                        pointBackgroundColor: ['#d3d3d3'],
+                        data: [1] 
+                    }]
+                };
+
+                new Chart(donutCtx, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: {
+                        maintainAspectRatio: false,
+                        hover: { mode: null },
+                        cutoutPercentage: 45
+                    }
+                });
+
+                $(`#surveyedInfo-${MaPhieu}`).text('Không có dữ liệu');
             }
         });
-
     } else {
         const card = `
-            <div class="alert alert-info" style="width: 100%;">
-                <div class="d-flex justify-content-start">
-                    <span class="alert-icon m-r-20 font-size-30">
-                        <i class="anticon anticon-close-circle"></i>
-                    </span>
-                    <div>
-                        <h5 class="alert-heading">Opps...</h5>
-                        <p>Không có dữ liệu phiếu khảo sát cho năm học này!</p>
-                    </div>
-                </div>
+            <div class="alert alert-info" style="width: 100%; text-align: center;">
+                <h5 class="alert-heading">Opps...</h5>
+                <p>Không có dữ liệu phiếu khảo sát cho năm học này!</p>
             </div>`;
         $('#survey-list').append(card);
-        $('.chart').hide();
     }
 }
+
+
 
 
 $(document).on("click", "#maphieu", function () {
     var maphieu = $(this).data("tenphieu");
-    $('#surveyModal').modal('show');
-    load_nguoi_hoc(maphieu);
+    window.location.href = `/ctdt/xem-chi-tiet-thong-ke-khao-sat/${maphieu}`;
 })
-$('#surveyModal').on('shown.bs.modal', function () {
-    $('#data-table-section').show();
-});
-async function load_nguoi_hoc(namesurvey) {
-    const res = await $.ajax({
-        url: '/api/ctdt/load_thong_ke_nguoi_hoc_khao_sat',
-        type: 'POST',
-        data: { id_survey: namesurvey }
-    });
-
-    if (res && res.data.length > 0) {
-        var body = $("#load_data");
-        var label = $("#exampleModalLabel");
-        var html = "";
-        body.empty();
-        if ($.fn.DataTable.isDataTable('#load_data')) {
-            $('#load_data').DataTable().clear().destroy();
-        }
-
-  
-        res.data.forEach(function (items, index) {
-            label.html(items.ten_phieu);
-            if (items.is_nguoi_hoc || items.is_nguoi_hoc_mon_hoc) {
-                html += "<thead>";
-                html += "<tr>";
-                html += "<th>Số Thứ Tự</th>";
-                html += "<th>Họ và Tên</th>";
-                html += "<th>Mã Người Học</th>";
-                html += "<th>Lớp</th>";
-                html += "<th>Tình Trạng Khảo Sát</th>";
-                html += "</tr>";
-                html += "</thead>";
-                html += "<tbody>";
-                items.nguoi_hoc.forEach(function (nguoiHoc, subIndex) {
-                    html += "<tr>";
-                    html += `<td>${subIndex + 1}</td>`;
-                    html += `<td>${nguoiHoc.ho_ten}</td>`;
-                    html += `<td>${nguoiHoc.ma_nguoi_hoc}</td>`;
-                    html += `<td>${nguoiHoc.lop}</td>`;
-                    html += `<td>${nguoiHoc.tinh_trang_khao_sat}</td>`;
-                    html += "</tr>";
-                });
-                html += "</tbody>";
-            }
-            else if (items.is_ctdt) {
-                html += "<thead>";
-                html += "<tr>";
-                html += "<th>Số Thứ Tự</th>";
-                html += "<th>Họ và tên</th>";
-                html += "<th>Email</th>";
-                html += "<th>Chương trình đào tạo</th>";
-                html += "</tr>";
-                html += "</thead>";
-                html += "<tbody>";
-                items.ctdt.forEach(function (ctdt, index) {
-                    html += "<tr>";
-                    html += `<td>${index + 1}</td>`;
-                    html += `<td>${ctdt.ho_ten}</td>`;
-                    html += `<td>${ctdt.email}</td>`;
-                    html += `<td>${ctdt.ctdt}</td>`;
-                    html += "</tr>";
-                });
-                html += "</tbody>";
-            }
-            else if (items.is_cbvc) {
-                html += "<thead>";
-                html += "<tr>";
-                html += "<th>Số Thứ Tự</th>";
-                html += "<th>Họ và tên</th>";
-                html += "<th>Email</th>";
-                html += "<th>Đơn vị</th>";
-                html += "<th>Chương trình đào tạo</th>";
-                html += "</tr>";
-                html += "</thead>";
-                html += "<tbody>";
-                items.cbvc.forEach(function (cbvc, index) {
-                    html += "<tr>";
-                    html += `<td>${index + 1}</td>`;
-                    html += `<td>${cbvc.ho_ten}</td>`;
-                    html += `<td>${cbvc.email}</td>`;
-                    html += `<td>${cbvc.don_vi}</td>`;
-                    html += `<td>${cbvc.ctdt}</td>`;
-                    html += "</tr>";
-                });
-                html += "</tbody>";
-            }
-        });
-
-        body.html(html);
-        $('#load_data').DataTable({
-            pageLength: 10,
-            lengthMenu: [5, 10, 25, 50, 100],
-            ordering: true,
-            searching: true,
-            language: {
-                paginate: {
-                    next: "Next",
-                    previous: "Previous"
-                },
-                search: "Search",
-                lengthMenu: "Show _MENU_ entries"
-            },
-            dom: "Bfrtip",
-            buttons: ['csv', 'excel', 'pdf', 'print']
-        });
-        
-    } else {
-        $("#load_data").html("<tr><td colspan='5'>No data available</td></tr>");
-    }
-}
-

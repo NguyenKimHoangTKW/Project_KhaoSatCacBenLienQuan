@@ -27,11 +27,12 @@ namespace CTDT.Models
     
         public virtual DbSet<answer_response> answer_response { get; set; }
         public virtual DbSet<CanBoVienChuc> CanBoVienChuc { get; set; }
+        public virtual DbSet<cbvc_khao_sat> cbvc_khao_sat { get; set; }
         public virtual DbSet<chuc_nang_users> chuc_nang_users { get; set; }
         public virtual DbSet<ChucVu> ChucVu { get; set; }
         public virtual DbSet<ctdt> ctdt { get; set; }
         public virtual DbSet<DonVi> DonVi { get; set; }
-        public virtual DbSet<DotKhaoSat> DotKhaoSat { get; set; }
+        public virtual DbSet<dot_khao_sat> dot_khao_sat { get; set; }
         public virtual DbSet<group_loaikhaosat> group_loaikhaosat { get; set; }
         public virtual DbSet<group_mon_hoc> group_mon_hoc { get; set; }
         public virtual DbSet<hedaotao> hedaotao { get; set; }
@@ -43,6 +44,7 @@ namespace CTDT.Models
         public virtual DbSet<mon_hoc> mon_hoc { get; set; }
         public virtual DbSet<NamHoc> NamHoc { get; set; }
         public virtual DbSet<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
+        public virtual DbSet<nguoi_hoc_khao_sat> nguoi_hoc_khao_sat { get; set; }
         public virtual DbSet<phan_quyen_chuc_nang_users> phan_quyen_chuc_nang_users { get; set; }
         public virtual DbSet<sinhvien> sinhvien { get; set; }
         public virtual DbSet<survey> survey { get; set; }
