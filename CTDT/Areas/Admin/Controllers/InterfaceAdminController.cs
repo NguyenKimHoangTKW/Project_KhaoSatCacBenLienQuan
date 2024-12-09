@@ -25,5 +25,14 @@ namespace CTDT.Areas.Admin.Controllers
             var PhanQuyen = db.users.Where(x => x.id_users == id).FirstOrDefault();
             return View(PhanQuyen);
         }
+        
+        public ActionResult Thong_Ke_Ket_Qua_Khao_Sat()
+        {
+            ViewBag.Year = new SelectList(db.NamHoc.OrderBy(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
+            ViewBag.HocKy = new SelectList(db.hoc_ky.OrderBy(l => l.id_hk), "id_hk", "ten_hk");
+            ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.ten_hedaotao), "id_hedaotao", "ten_hedaotao");
+            ViewBag.DotKhaoSat = new SelectList(db.dot_khao_sat.OrderBy(l => l.id_dot_khao_sat), "id_dot_khao_sat", "ten_dot_khao_sat");
+            return View();
+        }
     }
 }

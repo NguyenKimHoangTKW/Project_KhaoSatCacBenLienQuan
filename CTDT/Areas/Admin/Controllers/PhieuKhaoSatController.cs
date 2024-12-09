@@ -25,22 +25,19 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.LKS = new SelectList(db.LoaiKhaoSat, "id_loaikhaosat", "name_loaikhaosat");
             ViewBag.Year = new SelectList(db.NamHoc, "id_namhoc", "ten_namhoc");
 
-            // Lấy toàn bộ danh sách ma_lop trước
             var maLops = db.lop.Select(s => s.ma_lop).ToList();
 
-            // Duyệt qua chuỗi, lấy 2 số đầu tiên xuất hiện trong chuỗi và sắp xếp từ nhỏ đến lớn
             var keyclass = maLops
                             .Select(ml => new string(ml.Where(char.IsDigit).Take(2).ToArray()))
                             .Where(ml => ml.Length == 2)
                             .Distinct()
-                            .OrderByDescending(ml => int.Parse(ml)) // Sắp xếp từ nhỏ đến lớn
+                            .OrderByDescending(ml => int.Parse(ml))
                             .ToList();
 
             ViewBag.KeyClass = new SelectList(keyclass);
 
             return View();
         }
-
 
 
         [HttpPost]
