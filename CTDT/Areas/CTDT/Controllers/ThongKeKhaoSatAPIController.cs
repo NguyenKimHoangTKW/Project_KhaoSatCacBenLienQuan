@@ -339,12 +339,12 @@ namespace CTDT.Areas.CTDT.Controllers
             var questionDataDict = new Dictionary<string, dynamic>();
 
             List<string> specificChoices = new List<string> {
-        "Hoàn toàn không đồng ý",
-        "Không đồng ý",
-        "Bình thường",
-        "Đồng ý",
-        "Hoàn toàn đồng ý"
-    };
+                "Hoàn toàn không đồng ý",
+                "Không đồng ý",
+                "Bình thường",
+                "Đồng ý",
+                "Hoàn toàn đồng ý"
+            };
             foreach (var response in responses)
             {
                 var surveyDataObject = JObject.Parse(response.SurveyJson);

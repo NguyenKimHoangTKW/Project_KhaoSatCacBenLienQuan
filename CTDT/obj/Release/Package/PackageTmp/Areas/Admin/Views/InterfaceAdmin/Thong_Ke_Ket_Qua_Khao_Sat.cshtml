@@ -49,16 +49,6 @@
                                         <option value="">Chọn hệ đào tào và năm để thống kê</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn đợt khảo sát</label>
-                                    <select class="form-control select2" id="dotkhaosat">
-                                        <option value="">Bỏ qua</option>
-                                        @foreach (var item in ViewBag.DotKhaoSat)
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    </select>
-                                </div>
                                 <div class="col-md-6" id="hoc_ky" style="display:none">
                                     <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn học kỳ</label>
                                     <select class="form-control select2" id="hocky_fil">
@@ -73,7 +63,7 @@
                             </div>
                             <hr />
                             <!--Lọc môn học theo giảng viên-->
-                            <div class="row mb-3">
+                            <div class="row mb-3" id="loc-mon-hoc-theo-giang-vien" style="display:none;">
                                 <div class="col-md-6">
                                     <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn Lớp</label>
                                     <select class="form-control select2" id="lop-fil-mh">
@@ -93,6 +83,28 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <!--Lọc giảng viên theo môn học-->
+                            <div class="row mb-3" id="loc-giang-vien-theo-mon-hoc" style="display:none;">
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn Lớp</label>
+                                    <select class="form-control select2" id="lop-fil-gv">
+                                        <option value="">Chọn lớp</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn Giảng viên</label>
+                                    <select class="form-control select2" id="gv-fil-gv">
+                                        <option value="">Chọn giảng viên</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn Môn học</label>
+                                    <select class="form-control select2" id="mh-fil-gv">
+                                        <option value="">Chọn môn học</option>
+                                    </select>
+                                </div>
+                            </div>
                             <!---->
                             <hr />
                             <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn thống kê môn học (nếu chọn bộ phiếu 8)</label>
@@ -100,10 +112,9 @@
                                 <div class="col-md-6 d-flex align-items-center gap-3">
                                     <button type="button" class="btn btn-primary btn-tone m-r-5" id="btnThongKeMonHocGV" style=" margin-right: 10px;">Lọc môn học theo giảng viên</button>
                                     <button class="btn btn-primary btn-tone m-r-5" id="btnThongKeGVMonHoc">Lọc giảng viên theo môn học</button>
+                                    <button class="btn btn-danger btn-tone m-r-5" id="btnDongBoLoc">Đóng bộ lọc theo môn học</button>
                                 </div>
                             </div>
-
-
                             <hr />
                             <div class="row mb-3">
                                 <div class="col-md-6 d-flex align-items-center">
@@ -116,12 +127,12 @@
                         </fieldset>
                     </div>
 
-                    <div class="m-t-25" id="tan_xuat_table">
-
+                    <div class="m-t-25" id="tan_xuat_table" style="display:none">
+                       
                         <div class="table-responsive" id="ThongKeTyLeSurvey">
                             <!--Thống kê tỷ lệ-->
                         </div>
-                        <div class="accordion" id="accordion-default" style="display:none">
+                        <div class="accordion" id="accordion-default">
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title">
