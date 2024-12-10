@@ -21,6 +21,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/DanhSachMonHocHocVien.js">
       <publishTime>11/24/2024 13:09:31</publishTime>
     </File>
+    <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/GiamSatKetQuaKhaoSat.js">
+      <publishTime>12/10/2024 09:45:21</publishTime>
+    </File>
     <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/Khoa.js">
       <publishTime>11/20/2024 20:00:37</publishTime>
     </File>
@@ -56,6 +59,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Areas/Admin/Views/InterfaceAdmin/PhanQuyen.cshtml">
       <publishTime>11/20/2024 20:00:37</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/InterfaceAdmin/Thong_Ke_Ket_Qua_Khao_Sat.cshtml">
+      <publishTime>12/10/2024 09:41:51</publishTime>
     </File>
     <File Include="Areas/Admin/Views/InterfaceAdmin/UserInterface.cshtml">
       <publishTime>11/20/2024 20:00:37</publishTime>
@@ -94,10 +100,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2024 20:00:37</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_AdminLayout.cshtml">
-      <publishTime>11/20/2024 20:00:37</publishTime>
+      <publishTime>12/09/2024 19:12:00</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_AdminNavPartial.cshtml">
-      <publishTime>11/24/2024 13:09:31</publishTime>
+      <publishTime>12/09/2024 19:12:00</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SinhVien/ViewSinhVien.cshtml">
       <publishTime>11/20/2024 20:00:37</publishTime>
@@ -2533,7 +2539,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/08/2024 19:15:53</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/Shared/_CTDTNavPartial.cshtml">
-      <publishTime>12/08/2024 19:32:42</publishTime>
+      <publishTime>12/10/2024 00:46:17</publishTime>
     </File>
     <File Include="Areas/CTDT/Views/web.config">
       <publishTime>11/20/2024 20:00:37</publishTime>
@@ -2599,10 +2605,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2024 20:00:39</publishTime>
     </File>
     <File Include="bin/CTDT.dll">
-      <publishTime>12/08/2024 19:44:57</publishTime>
+      <publishTime>12/10/2024 09:54:46</publishTime>
     </File>
     <File Include="bin/CTDT.pdb">
-      <publishTime>12/08/2024 19:44:57</publishTime>
+      <publishTime>12/10/2024 09:54:46</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>11/20/2024 20:00:52</publishTime>
@@ -3058,7 +3064,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2024 20:00:38</publishTime>
     </File>
     <File Include="Models/CTDTModel.edmx.diagram">
-      <publishTime>12/08/2024 02:14:38</publishTime>
+      <publishTime>12/10/2024 00:47:20</publishTime>
     </File>
     <File Include="Scripts/bootstrap.bundle.js">
       <publishTime>11/20/2024 20:00:38</publishTime>
@@ -3136,7 +3142,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2024 20:00:38</publishTime>
     </File>
     <File Include="Scripts/login-with-google.js">
-      <publishTime>12/08/2024 19:44:22</publishTime>
+      <publishTime>12/10/2024 09:54:15</publishTime>
     </File>
     <File Include="Scripts/modernizr-2.8.3.js">
       <publishTime>11/20/2024 20:00:38</publishTime>

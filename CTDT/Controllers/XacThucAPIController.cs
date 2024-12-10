@@ -239,7 +239,6 @@ namespace CTDT.Controllers
             // Check phiếu thuộc giảng viên
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
-                bool check_giang_vien = await convert_giang_vien(survey.id_namhoc);
                 bool check_mail_cbvc = await db.CanBoVienChuc.AnyAsync(x => x.Email == user.email);
                 if (check_mail_cbvc)
                 {
@@ -402,15 +401,11 @@ namespace CTDT.Controllers
             // Check phiếu thuộc giảng viên
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
-                bool giang_vien = new[] { 3 }.Contains(survey.id_loaikhaosat);
-                bool can_bo_vien_chuc = new[] { 8 }.Contains(survey.id_loaikhaosat);
                 bool check_mail_cbvc = await db.CanBoVienChuc.AnyAsync(x => x.Email == user.email);
                 if (check_mail_cbvc)
                 {
                     url = survey.id_loaikhaosat == 3 ? "/xac_thuc/" + survey.surveyID : "/phieu-khao-sat/" + survey.surveyID;
-                    return Ok(new { data = url, non_survey = true });
-                    
-                    
+                    return Ok(new { data = url, non_survey = true });                    
                 }
                 else
                 {

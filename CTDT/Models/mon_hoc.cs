@@ -34,6 +34,7 @@ namespace CTDT.Models
         public virtual ICollection<answer_response> answer_response { get; set; }
         public virtual group_mon_hoc group_mon_hoc { get; set; }
         public virtual hoc_phan hoc_phan { get; set; }
+        public virtual lop lop { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
     }

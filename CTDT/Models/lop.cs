@@ -17,6 +17,7 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public lop()
         {
+            this.mon_hoc = new HashSet<mon_hoc>();
             this.sinhvien = new HashSet<sinhvien>();
         }
     
@@ -28,6 +29,8 @@ namespace CTDT.Models
         public Nullable<bool> status { get; set; }
     
         public virtual ctdt ctdt { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<mon_hoc> mon_hoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<sinhvien> sinhvien { get; set; }
     }

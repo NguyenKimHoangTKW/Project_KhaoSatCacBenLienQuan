@@ -566,6 +566,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_mon_hoc_lop">
+    <End Role="lop" Type="Self.lop" Multiplicity="0..1" />
+    <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="lop">
+        <PropertyRef Name="id_lop" />
+      </Principal>
+      <Dependent Role="mon_hoc">
+        <PropertyRef Name="id_lop" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc">
     <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="0..1" />
     <End Role="nguoi_hoc_dang_co_hoc_phan" Type="Self.nguoi_hoc_dang_co_hoc_phan" Multiplicity="*" />
@@ -948,6 +960,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_mon_hoc_hoc_phan" Association="Self.FK_mon_hoc_hoc_phan">
       <End Role="hoc_phan" EntitySet="hoc_phan" />
+      <End Role="mon_hoc" EntitySet="mon_hoc" />
+    </AssociationSet>
+    <AssociationSet Name="FK_mon_hoc_lop" Association="Self.FK_mon_hoc_lop">
+      <End Role="lop" EntitySet="lop" />
       <End Role="mon_hoc" EntitySet="mon_hoc" />
     </AssociationSet>
     <AssociationSet Name="FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc" Association="Self.FK_nguoi_hoc_dang_co_hoc_phan_CanBoVienChuc">

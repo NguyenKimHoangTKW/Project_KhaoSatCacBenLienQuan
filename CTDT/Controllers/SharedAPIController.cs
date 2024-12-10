@@ -25,7 +25,14 @@ namespace CTDT.Controllers
                     ten_phieu = x.surveyTitle,
                 })
                 .ToListAsync();
-
+            var ctdt = await db.ctdt
+                .Where(x => x.id_hdt == survey.id_hedaotao)
+                .Select(x => new
+                {
+                    id_ctdt = x.id_ctdt,
+                    ten_ctdt = x.ten_ctdt
+                })
+                .ToListAsync();
             var sortedPks = pks.OrderBy(p =>
             {
                 var match = System.Text.RegularExpressions.Regex.Match(p.ten_phieu, @"Phiếu (\d+)");
@@ -34,7 +41,7 @@ namespace CTDT.Controllers
 
             if (sortedPks.Count > 0)
             {
-                return Ok(new { data = sortedPks, success = true });
+                return Ok(new { data = sortedPks,ctdt = ctdt, success = true });
             }
             else
             {
