@@ -237,12 +237,12 @@ namespace CTDT.Areas.CTDT.Controllers
             Dictionary<string, List<string>> choices = new Dictionary<string, List<string>>();
 
             List<string> specificChoices = new List<string> {
-        "Hoàn toàn không đồng ý",
-        "Không đồng ý",
-        "Bình thường",
-        "Đồng ý",
-        "Hoàn toàn đồng ý"
-    };
+                "Hoàn toàn không đồng ý",
+                "Không đồng ý",
+                "Bình thường",
+                "Đồng ý",
+                "Hoàn toàn đồng ý"
+            };
 
             foreach (var response in responses)
             {

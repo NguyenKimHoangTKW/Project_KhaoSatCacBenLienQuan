@@ -22,7 +22,7 @@ namespace CTDT.Controllers
                 .Select(x => new
                 {
                     id_phieu = x.surveyID,
-                    ten_phieu = x.surveyTitle,
+                    ten_phieu = x.dot_khao_sat.ten_dot_khao_sat != null ? x.surveyTitle + " - " + x.dot_khao_sat.ten_dot_khao_sat : x.surveyTitle,
                 })
                 .ToListAsync();
             var ctdt = await db.ctdt

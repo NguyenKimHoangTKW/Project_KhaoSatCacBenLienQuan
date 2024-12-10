@@ -14,6 +14,7 @@ namespace CTDT.Areas.Admin.Controllers
     public class ThongKeKetQuaKhaoSatAPIController : ApiController
     {
         dbSurveyEntities db = new dbSurveyEntities();
+        // Giám sát kết quả khảo sát - Lọc giảng viên theo môn học API
         [HttpPost]
         [Route("api/loc-giang-vien-by-mon-hoc")]
         public async Task<IHttpActionResult> check_phieu_khao_sat(answer_response survey)
@@ -54,7 +55,7 @@ namespace CTDT.Areas.Admin.Controllers
                 return Ok(new { message = "Bạn đang chọn phiếu ngoài bộ phiếu 8", success = false });
             }
         }
-
+        // Giám sát kết quả khảo sát - Lọc môn học theo giảng viên API
         [HttpPost]
         [Route("api/loc-mon-hoc-by-giang-vien")]
         public async Task<IHttpActionResult> check_mon_hoc_by_giang_vien(answer_response survey)
@@ -65,12 +66,16 @@ namespace CTDT.Areas.Admin.Controllers
             var data_list = check_mon_hoc
                .GroupBy(x => new
                {
+                   x.mon_hoc.lop.id_lop,
+                   x.mon_hoc.lop.ma_lop,
                    x.CanBoVienChuc.MaCBVC,
                    x.id_giang_vvien,
                    x.CanBoVienChuc.TenCBVC
                })
                .Select(group => new
                {
+                   id_lop = group.Key.id_lop,
+                   ten_lop = group.Key.ma_lop,
                    ma_giang_vien = group.Key.MaCBVC,
                    id_giang_vien = group.Key.id_giang_vvien,
                    ten_giang_vien = group.Key.TenCBVC,
@@ -92,5 +97,36 @@ namespace CTDT.Areas.Admin.Controllers
                 return Ok(new { message = "Bạn đang chọn phiếu ngoài bộ phiếu 8", success = false });
             }
         }
+
+        [HttpPost]
+        [Route("api/test")]
+        public async Task<IHttpActionResult> test(GiamSatThongKeKetQua aw)
+        {
+            var check_answer = await db.answer_response
+                .Where(x => x.surveyID == aw.surveyID
+                            && x.id_ctdt == aw.id_ctdt)
+                .ToListAsync();
+            if (aw.id_lop != null)
+            {
+                check_answer = check_answer.Where(x => x.sinhvien.lop.id_lop == aw.id_lop).ToList();
+            }
+
+            if (aw.id_mh != null)
+            {
+                check_answer = check_answer.Where(x => x.id_mh == aw.id_mh).ToList();
+            }
+
+            if (aw.id_CBVC != null)
+            {
+                check_answer = check_answer.Where(x => x.id_CBVC == aw.id_CBVC).ToList();
+            }
+            var get_data = check_answer
+                .Select(x => new
+                {
+                    x.json_answer
+                }).ToList();
+            return Ok(new { data = get_data });
+        }
+
     }
 }
