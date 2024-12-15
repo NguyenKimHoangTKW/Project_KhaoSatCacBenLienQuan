@@ -18,7 +18,7 @@ namespace CTDT.Areas.Admin.Controllers
         dbSurveyEntities db = new dbSurveyEntities();
         // Giám sát kết quả khảo sát - Lọc giảng viên theo môn học API
         [HttpPost]
-        [Route("api/loc-giang-vien-by-mon-hoc")]
+        [Route("api/admin/loc-giang-vien-by-mon-hoc")]
         public async Task<IHttpActionResult> check_phieu_khao_sat(answer_response survey)
         {
             var check_mon_hoc = await db.nguoi_hoc_dang_co_hoc_phan
@@ -59,7 +59,7 @@ namespace CTDT.Areas.Admin.Controllers
         }
         // Giám sát kết quả khảo sát - Lọc môn học theo giảng viên API
         [HttpPost]
-        [Route("api/loc-mon-hoc-by-giang-vien")]
+        [Route("api/admin/loc-mon-hoc-by-giang-vien")]
         public async Task<IHttpActionResult> check_mon_hoc_by_giang_vien(answer_response survey)
         {
             var check_mon_hoc = await db.nguoi_hoc_dang_co_hoc_phan
@@ -99,10 +99,10 @@ namespace CTDT.Areas.Admin.Controllers
                 return Ok(new { message = "Bạn đang chọn phiếu ngoài bộ phiếu 8", success = false });
             }
         }
-
+        // Các hàm để thống kê và lấy ra các câu hỏi 5 mức,...
         [HttpPost]
-        [Route("api/test")]
-        public async Task<IHttpActionResult> test(GiamSatThongKeKetQua aw)
+        [Route("api/admin/giam-sat-ket-qua-khao-sat")]
+        public async Task<IHttpActionResult> giam_sat_ket_qua_khao_sat(GiamSatThongKeKetQua aw)
         {
             var check_answer = await db.answer_response
                 .Where(x => x.surveyID == aw.surveyID

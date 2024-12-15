@@ -20,6 +20,16 @@ namespace CTDT.Areas.Admin
                 new { controller = "InterfaceAdmin", action = "Thong_Ke_Ket_Qua_Khao_Sat" }
             );
             context.MapRoute(
+                "Admin_GiamSatTyLeThamGiaKhaoSat",
+                "admin/giam-sat-ty-le-tham-gia-khao-sat",
+                new { controller = "InterfaceAdmin", action = "giam_sat_ty_le_tham_gia_khao_sat" }
+            );
+            context.MapRoute(
+                "Admin_BaoCaoTongHopKetQuaKhaoSat",
+                "admin/bao-cao-tong-hop-ket-qua-khao-sat",
+                new { controller = "InterfaceAdmin", action = "bao_cao_tong_hop_ket_qua_khao_sat" }
+            );
+            context.MapRoute(
                 "Admin_default",
                 "Admin/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }

@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    @*<div class="page-header">
+            <h2 class="header-title">Thống kê tần xuất câu hỏi</h2>
+            <div class="header-sub-title">
+                <nav class="breadcrumb breadcrumb-dash">
+                    <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                    <span class="breadcrumb-item active">Thống kê tần xuất câu hỏi</span>
+                </nav>
+            </div>
+        </div>*@
+
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Báo cáo tổng hợp</a>
+                </li>
+            </ul>
+            <div class="tab-content m-t-15" id="myTabContent">
+
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="page-header no-gutters">
+                        <h2 class="text-uppercase">Báo cáo tổng hợp</h2>
+                        <hr />
+                        <fieldset class="border rounded-3 p-3">
+                            <legend class="float-none w-auto px-3">Chức năng</legend>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn hệ đào tạo</label>
+                                    <select class="form-control select2" id="hedaotao">
+                                        @foreach (var item in ViewBag.HeDaoTao)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
+                                    <select class="form-control select2" id="year">
+                                        @foreach (var item in ViewBag.Year)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn CTĐT</label>
+                                    <select class="form-control select2" id="ctdt">
+                                        <option value="">Chọn hệ đào tào và năm để thống kê</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <button type="button" class="btn btn-info" id="fildata">Lọc dữ liệu</button>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                                    <button class="btn btn-success" id="exportExcel">Xuất Excel</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="m-t-25" id="showalldata">
+                        <div class="table-responsive" id="bao_cao_tong_hop">
+                            <div class="accordion" id="accordion-default">
+                                <!--data-->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/BaoCaoTongHopKetQuaKhaoSat.js"></script>
+}

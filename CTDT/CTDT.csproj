@@ -305,11 +305,12 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\CBVCController.cs" />
     <Compile Include="Areas\Admin\Controllers\CTDTController.cs" />
     <Compile Include="Areas\Admin\Controllers\DanhSachMonHocHocVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\DoiTuongKhaoSatController.cs" />
+    <Compile Include="Areas\Admin\Controllers\GiamSatTyLeThamGiaKhaoSatAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportDataController.cs" />
     <Compile Include="Areas\Admin\Controllers\InterfaceAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhoaController.cs" />
@@ -320,7 +321,6 @@
     <Compile Include="Areas\Admin\Controllers\SinhVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\testController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeKetQuaKhaoSatAPIController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ThongKeKhaoSatController.cs" />
     <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\DoiSanhKetQuaKhaoSatController.cs" />
     <Compile Include="Areas\CTDT\Controllers\GiamSatKetQuaKhaoSatAPIController.cs" />
@@ -459,10 +459,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Scripts\BaoCaoTongHop.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\BaoCaoTongHopKetQuaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\CanBoVienChuc.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChuongTrinhDaoTao.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\DanhSachMonHocHocVien.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatKetQuaKhaoSat.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatTyLeThamGiaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Khoa.js" />
     <Content Include="Areas\Admin\Scripts\DoiTuongKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\PhanQuyen\DanhSachTaiKhoan.js" />
@@ -1363,6 +1365,8 @@
     <Content Include="Areas\Admin\Views\DanhSachMonHocHocVien\Index.cshtml" />
     <Content Include="Areas\CTDT\Views\Interface\xem_thong_ke_nguoi_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\Thong_Ke_Ket_Qua_Khao_Sat.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\giam_sat_ty_le_tham_gia_khao_sat.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\bao_cao_tong_hop_ket_qua_khao_sat.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
