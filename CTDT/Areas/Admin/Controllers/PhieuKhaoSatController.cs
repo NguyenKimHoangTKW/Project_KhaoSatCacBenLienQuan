@@ -240,6 +240,8 @@ namespace CTDT.Areas.Admin.Controllers
                     {
                         MaKQ = kq.id,
                         Email = kq.users.email,
+                        MonHoc = kq.mon_hoc.ten_mon_hoc,
+                        GiangVien = kq.CanBoVienChuc.TenCBVC,
                         SinhVien = kq.sinhvien.hovaten,
                         ThoiGianThucHien = kq.time,
                         CTDT = kq.ctdt.ten_ctdt,
@@ -332,6 +334,8 @@ namespace CTDT.Areas.Admin.Controllers
                                      DauThoiGian = x.time,
                                      x.json_answer,
                                      Email = x.users.email,
+                                     MonHoc = x.mon_hoc.ten_mon_hoc,
+                                     GiangVien = x.CanBoVienChuc.TenCBVC,
                                      MSSV = x.sinhvien.ma_sv,
                                      HoTen = x.sinhvien.hovaten,
                                      NgaySinh = (DateTime?)x.sinhvien.ngaysinh,
@@ -347,6 +351,8 @@ namespace CTDT.Areas.Admin.Controllers
                     JObject answerObject = JObject.Parse(answer.json_answer);
                     answerObject["DauThoiGian"] = answer.DauThoiGian;
                     answerObject["Email"] = answer.Email;
+                    answerObject["MonHoc"] = answer.MonHoc;
+                    answerObject["GiangVien"] = answer.GiangVien;
                     answerObject["MSSV"] = answer.MSSV;
                     answerObject["HoTen"] = answer.HoTen;
                     answerObject["NgaySinh"] = answer.NgaySinh?.ToString("dd-MM-yyyy");

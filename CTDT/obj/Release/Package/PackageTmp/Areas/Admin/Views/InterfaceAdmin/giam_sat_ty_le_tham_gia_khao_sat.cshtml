@@ -1,0 +1,108 @@
+﻿
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .main-content {
+        padding: 20px;
+    }
+
+    .survey-card {
+        width: 45%;
+        min-width: 370px;
+        height: 480px;
+        margin: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart {
+        max-height: 200px;
+    }
+
+    .card-body p {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    #survey-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .survey-row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .divider {
+        width: 100%;
+        height: 1px;
+        background-color: #dee2e6;
+        margin: 20px 0;
+    }
+
+    .modal-lg-custom {
+        max-width: 90% !important;
+        width: 90% !important;
+    }
+</style>
+
+<div class="main-content">
+    <div class="card">
+        <div class="page-header no-gutters">
+            <h2 class="text-uppercase">Thống kê tỷ lệ tham gia khảo sát</h2>
+            <hr />
+            <fieldset class="border rounded-3 p-3">
+                <legend class="float-none w-auto px-3">Chức năng</legend>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn hệ đào tạo</label>
+                        <select class="form-control select2" id="hedaotao">
+                            @foreach (var item in ViewBag.HeDaoTao)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
+                        <select class="form-control select2" id="year">
+                            @foreach (var item in ViewBag.Year)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn CTĐT</label>
+                        <select class="form-control select2" id="ctdt">
+                            <option value="">Chọn hệ đào tào và năm để thống kê</option>
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div class="row mb-3">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <button type="button" class="btn btn-info" id="fildata">Lọc dữ liệu</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-lg-14">
+            <hr />
+            <div id="survey-list">
+                <!-- Surveys will be appended here -->
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin {
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/GiamSatTyLeThamGiaKhaoSat.js"></script>
+}

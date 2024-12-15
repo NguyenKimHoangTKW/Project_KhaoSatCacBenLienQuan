@@ -100,7 +100,7 @@ async function load_gv_by_mh() {
     const ctdtid = $("#ctdt").val();
 
     const res = await $.ajax({
-        url: '/api/loc-giang-vien-by-mon-hoc',
+        url: '/api/admin/loc-giang-vien-by-mon-hoc',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -170,7 +170,7 @@ async function load_mh_by_gv() {
     const surveyid = $("#surveyid").val();
     const ctdtid = $("#ctdt").val();
     const res = await $.ajax({
-        url: '/api/loc-mon-hoc-by-giang-vien',
+        url: '/api/admin/loc-mon-hoc-by-giang-vien',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -256,7 +256,7 @@ async function test() {
     const mh = $("#mh-fil-mh").val() || $("#mh-fil-gv").val();
     const gv = $("#gv-fil-mh").val() || $("gv-fil-gv").val();
     const res = await $.ajax({
-        url: '/api/test',
+        url: '/api/admin/giam-sat-ket-qua-khao-sat',
         type: 'POST',
         data: {
             id_hdt: hdtid,
@@ -688,7 +688,6 @@ function form_y_kien_khac(ty_le) {
         Ykienkhac.empty();
     }
 }
-
 
 function getFormattedDateTime() {
     const now = new Date();

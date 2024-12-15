@@ -12,6 +12,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Areas/Admin/Scripts/BaoCaoTongHop.js">
       <publishTime>11/29/2024 13:30:41</publishTime>
     </File>
+    <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/BaoCaoTongHopKetQuaKhaoSat.js">
+      <publishTime>12/15/2024 10:31:58</publishTime>
+    </File>
     <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/CanBoVienChuc.js">
       <publishTime>11/20/2024 20:00:37</publishTime>
     </File>
@@ -22,7 +25,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/24/2024 13:09:31</publishTime>
     </File>
     <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/GiamSatKetQuaKhaoSat.js">
-      <publishTime>12/11/2024 01:34:22</publishTime>
+      <publishTime>12/15/2024 10:31:58</publishTime>
+    </File>
+    <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/GiamSatTyLeThamGiaKhaoSat.js">
+      <publishTime>12/15/2024 10:31:58</publishTime>
     </File>
     <File Include="Areas/Admin/Scripts/ChucNangNguoiDung/Khoa.js">
       <publishTime>11/20/2024 20:00:37</publishTime>
@@ -57,6 +63,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Areas/Admin/Views/ImportData/Index.cshtml">
       <publishTime>11/20/2024 20:00:37</publishTime>
     </File>
+    <File Include="Areas/Admin/Views/InterfaceAdmin/bao_cao_tong_hop_ket_qua_khao_sat.cshtml">
+      <publishTime>12/15/2024 10:31:58</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/InterfaceAdmin/giam_sat_ty_le_tham_gia_khao_sat.cshtml">
+      <publishTime>12/15/2024 10:31:58</publishTime>
+    </File>
     <File Include="Areas/Admin/Views/InterfaceAdmin/PhanQuyen.cshtml">
       <publishTime>11/20/2024 20:00:37</publishTime>
     </File>
@@ -88,7 +100,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2024 20:00:37</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PhieuKhaoSat/KetQuaPKS.cshtml">
-      <publishTime>11/20/2024 20:00:37</publishTime>
+      <publishTime>12/15/2024 10:51:29</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/Error.cshtml">
       <publishTime>11/20/2024 20:00:37</publishTime>
@@ -103,7 +115,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>12/09/2024 19:12:00</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Shared/_AdminNavPartial.cshtml">
-      <publishTime>12/09/2024 19:12:00</publishTime>
+      <publishTime>12/15/2024 10:31:58</publishTime>
     </File>
     <File Include="Areas/Admin/Views/SinhVien/ViewSinhVien.cshtml">
       <publishTime>11/20/2024 20:00:37</publishTime>
@@ -2605,10 +2617,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2024 20:00:39</publishTime>
     </File>
     <File Include="bin/CTDT.dll">
-      <publishTime>12/11/2024 01:35:34</publishTime>
+      <publishTime>12/15/2024 10:52:58</publishTime>
     </File>
     <File Include="bin/CTDT.pdb">
-      <publishTime>12/11/2024 01:35:34</publishTime>
+      <publishTime>12/15/2024 10:52:58</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>11/20/2024 20:00:52</publishTime>
@@ -3142,7 +3154,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/20/2024 20:00:38</publishTime>
     </File>
     <File Include="Scripts/login-with-google.js">
-      <publishTime>12/11/2024 01:35:09</publishTime>
+      <publishTime>12/15/2024 10:52:18</publishTime>
     </File>
     <File Include="Scripts/modernizr-2.8.3.js">
       <publishTime>11/20/2024 20:00:38</publishTime>

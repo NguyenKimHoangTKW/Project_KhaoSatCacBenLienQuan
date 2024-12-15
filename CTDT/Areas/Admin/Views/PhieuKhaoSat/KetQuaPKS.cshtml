@@ -227,7 +227,7 @@
 
     var headerRow;
     if (data[0].MSSV !== undefined) {
-        headerRow = ["Dấu thời gian", "Email", "MSSV", "Họ và tên", "Ngày sinh", "Thuộc lớp", "Thuộc CTĐT", "Thuộc Khoa","Số điện thoại"];
+        headerRow = ["Dấu thời gian", "Email", "Môn học","Giảng viên","MSSV", "Họ và tên", "Ngày sinh", "Thuộc lớp", "Thuộc CTĐT", "Thuộc Khoa","Số điện thoại"];
     } else if (data[0].CTDT !== undefined && data[0].MSSV === undefined) {
         headerRow = ["Dấu thời gian", "Email", "Thuộc CTĐT"];
     } else if (data[0].DonVi !== undefined) {
@@ -250,8 +250,10 @@
         if (survey.MSSV !== undefined) {
             rowData = [
                 unixTimestampToDate(survey.DauThoiGian) || "",
-                survey.MSSV || "",
                 survey.Email || "",
+                survey.MonHoc || "",
+                survey.GiangVien || "",
+                survey.MSSV || "",
                 survey.HoTen || "",
                 survey.NgaySinh || "",
                 survey.Lop || "",
