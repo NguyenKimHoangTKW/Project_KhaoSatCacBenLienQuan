@@ -210,6 +210,11 @@
     <!-- Core JS -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/CTDT/js")
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
     @RenderSection("scriptsAdmin", required: false)
 </body>
 </html>

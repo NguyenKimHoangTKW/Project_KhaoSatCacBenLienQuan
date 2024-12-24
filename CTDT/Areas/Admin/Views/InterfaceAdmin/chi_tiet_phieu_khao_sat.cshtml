@@ -65,11 +65,12 @@
     <div class="card">
         <div class="card-body">
             <h2 class="text-uppercase">Chi tiết phiếu khảo sát</h2>
+            <p id="value" hidden>@ViewBag.id</p>
             <div id="wp-content">
                 <!-- Sidebar -->
                 <div id="sidebar">
                     <h4>Chức năng</h4>
-                    <a href="#" class="menu-icon" title="Xem báo cáo">
+                    <a href="#" class="menu-icon" id="btnXemBaoCao" title="Xem báo cáo">
                         <i class="fas fa-chart-bar"></i>
                     </a>
                     <a href="#" class="menu-icon" title="Chỉnh sửa phiếu">
@@ -78,37 +79,16 @@
                     <a href="#" class="menu-icon" title="Xóa phiếu">
                         <i class="fas fa-trash-alt"></i>
                     </a>
-                    <a href="#" class="menu-icon" title="Quay lại danh sách">
+                    <a href="/admin/danh-sach-phieu-khao-sat" class="menu-icon" title="Quay lại danh sách">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
                 <!-- Nội dung chính -->
                 <div id="content">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>fat</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">Larry the Bird</td>
-                                    <td>twitter</td>
-                                </tr>
-                            </tbody>
+                        <h3 style="text-align:center;display:none;" id="title">Vui lòng chọn chức năng để tiếp tục</h3>
+                        <table style="display:none" id="bodycontent" class="table table-bordered">
+                            <!--data-->
                         </table>
                     </div>
                 </div>
@@ -119,3 +99,6 @@
 
 <!-- Thêm liên kết tới FontAwesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/ChiTietPhieuKhaoSat.js"></script>
+}

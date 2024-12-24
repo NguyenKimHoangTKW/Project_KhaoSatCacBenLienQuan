@@ -461,6 +461,7 @@
   <ItemGroup>
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\BaoCaoTongHopKetQuaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\CanBoVienChuc.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChiTietPhieuKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChuongTrinhDaoTao.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\DanhSachMonHocHocVien.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatKetQuaKhaoSat.js" />

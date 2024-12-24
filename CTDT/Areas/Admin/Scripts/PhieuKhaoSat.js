@@ -11,9 +11,6 @@ $(document).ready(function () {
         $('#NgayBatDau').val('');
         $('#NgayKetThuc').val('');
     });
-    $("#btnFilter").click(function () {
-        load_data();
-    });
 });
 $(document).on("click", "#EditPKS", function () {
     var id = $(this).data("id");
@@ -181,6 +178,9 @@ async function load_data() {
     const loaikhaosatid = $("#loaikhaosatid").val();
     const namid = $("#namid").val();
     const StatusSurvey = $("#StatusSurvey").val();
+    if ($.fn.DataTable.isDataTable('#datatable')) {
+        $('#datatable').DataTable().clear().destroy();
+    }
     const res = await $.ajax({
         url: '/api/admin/danh-sach-phieu-khao-sat',
         type: 'POST',
@@ -190,7 +190,8 @@ async function load_data() {
             id_namhoc: namid,
             surveyStatus: StatusSurvey
         }
-    })
+    });
+
     if (res.success) {
         var items = res.data;
         items.sort(function (a, b) {
@@ -198,78 +199,83 @@ async function load_data() {
             var maPhieuB = b.ten_phieu.split(".")[0];
             return maPhieuA.localeCompare(maPhieuB, undefined, { numeric: true, sensitivity: 'base' });
         });
+
         var html = "";
         items.forEach(function (survey, index) {
-            MaPhieu = survey.ten_phieu.split(".")[0];
+            var MaPhieu = survey.ten_phieu.split(".")[0];
             var formattedNgayTao = unixTimestampToDate(survey.ngay_tao);
             var formattedNgayChinhSua = unixTimestampToDate(survey.ngay_cap_nhat);
             var formattedNgayBatDau = unixTimestampToDate(survey.ngay_bat_dau);
             var formattedNgayKetThuc = unixTimestampToDate(survey.ngay_ket_thuc);
             var trangThaiText = survey.trang_thai == 0 ? 'ĐANG ĐÓNG' : 'ĐANG MỞ';
             var styleTrangThaiText = survey.trang_thai == 0 ? "color: red" : "color: #112bf2";
-            html +=
-                `
-                    <tr>
-                        <td class="formatSo">${index + 1}</td>
-                        <td>${survey.nguoi_tao}</td>
-                        <td>${survey.ten_hdt}</td>
-                        <td>${survey.ten_phieu}</td>
-                        <td>${survey.mo_ta}</td>
-                        <td>${survey.loai_khao_sat}</td>
-                        <td class="formatSo">${formattedNgayBatDau}</td>
-                        <td class="formatSo">${formattedNgayKetThuc}</td>
-                        <td class="formatSo">${formattedNgayTao}</td>
-                        <td class="formatSo">${formattedNgayChinhSua}</td>
-                        <td class="formatSo">${survey.nam}</td>
-                        <td style="${styleTrangThaiText};font-weight:bold">${trangThaiText}</td>
-                        <td>
-                            <button class="btn btn-info m-r-5 btnChiTiet" data-id="${survey.ma_phieu}">Chi tiết</button>
-                        </td>
-                    </tr>
-                    `;
 
-        })
+            html += `
+                <tr>
+                    <td class="formatSo">${index + 1}</td>
+                    <td>${survey.nguoi_tao}</td>
+                    <td>${survey.ten_hdt}</td>
+                    <td>${survey.ten_phieu}</td>
+                    <td>${survey.mo_ta}</td>
+                    <td>${survey.loai_khao_sat}</td>
+                    <td class="formatSo">${formattedNgayBatDau}</td>
+                    <td class="formatSo">${formattedNgayKetThuc}</td>
+                    <td class="formatSo">${formattedNgayTao}</td>
+                    <td class="formatSo">${formattedNgayChinhSua}</td>
+                    <td class="formatSo">${survey.nam}</td>
+                    <td style="${styleTrangThaiText};font-weight:bold">${trangThaiText}</td>
+                    <td>
+                        <button class="btn btn-info m-r-5 btnChiTiet" data-id="${survey.ma_phieu}">Chi tiết</button>
+                    </td>
+                </tr>
+            `;
+        });
+
         $('#card-view').html(html);
+        $('#datatable').DataTable({
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
+            searching: true,
+            autoWidth: false,
+            responsive: true,
+            language: {
+                paginate: {
+                    next: "Next",
+                    previous: "Previous"
+                },
+                search: "Search",
+                lengthMenu: "Show _MENU_ entries"
+            },
+            dom: "Bfrtip",
+            buttons: [
+                {
+                    extend: 'csv',
+                    title: 'Danh sách người dùng - CSV'
+                },
+                {
+                    extend: 'excel',
+                    title: 'Danh sách người dùng - Excel'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Danh sách người dùng PDF'
+                },
+                {
+                    extend: 'print',
+                    title: 'Danh sách người dùng'
+                }
+            ]
+        });
+
+    } else {
+        $('#card-view').html(`<tr><td colspan='13' class='text-center'>${res.message}</td></tr>`);
     }
-    else {
-        html += "<tr><td colspan='7' class='text-center'>Không có dữ liệu</td></tr>";
-    }
-    $("#datatable").DataTable({
-        pageLength: 10,
-        lengthMenu: [5, 10, 25, 50, 100],
-        ordering: true,
-        searching: true,
-        autoWidth: false,
-        responsive: true,
-        language: {
-            paginate: {
-                next: "Next",
-                previous: "Previous"
-            },
-            search: "Search",
-            lengthMenu: "Show _MENU_ entries"
-        },
-        dom: "Bfrtip",
-        buttons: [
-            {
-                extend: 'csv',
-                title: 'Danh sách chi tiết thống kê - CSV'
-            },
-            {
-                extend: 'excel',
-                title: 'Danh sách chi tiết thống kê - Excel'
-            },
-            {
-                extend: 'pdf',
-                title: 'Danh sách chi tiết thống kê PDF'
-            },
-            {
-                extend: 'print',
-                title: 'Danh sách chi tiết thống kê'
-            }
-        ]
-    });
 }
+$(document).on("click", "#btnFilter", function () {
+    load_data();
+})
+
 
 function AddPKS() {
     var tieuDe = $('#TieuDe').val();
