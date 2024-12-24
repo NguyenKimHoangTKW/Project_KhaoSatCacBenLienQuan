@@ -34,6 +34,7 @@ namespace CTDT.Controllers
                     avatarUrl = us.avatarUrl,
                     ngaycapnhat = unixTimestamp,
                     ngaytao = unixTimestamp,
+                    dang_nhap_lan_cuoi = unixTimestamp,
                     id_typeusers = 1
                 };
                 db.users.Add(user);

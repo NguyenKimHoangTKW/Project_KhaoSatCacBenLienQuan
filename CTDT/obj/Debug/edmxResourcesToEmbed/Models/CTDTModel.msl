@@ -253,11 +253,6 @@
       <EntityTypeMapping TypeName="dbSurveyModel.survey">
         <MappingFragment StoreEntitySet="survey">
           <ScalarProperty Name="mo_thong_ke" ColumnName="mo_thong_ke" />
-          <ScalarProperty Name="hoc_phan" ColumnName="hoc_phan" />
-          <ScalarProperty Name="thang_nhap_hoc" ColumnName="thang_nhap_hoc" />
-          <ScalarProperty Name="thang_tot_nghiep" ColumnName="thang_tot_nghiep" />
-          <ScalarProperty Name="key_class" ColumnName="key_class" />
-          <ScalarProperty Name="is_hocky" ColumnName="is_hocky" />
           <ScalarProperty Name="id_dot_khao_sat" ColumnName="id_dot_khao_sat" />
           <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
           <ScalarProperty Name="creator" ColumnName="creator" />

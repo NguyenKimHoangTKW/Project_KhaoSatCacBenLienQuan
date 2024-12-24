@@ -30,68 +30,7 @@ namespace CTDT.Areas.CTDT.Controllers
             is_user_ctdt = new int?[] { 3 }.Contains(user.id_typeusers);
             is_user_khoa = new int?[] { 5 }.Contains(user.id_typeusers);
         }
-        #region Thống kê toàn bộ phiếu
-        [HttpPost]
-        [Route("api/giam_sat_ty_le_khao_sat")]
-        public async Task<IHttpActionResult> load_charts_ty_le(FindChartsTyLeKhaoSat find)
-        {
-            var survey = await db.survey.Where(x => x.id_namhoc == find.id_nam_hoc && x.id_hedaotao == user.id_hdt).ToListAsync();
-            var List_data = new List<dynamic>();
-            foreach (var item_survey in survey)
-            {
-                var DataList = new List<dynamic>();
-                bool isStudent = new[] { 1, 2, 4, 6 }.Contains(item_survey.id_loaikhaosat) && item_survey.is_hocky == false;
-                bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(item_survey.id_loaikhaosat) && item_survey.is_hocky == true;
-                bool isCTDT = new[] { 5 }.Contains(item_survey.id_loaikhaosat);
-                bool isCBVC = new[] { 3, 8 }.Contains(item_survey.id_loaikhaosat);
-                var json = new List<dynamic>();
-                var answer_response = db.answer_response
-                    .Where(x => x.surveyID == item_survey.surveyID && x.id_namhoc == find.id_nam_hoc && x.survey.id_hedaotao == user.id_hdt);
-                answer_response = answer_response.Where(x => x.id_ctdt == user.id_ctdt);
-
-                var query = await answer_response.OrderBy(x => x.surveyID).Distinct().ToListAsync();
-                if (!string.IsNullOrEmpty(item_survey.key_class))
-                {
-                    var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(item_survey.key_class);
-
-                    if (isStudent)
-                    {
-                        sinh_vien(DataList, find.id_ctdt, item_survey.surveyID, keyClassList);
-                    }
-                    else if (isStudentBySubject)
-                    {
-                        sinh_vien_subject(DataList, find.id_ctdt, item_survey.surveyID, keyClassList);
-                    }
-                }
-                else
-                {
-                    if (isCTDT)
-                    {
-                        chuong_trinh_dao_tao(DataList, find.id_ctdt, item_survey.surveyID);
-                    }
-                    else if (isCBVC)
-                    {
-                        can_bo_vien_chuc(DataList, find.id_ctdt, item_survey.surveyID);
-                    }
-
-                }
-
-                List_data.Add(new
-                {
-                    ten_phieu = item_survey.surveyTitle,
-                    thong_ke_ty_le = DataList,
-                });
-            }
-            if (List_data.Count > 0)
-            {
-                return Ok(new { data = List_data, is_data = List_data.Count > 0 });
-            }
-            else
-            {
-                return Ok(new { message = "No Data Avalible", is_data = false });
-            }
-        }
-        #endregion
+     
         #region Thống kê theo thông tư 01
         [HttpPost]
         [Route("api/giam_sat_ty_le_khao_sat_thong_tu_01")]
@@ -105,8 +44,8 @@ namespace CTDT.Areas.CTDT.Controllers
             foreach (var item_survey in survey)
             {
                 var DataList = new List<dynamic>();
-                bool isStudent = new[] { 1, 2, 4, 6 }.Contains(item_survey.id_loaikhaosat) && item_survey.is_hocky == false;
-                bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(item_survey.id_loaikhaosat) && item_survey.is_hocky == true;
+                bool isStudent = new[] { 1, 2, 4, 6 }.Contains(item_survey.id_loaikhaosat);
+                bool isStudentBySubject = new[] { 1, 2, 4, 6 }.Contains(item_survey.id_loaikhaosat);
                 bool isCTDT = new[] { 5 }.Contains(item_survey.id_loaikhaosat);
                 bool isCBVC = new[] { 3, 8 }.Contains(item_survey.id_loaikhaosat);
                 var json = new List<dynamic>();
@@ -115,9 +54,9 @@ namespace CTDT.Areas.CTDT.Controllers
                 answer_response = answer_response.Where(x => x.id_ctdt == user.id_ctdt);
 
                 var query = await answer_response.OrderBy(x => x.surveyID).Distinct().ToListAsync();
-                if (!string.IsNullOrEmpty(item_survey.key_class))
+                if (!string.IsNullOrEmpty(item_survey.surveyData))
                 {
-                    var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(item_survey.key_class);
+                    var keyClassList = new JavaScriptSerializer().Deserialize<List<string>>(item_survey.surveyData);
 
                     if (isStudent)
                     {

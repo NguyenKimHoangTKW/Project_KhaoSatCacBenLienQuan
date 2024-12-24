@@ -48,5 +48,19 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.ten_hedaotao), "id_hedaotao", "ten_hedaotao");
             return View();
         }
+
+        public ActionResult danh_sach_phieu_khao_sat()
+        {
+            ViewBag.HDT = new SelectList(db.hedaotao, "id_hedaotao", "ten_hedaotao");
+            ViewBag.LKS = new SelectList(db.LoaiKhaoSat, "id_loaikhaosat", "name_loaikhaosat");
+            ViewBag.Year = new SelectList(db.NamHoc, "id_namhoc", "ten_namhoc");
+            return View();
+        }
+
+        public ActionResult chi_tiet_phieu_khao_sat(int id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
     }
 }

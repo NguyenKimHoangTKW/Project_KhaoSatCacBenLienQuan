@@ -75,7 +75,7 @@ namespace CTDT.Controllers
                 return BadRequest("Không thể phân loại được tài khoản");
             }
             var phieukhaosat = await db.survey
-               .Where(c => c.surveyStatus == true && c.hedaotao.ten_hedaotao == hdt.ten_hedaotao).ToListAsync();
+               .Where(c => c.surveyStatus == 1 && c.hedaotao.ten_hedaotao == hdt.ten_hedaotao).ToListAsync();
             var list_phieu_khao_sat = new List<dynamic>();
             foreach (var item in phieukhaosat)
             {

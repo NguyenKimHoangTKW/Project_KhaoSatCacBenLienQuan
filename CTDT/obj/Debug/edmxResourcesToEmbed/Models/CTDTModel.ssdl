@@ -231,7 +231,7 @@
       <PropertyRef Name="surveyID" />
     </Key>
     <Property Name="surveyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="id_hedaotao" Type="int" Nullable="false" />
+    <Property Name="id_hedaotao" Type="int" />
     <Property Name="surveyData" Type="nvarchar(max)" />
     <Property Name="surveyTitle" Type="nvarchar(max)" />
     <Property Name="surveyDescription" Type="nvarchar(max)" />
@@ -239,16 +239,11 @@
     <Property Name="surveyTimeEnd" Type="int" />
     <Property Name="surveyTimeMake" Type="int" />
     <Property Name="surveyTimeUpdate" Type="int" />
-    <Property Name="surveyStatus" Type="bit" />
+    <Property Name="surveyStatus" Type="int" />
     <Property Name="id_loaikhaosat" Type="int" Nullable="false" />
     <Property Name="creator" Type="int" />
     <Property Name="id_namhoc" Type="int" />
     <Property Name="id_dot_khao_sat" Type="int" />
-    <Property Name="is_hocky" Type="bit" />
-    <Property Name="key_class" Type="nvarchar(max)" />
-    <Property Name="thang_tot_nghiep" Type="nvarchar" MaxLength="20" />
-    <Property Name="thang_nhap_hoc" Type="nvarchar" MaxLength="20" />
-    <Property Name="hoc_phan" Type="nvarchar" MaxLength="20" />
     <Property Name="mo_thong_ke" Type="int" />
   </EntityType>
   <EntityType Name="sysdiagrams">
@@ -715,7 +710,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_survey_hedaotao">
-    <End Role="hedaotao" Type="Self.hedaotao" Multiplicity="1" />
+    <End Role="hedaotao" Type="Self.hedaotao" Multiplicity="0..1" />
     <End Role="survey" Type="Self.survey" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="hedaotao">

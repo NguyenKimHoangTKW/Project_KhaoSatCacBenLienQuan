@@ -25,7 +25,7 @@ namespace CTDT.Models
         }
     
         public int surveyID { get; set; }
-        public int id_hedaotao { get; set; }
+        public Nullable<int> id_hedaotao { get; set; }
         public string surveyData { get; set; }
         public string surveyTitle { get; set; }
         public string surveyDescription { get; set; }
@@ -33,16 +33,11 @@ namespace CTDT.Models
         public Nullable<int> surveyTimeEnd { get; set; }
         public Nullable<int> surveyTimeMake { get; set; }
         public Nullable<int> surveyTimeUpdate { get; set; }
-        public Nullable<bool> surveyStatus { get; set; }
+        public Nullable<int> surveyStatus { get; set; }
         public int id_loaikhaosat { get; set; }
         public Nullable<int> creator { get; set; }
         public Nullable<int> id_namhoc { get; set; }
         public Nullable<int> id_dot_khao_sat { get; set; }
-        public Nullable<bool> is_hocky { get; set; }
-        public string key_class { get; set; }
-        public string thang_tot_nghiep { get; set; }
-        public string thang_nhap_hoc { get; set; }
-        public string hoc_phan { get; set; }
         public Nullable<int> mo_thong_ke { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

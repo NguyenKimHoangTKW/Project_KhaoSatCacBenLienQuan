@@ -508,7 +508,7 @@
       <PropertyRef Name="surveyID" />
     </Key>
     <Property Name="surveyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="id_hedaotao" Type="Int32" Nullable="false" />
+    <Property Name="id_hedaotao" Type="Int32" />
     <Property Name="surveyData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="surveyTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="surveyDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -516,16 +516,11 @@
     <Property Name="surveyTimeEnd" Type="Int32" />
     <Property Name="surveyTimeMake" Type="Int32" />
     <Property Name="surveyTimeUpdate" Type="Int32" />
-    <Property Name="surveyStatus" Type="Boolean" />
+    <Property Name="surveyStatus" Type="Int32" />
     <Property Name="id_loaikhaosat" Type="Int32" Nullable="false" />
     <Property Name="creator" Type="Int32" />
     <Property Name="id_namhoc" Type="Int32" />
     <Property Name="id_dot_khao_sat" Type="Int32" />
-    <Property Name="is_hocky" Type="Boolean" />
-    <Property Name="key_class" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="thang_tot_nghiep" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="thang_nhap_hoc" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="hoc_phan" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="mo_thong_ke" Type="Int32" />
     <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_survey" FromRole="survey" ToRole="answer_response" />
     <NavigationProperty Name="cbvc_khao_sat" Relationship="dbSurveyModel.FK_cbvc_khao_sat_survey" FromRole="survey" ToRole="cbvc_khao_sat" />
@@ -940,7 +935,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_survey_hedaotao">
-    <End Type="dbSurveyModel.hedaotao" Role="hedaotao" Multiplicity="1" />
+    <End Type="dbSurveyModel.hedaotao" Role="hedaotao" Multiplicity="0..1" />
     <End Type="dbSurveyModel.survey" Role="survey" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="hedaotao">

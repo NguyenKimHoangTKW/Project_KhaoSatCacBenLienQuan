@@ -318,20 +318,6 @@
     var blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     var formData = new FormData();
     formData.append('file', blob, 'KetQuaKhaoSat.xlsx');
-
-    $.ajax({
-        url: '/Admin/PhieuKhaoSat/SaveExcelFile',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            console.log('File saved successfully.');
-        },
-        error: function (xhr, status, error) {
-            console.error('Failed to save file:', error);
-        }
-    });
 }
 
     function LoadData(pageNumber) {

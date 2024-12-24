@@ -1,5 +1,7 @@
 ﻿using CTDT.Models;
+using GoogleApi.Entities.Search.Video.Common;
 using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -143,7 +145,7 @@ namespace CTDT.Areas.Admin.Controllers
                     var count_mon_hoc = await db.nguoi_hoc_dang_co_hoc_phan
                             .Where(x => x.surveyID == aw.surveyID)
                             .ToListAsync();
-                    if(aw.id_lop != null)
+                    if (aw.id_lop != null)
                     {
                         count_mon_hoc = count_mon_hoc
                             .Where(x => x.sinhvien.id_lop == aw.id_lop)
@@ -204,7 +206,7 @@ namespace CTDT.Areas.Admin.Controllers
 
                     list_count.Add(get_mh);
                 }
-                else if(check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 2)
+                else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 2)
                 {
                     if (check_group_pks.id_loaikhaosat == 3)
                     {
@@ -229,7 +231,7 @@ namespace CTDT.Areas.Admin.Controllers
 
                         var DataCTDT = new
                         {
-                            ctdt = groupedData, 
+                            ctdt = groupedData,
                             tong_khao_sat = count_gv.Count(),
                             tong_phieu_da_tra_loi = count_gv.Count(),
                             tong_phieu_chua_tra_loi = 0,
@@ -245,7 +247,7 @@ namespace CTDT.Areas.Admin.Controllers
                     {
                         var count_cbvc = await db.cbvc_khao_sat
                             .Where(x => x.surveyID == aw.surveyID).ToListAsync();
-                        if(aw.id_ctdt != null)
+                        if (aw.id_ctdt != null)
                         {
                             count_cbvc = count_cbvc.Where(x => x.CanBoVienChuc.id_chuongtrinhdaotao == aw.id_ctdt).ToList();
                         }
@@ -397,7 +399,6 @@ namespace CTDT.Areas.Admin.Controllers
             }).ToList();
             return results;
         }
-
         public List<object> cau_hoi_mot_lua_chon(dynamic get_data)
         {
             var questionDataDict = new Dictionary<string, dynamic>();
@@ -637,7 +638,6 @@ namespace CTDT.Areas.Admin.Controllers
 
             return questionDataList;
         }
-
         public List<object> y_kien_khac(dynamic get_data)
         {
             var questionDataList = new List<dynamic>();
@@ -703,6 +703,182 @@ namespace CTDT.Areas.Admin.Controllers
 
 
             return questionDataList;
+        }
+
+        // Hàm xuất dữ liệu thô
+        [HttpPost]
+        [Route("api/admin/export-du-lieu-tho")]
+        public async Task<IHttpActionResult> export_du_lieu_tho(GiamSatThongKeKetQua aw)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var check_group_pks = await db.survey.FirstOrDefaultAsync(x => x.surveyID == aw.surveyID);
+            var query = db.answer_response.Where(x => x.surveyID == aw.surveyID).AsQueryable();
+            bool is_subject = false;
+            bool is_student = false;
+            bool is_staff = false;
+            bool is_program = false;
+            List<JObject> surveyData = new List<JObject>();
+
+            if (aw.id_hdt != null)
+            {
+                query = query.Where(x => x.ctdt.id_hdt == aw.id_hdt);
+            }
+
+            if (aw.id_ctdt != null)
+            {
+                query = query.Where(x => x.id_ctdt == aw.id_ctdt);
+            }
+
+            if (aw.id_lop != null)
+            {
+                query = query.Where(x => x.sinhvien.lop.id_lop == aw.id_lop);
+            }
+
+            if (aw.id_mh != null)
+            {
+                query = query.Where(x => x.id_mh == aw.id_mh);
+            }
+
+            if (aw.id_CBVC != null)
+            {
+                query = query.Where(x => x.id_CBVC == aw.id_CBVC);
+            }
+            if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 3)
+            {
+                is_subject = true;
+                var answers = query
+                          .Select(x => new
+                          {
+                              DauThoiGian = x.time,
+                              x.json_answer,
+                              Email = x.users.email,
+                              MonHoc = x.mon_hoc.ten_mon_hoc,
+                              GiangVien = x.CanBoVienChuc.TenCBVC,
+                              MSSV = x.sinhvien.ma_sv,
+                              HoTen = x.sinhvien.hovaten,
+                              NgaySinh = (DateTime?)x.sinhvien.ngaysinh,
+                              Lop = x.sinhvien.lop.ma_lop,
+                              CTDT = x.ctdt.ten_ctdt,
+                              Khoa = x.ctdt.khoa.ten_khoa,
+                              SDT = x.sinhvien.sodienthoai,
+                          }).ToList();
+                foreach (var answer in answers)
+                {
+                    JObject answerObject = JObject.Parse(answer.json_answer);
+                    answerObject["DauThoiGian"] = answer.DauThoiGian;
+                    answerObject["Email"] = answer.Email;
+                    answerObject["MonHoc"] = answer.MonHoc;
+                    answerObject["GiangVien"] = answer.GiangVien;
+                    answerObject["MSSV"] = answer.MSSV;
+                    answerObject["HoTen"] = answer.HoTen;
+                    answerObject["NgaySinh"] = answer.NgaySinh?.ToString("dd-MM-yyyy");
+                    answerObject["Lop"] = answer.Lop;
+                    answerObject["CTDT"] = answer.CTDT;
+                    answerObject["Khoa"] = answer.Khoa;
+                    answerObject["SDT"] = answer.SDT;
+                    surveyData.Add(answerObject);
+                }
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 5)
+            {
+                is_student = true;
+                var answers = query
+                          .Select(x => new
+                          {
+                              DauThoiGian = x.time,
+                              x.json_answer,
+                              Email = x.users.email,
+                              MSSV = x.sinhvien.ma_sv,
+                              HoTen = x.sinhvien.hovaten,
+                              NgaySinh = (DateTime?)x.sinhvien.ngaysinh,
+                              Lop = x.sinhvien.lop.ma_lop,
+                              CTDT = x.ctdt.ten_ctdt,
+                              Khoa = x.ctdt.khoa.ten_khoa,
+                              SDT = x.sinhvien.sodienthoai,
+                          }).ToList();
+                foreach (var answer in answers)
+                {
+                    JObject answerObject = JObject.Parse(answer.json_answer);
+                    answerObject["DauThoiGian"] = answer.DauThoiGian;
+                    answerObject["Email"] = answer.Email;
+                    answerObject["MSSV"] = answer.MSSV;
+                    answerObject["HoTen"] = answer.HoTen;
+                    answerObject["NgaySinh"] = answer.NgaySinh?.ToString("dd-MM-yyyy");
+                    answerObject["Lop"] = answer.Lop;
+                    answerObject["CTDT"] = answer.CTDT;
+                    answerObject["Khoa"] = answer.Khoa;
+                    answerObject["SDT"] = answer.SDT;
+                    surveyData.Add(answerObject);
+                }
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 4)
+            {
+                is_program = true;
+                var answers = query
+                       .Select(x => new
+                       {
+                           DauThoiGian = x.time,
+                           x.json_answer,
+                           Email = x.users.email,
+                           CTDT = x.ctdt.ten_ctdt,
+                       }).ToList();
+
+                foreach (var answer in answers)
+                {
+                    JObject answerObject = JObject.Parse(answer.json_answer);
+                    answerObject["DauThoiGian"] = answer.DauThoiGian;
+                    answerObject["Email"] = answer.Email;
+                    answerObject["CTDT"] = answer.CTDT;
+                    surveyData.Add(answerObject);
+                }
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 2)
+            {
+                is_staff = true;
+                var answers = query
+                         .Select(x => new
+                         {
+                             DauThoiGian = x.time,
+                             x.json_answer,
+                             HoTen = x.CanBoVienChuc.TenCBVC,
+                             Email = x.users.email,
+                             KhaoSatCTDT = x.ctdt.ten_ctdt,
+                             DonVi = x.DonVi.name_donvi,
+                             ChucDanh = x.CanBoVienChuc.ChucVu.name_chucvu,
+                         }).ToList();
+
+                foreach (var answer in answers)
+                {
+                    JObject answerObject = JObject.Parse(answer.json_answer);
+                    answerObject["DauThoiGian"] = answer.DauThoiGian;
+                    answerObject["Email"] = answer.Email;
+                    answerObject["HoTen"] = answer.HoTen;
+                    answerObject["KhaoSatCTDT"] = answer.KhaoSatCTDT;
+                    answerObject["DonVi"] = answer.DonVi;
+                    answerObject["ChucDanh"] = answer.ChucDanh;
+                    surveyData.Add(answerObject);
+                }
+            }
+            if (surveyData.Count > 0)
+            {
+                if (is_subject)
+                {
+                    return Ok(new { data = surveyData, success = true, is_subject = true });
+                }
+                else if (is_student)
+                {
+                    return Ok(new { data = surveyData, success = true, is_student = true });
+                }
+                else if (is_program)
+                {
+                    return Ok(new { data = surveyData, success = true, is_program = true });
+                }
+                else if (is_staff)
+                {
+                    return Ok(new { data = surveyData, success = true, is_staff = true });
+                }
+            }
+            return Ok(new { message = "Không tìm thấy dữ liệu", success = false });
         }
     }
 }

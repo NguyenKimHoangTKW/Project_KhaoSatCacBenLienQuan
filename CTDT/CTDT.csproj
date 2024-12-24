@@ -305,7 +305,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopKetQuaKhaoSatAdminAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\CBVCController.cs" />
     <Compile Include="Areas\Admin\Controllers\CTDTController.cs" />
     <Compile Include="Areas\Admin\Controllers\DanhSachMonHocHocVienController.cs" />
@@ -317,6 +317,7 @@
     <Compile Include="Areas\Admin\Controllers\LopController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatAdminAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatController.cs" />
     <Compile Include="Areas\Admin\Controllers\SinhVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\testController.cs" />
@@ -458,7 +459,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Scripts\BaoCaoTongHop.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\BaoCaoTongHopKetQuaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\CanBoVienChuc.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChuongTrinhDaoTao.js" />
@@ -1367,6 +1367,8 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\Thong_Ke_Ket_Qua_Khao_Sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\giam_sat_ty_le_tham_gia_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\bao_cao_tong_hop_ket_qua_khao_sat.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_phieu_khao_sat.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\chi_tiet_phieu_khao_sat.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

@@ -14,7 +14,7 @@ async function load_he_dao_tao() {
         form_client(res.data)
     }
     else if (res.islogin && res.admin) {
-        window.location.href = "/Admin/PhieuKhaoSat/Index";
+        window.location.href = "/admin/danh-sach-phieu-khao-sat";
     }
     else if (res.islogin && res.khoa) {
         form_khoa(res.data)

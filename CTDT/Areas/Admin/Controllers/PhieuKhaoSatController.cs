@@ -24,22 +24,8 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.HDT = new SelectList(db.hedaotao, "id_hedaotao", "ten_hedaotao");
             ViewBag.LKS = new SelectList(db.LoaiKhaoSat, "id_loaikhaosat", "name_loaikhaosat");
             ViewBag.Year = new SelectList(db.NamHoc, "id_namhoc", "ten_namhoc");
-
-            var maLops = db.lop.Select(s => s.ma_lop).ToList();
-
-            var keyclass = maLops
-                            .Select(ml => new string(ml.Where(char.IsDigit).Take(2).ToArray()))
-                            .Where(ml => ml.Length == 2)
-                            .Distinct()
-                            .OrderByDescending(ml => int.Parse(ml))
-                            .ToList();
-
-            ViewBag.KeyClass = new SelectList(keyclass);
-
             return View();
         }
-
-
         [HttpPost]
         public ActionResult NewSurvey(survey s)
         {
@@ -109,11 +95,11 @@ namespace CTDT.Areas.Admin.Controllers
 
                 if (surveystatus == 1)
                 {
-                    query = query.Where(p => p.surveyStatus == true);
+                    query = query.Where(p => p.surveyStatus == 1);
                 }
                 else if(surveystatus == 0)
                 {
-                    query = query.Where(p => p.surveyStatus == false);
+                    query = query.Where(p => p.surveyStatus == 2);
                 }
 
                 if (year != 0)
@@ -169,7 +155,6 @@ namespace CTDT.Areas.Admin.Controllers
                     NgayKetThuc = x.surveyTimeEnd,
                     NamHoc = x.id_namhoc,
                     TrangThai = x.surveyStatus,
-                    key_class = x.key_class
                 }).FirstOrDefault();
             return Json(new { data = GetID }, JsonRequestBehavior.AllowGet);
         }
@@ -194,7 +179,6 @@ namespace CTDT.Areas.Admin.Controllers
                 query.id_namhoc = sv.id_namhoc;
                 query.surveyTimeStart = sv.surveyTimeStart;
                 query.surveyTimeEnd = sv.surveyTimeEnd;
-                query.key_class = sv.key_class;
                 db.SaveChanges();
                 return Json(new { success = true, message = "Cập nhật dữ liệu thành công"}, JsonRequestBehavior.AllowGet);
             }

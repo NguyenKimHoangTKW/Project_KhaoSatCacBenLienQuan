@@ -83,8 +83,8 @@ async function LoadChartSurvey() {
                         <hr />
                         <div style="display: flex; justify-content: space-between; align-items: center; font-weight:bold">
                             <p style="margin: 0; color: black;">Tổng phiếu: ${thongKeTyLe.tong_khao_sat || '0'}</p>
-                            <p style="margin: 0; color:#ebb000;">Đã thu về: ${thongKeTyLe.tong_phieu_da_tra_loi || '0'}</p>
-                            <p style="margin: 0; color:#5029ff;">Chưa thu về: ${thongKeTyLe.tong_phieu_chua_tra_loi || '0'}</p>
+                            <p style="margin: 0; color:#5029ff;">Đã thu về: ${thongKeTyLe.tong_phieu_da_tra_loi || '0'}</p>
+                            <p style="margin: 0; color:#ebb000;">Chưa thu về: ${thongKeTyLe.tong_phieu_chua_tra_loi || '0'}</p>
                         </div>
                     </div>
                 </div>`;

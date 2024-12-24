@@ -59,6 +59,10 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("#exportExcelTho").click(function () {
+        XuatExcel();
+    })
 });
 
 
@@ -309,7 +313,7 @@ async function test() {
             title: res.message
         });
     }
-   
+
 }
 
 function form_ty_le(ty_le) {
@@ -318,7 +322,7 @@ function form_ty_le(ty_le) {
         let html = "";
         container.empty();
 
-       
+
 
         ty_le.forEach(item => {
             if (item.is_mon_hoc) {
@@ -423,9 +427,6 @@ function form_ty_le(ty_le) {
         container.empty();
     }
 }
-
-
-
 function form_cau_hoi_1_lua_chon(ty_le) {
     if (ty_le) {
         let container = $("#surveyContainerSingle");
@@ -829,7 +830,7 @@ function ExportExcelKetQuaKhaoSat() {
         });
 
         worksheet.columns.forEach(column => {
-            column.width = 20; 
+            column.width = 20;
         });
 
         worksheet.addRow([]);
@@ -1101,4 +1102,170 @@ function ExportExcelKetQuaKhaoSat() {
         const filename = `Kết quả khảo sát_${dateTime}.xlsx`;
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
+}
+
+async function XuatExcel() {
+    const hdtid = $("#hedaotao").val();
+    const surveyid = $("#surveyid").val();
+    const ctdt = $("#ctdt").val();
+    const lop = $("#lop-fil-mh").val() || $("#lop-fil-gv").val();
+    const mh = $("#mh-fil-mh").val() || $("#mh-fil-gv").val();
+    const gv = $("#gv-fil-mh").val() || $("gv-fil-gv").val();
+    const res = await $.ajax({
+        url: '/api/admin/export-du-lieu-tho',
+        type: 'POST',
+        data: {
+            surveyID: surveyid,
+            id_hdt: hdtid,
+            id_ctdt: ctdt,
+            id_lop: lop,
+            id_mh: mh,
+            id_CBVC: gv
+        }
+    });
+    if (res.success) {
+        let timerInterval;
+        Swal.fire({
+            title: "Đang xuất dữ liệu ra Excel!",
+            html: "Vui lòng đợi trong <b></b> giây.",
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+                exportToExcel(res, res.data);
+            }
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Không có dữ liệu',
+            text: res.message
+        });
+    }
+};
+
+function exportToExcel(check, data) {
+    var surveytitle = $("#surveyid option:selected").text();
+    var workbook = XLSX.utils.book_new();
+    var worksheet = XLSX.utils.aoa_to_sheet([]);
+
+    var excelData = [];
+    var titleRow = [surveytitle];
+    var headerRow;
+    if (check.is_subject) {
+        headerRow = ["Dấu thời gian", "Email", "Môn học", "Giảng viên", "MSSV", "Họ và tên", "Ngày sinh", "Thuộc lớp", "Thuộc CTĐT", "Thuộc Khoa", "Số điện thoại"];
+    } else if (check.is_program) {
+        headerRow = ["Dấu thời gian", "Email", "Thuộc CTĐT"];
+    } else if (check.is_staff) {
+        headerRow = ["Dấu thời gian", "Email", "Họ và tên","Khảo sát CTĐT", "Thuộc đơn vị", "Thuộc chức danh"];
+    }
+
+    if (data.length > 0 && data[0].pages && data[0].pages.length > 0) {
+        data[0].pages.forEach(function (page) {
+            page.elements.forEach(function (element) {
+                headerRow.push(element.title);
+            });
+        });
+    }
+    excelData.push(titleRow);
+    excelData.push(headerRow);
+
+    data.forEach(function (survey) {
+        var rowData = [];
+        if (check.is_subject) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.MonHoc || "",
+                survey.GiangVien || "",
+                survey.MSSV || "",
+                survey.HoTen || "",
+                survey.NgaySinh || "",
+                survey.Lop || "",
+                survey.CTDT || "",
+                survey.Khoa || "",
+                survey.SDT || ""
+            ];
+        } else if (check.is_program) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.CTDT || ""
+            ];
+        } else if (check.is_staff) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.HoTen || "",
+                survey.KhaoSatCTDT || "",
+                survey.DonVi || "",
+                survey.ChucDanh || ""
+            ];
+        }
+
+        survey.pages.forEach(function (page) {
+            page.elements.forEach(function (element) {
+                if (element.type === "text" || element.type === "comment") {
+                    rowData.push(element.response ? element.response.text || "" : "");
+                } else if (element.type === "radiogroup") {
+                    rowData.push(element.response ? element.response.text || "" : "");
+                } else if (element.type === "checkbox") {
+                    let checkboxResponses = Array.isArray(element.response.text) ? element.response.text.join(", ") : "";
+                    rowData.push(checkboxResponses);
+                } else if (element.type === "dropdown") {
+                    rowData.push(element.response ? element.response.text || "" : "");
+                } else {
+                    rowData.push("");
+                }
+            });
+        });
+
+        excelData.push(rowData);
+    });
+
+    excelData.forEach(function (row) {
+        XLSX.utils.sheet_add_aoa(worksheet, [row], { origin: -1 });
+    });
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'SurveyData');
+
+    var now = new Date();
+    var timestamp = now.getFullYear().toString() +
+        ('0' + (now.getMonth() + 1)).slice(-2) +
+        ('0' + now.getDate()).slice(-2) +
+        ('0' + now.getHours()).slice(-2) +
+        ('0' + now.getMinutes()).slice(-2) +
+        ('0' + now.getSeconds()).slice(-2);
+    var fileName = 'DuLieuTho-' + timestamp + '.xlsx';
+
+    XLSX.writeFile(workbook, fileName);
+
+    var excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    var blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    var formData = new FormData();
+    formData.append('file', blob, 'DuLieuTho.xlsx');
+}
+function unixTimestampToDate(unixTimestamp) {
+    var date = new Date(unixTimestamp * 1000);
+    var weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+    var dayOfWeek = weekdays[date.getDay()];
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    var year = date.getFullYear();
+    var hours = ("0" + date.getHours()).slice(-2);
+    var minutes = ("0" + date.getMinutes()).slice(-2);
+    var seconds = ("0" + date.getSeconds()).slice(-2);
+    var formattedDate = dayOfWeek + ', ' + day + "-" + month + "-" + year + " " + ', ' + hours + ":" + minutes + ":" + seconds;
+    return formattedDate;
 }

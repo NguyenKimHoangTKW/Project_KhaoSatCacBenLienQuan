@@ -22,7 +22,7 @@ namespace CTDT.Areas.CTDT.Controllers
             var check_contains = new HashSet<string>();
             foreach (var items in survey)
             {
-                bool isStudent = new[] { 1, 2, 4, 6 }.Contains(items.id_loaikhaosat) && (items.is_hocky == false || items.is_hocky == true);
+                bool isStudent = new[] { 1, 2, 4, 6 }.Contains(items.id_loaikhaosat);
                 bool isCTDT = new[] { 5 }.Contains(items.id_loaikhaosat);
                 bool isCBVC = new[] { 3, 8 }.Contains(items.id_loaikhaosat);
 
