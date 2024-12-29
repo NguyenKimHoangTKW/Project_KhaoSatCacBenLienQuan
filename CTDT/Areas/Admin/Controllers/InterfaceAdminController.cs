@@ -62,5 +62,13 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.id = id;
             return View();
         }
+
+
+        public ActionResult tieu_de_cau_hoi_pks()
+        {
+            ViewBag.Year = new SelectList(db.NamHoc.OrderBy(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
+            ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.ten_hedaotao), "id_hedaotao", "ten_hedaotao");
+            return View();
+        }
     }
 }

@@ -45,6 +45,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="chi_tiet_cau_hoi_tieu_de">
+      <EntityTypeMapping TypeName="dbSurveyModel.chi_tiet_cau_hoi_tieu_de">
+        <MappingFragment StoreEntitySet="chi_tiet_cau_hoi_tieu_de">
+          <ScalarProperty Name="is_ykienkhac" ColumnName="is_ykienkhac" />
+          <ScalarProperty Name="bat_buoc" ColumnName="bat_buoc" />
+          <ScalarProperty Name="id_group_radio" ColumnName="id_group_radio" />
+          <ScalarProperty Name="id_dang_cau_hoi" ColumnName="id_dang_cau_hoi" />
+          <ScalarProperty Name="ten_cau_hoi" ColumnName="ten_cau_hoi" />
+          <ScalarProperty Name="id_tieu_de_phieu" ColumnName="id_tieu_de_phieu" />
+          <ScalarProperty Name="thu_tu" ColumnName="thu_tu" />
+          <ScalarProperty Name="id_chi_tiet_cau_hoi_tieu_de" ColumnName="id_chi_tiet_cau_hoi_tieu_de" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="chuc_nang_users">
       <EntityTypeMapping TypeName="dbSurveyModel.chuc_nang_users">
         <MappingFragment StoreEntitySet="chuc_nang_users">
@@ -74,6 +88,14 @@
           <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
           <ScalarProperty Name="ma_ctdt" ColumnName="ma_ctdt" />
           <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dang_cau_hoi">
+      <EntityTypeMapping TypeName="dbSurveyModel.dang_cau_hoi">
+        <MappingFragment StoreEntitySet="dang_cau_hoi">
+          <ScalarProperty Name="ten_dang_cau_hoi" ColumnName="ten_dang_cau_hoi" />
+          <ScalarProperty Name="id_dang_cau_hoi" ColumnName="id_dang_cau_hoi" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -109,6 +131,14 @@
           <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
           <ScalarProperty Name="ten_group_mh" ColumnName="ten_group_mh" />
           <ScalarProperty Name="id_group_mh" ColumnName="id_group_mh" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="group_radio_cau_hoi">
+      <EntityTypeMapping TypeName="dbSurveyModel.group_radio_cau_hoi">
+        <MappingFragment StoreEntitySet="group_radio_cau_hoi">
+          <ScalarProperty Name="ten_group_radio" ColumnName="ten_group_radio" />
+          <ScalarProperty Name="id_group_radio" ColumnName="id_group_radio" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -230,6 +260,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="radio_cau_hoi">
+      <EntityTypeMapping TypeName="dbSurveyModel.radio_cau_hoi">
+        <MappingFragment StoreEntitySet="radio_cau_hoi">
+          <ScalarProperty Name="id_group_radio" ColumnName="id_group_radio" />
+          <ScalarProperty Name="ten_radio_cau_hoi" ColumnName="ten_radio_cau_hoi" />
+          <ScalarProperty Name="thu_tu" ColumnName="thu_tu" />
+          <ScalarProperty Name="id_radio_cau_hoi" ColumnName="id_radio_cau_hoi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="radio_cau_hoi_khac">
+      <EntityTypeMapping TypeName="dbSurveyModel.radio_cau_hoi_khac">
+        <MappingFragment StoreEntitySet="radio_cau_hoi_khac">
+          <ScalarProperty Name="id_chi_tiet_cau_hoi_tieu_de" ColumnName="id_chi_tiet_cau_hoi_tieu_de" />
+          <ScalarProperty Name="ten_rd_cau_hoi_khac" ColumnName="ten_rd_cau_hoi_khac" />
+          <ScalarProperty Name="thu_tu" ColumnName="thu_tu" />
+          <ScalarProperty Name="id_rd_cau_hoi_khac" ColumnName="id_rd_cau_hoi_khac" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="sinhvien">
       <EntityTypeMapping TypeName="dbSurveyModel.sinhvien">
         <MappingFragment StoreEntitySet="sinhvien">
@@ -291,6 +341,16 @@
           <ScalarProperty Name="id_survey" ColumnName="id_survey" />
           <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
           <ScalarProperty Name="id_thong_ke" ColumnName="id_thong_ke" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tieu_de_phieu_khao_sat">
+      <EntityTypeMapping TypeName="dbSurveyModel.tieu_de_phieu_khao_sat">
+        <MappingFragment StoreEntitySet="tieu_de_phieu_khao_sat">
+          <ScalarProperty Name="ten_tieu_de" ColumnName="ten_tieu_de" />
+          <ScalarProperty Name="surveyID" ColumnName="surveyID" />
+          <ScalarProperty Name="thu_tu" ColumnName="thu_tu" />
+          <ScalarProperty Name="id_tieu_de_phieu" ColumnName="id_tieu_de_phieu" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

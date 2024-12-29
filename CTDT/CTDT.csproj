@@ -318,7 +318,6 @@
     <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatAdminAPIController.cs" />
-    <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatController.cs" />
     <Compile Include="Areas\Admin\Controllers\SinhVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\testController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeKetQuaKhaoSatAPIController.cs" />
@@ -351,6 +350,12 @@
     <Compile Include="Helper\UserAuthorizeAttribute.cs" />
     <Compile Include="Helper\VisitorHub.cs" />
     <Compile Include="Models\cbvc_khao_sat.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\chi_tiet_cau_hoi_tieu_de.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dang_cau_hoi.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\dot_khao_sat.cs">
@@ -400,6 +405,9 @@
     <Compile Include="Models\group_mon_hoc.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\group_radio_cau_hoi.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\hedaotao.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -436,6 +444,12 @@
     <Compile Include="Models\phan_quyen_chuc_nang_users.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\radio_cau_hoi.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\radio_cau_hoi_khac.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SaveForm.cs" />
     <Compile Include="Models\SaveXacThuc.cs" />
     <Compile Include="Models\sinhvien.cs">
@@ -448,6 +462,9 @@
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\thong_ke_theo_yeu_cau.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tieu_de_phieu_khao_sat.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\typeusers.cs">
@@ -471,6 +488,7 @@
     <Content Include="Areas\Admin\Scripts\PhanQuyen\DanhSachTaiKhoan.js" />
     <Content Include="Areas\Admin\Scripts\PhanQuyen\PhanQuyenNguoiDung.js" />
     <Content Include="Areas\Admin\Scripts\PhieuKhaoSat.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\TieuDeCauHoi.js" />
     <Content Include="Areas\assets\css\app.min.css" />
     <Content Include="Areas\assets\css\buttons.dataTables.min.css" />
     <Content Include="Areas\assets\css\sweetalert2.min.css" />
@@ -1320,10 +1338,6 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Areas\Admin\Views\PhieuKhaoSat\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\PhieuKhaoSat\KetQuaPKS.cshtml" />
-    <Content Include="Areas\Admin\Views\PhieuKhaoSat\AnswerPKS.cshtml" />
-    <Content Include="Areas\Admin\Views\PhieuKhaoSat\AddSurvey.cshtml" />
     <Content Include="Areas\Admin\Views\NguoiDung\ViewUser.cshtml" />
     <Content Include="Areas\Admin\Views\SinhVien\ViewSinhVien.cshtml" />
     <Content Include="Areas\CTDT\Views\web.config" />
@@ -1370,6 +1384,7 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\bao_cao_tong_hop_ket_qua_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_phieu_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\chi_tiet_phieu_khao_sat.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\tieu_de_cau_hoi_pks.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

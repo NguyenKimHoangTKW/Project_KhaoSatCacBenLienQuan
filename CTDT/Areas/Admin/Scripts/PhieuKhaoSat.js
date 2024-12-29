@@ -233,7 +233,7 @@ async function load_data() {
 
         $('#card-view').html(html);
         $('#datatable').DataTable({
-            pageLength: 10,
+            pageLength: 7,
             lengthMenu: [5, 10, 25, 50, 100],
             ordering: true,
             searching: true,
@@ -250,16 +250,8 @@ async function load_data() {
             dom: "Bfrtip",
             buttons: [
                 {
-                    extend: 'csv',
-                    title: 'Danh sách người dùng - CSV'
-                },
-                {
                     extend: 'excel',
                     title: 'Danh sách người dùng - Excel'
-                },
-                {
-                    extend: 'pdf',
-                    title: 'Danh sách người dùng PDF'
                 },
                 {
                     extend: 'print',

@@ -1,0 +1,138 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .parent-title {
+        margin-bottom: 20px;
+        padding: 10px 0;
+    }
+
+        .parent-title h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+        }
+
+    .child-titles {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
+
+    .child-title {
+        margin-bottom: 15px;
+    }
+
+    .child-header {
+        font-size: 16px;
+        color: #007bff;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .child-attributes {
+        margin: 0;
+        padding-left: 20px;
+        list-style-type: square;
+        color: #555;
+    }
+
+        .child-attributes li {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+</style>
+<div class="main-content">
+    @*<div class="page-header">
+            <h2 class="header-title">Thống kê tần xuất câu hỏi</h2>
+            <div class="header-sub-title">
+                <nav class="breadcrumb breadcrumb-dash">
+                    <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                    <span class="breadcrumb-item active">Thống kê tần xuất câu hỏi</span>
+                </nav>
+            </div>
+        </div>*@
+
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Báo cáo tổng hợp</a>
+                </li>
+            </ul>
+            <div class="tab-content m-t-15" id="myTabContent">
+
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="page-header no-gutters">
+                        <h2 class="text-uppercase">TIÊU ĐỀ CHI TIẾT CÂU HỎI</h2>
+                        <hr />
+                        <fieldset class="border rounded-3 p-3">
+                            <legend class="float-none w-auto px-3">Chức năng</legend>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn hệ đào tạo</label>
+                                    <select class="form-control select2" id="hedaotao">
+                                        @foreach (var item in ViewBag.HeDaoTao)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
+                                    <select class="form-control select2" id="year">
+                                        @foreach (var item in ViewBag.Year)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn phiếu khảo sát</label>
+                                    <select class="form-control select2" id="surveyid">
+                                        <option value="">Chọn hệ đào tào và năm để thống kê</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <button type="button" class="btn btn-info" id="fildata">Tạo mới tiêu đề</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="m-t-25" id="showalldata">
+                        <div class="table-responsive" id="tieu-de-pks">
+                            <div class="parent-title">
+                                <h2>Tiêu đề cha</h2>
+                                <div class="child-titles">
+                                    <div class="child-title">
+                                        <div class="child-header">Tiêu đề con 1</div>
+                                        <ul class="child-attributes">
+                                            <li>Thuộc tính 1: Giá trị 1</li>
+                                            <li>Thuộc tính 2: Giá trị 2</li>
+                                            <li>Thuộc tính 3: Giá trị 3</li>
+                                        </ul>
+                                    </div>
+                                    <div class="child-title">
+                                        <div class="child-header">Tiêu đề con 2</div>
+                                        <ul class="child-attributes">
+                                            <li>Thuộc tính A: Giá trị A</li>
+                                            <li>Thuộc tính B: Giá trị B</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/TieuDeCauHoi.js"></script>
+}
