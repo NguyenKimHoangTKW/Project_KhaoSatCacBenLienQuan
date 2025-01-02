@@ -50,9 +50,9 @@
     <Property Name="id_tieu_de_phieu" Type="int" />
     <Property Name="ten_cau_hoi" Type="nvarchar" MaxLength="50" />
     <Property Name="id_dang_cau_hoi" Type="int" />
-    <Property Name="id_group_radio" Type="int" />
     <Property Name="bat_buoc" Type="int" />
     <Property Name="is_ykienkhac" Type="int" />
+    <Property Name="dieu_kien_hien_thi" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="chuc_nang_users">
     <Key>
@@ -120,13 +120,6 @@
     <Property Name="ten_group_mh" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="ngay_tao" Type="int" Nullable="false" />
     <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="group_radio_cau_hoi">
-    <Key>
-      <PropertyRef Name="id_group_radio" />
-    </Key>
-    <Property Name="id_group_radio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ten_group_radio" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="hedaotao">
     <Key>
@@ -234,15 +227,6 @@
     <Property Name="id_phan_quyen" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="id_users" Type="int" Nullable="false" />
     <Property Name="id_chuc_nang" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="radio_cau_hoi">
-    <Key>
-      <PropertyRef Name="id_radio_cau_hoi" />
-    </Key>
-    <Property Name="id_radio_cau_hoi" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="thu_tu" Type="int" />
-    <Property Name="ten_radio_cau_hoi" Type="nvarchar" MaxLength="50" />
-    <Property Name="id_group_radio" Type="int" />
   </EntityType>
   <EntityType Name="radio_cau_hoi_khac">
     <Key>
@@ -543,18 +527,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_chi_tiet_cau_hoi_tieu_de_group_radio_cau_hoi">
-    <End Role="group_radio_cau_hoi" Type="Self.group_radio_cau_hoi" Multiplicity="0..1" />
-    <End Role="chi_tiet_cau_hoi_tieu_de" Type="Self.chi_tiet_cau_hoi_tieu_de" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="group_radio_cau_hoi">
-        <PropertyRef Name="id_group_radio" />
-      </Principal>
-      <Dependent Role="chi_tiet_cau_hoi_tieu_de">
-        <PropertyRef Name="id_group_radio" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_chi_tiet_cau_hoi_tieu_de_tieu_de_phieu_khao_sat">
     <End Role="tieu_de_phieu_khao_sat" Type="Self.tieu_de_phieu_khao_sat" Multiplicity="0..1" />
     <End Role="chi_tiet_cau_hoi_tieu_de" Type="Self.chi_tiet_cau_hoi_tieu_de" Multiplicity="*" />
@@ -775,18 +747,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_radio_cau_hoi_group_radio_cau_hoi">
-    <End Role="group_radio_cau_hoi" Type="Self.group_radio_cau_hoi" Multiplicity="0..1" />
-    <End Role="radio_cau_hoi" Type="Self.radio_cau_hoi" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="group_radio_cau_hoi">
-        <PropertyRef Name="id_group_radio" />
-      </Principal>
-      <Dependent Role="radio_cau_hoi">
-        <PropertyRef Name="id_group_radio" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_radio_cau_hoi_khac_chi_tiet_cau_hoi_tieu_de">
     <End Role="chi_tiet_cau_hoi_tieu_de" Type="Self.chi_tiet_cau_hoi_tieu_de" Multiplicity="0..1" />
     <End Role="radio_cau_hoi_khac" Type="Self.radio_cau_hoi_khac" Multiplicity="*" />
@@ -980,7 +940,6 @@
     <EntitySet Name="dot_khao_sat" EntityType="Self.dot_khao_sat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="group_loaikhaosat" EntityType="Self.group_loaikhaosat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="group_mon_hoc" EntityType="Self.group_mon_hoc" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="group_radio_cau_hoi" EntityType="Self.group_radio_cau_hoi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hedaotao" EntityType="Self.hedaotao" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hoc_ky" EntityType="Self.hoc_ky" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hoc_phan" EntityType="Self.hoc_phan" Schema="dbo" store:Type="Tables" />
@@ -992,7 +951,6 @@
     <EntitySet Name="nguoi_hoc_dang_co_hoc_phan" EntityType="Self.nguoi_hoc_dang_co_hoc_phan" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="nguoi_hoc_khao_sat" EntityType="Self.nguoi_hoc_khao_sat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="phan_quyen_chuc_nang_users" EntityType="Self.phan_quyen_chuc_nang_users" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="radio_cau_hoi" EntityType="Self.radio_cau_hoi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="radio_cau_hoi_khac" EntityType="Self.radio_cau_hoi_khac" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sinhvien" EntityType="Self.sinhvien" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="survey" EntityType="Self.survey" Schema="dbo" store:Type="Tables" />
@@ -1063,10 +1021,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_chi_tiet_cau_hoi_tieu_de_dang_cau_hoi" Association="Self.FK_chi_tiet_cau_hoi_tieu_de_dang_cau_hoi">
       <End Role="dang_cau_hoi" EntitySet="dang_cau_hoi" />
-      <End Role="chi_tiet_cau_hoi_tieu_de" EntitySet="chi_tiet_cau_hoi_tieu_de" />
-    </AssociationSet>
-    <AssociationSet Name="FK_chi_tiet_cau_hoi_tieu_de_group_radio_cau_hoi" Association="Self.FK_chi_tiet_cau_hoi_tieu_de_group_radio_cau_hoi">
-      <End Role="group_radio_cau_hoi" EntitySet="group_radio_cau_hoi" />
       <End Role="chi_tiet_cau_hoi_tieu_de" EntitySet="chi_tiet_cau_hoi_tieu_de" />
     </AssociationSet>
     <AssociationSet Name="FK_chi_tiet_cau_hoi_tieu_de_tieu_de_phieu_khao_sat" Association="Self.FK_chi_tiet_cau_hoi_tieu_de_tieu_de_phieu_khao_sat">
@@ -1140,10 +1094,6 @@
     <AssociationSet Name="FK_phan_quyen_chuc_nang_users_users" Association="Self.FK_phan_quyen_chuc_nang_users_users">
       <End Role="users" EntitySet="users" />
       <End Role="phan_quyen_chuc_nang_users" EntitySet="phan_quyen_chuc_nang_users" />
-    </AssociationSet>
-    <AssociationSet Name="FK_radio_cau_hoi_group_radio_cau_hoi" Association="Self.FK_radio_cau_hoi_group_radio_cau_hoi">
-      <End Role="group_radio_cau_hoi" EntitySet="group_radio_cau_hoi" />
-      <End Role="radio_cau_hoi" EntitySet="radio_cau_hoi" />
     </AssociationSet>
     <AssociationSet Name="FK_radio_cau_hoi_khac_chi_tiet_cau_hoi_tieu_de" Association="Self.FK_radio_cau_hoi_khac_chi_tiet_cau_hoi_tieu_de">
       <End Role="chi_tiet_cau_hoi_tieu_de" EntitySet="chi_tiet_cau_hoi_tieu_de" />

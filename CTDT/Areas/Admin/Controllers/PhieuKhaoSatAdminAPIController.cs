@@ -271,30 +271,32 @@ namespace CTDT.Areas.Admin.Controllers
                         .FirstOrDefaultAsync();
                     var nhieu_lua_chon = new List<dynamic>();
 
-                    if (chitietcauhoi.id_group_radio != null)
+                    if (dangCauHoi.id_dang_cau_hoi == 3)
                     {
-                        if (chitietcauhoi.group_radio_cau_hoi.ten_group_radio == "Khác")
-                        {
-                            var get_radio_cau_hoi_khac = await db.radio_cau_hoi_khac
+                        var get_radio_cau_hoi_khac = await db.radio_cau_hoi_khac
                                 .Where(x => x.id_chi_tiet_cau_hoi_tieu_de == chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de)
                                 .OrderBy(x => x.thu_tu)
                                 .ToListAsync();
 
-                            foreach (var getradiocauhoikhac in get_radio_cau_hoi_khac)
+                        foreach (var getradiocauhoikhac in get_radio_cau_hoi_khac)
+                        {
+                            nhieu_lua_chon.Add(new
                             {
-                                nhieu_lua_chon.Add(new
-                                {
-                                    name = $"question{elementCounter}_{getradiocauhoikhac.thu_tu}",
-                                    text = getradiocauhoikhac.ten_rd_cau_hoi_khac,
-                                });
-                            }
-                            if (chitietcauhoi.is_ykienkhac == 1)
+                                name = $"question{elementCounter}_{getradiocauhoikhac.thu_tu}",
+                                text = getradiocauhoikhac.ten_rd_cau_hoi_khac,
+                            });
+                        }
+                        if (chitietcauhoi.is_ykienkhac == 1)
+                        {
+                            if (chitietcauhoi.dieu_kien_hien_thi != null)
                             {
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "radiogroup",
                                     name = $"question{elementCounter}",
-                                    title = $"{elementCounter}. {chitietcauhoi.ten_cau_hoi}",
+                                    visible = false,
+                                    visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
                                     choices = nhieu_lua_chon,
                                     showOtherItem = true,
@@ -307,45 +309,28 @@ namespace CTDT.Areas.Admin.Controllers
                                 {
                                     type = "radiogroup",
                                     name = $"question{elementCounter}",
-                                    title = $"{elementCounter}. {chitietcauhoi.ten_cau_hoi}",
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
-                                    choices = nhieu_lua_chon
+                                    choices = nhieu_lua_chon,
+                                    showOtherItem = true,
+                                    otherText = "Ý kiến khác:"
                                 });
                             }
-                        }
-                        else if (chitietcauhoi.id_group_radio == null)
-                        {
-                            chi_tiet_cau_hoi_list.Add(new
-                            {
-                                type = "radiogroup",
-                                name = $"question{elementCounter}",
-                                title = $"{elementCounter}. {chitietcauhoi.ten_cau_hoi}",
-                                isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
-                                dang_cau_hoi = dangCauHoi.ten_dang_cau_hoi,
-                            });
+
                         }
                         else
                         {
-                            var get_chi_tiet_radio = await db.radio_cau_hoi.Where(x => x.id_group_radio == chitietcauhoi.group_radio_cau_hoi.id_group_radio).ToListAsync();
-                            foreach (var radio in get_chi_tiet_radio)
-                            {
-                                nhieu_lua_chon.Add(new
-                                {
-                                    name = $"question{elementCounter}_{radio.thu_tu}",
-                                    text = radio.ten_radio_cau_hoi,
-                                });
-                            }
-                            if (chitietcauhoi.is_ykienkhac == 1)
+                            if (chitietcauhoi.dieu_kien_hien_thi != null)
                             {
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "radiogroup",
                                     name = $"question{elementCounter}",
-                                    title = $"{elementCounter}. {chitietcauhoi.ten_cau_hoi}",
+                                    visible = false,
+                                    visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
                                     choices = nhieu_lua_chon,
-                                    showOtherItem = true,
-                                    otherText = "Ý kiến khác:"
                                 });
                             }
                             else
@@ -354,9 +339,9 @@ namespace CTDT.Areas.Admin.Controllers
                                 {
                                     type = "radiogroup",
                                     name = $"question{elementCounter}",
-                                    title = $"{elementCounter}. {chitietcauhoi.ten_cau_hoi}",
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
-                                    choices = nhieu_lua_chon
+                                    choices = nhieu_lua_chon,
                                 });
                             }
                         }
@@ -378,44 +363,170 @@ namespace CTDT.Areas.Admin.Controllers
                         }
                         if (chitietcauhoi.is_ykienkhac == 1)
                         {
+                            if (chitietcauhoi.dieu_kien_hien_thi != null)
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "checkbox",
+                                    name = $"question{elementCounter}",
+                                    visible = false,
+                                    visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon,
+                                    showOtherItem = true,
+                                    otherText = "Ý kiến khác:"
+                                });
+                            }
+                            else
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "checkbox",
+                                    name = $"question{elementCounter}",
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon,
+                                    showOtherItem = true,
+                                    otherText = "Ý kiến khác:"
+                                });
+                            }
+                        }
+                        else
+                        {
+                            if (chitietcauhoi.dieu_kien_hien_thi != null)
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "checkbox",
+                                    name = $"question{elementCounter}",
+                                    visible = false,
+                                    visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon
+                                });
+                            }
+                            else
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "checkbox",
+                                    name = $"question{elementCounter}",
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon
+                                });
+                            }
+
+                        }
+                    }
+                    else if (dangCauHoi.id_dang_cau_hoi == 5)
+                    {
+                        var get_radio_cau_hoi_khac = await db.radio_cau_hoi_khac
+                                .Where(x => x.id_chi_tiet_cau_hoi_tieu_de == chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de)
+                                .OrderBy(x => x.thu_tu)
+                                .ToListAsync();
+
+                        foreach (var getradiocauhoikhac in get_radio_cau_hoi_khac)
+                        {
+                            nhieu_lua_chon.Add(new
+                            {
+                                name = $"question{elementCounter}_{getradiocauhoikhac.thu_tu}",
+                                text = getradiocauhoikhac.ten_rd_cau_hoi_khac,
+                            });
+                        }
+                        if (chitietcauhoi.is_ykienkhac == 1)
+                        {
+                            if (chitietcauhoi.dieu_kien_hien_thi != null)
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "select",
+                                    name = $"question{elementCounter}",
+                                    visible = false,
+                                    visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon,
+                                    showOtherItem = true,
+                                    otherText = "Ý kiến khác:"
+                                });
+                            }
+                            else
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "select",
+                                    name = $"question{elementCounter}",
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon,
+                                    showOtherItem = true,
+                                    otherText = "Ý kiến khác:"
+                                });
+                            }
+                        }
+                        else
+                        {
+                            if (chitietcauhoi.dieu_kien_hien_thi != null)
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "select",
+                                    name = $"question{elementCounter}",
+                                    visible = false,
+                                    visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon
+                                });
+                            }
+                            else
+                            {
+                                chi_tiet_cau_hoi_list.Add(new
+                                {
+                                    type = "select",
+                                    name = $"question{elementCounter}",
+                                    title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
+                                    isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
+                                    choices = nhieu_lua_chon
+                                });
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        if (chitietcauhoi.dieu_kien_hien_thi != null)
+                        {
                             chi_tiet_cau_hoi_list.Add(new
                             {
-                                type = "radiogroup",
+                                type = dangCauHoi.id_dang_cau_hoi == 2 ? "comment" : "text",
                                 name = $"question{elementCounter}",
-                                title = $"{elementCounter}. {chitietcauhoi.ten_cau_hoi}",
+                                visible = false,
+                                visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
+                                title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                 isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
-                                choices = nhieu_lua_chon,
-                                showOtherItem = true,
-                                otherText = "Ý kiến khác:"
                             });
                         }
                         else
                         {
                             chi_tiet_cau_hoi_list.Add(new
                             {
-                                type = "radiogroup",
+                                type = dangCauHoi.id_dang_cau_hoi == 2 ? "comment" : "text",
                                 name = $"question{elementCounter}",
-                                title = $"{elementCounter}. {chitietcauhoi.ten_cau_hoi}",
+                                title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                 isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
-                                choices = nhieu_lua_chon
                             });
                         }
-                    }
-                    else
-                    {
-                        chi_tiet_cau_hoi_list.Add(new
-                        {
-                            type = dangCauHoi.id_dang_cau_hoi == 2 ? "comment" : "text",
-                            name = $"question{elementCounter}",
-                            title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
-                            isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
-                        });
                     }
                     elementCounter++;
                 }
 
                 list_data.Add(new
                 {
+                    value_title = tieude.id_tieu_de_phieu,
                     name = $"page{pageCounter}",
                     title = $"PHẦN {tieude.thu_tu}. {tieude.ten_tieu_de}",
                     elements = chi_tiet_cau_hoi_list,
@@ -429,10 +540,148 @@ namespace CTDT.Areas.Admin.Controllers
                 description = get_tieu_de_pks.FirstOrDefault()?.survey?.surveyDescription,
                 pages = list_data
             };
-            return Ok(result);
+            if (list_data.Count > 0)
+            {
+                return Ok(new { data = result, success = true });
+            }
+            else
+            {
+                return Ok(new { message = "Chưa có dữ liệu câu hỏi bộ phiếu", success = false });
+            }
         }
 
+        [HttpPost]
+        [Route("api/admin/add-new-title-survey")]
+        public IHttpActionResult them_moi_tieu_de_pks(tieu_de_phieu_khao_sat td)
+        {
+            if (string.IsNullOrEmpty(td.thu_tu))
+            {
+                return Ok(new { message = "Số thứ tự không được bỏ trống", success = false });
+            }
+            if (string.IsNullOrEmpty(td.ten_tieu_de))
+            {
+                return Ok(new { message = "Tên tiêu đề không được bỏ trống", success = false });
+            }
+            if (db.tieu_de_phieu_khao_sat.FirstOrDefault(x => x.surveyID == td.surveyID && x.thu_tu == td.thu_tu) != null)
+            {
+                return Ok(new { message = "Số thứ tự này đã tồn tại, vui lòng điền số khác", success = false });
+            }
 
+            if (db.tieu_de_phieu_khao_sat.FirstOrDefault(x => x.surveyID == td.surveyID && x.thu_tu == td.thu_tu) != null)
+            {
+                return Ok(new { message = "Tiêu đề này đã tồn tại, vui lòng nhập tiêu đề khác", success = false });
+            }
+            db.tieu_de_phieu_khao_sat.Add(td);
+            db.SaveChanges();
+            return Ok(new { message = "Thêm mới dữ liệu thành công", success = true });
+        }
+        [HttpPost]
+        [Route("api/admin/delete-title-survey")]
+        public IHttpActionResult delete_tieu_de_pks(tieu_de_phieu_khao_sat td)
+        {
+            var checkChiTietTitleList = db.chi_tiet_cau_hoi_tieu_de
+                .Where(x => x.id_tieu_de_phieu == td.id_tieu_de_phieu)
+                .ToList();
+            foreach (var chiTiet in checkChiTietTitleList)
+            {
+                var checkRdKhac = db.radio_cau_hoi_khac
+                    .Where(x => x.id_chi_tiet_cau_hoi_tieu_de == chiTiet.id_chi_tiet_cau_hoi_tieu_de).ToList();
+
+                if (checkRdKhac.Any())
+                {
+                    foreach (var rd in checkRdKhac)
+                    {
+                        db.radio_cau_hoi_khac.Remove(rd);
+                    }
+                }
+                db.chi_tiet_cau_hoi_tieu_de.Remove(chiTiet);
+            }
+            db.SaveChanges();
+            var checkTitle = db.tieu_de_phieu_khao_sat
+                .SingleOrDefault(x => x.id_tieu_de_phieu == td.id_tieu_de_phieu);
+            db.tieu_de_phieu_khao_sat.Remove(checkTitle);
+            db.SaveChanges();
+            return Ok(new { message = "Xóa dữ liệu thành công", success = true });
+        }
+        [HttpPost]
+        [Route("api/admin/get-info-title-survey")]
+        public async Task<IHttpActionResult> get_info_title(tieu_de_phieu_khao_sat td)
+        {
+            var get_info = await db.tieu_de_phieu_khao_sat
+                .Where(x => x.id_tieu_de_phieu == td.id_tieu_de_phieu)
+                .Select(x => new
+                {
+                    x.thu_tu,
+                    x.ten_tieu_de
+                }).FirstOrDefaultAsync();
+            return Ok(get_info);
+        }
+        [HttpPost]
+        [Route("api/admin/update-title-survey")]
+        public IHttpActionResult update_title_survey(tieu_de_phieu_khao_sat td)
+        {
+            var check_title = db.tieu_de_phieu_khao_sat.FirstOrDefault(x => td.id_tieu_de_phieu == x.id_tieu_de_phieu);
+            check_title.surveyID = td.surveyID;
+            check_title.thu_tu = td.thu_tu;
+            check_title.ten_tieu_de = td.ten_tieu_de;
+            db.SaveChanges();
+            return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
+        }
+        [HttpPost]
+        [Route("api/admin/option-chi-tiet-cau-hoi")]
+        public async Task<IHttpActionResult> load_option(tieu_de_phieu_khao_sat td)
+        {
+            var get_tieu_de_pks = (await db.tieu_de_phieu_khao_sat
+                .Where(x => x.surveyID == td.surveyID)
+                .ToListAsync())
+                .OrderBy(x => RomanToInt(x.thu_tu))
+                .Select(x => new
+                {
+                    value_title = x.id_tieu_de_phieu,
+                    name = $"{x.thu_tu}. {x.ten_tieu_de}"
+                })
+                .ToList();
+            var get_dang_cau_hoi = await db.dang_cau_hoi
+                .Select(x => new
+                {
+                    value_dch = x.id_dang_cau_hoi,
+                    name = x.ten_dang_cau_hoi
+                }).ToListAsync();
+            return Ok(new
+            {
+                tieu_de = get_tieu_de_pks,
+                dang_cau_hoi = get_dang_cau_hoi
+            });
+        }
+
+        [HttpPost]
+        [Route("api/admin/saveRadioOptions")]
+        public IHttpActionResult save_option([FromBody] radio_cau_hoi_khac rd)
+        {
+            var options = rd.ten_rd_cau_hoi_khac
+                            .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.Trim())
+                            .Where(o => !string.IsNullOrEmpty(o));
+
+            foreach (var option in options)
+            {
+                var parts = option.Split(new[] { '.' }, 2);
+                if (parts.Length < 2) continue;
+
+                int thuTu;
+                if (!int.TryParse(parts[0].Trim(), out thuTu)) continue;
+
+                var newOption = new radio_cau_hoi_khac
+                {
+                    thu_tu = thuTu,
+                    ten_rd_cau_hoi_khac = parts[1].Trim(),
+                    id_chi_tiet_cau_hoi_tieu_de = 2
+                };
+                db.radio_cau_hoi_khac.Add(newOption);
+            }
+            db.SaveChanges();
+            return Ok(new { message = "Options saved successfully!" });
+        }
 
         public int RomanToInt(string roman)
         {

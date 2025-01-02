@@ -1,60 +1,8 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-<style>
-    .parent-title {
-        margin-bottom: 20px;
-        padding: 10px 0;
-    }
-
-        .parent-title h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #333;
-            font-weight: bold;
-            text-align: left;
-        }
-
-    .child-titles {
-        margin-top: 10px;
-        padding-left: 20px;
-    }
-
-    .child-title {
-        margin-bottom: 15px;
-    }
-
-    .child-header {
-        font-size: 16px;
-        color: #007bff;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .child-attributes {
-        margin: 0;
-        padding-left: 20px;
-        list-style-type: square;
-        color: #555;
-    }
-
-        .child-attributes li {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-</style>
+<link href="~/Areas/assets/css/tieude.min.css" rel="stylesheet" />
 <div class="main-content">
-    @*<div class="page-header">
-            <h2 class="header-title">Thống kê tần xuất câu hỏi</h2>
-            <div class="header-sub-title">
-                <nav class="breadcrumb breadcrumb-dash">
-                    <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-                    <span class="breadcrumb-item active">Thống kê tần xuất câu hỏi</span>
-                </nav>
-            </div>
-        </div>*@
-
     <div class="card">
         <div class="card-body">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -92,42 +40,117 @@
                                 <div class="col-md-6">
                                     <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn phiếu khảo sát</label>
                                     <select class="form-control select2" id="surveyid">
-                                        <option value="">Chọn hệ đào tào và năm để thống kê</option>
+                                        <option value="">Chọn hệ đào tạo và năm để thống kê</option>
                                     </select>
                                 </div>
                             </div>
                             <hr />
-                            <div class="row mb-3">
-                                <div class="col-md-6 d-flex align-items-center">
-                                    <button type="button" class="btn btn-info" id="fildata">Tạo mới tiêu đề</button>
-                                </div>
-                            </div>
                         </fieldset>
+
+                        <!-- Sticky Banner -->
+                        <div id="smallBanner" class="small-banner">
+                            <button type="button" id="btnAddTitle" class="btn btn-primary m-r-5">Tạo mới tiêu đề cha</button>
+                            <button type="button" id="btnAddChilTitle" class="btn btn-warning m-r-5">Tạo mới tiêu đề con</button>
+                            <button type="button" class="btn btn-info m-r-5">Xem trước phiếu đã tạo</button>
+                            <button type="button" class="btn btn-success m-r-5">Xuất bản phiếu</button>
+                        </div>
                     </div>
+
                     <div class="m-t-25" id="showalldata">
                         <div class="table-responsive" id="tieu-de-pks">
-                            <div class="parent-title">
-                                <h2>Tiêu đề cha</h2>
-                                <div class="child-titles">
-                                    <div class="child-title">
-                                        <div class="child-header">Tiêu đề con 1</div>
-                                        <ul class="child-attributes">
-                                            <li>Thuộc tính 1: Giá trị 1</li>
-                                            <li>Thuộc tính 2: Giá trị 2</li>
-                                            <li>Thuộc tính 3: Giá trị 3</li>
-                                        </ul>
-                                    </div>
-                                    <div class="child-title">
-                                        <div class="child-header">Tiêu đề con 2</div>
-                                        <ul class="child-attributes">
-                                            <li>Thuộc tính A: Giá trị A</li>
-                                            <li>Thuộc tính B: Giá trị B</li>
-                                        </ul>
-                                    </div>
+                            <div class="alert alert-info" style="text-align: center; font-weight: bold;">
+                                Vui lòng chọn phiếu khảo sát để tiếp tục
+                            </div>
+                        </div>
+                    </div>
+                    <!--modal Thêm tiêu đề chính-->
+                    <div class="modal fade" id="exampleModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabelTitleSurvey"></h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <i class="anticon anticon-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="edtThuTuHienThi">Nhập số thứ tự hiển thị</label>
+                                            <input type="text" class="form-control" id="edtThuTuHienThiTitle" placeholder="Số thứ tự là kiểu la mã (I,II,III,...)">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="edttieudeTitle">Nhập tiêu đề phiếu</label>
+                                            <input type="text" class="form-control" id="edttieudeTitle" placeholder="Nhập tiêu đề tại đây">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer" id="showfootermodaltitlesurvey">
+                                    <!--footer modal-->
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!---->
+                    <!--modal Thêm chi tiết-->
+                    <div class="modal fade" id="chitietModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <i class="anticon anticon-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="form-label">Chọn tiêu đề câu hỏi chính</label>
+                                            <select class="form-control select2" id="hedaotao">
+                                                <option value="item.Value">item.Text</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
+                                            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
+                                            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Dạng câu hỏi</label>
+                                            <select class="form-control select2" id="hedaotao">
+                                                <option value="item.Value">item.Text</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput2">Các lựa chọn</label>
+                                            <div class="checkbox">
+                                                <input id="checkbox1" type="checkbox">
+                                                <label for="checkbox1">Là câu hỏi bắt buộc</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="checkbox2" type="checkbox">
+                                                <label for="checkbox2">Có ý kiến khác</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
+                                            <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10"></textarea>
+                                            <button id="saveOptions" class="btn btn-primary mt-3">Lưu</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!---->
                 </div>
             </div>
         </div>

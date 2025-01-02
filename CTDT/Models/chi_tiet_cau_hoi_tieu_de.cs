@@ -25,12 +25,11 @@ namespace CTDT.Models
         public Nullable<int> id_tieu_de_phieu { get; set; }
         public string ten_cau_hoi { get; set; }
         public Nullable<int> id_dang_cau_hoi { get; set; }
-        public Nullable<int> id_group_radio { get; set; }
         public Nullable<int> bat_buoc { get; set; }
         public Nullable<int> is_ykienkhac { get; set; }
+        public string dieu_kien_hien_thi { get; set; }
     
         public virtual dang_cau_hoi dang_cau_hoi { get; set; }
-        public virtual group_radio_cau_hoi group_radio_cau_hoi { get; set; }
         public virtual tieu_de_phieu_khao_sat tieu_de_phieu_khao_sat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<radio_cau_hoi_khac> radio_cau_hoi_khac { get; set; }

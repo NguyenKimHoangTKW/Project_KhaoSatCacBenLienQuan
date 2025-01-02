@@ -1,0 +1,116 @@
+﻿.parent-title {
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+    .parent-title h2 {
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+        font-weight: bold;
+        text-align: left;
+    }
+
+.child-titles {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.child-title {
+    margin-bottom: 15px;
+}
+
+.child-header {
+    font-size: 16px;
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.child-attributes {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: square;
+    color: #555;
+}
+
+    .child-attributes li {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+.btn-edit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete:hover {
+    background-color: #a71d2a;
+}
+
+.small-banner {
+    position: fixed;
+    top: 86%;
+    right: 15px;
+    transform: translateY(-50%);
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+    width: 160px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+    .small-banner .btn {
+        font-size: 14px;
+        padding: 8px 10px;
+        text-align: center;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .small-banner .btn-info {
+        background-color: #17a2b8;
+        border: none;
+        color: #fff;
+    }
+
+    .small-banner .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        color: #fff;
+    }
+
+    .small-banner .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        color: #fff;
+    }
+
+    .small-banner .btn:hover {
+        opacity: 0.85;
+    }

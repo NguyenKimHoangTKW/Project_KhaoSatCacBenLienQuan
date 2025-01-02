@@ -48,9 +48,9 @@
     <EntitySetMapping Name="chi_tiet_cau_hoi_tieu_de">
       <EntityTypeMapping TypeName="dbSurveyModel.chi_tiet_cau_hoi_tieu_de">
         <MappingFragment StoreEntitySet="chi_tiet_cau_hoi_tieu_de">
+          <ScalarProperty Name="dieu_kien_hien_thi" ColumnName="dieu_kien_hien_thi" />
           <ScalarProperty Name="is_ykienkhac" ColumnName="is_ykienkhac" />
           <ScalarProperty Name="bat_buoc" ColumnName="bat_buoc" />
-          <ScalarProperty Name="id_group_radio" ColumnName="id_group_radio" />
           <ScalarProperty Name="id_dang_cau_hoi" ColumnName="id_dang_cau_hoi" />
           <ScalarProperty Name="ten_cau_hoi" ColumnName="ten_cau_hoi" />
           <ScalarProperty Name="id_tieu_de_phieu" ColumnName="id_tieu_de_phieu" />
@@ -131,14 +131,6 @@
           <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
           <ScalarProperty Name="ten_group_mh" ColumnName="ten_group_mh" />
           <ScalarProperty Name="id_group_mh" ColumnName="id_group_mh" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="group_radio_cau_hoi">
-      <EntityTypeMapping TypeName="dbSurveyModel.group_radio_cau_hoi">
-        <MappingFragment StoreEntitySet="group_radio_cau_hoi">
-          <ScalarProperty Name="ten_group_radio" ColumnName="ten_group_radio" />
-          <ScalarProperty Name="id_group_radio" ColumnName="id_group_radio" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -257,16 +249,6 @@
           <ScalarProperty Name="id_chuc_nang" ColumnName="id_chuc_nang" />
           <ScalarProperty Name="id_users" ColumnName="id_users" />
           <ScalarProperty Name="id_phan_quyen" ColumnName="id_phan_quyen" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="radio_cau_hoi">
-      <EntityTypeMapping TypeName="dbSurveyModel.radio_cau_hoi">
-        <MappingFragment StoreEntitySet="radio_cau_hoi">
-          <ScalarProperty Name="id_group_radio" ColumnName="id_group_radio" />
-          <ScalarProperty Name="ten_radio_cau_hoi" ColumnName="ten_radio_cau_hoi" />
-          <ScalarProperty Name="thu_tu" ColumnName="thu_tu" />
-          <ScalarProperty Name="id_radio_cau_hoi" ColumnName="id_radio_cau_hoi" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
