@@ -27,21 +27,21 @@
 })
 $(document).on('keypress', '#optionsTextarea', function (event) {
     if (event.which === 13) {
-        event.preventDefault(); 
+        event.preventDefault();
         const textarea = $(this);
-        const text = textarea.val(); 
-        const lines = text.split('\n'); 
+        const text = textarea.val();
+        const lines = text.split('\n');
         const lastLine = lines[lines.length - 1];
-        const match = lastLine.match(/^(\d+)\./); 
-        const nextNumber = match ? parseInt(match[1], 10) + 1 : 1; 
+        const match = lastLine.match(/^(\d+)\./);
+        const nextNumber = match ? parseInt(match[1], 10) + 1 : 1;
         textarea.val(text + `\n${nextNumber}. `);
     }
 });
 
 $(document).on('paste', '#optionsTextarea', function () {
     const textarea = $(this);
-    setTimeout(function () { 
-        const text = textarea.val(); 
+    setTimeout(function () {
+        const text = textarea.val();
         const lines = text.split('\n');
         let newText = '';
         let lineNumber = 1;
@@ -53,7 +53,7 @@ $(document).on('paste', '#optionsTextarea', function () {
                 } else {
                     newText += `${lineNumber}. ${line.trim()}\n`;
                 }
-                lineNumber++; 
+                lineNumber++;
             }
         });
 
@@ -219,19 +219,104 @@ $(document).on("click", "#btnEditTitleSurvey", function () {
     $("#btnSaveChangesEditTittle").click(function (events) {
         events.preventDefault();
         update_tieu_de_pks(value);
-    })   
+    })
 });
 
 $(document).on("click", "#btnAddChilTitle", function (event) {
     event.preventDefault();
-
-    $("#chitietModal").modal("show");
+    load_option_children_title();
+   
 })
 
 async function load_option_children_title() {
     const value_sv = $("#surveyid").val();
+    const body = $("#loadoptionchiltitle");
+    let html = ``;
+    const res = await $.ajax({
+        url: "/api/admin/option-chi-tiet-cau-hoi",
+        type: "POST",
+        data: {
+            surveyID: value_sv
+        }
+    });
+    if (res.success) {
+        html += `
+            <div class="form-group">
+                <label class="form-label">Chọn tiêu đề câu hỏi chính</label>
+                <select class="form-control select2" id="hedaotao">`;
+        res.tieu_de.forEach(title => {
+            html += `<option value="${title.value_title}">${title.name}</option>`;
+        });
 
+        html += `</select>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
+                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
+                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Dạng câu hỏi</label>
+                <select class="form-control select2" id="dangCauHoi">`;
+
+        res.dang_cau_hoi.forEach(dangcauhoi => {
+            html += `<option value="${dangcauhoi.value_dch}">${dangcauhoi.name}</option>`;
+        });
+
+        html += `</select>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Các lựa chọn</label>
+                <div class="checkbox">
+                    <input id="checkbox1" type="checkbox">
+                    <label for="checkbox1">Là câu hỏi bắt buộc</label>
+                </div>
+                <div class="checkbox">
+                    <input id="checkbox2" type="checkbox">
+                    <label for="checkbox2">Có ý kiến khác</label>
+                </div>
+            </div>
+            <div id="conditionalBlock"></div>`;
+
+        body.html(html);
+        $("#chitietModal").modal("show");
+        $("#dangCauHoi").on("change", function () {
+            const selectedValue = $(this).val();
+            const conditionalBlock = $("#conditionalBlock");
+
+            if (selectedValue == "2") {
+                conditionalBlock.html(`
+                    <div class="form-group">
+                        <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
+                        <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10"></textarea>
+                    </div>
+                `);
+            } else {
+                conditionalBlock.html(""); 
+            }
+        });
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
 }
+
 
 async function update_tieu_de_pks(value) {
     const value_s = $("#surveyid").val();
@@ -272,7 +357,7 @@ async function delete_tieu_de_pks(value) {
         url: "/api/admin/delete-title-survey",
         type: "POST",
         data: {
-            id_tieu_de_phieu : value
+            id_tieu_de_phieu: value
         }
     });
     if (res.success) {
@@ -292,7 +377,7 @@ async function delete_tieu_de_pks(value) {
             title: res.message
         });
         load_tieu_de_pks()
-    } 
+    }
 }
 async function get_info_title_survey(value) {
     const res = await $.ajax({
@@ -358,7 +443,7 @@ async function load_tieu_de_pks() {
                                 <strong>Dạng câu hỏi:</strong> ${element.type === "radiogroup" ? "Trắc nghiệm" :
                         element.type === "checkbox" ? "Hộp kiểm" :
                             element.type === "text" ? "Đoạn trả lời ngắn" :
-                            element.type === "comment" ? "Đoạn trả lời dài" : "Đoạn trả lời dài"
+                                element.type === "comment" ? "Đoạn trả lời dài" : "Đoạn trả lời dài"
                     }
                             </li>
                             <li>

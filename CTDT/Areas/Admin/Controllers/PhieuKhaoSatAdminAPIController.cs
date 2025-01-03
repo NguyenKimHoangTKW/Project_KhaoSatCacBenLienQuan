@@ -631,6 +631,10 @@ namespace CTDT.Areas.Admin.Controllers
         [Route("api/admin/option-chi-tiet-cau-hoi")]
         public async Task<IHttpActionResult> load_option(tieu_de_phieu_khao_sat td)
         {
+            if (td.surveyID == null)
+            {
+                return Ok(new { message = "Vui lòng chọn phiếu khảo sát để tạo mới", success = false });
+            }
             var get_tieu_de_pks = (await db.tieu_de_phieu_khao_sat
                 .Where(x => x.surveyID == td.surveyID)
                 .ToListAsync())
@@ -647,11 +651,19 @@ namespace CTDT.Areas.Admin.Controllers
                     value_dch = x.id_dang_cau_hoi,
                     name = x.ten_dang_cau_hoi
                 }).ToListAsync();
-            return Ok(new
+            if (get_tieu_de_pks.Count > 0)
             {
-                tieu_de = get_tieu_de_pks,
-                dang_cau_hoi = get_dang_cau_hoi
-            });
+                return Ok(new
+                {
+                    tieu_de = get_tieu_de_pks,
+                    dang_cau_hoi = get_dang_cau_hoi,
+                    success = true
+                });
+            }
+            else
+            {
+                return Ok(new { message = "Chưa có tiêu đề câu hỏi chính nào cho phiếu này, vui lòng tạo mới tiêu đề và quay lại để tiếp tục", success = false });
+            }
         }
 
         [HttpPost]
