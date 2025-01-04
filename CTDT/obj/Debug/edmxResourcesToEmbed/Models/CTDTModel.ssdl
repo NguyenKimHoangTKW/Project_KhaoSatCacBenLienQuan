@@ -48,7 +48,7 @@
     <Property Name="id_chi_tiet_cau_hoi_tieu_de" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="thu_tu" Type="int" />
     <Property Name="id_tieu_de_phieu" Type="int" />
-    <Property Name="ten_cau_hoi" Type="nvarchar" MaxLength="50" />
+    <Property Name="ten_cau_hoi" Type="nvarchar(max)" />
     <Property Name="id_dang_cau_hoi" Type="int" />
     <Property Name="bat_buoc" Type="int" />
     <Property Name="is_ykienkhac" Type="int" />
@@ -88,7 +88,7 @@
       <PropertyRef Name="id_dang_cau_hoi" />
     </Key>
     <Property Name="id_dang_cau_hoi" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ten_dang_cau_hoi" Type="nvarchar" MaxLength="50" />
+    <Property Name="ten_dang_cau_hoi" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="DonVi">
     <Key>
@@ -234,7 +234,7 @@
     </Key>
     <Property Name="id_rd_cau_hoi_khac" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="thu_tu" Type="int" />
-    <Property Name="ten_rd_cau_hoi_khac" Type="nvarchar" MaxLength="50" />
+    <Property Name="ten_rd_cau_hoi_khac" Type="nvarchar(max)" />
     <Property Name="id_chi_tiet_cau_hoi_tieu_de" Type="int" />
   </EntityType>
   <EntityType Name="sinhvien">
@@ -304,7 +304,7 @@
     <Property Name="id_tieu_de_phieu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="thu_tu" Type="nvarchar" MaxLength="5" />
     <Property Name="surveyID" Type="int" />
-    <Property Name="ten_tieu_de" Type="nvarchar" MaxLength="50" />
+    <Property Name="ten_tieu_de" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="typeusers">
     <Key>

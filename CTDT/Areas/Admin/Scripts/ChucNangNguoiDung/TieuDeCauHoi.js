@@ -60,34 +60,6 @@ $(document).on('paste', '#optionsTextarea', function () {
         textarea.val(newText.trim());
     }, 1);
 });
-
-$(document).on("click", "#saveOptions", function (event) {
-    event.preventDefault();
-    const inputText = $('#optionsTextarea').val();
-
-    const options = inputText.split('\n')
-        .map(option => option.trim())
-        .filter(option => option !== '');
-
-    const requestData = {
-        ten_rd_cau_hoi_khac: options.join('\n')
-    };
-    $.ajax({
-        url: '/api/admin/saveRadioOptions',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(requestData),
-        success: function (response) {
-            alert(response.message);
-            $('#optionsTextarea').val('');
-            load_tieu_de_pks()
-        },
-        error: function (xhr) {
-            console.error(xhr.responseText);
-            alert('Có lỗi xảy ra khi lưu dữ liệu.');
-        }
-    });
-})
 async function load_pks_by_nam() {
     const hedaotao = $("#hedaotao").val();
     const year = $("#year").val();
@@ -221,13 +193,289 @@ $(document).on("click", "#btnEditTitleSurvey", function () {
         update_tieu_de_pks(value);
     })
 });
-
 $(document).on("click", "#btnAddChilTitle", function (event) {
     event.preventDefault();
+    const body_footer = $("#modalfooterchildrentitle");
+    let html = ``;
+    html += `
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="AddNewChildrenTitle" class="btn btn-primary">Lưu dữ liệu</button>
+    `;
+    body_footer.html(html);
     load_option_children_title();
-   
-})
+});
+$(document).on("click", "#AddNewChildrenTitle", function (event) {
+    event.preventDefault();
+    const value_title = $("#edtSelectedTitle").val();
+    const thu_tu = $("#edtThuTuChilTitle").val();
+    const ten_cau_hoi = $("#edtNameChilTitle").val();
+    const id_dang_cau_hoi = $("#edtSelectedDangCauHoi").val();
+    const is_required = $("#ckIsRequired").prop('checked') ? 1 : 0;
+    const is_orderitem = $("#ckIsOrderItem").prop('checked') ? 1 : 0;
+    
 
+    if (id_dang_cau_hoi == "3" || id_dang_cau_hoi == "4" || id_dang_cau_hoi == "5") {
+        const inputText = $('#optionsTextarea').val();
+        const options = inputText.split('\n')
+            .map(option => option.trim())
+            .filter(option => option !== '');
+
+        const requestData = {
+            thu_tu: thu_tu,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: options.join('\n')
+        };
+        $.ajax({
+            url: '/api/admin/save-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function (response) {
+                if (response.success) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: response.message
+                    });
+                    $('#optionsTextarea').val('');
+                    load_tieu_de_pks()
+                }
+                else {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "error",
+                        title: res.message
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert('Có lỗi xảy ra khi lưu dữ liệu.');
+            }
+        });
+    }
+    else {
+        const requestData = {
+            thu_tu: thu_tu,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: null
+        };
+        $.ajax({
+            url: '/api/admin/save-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function (response) {
+                if (response.success) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: response.message
+                    });
+                    load_tieu_de_pks()
+                }
+                else {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert('Có lỗi xảy ra khi lưu dữ liệu.');
+            }
+        });
+    }
+})
+$(document).on('input', '#edtThuTuChilTitle', function () {
+    let value = $(this).val();
+    value = value.replace(/\D/g, '');
+    $(this).val(value);
+});
+$(document).on("click", "#EditChildrenTitle", function (event) {
+    event.preventDefault();
+    const value = $("#btnEditChilTitle").data("id");
+    const value_title = $("#edtSelectedTitle").val();
+    const thu_tu = $("#edtThuTuChilTitle").val();
+    const ten_cau_hoi = $("#edtNameChilTitle").val();
+    const id_dang_cau_hoi = $("#edtSelectedDangCauHoi").val();
+    const is_required = $("#ckIsRequired").prop('checked') ? 1 : 0;
+    const is_orderitem = $("#ckIsOrderItem").prop('checked') ? 1 : 0;
+    if (id_dang_cau_hoi == "3" || id_dang_cau_hoi == "4" || id_dang_cau_hoi == "5") {
+        const inputText = $('#optionsTextarea').val();
+        const options = inputText.split('\n')
+            .map(option => option.trim())
+            .filter(option => option !== '');
+
+        const requestData = {
+            id_chi_tiet_cau_hoi_tieu_de: value,
+            thu_tu: thu_tu,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: options.join('\n')
+        };
+        $.ajax({
+            url: '/api/admin/edit-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function (response) {
+                if (response.success) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: response.message
+                    });
+                    $('#optionsTextarea').val('');
+                    load_tieu_de_pks()
+                }
+                else {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "error",
+                        title: res.message
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert('Có lỗi xảy ra khi lưu dữ liệu.');
+            }
+        });
+    }
+    else {
+        const requestData = {
+            id_chi_tiet_cau_hoi_tieu_de: value,
+            thu_tu: thu_tu,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: null
+        };
+        $.ajax({
+            url: '/api/admin/edit-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function (response) {
+                if (response.success) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: response.message
+                    });
+                    load_tieu_de_pks()
+                }
+                else {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "error",
+                        title: response.message
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert('Có lỗi xảy ra khi lưu dữ liệu.');
+            }
+        });
+    }
+})
 async function load_option_children_title() {
     const value_sv = $("#surveyid").val();
     const body = $("#loadoptionchiltitle");
@@ -243,7 +491,7 @@ async function load_option_children_title() {
         html += `
             <div class="form-group">
                 <label class="form-label">Chọn tiêu đề câu hỏi chính</label>
-                <select class="form-control select2" id="hedaotao">`;
+                <select class="form-control select2" id="edtSelectedTitle">`;
         res.tieu_de.forEach(title => {
             html += `<option value="${title.value_title}">${title.name}</option>`;
         });
@@ -252,15 +500,15 @@ async function load_option_children_title() {
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
-                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                <input type="text" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số">
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
-                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                <input type="text" class="form-control" id="edtNameChilTitle" placeholder="Nhập tên chi tiết">
             </div>
             <div class="form-group">
                 <label class="form-label">Dạng câu hỏi</label>
-                <select class="form-control select2" id="dangCauHoi">`;
+                <select class="form-control select2" id="edtSelectedDangCauHoi">`;
 
         res.dang_cau_hoi.forEach(dangcauhoi => {
             html += `<option value="${dangcauhoi.value_dch}">${dangcauhoi.name}</option>`;
@@ -271,27 +519,27 @@ async function load_option_children_title() {
             <div class="form-group">
                 <label for="formGroupExampleInput2">Các lựa chọn</label>
                 <div class="checkbox">
-                    <input id="checkbox1" type="checkbox">
-                    <label for="checkbox1">Là câu hỏi bắt buộc</label>
+                    <input id="ckIsRequired" type="checkbox">
+                    <label for="ckIsRequired">Là câu hỏi bắt buộc</label>
                 </div>
                 <div class="checkbox">
-                    <input id="checkbox2" type="checkbox">
-                    <label for="checkbox2">Có ý kiến khác</label>
+                    <input id="ckIsOrderItem" type="checkbox">
+                    <label for="ckIsOrderItem">Có ý kiến khác</label>
                 </div>
             </div>
             <div id="conditionalBlock"></div>`;
 
         body.html(html);
         $("#chitietModal").modal("show");
-        $("#dangCauHoi").on("change", function () {
+        $("#edtSelectedDangCauHoi").on("change", function () {
             const selectedValue = $(this).val();
             const conditionalBlock = $("#conditionalBlock");
 
-            if (selectedValue == "2") {
+            if (selectedValue == "3" || selectedValue == "4" || selectedValue == "5") {
                 conditionalBlock.html(`
                     <div class="form-group">
                         <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
-                        <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10"></textarea>
+                        <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10">1. </textarea>
                     </div>
                 `);
             } else {
@@ -317,6 +565,128 @@ async function load_option_children_title() {
     }
 }
 
+$(document).on("click", "#btnEditChilTitle", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    const body_footer = $("#modalfooterchildrentitle");
+    let html = ``;
+    html += `
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="EditChildrenTitle" class="btn btn-primary">Lưu dữ liệu</button>
+    `;
+    body_footer.html(html);
+    load_option_info_children_title(value);
+})
+async function load_option_info_children_title(value) {
+    const value_sv = $("#surveyid").val();
+    const body = $("#loadoptionchiltitle");
+    let html = ``;
+    const res = await $.ajax({
+        url: "/api/admin/option-chi-tiet-cau-hoi",
+        type: "POST",
+        data: { surveyID: value_sv }
+    });
+
+    if (res.success) {
+        const response_data = await $.ajax({
+            url: '/api/admin/info-children-title',
+            type: 'POST',
+            data: { id_chi_tiet_cau_hoi_tieu_de: value },
+        });
+
+        if (response_data.success) {
+            const item = response_data.data_chil;
+            const get_rd = response_data.get_rd;
+
+            html += `
+                <div class="form-group">
+                    <label class="form-label">Chọn tiêu đề câu hỏi chính</label>
+                    <select class="form-control select2" id="edtSelectedTitle">`;
+            res.tieu_de.forEach(title => {
+                html += `<option value="${title.value_title}" ${title.value_title == item.id_tieu_de_phieu ? 'selected' : ''}>${title.name}</option>`;
+            });
+
+            html += `</select>
+                </div>
+                <div class="form-group">
+                    <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
+                    <input type="text" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số" value="${item.thu_tu}">
+                </div>
+                <div class="form-group">
+                    <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
+                    <input type="text" class="form-control" id="edtNameChilTitle" placeholder="Nhập tên chi tiết" value="${item.ten_cau_hoi}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Dạng câu hỏi</label>
+                    <select class="form-control select2" id="edtSelectedDangCauHoi">`;
+            res.dang_cau_hoi.forEach(dangcauhoi => {
+                html += `<option value="${dangcauhoi.value_dch}" ${dangcauhoi.value_dch == item.id_dang_cau_hoi ? 'selected' : ''}>${dangcauhoi.name}</option>`;
+            });
+
+            html += `</select>
+                </div>
+                <div class="form-group">
+                    <label for="formGroupExampleInput2">Các lựa chọn</label>
+                    <div class="checkbox">
+                        <input id="ckIsRequired" type="checkbox" ${item.bat_buoc ? 'checked' : ''}>
+                        <label for="ckIsRequired">Là câu hỏi bắt buộc</label>
+                    </div>
+                    <div class="checkbox">
+                        <input id="ckIsOrderItem" type="checkbox" ${item.is_ykienkhac ? 'checked' : ''}>
+                        <label for="ckIsOrderItem">Có ý kiến khác</label>
+                    </div>
+                </div>
+                <div id="conditionalBlock">`;
+
+            if (item.id_dang_cau_hoi == 3 || item.id_dang_cau_hoi == 4 || item.id_dang_cau_hoi == 5) {
+                html += `
+                    <div class="form-group">
+                        <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
+                        <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10">`;
+                get_rd.forEach(rd => {
+                    html += `${rd.thu_tu}. ${rd.ten_rd_cau_hoi_khac}\n`;
+                });
+                html += `</textarea>
+                    </div>`;
+            }
+
+            html += `</div>`;
+            body.html(html);
+            $("#chitietModal").modal("show");
+            $("#edtSelectedDangCauHoi").on("change", function () {
+                const selectedValue = $(this).val();
+                const conditionalBlock = $("#conditionalBlock");
+
+                if (selectedValue == "3" || selectedValue == "4" || selectedValue == "5") {
+                    let optionsHtml = `
+                        <div class="form-group">
+                            <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
+                            <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10">`;
+                    get_rd.forEach(rd => {
+                        optionsHtml += `${rd.thu_tu}. ${rd.ten_rd_cau_hoi_khac}\n`;
+                    });
+                    optionsHtml += `</textarea>
+                        </div>`;
+                    conditionalBlock.html(optionsHtml);
+                } else {
+                    conditionalBlock.html("");
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: "Không thể tải thông tin chi tiết câu hỏi!"
+            });
+        }
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Lỗi",
+            text: res.message
+        });
+    }
+}
 
 async function update_tieu_de_pks(value) {
     const value_s = $("#surveyid").val();
@@ -430,10 +800,10 @@ async function load_tieu_de_pks() {
                                 <i class="bi bi-question-circle"></i> ${element.title}
                             </h5>
                             <div class="element-actions">
-                                <button id="btnEditChilTitle" class="btn btn-sm btn-outline-primary me-2">
+                                <button id="btnEditChilTitle" data-id="${element.value_chil}" class="btn btn-sm btn-outline-primary me-2">
                                     <i class="bi bi-pencil"></i> Chỉnh sửa
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger">
+                                <button id="btnDeleteChilTitle" data-id="${element.value_chil}" class="btn btn-sm btn-outline-danger">
                                     <i class="bi bi-trash"></i> Xóa
                                 </button>
                             </div>

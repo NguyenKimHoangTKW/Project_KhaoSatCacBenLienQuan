@@ -349,6 +349,7 @@
     <Compile Include="Helper\SessionHelper.cs" />
     <Compile Include="Helper\UserAuthorizeAttribute.cs" />
     <Compile Include="Helper\VisitorHub.cs" />
+    <Compile Include="Models\ChildrenTitleSurvey.cs" />
     <Compile Include="Models\cbvc_khao_sat.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>

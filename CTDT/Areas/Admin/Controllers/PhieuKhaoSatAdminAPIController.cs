@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -293,6 +294,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "radiogroup",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     visible = false,
                                     visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
@@ -308,6 +310,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "radiogroup",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
@@ -325,6 +328,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "radiogroup",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     visible = false,
                                     visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
@@ -338,6 +342,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "radiogroup",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
@@ -368,6 +373,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "checkbox",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     visible = false,
                                     visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
@@ -383,6 +389,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "checkbox",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
@@ -399,6 +406,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "checkbox",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     visible = false,
                                     visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
@@ -412,6 +420,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "checkbox",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
@@ -443,6 +452,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "select",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     visible = false,
                                     visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
@@ -458,6 +468,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "select",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
@@ -474,6 +485,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "select",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     visible = false,
                                     visibleIf = chitietcauhoi.dieu_kien_hien_thi.Split(',').ToArray(),
@@ -487,6 +499,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 chi_tiet_cau_hoi_list.Add(new
                                 {
                                     type = "select",
+                                    value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                     name = $"question{elementCounter}",
                                     title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
                                     isRequired = chitietcauhoi.bat_buoc == 1 ? true : false,
@@ -502,6 +515,7 @@ namespace CTDT.Areas.Admin.Controllers
                         {
                             chi_tiet_cau_hoi_list.Add(new
                             {
+                                value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                 type = dangCauHoi.id_dang_cau_hoi == 2 ? "comment" : "text",
                                 name = $"question{elementCounter}",
                                 visible = false,
@@ -514,6 +528,7 @@ namespace CTDT.Areas.Admin.Controllers
                         {
                             chi_tiet_cau_hoi_list.Add(new
                             {
+                                value_chil = chitietcauhoi.id_chi_tiet_cau_hoi_tieu_de,
                                 type = dangCauHoi.id_dang_cau_hoi == 2 ? "comment" : "text",
                                 name = $"question{elementCounter}",
                                 title = $"{chitietcauhoi.thu_tu}. {chitietcauhoi.ten_cau_hoi}",
@@ -667,34 +682,144 @@ namespace CTDT.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Route("api/admin/saveRadioOptions")]
-        public IHttpActionResult save_option([FromBody] radio_cau_hoi_khac rd)
+        [Route("api/admin/save-children-title")]
+        public IHttpActionResult save_option([FromBody] ChildrenTitleSurvey rd)
         {
-            var options = rd.ten_rd_cau_hoi_khac
-                            .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                            .Select(o => o.Trim())
-                            .Where(o => !string.IsNullOrEmpty(o));
-
-            foreach (var option in options)
+            if (db.chi_tiet_cau_hoi_tieu_de.FirstOrDefault(x => x.id_tieu_de_phieu == rd.id_tieu_de_phieu && x.thu_tu == rd.thu_tu) != null)
             {
-                var parts = option.Split(new[] { '.' }, 2);
-                if (parts.Length < 2) continue;
-
-                int thuTu;
-                if (!int.TryParse(parts[0].Trim(), out thuTu)) continue;
-
-                var newOption = new radio_cau_hoi_khac
-                {
-                    thu_tu = thuTu,
-                    ten_rd_cau_hoi_khac = parts[1].Trim(),
-                    id_chi_tiet_cau_hoi_tieu_de = 2
-                };
-                db.radio_cau_hoi_khac.Add(newOption);
+                return Ok(new { message = "Số thứ tự này đã tồn tại, vùi lòng nhập số thứ tự khác", success = false });
             }
+            if (string.IsNullOrEmpty(rd.ten_cau_hoi))
+            {
+                return Ok(new { message = "Không được bỏ trống tên tiêu đề con", success = false });
+            }
+            var chil_title = new chi_tiet_cau_hoi_tieu_de
+            {
+                thu_tu = rd.thu_tu,
+                id_tieu_de_phieu = rd.id_tieu_de_phieu,
+                ten_cau_hoi = rd.ten_cau_hoi,
+                id_dang_cau_hoi = rd.id_dang_cau_hoi,
+                bat_buoc = rd.bat_buoc,
+                is_ykienkhac = rd.is_ykienkhac,
+                dieu_kien_hien_thi = null,
+            };
+            db.chi_tiet_cau_hoi_tieu_de.Add(chil_title);
             db.SaveChanges();
-            return Ok(new { message = "Options saved successfully!" });
-        }
+            if (!string.IsNullOrEmpty(rd.ten_rd_cau_hoi_khac))
+            {
+                var options = rd.ten_rd_cau_hoi_khac
+                    .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(o => o.Trim())
+                    .Where(o => !string.IsNullOrEmpty(o))
+                    .ToList();
+                var newOptions = new List<radio_cau_hoi_khac>();
+                foreach (var option in options)
+                {
+                    var parts = option.Split(new[] { '.' }, 2);
+                    if (parts.Length < 2) continue;
 
+                    if (int.TryParse(parts[0].Trim(), out int thuTu))
+                    {
+                        newOptions.Add(new radio_cau_hoi_khac
+                        {
+                            thu_tu = thuTu,
+                            ten_rd_cau_hoi_khac = parts[1].Trim(),
+                            id_chi_tiet_cau_hoi_tieu_de = chil_title.id_chi_tiet_cau_hoi_tieu_de
+                        });
+                    }
+                }
+                db.radio_cau_hoi_khac.AddRange(newOptions);
+                db.SaveChanges();
+            }
+            return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
+        }
+        [HttpPost]
+        [Route("api/admin/info-children-title")]
+        public async Task<IHttpActionResult> load_info_chil_title(ChildrenTitleSurvey chil)
+        {
+            var get_info_children_title = await db.chi_tiet_cau_hoi_tieu_de
+                .Where(x => x.id_chi_tiet_cau_hoi_tieu_de == chil.id_chi_tiet_cau_hoi_tieu_de)
+                .Select(x => new
+                {
+                    x.id_chi_tiet_cau_hoi_tieu_de,
+                    x.thu_tu,
+                    x.id_tieu_de_phieu,
+                    x.ten_cau_hoi,
+                    x.id_dang_cau_hoi,
+                    x.bat_buoc,
+                    x.is_ykienkhac
+                })
+                .FirstOrDefaultAsync();
+            var get_info_rd = await db.radio_cau_hoi_khac
+                .Where(x => x.id_chi_tiet_cau_hoi_tieu_de == get_info_children_title.id_chi_tiet_cau_hoi_tieu_de)
+                .Select(x => new
+                {
+                    x.id_rd_cau_hoi_khac,
+                    x.thu_tu,
+                    x.ten_rd_cau_hoi_khac,
+                })
+                .ToListAsync();
+            return Ok(new { data_chil = get_info_children_title, get_rd = get_info_rd, success = true });
+
+        }
+        [HttpPost]
+        [Route("api/admin/edit-children-title")]
+        public IHttpActionResult edit_children_title(ChildrenTitleSurvey chil)
+        {
+            var check_chil_title = db.chi_tiet_cau_hoi_tieu_de.FirstOrDefault(x => x.id_chi_tiet_cau_hoi_tieu_de == chil.id_chi_tiet_cau_hoi_tieu_de);
+            if (chil.thu_tu == null)
+            {
+                return Ok(new { message = "Vui lòng không để trống thứ tự", success = false });
+            }
+            if (string.IsNullOrEmpty(chil.ten_cau_hoi))
+            {
+                return Ok(new { message = "Vui lòng không để trống tên tiêu đề", success = false });
+            }
+            check_chil_title.thu_tu = chil.thu_tu;
+            check_chil_title.id_tieu_de_phieu = chil.id_tieu_de_phieu;
+            check_chil_title.ten_cau_hoi = chil.ten_cau_hoi;
+            check_chil_title.id_dang_cau_hoi = chil.id_dang_cau_hoi;
+            check_chil_title.bat_buoc = chil.bat_buoc;
+            check_chil_title.is_ykienkhac = chil.is_ykienkhac;
+            check_chil_title.dieu_kien_hien_thi = null;
+            db.SaveChanges();
+            if (string.IsNullOrEmpty(chil.ten_rd_cau_hoi_khac))
+            {
+                var existingRadios = db.radio_cau_hoi_khac.Where(x => x.id_chi_tiet_cau_hoi_tieu_de == chil.id_chi_tiet_cau_hoi_tieu_de).ToList();
+                db.radio_cau_hoi_khac.RemoveRange(existingRadios);
+                db.SaveChanges();
+            }
+            else
+            {
+                var existingRadios = db.radio_cau_hoi_khac.Where(x => x.id_chi_tiet_cau_hoi_tieu_de == chil.id_chi_tiet_cau_hoi_tieu_de).ToList();
+                db.radio_cau_hoi_khac.RemoveRange(existingRadios);
+                db.SaveChanges();
+                var options = chil.ten_rd_cau_hoi_khac
+                    .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(o => o.Trim())
+                    .Where(o => !string.IsNullOrEmpty(o))
+                    .ToList();
+                var newOptions = new List<radio_cau_hoi_khac>();
+                foreach (var option in options)
+                {
+                    var parts = option.Split(new[] { '.' }, 2);
+                    if (parts.Length < 2) continue;
+
+                    if (int.TryParse(parts[0].Trim(), out int thuTu))
+                    {
+                        newOptions.Add(new radio_cau_hoi_khac
+                        {
+                            thu_tu = thuTu,
+                            ten_rd_cau_hoi_khac = parts[1].Trim(),
+                            id_chi_tiet_cau_hoi_tieu_de = check_chil_title.id_chi_tiet_cau_hoi_tieu_de
+                        });
+                    }
+                }
+                db.radio_cau_hoi_khac.AddRange(newOptions);
+                db.SaveChanges();
+            }
+            return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
+        }
         public int RomanToInt(string roman)
         {
             var romanMap = new Dictionary<char, int>

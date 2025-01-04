@@ -295,7 +295,7 @@
     <Property Name="id_chi_tiet_cau_hoi_tieu_de" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="thu_tu" Type="Int32" />
     <Property Name="id_tieu_de_phieu" Type="Int32" />
-    <Property Name="ten_cau_hoi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ten_cau_hoi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="id_dang_cau_hoi" Type="Int32" />
     <Property Name="bat_buoc" Type="Int32" />
     <Property Name="is_ykienkhac" Type="Int32" />
@@ -348,7 +348,7 @@
       <PropertyRef Name="id_dang_cau_hoi" />
     </Key>
     <Property Name="id_dang_cau_hoi" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ten_dang_cau_hoi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ten_dang_cau_hoi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="chi_tiet_cau_hoi_tieu_de" Relationship="dbSurveyModel.FK_chi_tiet_cau_hoi_tieu_de_dang_cau_hoi" FromRole="dang_cau_hoi" ToRole="chi_tiet_cau_hoi_tieu_de" />
   </EntityType>
   <EntityType Name="DonVi">
@@ -531,7 +531,7 @@
     </Key>
     <Property Name="id_rd_cau_hoi_khac" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="thu_tu" Type="Int32" />
-    <Property Name="ten_rd_cau_hoi_khac" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ten_rd_cau_hoi_khac" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="id_chi_tiet_cau_hoi_tieu_de" Type="Int32" />
     <NavigationProperty Name="chi_tiet_cau_hoi_tieu_de" Relationship="dbSurveyModel.FK_radio_cau_hoi_khac_chi_tiet_cau_hoi_tieu_de" FromRole="radio_cau_hoi_khac" ToRole="chi_tiet_cau_hoi_tieu_de" />
   </EntityType>
@@ -620,7 +620,7 @@
     <Property Name="id_tieu_de_phieu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="thu_tu" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
     <Property Name="surveyID" Type="Int32" />
-    <Property Name="ten_tieu_de" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ten_tieu_de" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="chi_tiet_cau_hoi_tieu_de" Relationship="dbSurveyModel.FK_chi_tiet_cau_hoi_tieu_de_tieu_de_phieu_khao_sat" FromRole="tieu_de_phieu_khao_sat" ToRole="chi_tiet_cau_hoi_tieu_de" />
     <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_tieu_de_phieu_khao_sat_survey" FromRole="tieu_de_phieu_khao_sat" ToRole="survey" />
   </EntityType>
