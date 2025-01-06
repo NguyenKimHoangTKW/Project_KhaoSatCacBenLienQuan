@@ -329,6 +329,7 @@
     <EntitySetMapping Name="tieu_de_phieu_khao_sat">
       <EntityTypeMapping TypeName="dbSurveyModel.tieu_de_phieu_khao_sat">
         <MappingFragment StoreEntitySet="tieu_de_phieu_khao_sat">
+          <ScalarProperty Name="desception" ColumnName="desception" />
           <ScalarProperty Name="ten_tieu_de" ColumnName="ten_tieu_de" />
           <ScalarProperty Name="surveyID" ColumnName="surveyID" />
           <ScalarProperty Name="thu_tu" ColumnName="thu_tu" />

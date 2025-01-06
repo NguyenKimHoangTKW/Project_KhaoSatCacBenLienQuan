@@ -487,7 +487,6 @@
     <Content Include="Areas\assets\css\app.min.css" />
     <Content Include="Areas\assets\css\buttons.dataTables.min.css" />
     <Content Include="Areas\assets\css\sweetalert2.min.css" />
-    <Content Include="Areas\assets\css\tieude.min.css" />
     <Content Include="Areas\assets\es6\app.js" />
     <Content Include="Areas\assets\es6\constant\theme-constant.js" />
     <Content Include="Areas\assets\es6\core\core.js" />
@@ -1381,6 +1380,7 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_phieu_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\chi_tiet_phieu_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\tieu_de_cau_hoi_pks.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\xem_truoc_cau_hoi_da_tao.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

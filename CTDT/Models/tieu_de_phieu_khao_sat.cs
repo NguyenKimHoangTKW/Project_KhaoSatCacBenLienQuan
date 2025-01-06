@@ -24,6 +24,7 @@ namespace CTDT.Models
         public string thu_tu { get; set; }
         public Nullable<int> surveyID { get; set; }
         public string ten_tieu_de { get; set; }
+        public string desception { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<chi_tiet_cau_hoi_tieu_de> chi_tiet_cau_hoi_tieu_de { get; set; }

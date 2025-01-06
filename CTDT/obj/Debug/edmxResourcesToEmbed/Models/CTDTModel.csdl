@@ -621,6 +621,7 @@
     <Property Name="thu_tu" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
     <Property Name="surveyID" Type="Int32" />
     <Property Name="ten_tieu_de" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="desception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="chi_tiet_cau_hoi_tieu_de" Relationship="dbSurveyModel.FK_chi_tiet_cau_hoi_tieu_de_tieu_de_phieu_khao_sat" FromRole="tieu_de_phieu_khao_sat" ToRole="chi_tiet_cau_hoi_tieu_de" />
     <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_tieu_de_phieu_khao_sat_survey" FromRole="tieu_de_phieu_khao_sat" ToRole="survey" />
   </EntityType>

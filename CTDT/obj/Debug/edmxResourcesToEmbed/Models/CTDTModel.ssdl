@@ -305,6 +305,7 @@
     <Property Name="thu_tu" Type="nvarchar" MaxLength="5" />
     <Property Name="surveyID" Type="int" />
     <Property Name="ten_tieu_de" Type="nvarchar(max)" />
+    <Property Name="desception" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="typeusers">
     <Key>

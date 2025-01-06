@@ -310,6 +310,7 @@
           <Property Name="thu_tu" Type="nvarchar" MaxLength="5" />
           <Property Name="surveyID" Type="int" />
           <Property Name="ten_tieu_de" Type="nvarchar(max)" />
+          <Property Name="desception" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="typeusers">
           <Key>
@@ -1786,6 +1787,7 @@
           <Property Name="thu_tu" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <Property Name="surveyID" Type="Int32" />
           <Property Name="ten_tieu_de" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="desception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="chi_tiet_cau_hoi_tieu_de" Relationship="dbSurveyModel.FK_chi_tiet_cau_hoi_tieu_de_tieu_de_phieu_khao_sat" FromRole="tieu_de_phieu_khao_sat" ToRole="chi_tiet_cau_hoi_tieu_de" />
           <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_tieu_de_phieu_khao_sat_survey" FromRole="tieu_de_phieu_khao_sat" ToRole="survey" />
         </EntityType>
@@ -2753,6 +2755,7 @@
           <EntitySetMapping Name="tieu_de_phieu_khao_sat">
             <EntityTypeMapping TypeName="dbSurveyModel.tieu_de_phieu_khao_sat">
               <MappingFragment StoreEntitySet="tieu_de_phieu_khao_sat">
+                <ScalarProperty Name="desception" ColumnName="desception" />
                 <ScalarProperty Name="ten_tieu_de" ColumnName="ten_tieu_de" />
                 <ScalarProperty Name="surveyID" ColumnName="surveyID" />
                 <ScalarProperty Name="thu_tu" ColumnName="thu_tu" />

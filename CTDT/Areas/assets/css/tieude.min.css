@@ -66,51 +66,28 @@
 .btn-delete:hover {
     background-color: #a71d2a;
 }
-
-.small-banner {
-    position: fixed;
-    top: 70%;
-    right: 15px;
-    transform: translateY(-50%);
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    padding: 10px;
+.main-content {
+    position: relative;
+    min-height: 100vh; /* Đảm bảo nội dung chiếm toàn bộ chiều cao */
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 9999;
-    width: 160px;
-    transition: opacity 0.3s ease-in-out;
+    flex-direction: column; /* Sắp xếp nội dung theo cột */
 }
 
-    .small-banner .btn {
-        font-size: 14px;
-        padding: 8px 10px;
-        text-align: center;
-        border-radius: 5px;
-        width: 100%;
-    }
+.card-body {
+    flex: 1; /* Chiếm khoảng trống còn lại để đẩy footer xuống */
+}
 
-    .small-banner .btn-info {
-        background-color: #17a2b8;
-        border: none;
-        color: #fff;
-    }
+.small-banner {
+    position: sticky;
+    bottom: 0;
+    background-color: #f8f9fa; /* Màu nền nhạt */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Tạo bóng cho footer */
+    padding: 10px 15px;
+    border-top: 1px solid #ddd; /* Đường viền trên */
+    text-align: center;
+}
 
-    .small-banner .btn-warning {
-        background-color: #ffc107;
-        border: none;
-        color: #fff;
+    .small-banner button {
+        margin: 5px;
     }
-
-    .small-banner .btn-danger {
-        background-color: #dc3545;
-        border: none;
-        color: #fff;
-    }
-
-    .small-banner .btn:hover {
-        opacity: 0.85;
-    }
+    

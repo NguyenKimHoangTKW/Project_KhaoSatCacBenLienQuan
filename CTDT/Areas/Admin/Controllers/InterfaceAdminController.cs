@@ -70,5 +70,10 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.ten_hedaotao), "id_hedaotao", "ten_hedaotao");
             return View();
         }
+        public ActionResult xem_truoc_cau_hoi_da_tao(int id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
     }
 }

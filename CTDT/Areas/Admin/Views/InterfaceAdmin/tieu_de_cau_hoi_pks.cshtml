@@ -46,14 +46,6 @@
                             </div>
                             <hr />
                         </fieldset>
-
-                        <!-- Sticky Banner -->
-                        <div id="smallBanner" class="small-banner">
-                            <button type="button" id="btnAddTitle" class="btn btn-primary m-r-5">Tạo mới tiêu đề cha</button>
-                            <button type="button" id="btnAddChilTitle" class="btn btn-warning m-r-5">Tạo mới tiêu đề con</button>
-                            <button type="button" class="btn btn-info m-r-5">Xem trước phiếu đã tạo</button>
-                            <button type="button" class="btn btn-success m-r-5">Xuất bản phiếu</button>
-                        </div>
                     </div>
 
                     <div class="m-t-25" id="showalldata">
@@ -114,9 +106,58 @@
                         </div>
                     </div>
                     <!---->
+                    <!--modal Điều kiện khác-->
+                    <div class="modal fade" id="modalDieuKienKhac">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <i class="anticon anticon-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h2 class="text-uppercase">câu hỏi điều kiện</h2>
+                                    <div class="form-group">
+                                        <label class="form-label">Chọn câu hỏi điều kiện</label>
+                                        <select class="form-control select2" id="edtSelectedDangCauHoi">
+                                            <option value="">asdassad</option>
+                                        </select>
+                                    </div>
+                                    <hr />
+                                    <h2 class="text-uppercase">câu hỏi muốn hiển thị khi đạt điều kiện</h2>
+                                    <div class="form-group">
+                                        <label class="form-label">Chọn tiêu đề con</label>
+                                        <select class="form-control select2" id="edtSelectedDangCauHoi">
+                                            <option value="">asdassad</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Chọn chi tiết câu hỏi tiêu đề con</label>
+                                        <select class="form-control select2" id="edtSelectedDangCauHoi">
+                                            <option value="">asdassad</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!---->
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Sticky Banner -->
+    <div id="smallBanner" class="small-banner fixed-footer">
+        <button type="button" id="btnAddTitle" class="btn btn-primary m-r-5">Tạo mới tiêu đề cha</button>
+        <button type="button" id="btnAddChilTitle" class="btn btn-warning m-r-5">Tạo mới tiêu đề con</button>
+        <button type="button" id="btnXemTruocPhieuDaTao" class="btn btn-info m-r-5">Xem trước Form phiếu khảo sát</button>
+        <button type="button" class="btn btn-success m-r-5">Xuất bản phiếu</button>
     </div>
 </div>
 @section scriptsAdmin{

@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿// Các sự kiện
+$(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
     $('#optionsTextarea').val('1. ');
     function validateRomanInput() {
@@ -37,7 +38,6 @@ $(document).on('keypress', '#optionsTextarea', function (event) {
         textarea.val(text + `\n${nextNumber}. `);
     }
 });
-
 $(document).on('paste', '#optionsTextarea', function () {
     const textarea = $(this);
     setTimeout(function () {
@@ -60,88 +60,13 @@ $(document).on('paste', '#optionsTextarea', function () {
         textarea.val(newText.trim());
     }, 1);
 });
-async function load_pks_by_nam() {
-    const hedaotao = $("#hedaotao").val();
-    const year = $("#year").val();
-    const res = await $.ajax({
-        url: '/api/load_phieu_by_nam',
-        type: 'POST',
-        data: {
-            id_namhoc: year,
-            id_hedaotao: hedaotao
-        }
-    });
-    let html = "";
-    if (res.success) {
-        res.data.forEach(function (item) {
-            html += `<option value="${item.id_phieu}">${item.ten_phieu}</option>`;
-        });
-        $("#surveyid").empty().html(html);
-    } else {
-        html += `<option value="">${res.message}</option>`;
-        $("#surveyid").empty().html(html);
-        $("#ctdt").empty().html(html);
-    }
-}
-
 $(document).on("change", "#surveyid", function () {
     load_tieu_de_pks();
 })
-
 $(document).on("click", "#btnSaveChangesAddTittle", function (event) {
     event.preventDefault()
     add_tittle();
 });
-
-async function add_tittle() {
-    const value = $("#surveyid").val();
-    const thutu = $("#edtThuTuHienThiTitle").val();
-    const tieude = $("#edttieudeTitle").val();
-    const res = await $.ajax({
-        url: "/api/admin/add-new-title-survey",
-        type: "POST",
-        data: {
-            surveyID: value,
-            thu_tu: thutu,
-            ten_tieu_de: tieude
-        }
-    })
-    if (res.success) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "success",
-            title: res.message
-        });
-        load_tieu_de_pks()
-    }
-    else {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "error",
-            title: res.message
-        });
-    }
-}
 $(document).on("click", "#btnAddTitle", function () {
     const footer = $("#showfootermodaltitlesurvey");
     const titleHeaderModal = $("#exampleModalLabelTitleSurvey")
@@ -212,7 +137,7 @@ $(document).on("click", "#AddNewChildrenTitle", function (event) {
     const id_dang_cau_hoi = $("#edtSelectedDangCauHoi").val();
     const is_required = $("#ckIsRequired").prop('checked') ? 1 : 0;
     const is_orderitem = $("#ckIsOrderItem").prop('checked') ? 1 : 0;
-    
+
 
     if (id_dang_cau_hoi == "3" || id_dang_cau_hoi == "4" || id_dang_cau_hoi == "5") {
         const inputText = $('#optionsTextarea').val();
@@ -251,7 +176,6 @@ $(document).on("click", "#AddNewChildrenTitle", function (event) {
                         icon: "success",
                         title: response.message
                     });
-                    $('#optionsTextarea').val('');
                     load_tieu_de_pks()
                 }
                 else {
@@ -389,7 +313,6 @@ $(document).on("click", "#EditChildrenTitle", function (event) {
                         icon: "success",
                         title: response.message
                     });
-                    $('#optionsTextarea').val('');
                     load_tieu_de_pks()
                 }
                 else {
@@ -476,77 +399,40 @@ $(document).on("click", "#EditChildrenTitle", function (event) {
         });
     }
 })
-async function load_option_children_title() {
-    const value_sv = $("#surveyid").val();
-    const body = $("#loadoptionchiltitle");
+$(document).on("click", "#btnEditChilTitle", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    const body_footer = $("#modalfooterchildrentitle");
     let html = ``;
-    const res = await $.ajax({
-        url: "/api/admin/option-chi-tiet-cau-hoi",
-        type: "POST",
-        data: {
-            surveyID: value_sv
+    html += `
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="EditChildrenTitle" class="btn btn-primary">Lưu dữ liệu</button>
+    `;
+    body_footer.html(html);
+    load_option_info_children_title(value);
+})
+$(document).on("click", "#btnDeleteChilTitle", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    Swal.fire({
+        title: "Bạn muốn xóa tiêu đề con?",
+        text: "Khi bạn xóa tiêu đề con, toàn bộ thông tin liên quan đến tiêu đề con này sẽ bị xóa!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có, xóa luôn"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            delete_children_title(value);
         }
     });
-    if (res.success) {
-        html += `
-            <div class="form-group">
-                <label class="form-label">Chọn tiêu đề câu hỏi chính</label>
-                <select class="form-control select2" id="edtSelectedTitle">`;
-        res.tieu_de.forEach(title => {
-            html += `<option value="${title.value_title}">${title.name}</option>`;
-        });
 
-        html += `</select>
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
-                <input type="text" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số">
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
-                <input type="text" class="form-control" id="edtNameChilTitle" placeholder="Nhập tên chi tiết">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Dạng câu hỏi</label>
-                <select class="form-control select2" id="edtSelectedDangCauHoi">`;
-
-        res.dang_cau_hoi.forEach(dangcauhoi => {
-            html += `<option value="${dangcauhoi.value_dch}">${dangcauhoi.name}</option>`;
-        });
-
-        html += `</select>
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">Các lựa chọn</label>
-                <div class="checkbox">
-                    <input id="ckIsRequired" type="checkbox">
-                    <label for="ckIsRequired">Là câu hỏi bắt buộc</label>
-                </div>
-                <div class="checkbox">
-                    <input id="ckIsOrderItem" type="checkbox">
-                    <label for="ckIsOrderItem">Có ý kiến khác</label>
-                </div>
-            </div>
-            <div id="conditionalBlock"></div>`;
-
-        body.html(html);
-        $("#chitietModal").modal("show");
-        $("#edtSelectedDangCauHoi").on("change", function () {
-            const selectedValue = $(this).val();
-            const conditionalBlock = $("#conditionalBlock");
-
-            if (selectedValue == "3" || selectedValue == "4" || selectedValue == "5") {
-                conditionalBlock.html(`
-                    <div class="form-group">
-                        <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
-                        <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10">1. </textarea>
-                    </div>
-                `);
-            } else {
-                conditionalBlock.html(""); 
-            }
-        });
-    } else {
+})
+$(document).on("click", "#btnXemTruocPhieuDaTao", function (event) {
+    event.preventDefault();
+    const value = $("#surveyid").val();
+    if (value == "") {
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -560,23 +446,42 @@ async function load_option_children_title() {
         });
         Toast.fire({
             icon: "error",
-            title: res.message
+            title: "Vui lòng chọn phiếu khảo sát để xem"
         });
     }
-}
+    else {
+        window.open(`/xem-truoc-cau-hoi-da-tao/${value}`, '_blank');
+    }
+});
 
-$(document).on("click", "#btnEditChilTitle", function (event) {
-    event.preventDefault();
-    const value = $(this).data("id");
-    const body_footer = $("#modalfooterchildrentitle");
-    let html = ``;
-    html += `
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="EditChildrenTitle" class="btn btn-primary">Lưu dữ liệu</button>
-    `;
-    body_footer.html(html);
-    load_option_info_children_title(value);
-})
+// Hàm xử lý
+async function delete_children_title(value) {
+    const res = await $.ajax({
+        url: "/api/admin/delete-children-title",
+        type: "POST",
+        data: {
+            id_chi_tiet_cau_hoi_tieu_de: value
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_tieu_de_pks();
+    }
+}
 async function load_option_info_children_title(value) {
     const value_sv = $("#surveyid").val();
     const body = $("#loadoptionchiltitle");
@@ -687,7 +592,6 @@ async function load_option_info_children_title(value) {
         });
     }
 }
-
 async function update_tieu_de_pks(value) {
     const value_s = $("#surveyid").val();
     const thutu = $("#edtThuTuHienThiTitle").val();
@@ -760,6 +664,166 @@ async function get_info_title_survey(value) {
     $("#edttieudeTitle").val(res.ten_tieu_de);
     $("#edtThuTuHienThiTitle").val(res.thu_tu);
 }
+async function load_option_children_title() {
+    const value_sv = $("#surveyid").val();
+    const body = $("#loadoptionchiltitle");
+    let html = ``;
+    const res = await $.ajax({
+        url: "/api/admin/option-chi-tiet-cau-hoi",
+        type: "POST",
+        data: {
+            surveyID: value_sv
+        }
+    });
+    if (res.success) {
+        html += `
+            <div class="form-group">
+                <label class="form-label">Chọn tiêu đề câu hỏi chính</label>
+                <select class="form-control select2" id="edtSelectedTitle">`;
+        res.tieu_de.forEach(title => {
+            html += `<option value="${title.value_title}">${title.name}</option>`;
+        });
+
+        html += `</select>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
+                <input type="text" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
+                <input type="text" class="form-control" id="edtNameChilTitle" placeholder="Nhập tên chi tiết">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Dạng câu hỏi</label>
+                <select class="form-control select2" id="edtSelectedDangCauHoi">`;
+
+        res.dang_cau_hoi.forEach(dangcauhoi => {
+            html += `<option value="${dangcauhoi.value_dch}">${dangcauhoi.name}</option>`;
+        });
+
+        html += `</select>
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Các lựa chọn</label>
+                <div class="checkbox">
+                    <input id="ckIsRequired" type="checkbox">
+                    <label for="ckIsRequired">Là câu hỏi bắt buộc</label>
+                </div>
+                <div class="checkbox">
+                    <input id="ckIsOrderItem" type="checkbox">
+                    <label for="ckIsOrderItem">Có ý kiến khác</label>
+                </div>
+            </div>
+            <div id="conditionalBlock"></div>`;
+
+        body.html(html);
+        $("#chitietModal").modal("show");
+        $("#edtSelectedDangCauHoi").on("change", function () {
+            const selectedValue = $(this).val();
+            const conditionalBlock = $("#conditionalBlock");
+
+            if (selectedValue == "3" || selectedValue == "4" || selectedValue == "5") {
+                conditionalBlock.html(`
+                    <div class="form-group">
+                        <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
+                        <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10">1. </textarea>
+                    </div>
+                `);
+            } else {
+                conditionalBlock.html("");
+            }
+        });
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+async function add_tittle() {
+    const value = $("#surveyid").val();
+    const thutu = $("#edtThuTuHienThiTitle").val();
+    const tieude = $("#edttieudeTitle").val();
+    const res = await $.ajax({
+        url: "/api/admin/add-new-title-survey",
+        type: "POST",
+        data: {
+            surveyID: value,
+            thu_tu: thutu,
+            ten_tieu_de: tieude
+        }
+    })
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_tieu_de_pks()
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+async function load_pks_by_nam() {
+    const hedaotao = $("#hedaotao").val();
+    const year = $("#year").val();
+    const res = await $.ajax({
+        url: '/api/load_phieu_by_nam',
+        type: 'POST',
+        data: {
+            id_namhoc: year,
+            id_hedaotao: hedaotao
+        }
+    });
+    let html = "";
+    if (res.success) {
+        res.data.forEach(function (item) {
+            html += `<option value="${item.id_phieu}">${item.ten_phieu}</option>`;
+        });
+        $("#surveyid").empty().html(html);
+    } else {
+        html += `<option value="">${res.message}</option>`;
+        $("#surveyid").empty().html(html);
+        $("#ctdt").empty().html(html);
+    }
+}
 async function load_tieu_de_pks() {
     const pks = $("#surveyid").val();
     const res = await $.ajax({
@@ -790,7 +854,7 @@ async function load_tieu_de_pks() {
                             </button>
                         </div>
                     </div>
-                    <div class="child-titles">
+                    <div class="child-titles mt-3">
             `;
             page.elements.forEach(element => {
                 html += `
@@ -812,8 +876,9 @@ async function load_tieu_de_pks() {
                             <li>
                                 <strong>Dạng câu hỏi:</strong> ${element.type === "radiogroup" ? "Trắc nghiệm" :
                         element.type === "checkbox" ? "Hộp kiểm" :
-                            element.type === "text" ? "Đoạn trả lời ngắn" :
-                                element.type === "comment" ? "Đoạn trả lời dài" : "Đoạn trả lời dài"
+                            element.type === "select" ? "Menu thả xuống" :
+                                element.type === "text" ? "Đoạn trả lời ngắn" :
+                                    "Đoạn trả lời dài"
                     }
                             </li>
                             <li>
@@ -825,12 +890,19 @@ async function load_tieu_de_pks() {
                 if (element.choices && element.choices.length > 0) {
                     html += `
                         <div class="choices mt-3">
-                            <strong>Danh sách lựa chọn:</strong>
-                            <ul class="list-group mt-2">
+                            <h6 class="text-secondary mb-3">Danh sách lựa chọn:</h6>
+                            <ul class="list-group list-group-flush">
                     `;
                     element.choices.forEach(choice => {
                         html += `
-                            <li class="list-group-item p-2">${choice.text}</li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="text-dark fw-bold">
+                                    <i class="bi bi-chevron-right text-primary me-2"></i> ${choice.text}
+                                </span>
+                                <button class="btn btn-sm btn-outline-success" data-choice-id="${choice.value}">
+                                    <i class="bi bi-plus-circle"></i> Thêm điều kiện
+                                </button>
+                            </li>
                         `;
                     });
                     html += `
@@ -838,6 +910,8 @@ async function load_tieu_de_pks() {
                         </div>
                     `;
                 }
+
+
 
                 if (element.showOtherItem) {
                     html += `
@@ -861,7 +935,7 @@ async function load_tieu_de_pks() {
         body.html(html);
     } else {
         html = `
-            <div class="alert alert-info text-center font-weight-bold">
+            <div class="alert alert-info text-center fw-bold">
                 ${res.message}
             </div>`;
         body.html(html);
