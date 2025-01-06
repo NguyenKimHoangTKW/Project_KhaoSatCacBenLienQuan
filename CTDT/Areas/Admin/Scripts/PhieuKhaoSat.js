@@ -1,6 +1,4 @@
-﻿var currentPage = 1;
-var totalPages = 0;
-$(".select2").select2();
+﻿$(".select2").select2();
 $(document).ready(function () {
     load_data();
     $("#cancelmodalAdd").click(function () {
@@ -12,102 +10,6 @@ $(document).ready(function () {
         $('#NgayKetThuc').val('');
     });
 });
-$(document).on("click", "#EditPKS", function () {
-    var id = $(this).data("id");
-    GetByID(id);
-});
-function GetByID(id) {
-    $.ajax({
-        url: "/Admin/PhieuKhaoSat/GetByIDPKS",
-        type: "GET",
-        data: { id: id },
-        success: function (res) {
-            var items = res.data;
-            if (items) {
-                $("#EditID").val(items.IdPhieu);
-                $("#EditTieuDe").val(items.TieuDe);
-                $("#EditMoTa").val(items.MoTa);
-                $('input[name="EditDanhChoHe"][value="' + items.HeDaoTao + '"]').prop('checked', true);
-                $("#EditMaDoiTuong").val(items.DoiTuong);
-                $("#EditNgayBatDau").val(formatDateTimeLocal(items.NgayBatDau));
-                $("#EditNgayKetThuc").val(formatDateTimeLocal(items.NgayKetThuc));
-                $("#EditMaNamHoc").val(items.NamHoc);
-                $("#EditTrangThai").val(items.TrangThai);
-
-                var keyClassArray = JSON.parse(items.key_class);
-                $('input[name="eidt_radioKey"]').each(function () {
-                    if (keyClassArray.includes($(this).val())) {
-                        $(this).prop('checked', true);
-                    } else {
-                        $(this).prop('checked', false);
-                    }
-                });
-            }
-        }
-    });
-}
-
-$(document).on("click", "#btnEdit", function () {
-    var id = $("#EditID").val();
-    EditPKS(id);
-});
-function EditPKS(id) {
-    var tieuDe = $('#EditTieuDe').val();
-    var moTa = $('#EditMoTa').val();
-    var danhChoHe = $('input[name="EditDanhChoHe"]:checked').val();
-    var maDoiTuong = $('#EditMaDoiTuong').val();
-    var ngayBatDau = $('#EditNgayBatDau').val();
-    var ngayKetThuc = $('#EditNgayKetThuc').val();
-    var trangThai = $('#EditTrangThai').val();
-    var maNamHoc = $("#EditMaNamHoc").val();
-    var checked_key_class = [];
-    $('input[name="eidt_radioKey"]:checked').each(function () {
-        checked_key_class.push($(this).val());
-    });
-    var unixNgayBatDau = Math.floor(new Date(ngayBatDau).getTime() / 1000);
-    var unixNgayKetThuc = Math.floor(new Date(ngayKetThuc).getTime() / 1000);
-
-    var Checkdata = {
-        id: id,
-        surveyTitle: tieuDe,
-        surveyDescription: moTa,
-        id_hedaotao: danhChoHe,
-        id_loaikhaosat: maDoiTuong,
-        id_namhoc: maNamHoc,
-        surveyTimeStart: unixNgayBatDau,
-        surveyTimeEnd: unixNgayKetThuc,
-        surveyStatus: trangThai,
-        key_class: JSON.stringify(checked_key_class)
-    };
-    $.ajax({
-        url: "/Admin/PhieuKhaoSat/EditPhieuKhaoSat",
-        type: "POST",
-        dataType: "JSON",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(Checkdata),
-        success: function (res) {
-            if (res.success) {
-                Swal.fire({
-                    text: res.message,
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(function () {
-                    $("#EditSurvey").modal("hide");
-                    FilData();
-                });
-            }
-            else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: res.message,
-                    confirmButtonText: 'OK'
-                });
-            }
-        }
-    });
-}
 function formatDateTimeLocal(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);
     var year = date.getFullYear();
@@ -118,57 +20,6 @@ function formatDateTimeLocal(unixTimestamp) {
 
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
-$(document).on("click", "#DelPKS", function () {
-    var id = $(this).data("id");
-    Swal.fire({
-        icon: 'warning',
-        text: "Bạn có chắc muốn xóa phiếu khảo sát này không",
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa',
-        cancelButtonText: 'Hủy'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            DelPKS(id);
-        }
-    });
-});
-function DelPKS(id) {
-    $.ajax({
-        url: "/Admin/PhieuKhaoSat/DeletePKS",
-        type: "POST",
-        data: { id: id },
-        success: function (res) {
-            if (res.success) {
-                Swal.fire({
-                    text: res.message,
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(function () {
-                    FilData();
-                });
-            }
-            else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: res.message,
-                    confirmButtonText: 'OK'
-                });
-            }
-        },
-        error: function () {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Đã xảy ra lỗi trong quá trình xử lý",
-                confirmButtonText: 'OK'
-            });
-        }
-    });
-};
 $(document).on("click", ".btnChiTiet", function () {
     const id = $(this).data("id");
     window.location.href = `/admin/chi-tiet-phieu-khao-sat/${id}`;
@@ -267,7 +118,75 @@ async function load_data() {
 $(document).on("click", "#btnFilter", function () {
     load_data();
 })
-
+$(document).on("click", "#btnSave", function (event) {
+    event.preventDefault();
+    add_new_survey();
+})
+async function add_new_survey() {
+    const tieuDe = $('#TieuDe').val();
+    const moTa = $('#MoTa').val();
+    const danhChoHe = $('input[name="DanhChoHe"]:checked').val();
+    const maDoiTuong = $('#MaDoiTuong').val();
+    const ngayBatDau = $('#NgayBatDau').val();
+    const ngayKetThuc = $('#NgayKetThuc').val();
+    const trangThai = $('#TrangThai').val();
+    const dotkhaosat = $("#DotKhaoSat").val();
+    const mothongke = $("#EnableThongKe").val();
+    const maNamHoc = $("#MaNamHoc").val();
+    const unixNgayBatDau = Math.floor(new Date(ngayBatDau).getTime() / 1000);
+    const unixNgayKetThuc = Math.floor(new Date(ngayKetThuc).getTime() / 1000);
+    const res = await $.ajax({
+        url: '/api/admin/them-moi-phieu-khao-sat',
+        type: 'POST',
+        data: {
+            surveyTitle: tieuDe,
+            surveyDescription: moTa,
+            id_hedaotao: danhChoHe,
+            id_loaikhaosat: maDoiTuong,
+            id_namhoc: maNamHoc,
+            surveyTimeStart: unixNgayBatDau,
+            surveyTimeEnd: unixNgayKetThuc,
+            surveyStatus: trangThai,
+            id_dot_khao_sat: dotkhaosat,
+            mo_thong_ke: mothongke,
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
 
 function AddPKS() {
     var tieuDe = $('#TieuDe').val();
@@ -278,26 +197,13 @@ function AddPKS() {
     var ngayKetThuc = $('#NgayKetThuc').val();
     var trangThai = $('#TrangThai').val();
     var maNamHoc = $("#MaNamHoc").val();
-    var checked_key_class = [];
-    $('input[name="radioKey"]:checked').each(function () {
-        checked_key_class.push($(this).val());
-    });
     var unixNgayBatDau = Math.floor(new Date(ngayBatDau).getTime() / 1000);
     var unixNgayKetThuc = Math.floor(new Date(ngayKetThuc).getTime() / 1000);
-
     var data = {
-        surveyTitle: tieuDe,
-        surveyDescription: moTa,
-        id_hedaotao: danhChoHe,
-        id_loaikhaosat: maDoiTuong,
-        id_namhoc: maNamHoc,
-        surveyTimeStart: unixNgayBatDau,
-        surveyTimeEnd: unixNgayKetThuc,
-        surveyStatus: trangThai,
-        key_class: JSON.stringify(checked_key_class)
+
     };
     $.ajax({
-        url: '/Admin/PhieuKhaoSat/NewSurvey',
+        url: '/api/admin/them-moi-phieu-khao-sat',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
@@ -308,15 +214,13 @@ function AddPKS() {
                 showConfirmButton: false,
                 timer: 2000
             });
-            FilData();
+            load_data();
         },
         error: function () {
             alert('Lưu không thành công.');
         }
     });
 }
-
-
 
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);

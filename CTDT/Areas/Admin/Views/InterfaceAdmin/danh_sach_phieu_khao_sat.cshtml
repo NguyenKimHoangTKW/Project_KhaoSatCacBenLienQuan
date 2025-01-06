@@ -126,15 +126,31 @@
                                     <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Trạng thái *</label>
                                     <div class="col-sm-10" style="margin-top: 10px;">
                                         <select id="TrangThai" class="form-control select2">
-                                            <option value="True">Mở</option>
-                                            <option value="False">Đóng</option>
+                                            <option value="1">Mở</option>
+                                            <option value="0">Đóng</option>
                                         </select>
                                     </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Đợt khảo sát (Đợt/ Học kỳ) *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="DotKhaoSat" class="form-control select2">
+                                            <option value="">Không áp dụng</option>
+                                            <option value="1">Mở</option>
+                                            <option value="0">Đóng</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Mở thống kê *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="EnableThongKe" class="form-control select2">
+                                            <option value="1">Mở</option>
+                                            <option value="0">Đóng</option>
+                                        </select>
+                                    </div>
+
                                 </div>
                             </form>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger btn-tone m-r-5" id="cancelmodalAdd" data-dismiss="modal">Thoát</button>
-                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave" onclick="AddPKS()">Lưu</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
                             </div>
                         </div>
 
@@ -142,87 +158,6 @@
                 </div>
             </div>
             <!--End Modal Thêm mới Phiếu-->
-            <!--Modal chỉnh sửa PKS-->
-            <div class="modal fade" id="EditSurvey">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title h4">Chỉnh sửa Phiếu khảo sát</h5>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <i class="anticon anticon-close"></i>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="form-validation">
-                                <div class="form-group row">
-                                    <input type="hidden" id="EditID" />
-                                    <label class="col-sm-2 col-form-label control-label">Tiêu đề *</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="EditTieuDe" placeholder="Nhập tiêu đề ... *">
-                                    </div>
-
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Mô tả *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <textarea class="form-control" id="EditMoTa" placeholder="Nhập Mô tả ... *"></textarea>
-                                    </div>
-
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Dành cho hệ *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        @foreach (var item in ViewBag.HDT)
-                                        {
-                                            <div class="form-check form-check-inline">
-                                                <input type="radio" class="form-check-input" name="EditDanhChoHe" value="@item.Value" id="EditDanhChoHe_@item.Value">
-                                                <label class="form-check-label" for="DanhChoHe_@item.Value">@item.Text</label>
-                                            </div>
-                                        }
-                                    </div>
-
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Đối tượng *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <select id="EditMaDoiTuong" class="form-control">
-                                            @foreach (var item in ViewBag.LKS)
-                                            {
-                                                <option value="@item.Value">@item.Text</option>
-                                            }
-                                        </select>
-                                    </div>
-
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Ngày bắt đầu *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <input type="datetime-local" class="form-control" id="EditNgayBatDau" />
-                                    </div>
-
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Ngày kết thúc *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <input type="datetime-local" class="form-control" id="EditNgayKetThuc" />
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Năm học *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <select id="EditMaNamHoc" class="form-control">
-                                            @foreach (var item in ViewBag.Year)
-                                            {
-                                                <option value="@item.Value">@item.Text</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Trạng thái *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <select id="EditTrangThai" class="form-control">
-                                            <option value="True">Mở</option>
-                                            <option value="False">Đóng</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger btn-tone m-r-5" id="cancelmodalAdd" data-dismiss="modal">Thoát</button>
-                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnEdit">Lưu</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--End Modal chỉnh sửa PKS-->
         </div>
     </div>
     <div class="row">

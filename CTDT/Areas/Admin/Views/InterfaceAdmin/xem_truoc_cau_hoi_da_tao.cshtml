@@ -70,7 +70,9 @@
         <h2>${surveyData.title}</h2>
         <p>${surveyData.description}</p>
         <hr />
-        <h4>THÔNG TIN CHUNG</h4>`;
+        <h4>THÔNG TIN CHUNG</h4>
+        <p>Phần này sẽ hiển thị thông tin của người khảo sát theo phiếu đã được phân theo loại</p>
+        `;
 
                             html += `<hr />
         <form>
@@ -253,7 +255,6 @@
             $('input[type=radio]:checked').each(function () {
                 selectedValues[$(this).attr('name')] = $(this).val();
             });
-
             surveyData.pages.forEach(function (page) {
                 page.elements.forEach(function (element) {
                     if (element.visibleIf) {

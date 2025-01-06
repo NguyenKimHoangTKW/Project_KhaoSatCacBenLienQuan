@@ -75,7 +75,6 @@ namespace CTDT.Areas.Admin.Controllers
                 return Ok(new { message = "Không tồn tại dữ liệu", success = false });
             }
         }
-
         [HttpPost]
         [Route("api/admin/danh-sach-cau-tra-loi-phieu")]
         public async Task<IHttpActionResult> danh_sach_cac_cau_tra_loi_phieu(answer_response aw)
@@ -192,7 +191,6 @@ namespace CTDT.Areas.Admin.Controllers
             }
 
         }
-
         [HttpPost]
         [Route("api/admin/chi-tiet-cau-hoi-khao-sat")]
         public async Task<IHttpActionResult> chi_tiet_cau_hoi_khao_sat(survey sv)
@@ -207,7 +205,37 @@ namespace CTDT.Areas.Admin.Controllers
                 return Ok(new { message = "Chưa có biểu mẫu khảo sát", success = false });
             }
         }
-
+        [HttpPost]
+        [Route("api/admin/them-moi-phieu-khao-sat")]
+        public IHttpActionResult them_moi_phieu_khao_sat(survey sv)
+        {
+            DateTime now = DateTime.UtcNow;
+            int unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            if (db.survey.FirstOrDefault(x => x.surveyTitle == sv.surveyTitle && x.id_hedaotao == sv.id_hedaotao && x.id_namhoc == sv.id_namhoc) != null)
+            {
+                return Ok(new { message = "Phiếu khảo sát này đã tồn tại, vui lòng kiểm tra lại", success = false });
+            }
+            var data = new survey
+            {
+                id_hedaotao = sv.id_hedaotao,
+                surveyData = null,
+                surveyTitle = sv.surveyTitle,
+                surveyDescription = sv.surveyDescription,
+                surveyTimeStart = sv.surveyTimeStart,
+                surveyTimeEnd = sv.surveyTimeEnd,
+                surveyStatus = sv.surveyStatus,
+                id_loaikhaosat = sv.id_loaikhaosat,
+                id_namhoc = sv.id_namhoc,
+                id_dot_khao_sat = sv.id_dot_khao_sat,
+                mo_thong_ke = sv.mo_thong_ke,
+                creator = user.id_users,
+                surveyTimeMake = unixTimestamp,
+                surveyTimeUpdate = unixTimestamp
+            };
+            db.survey.Add(data);
+            db.SaveChanges();
+            return Ok(new { message = "Thêm mới dữ liệu thành công", success = true });
+        }
         [HttpPost]
         [Route("api/admin/xoa-du-lieu-phieu-khao-sat")]
         public IHttpActionResult delete_survey(survey sv)
@@ -1173,6 +1201,5 @@ namespace CTDT.Areas.Admin.Controllers
             }
             return number;
         }
-
     }
 }
