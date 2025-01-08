@@ -153,8 +153,11 @@
                                     <div class="col-sm-10" style="margin-top: 10px;">
                                         <select id="DotKhaoSat" class="form-control select2">
                                             <option value="">Không áp dụng</option>
-                                            <option value="1">Mở</option>
-                                            <option value="0">Đóng</option>
+                                            @foreach (var item in ViewBag.DotKhaoSat)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+
+                                            }
                                         </select>
                                     </div>
                                     <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Mở thống kê *</label>
@@ -164,6 +167,9 @@
                                             <option value="0">Đóng</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
                                 </div>
                             </form>
                         </div>

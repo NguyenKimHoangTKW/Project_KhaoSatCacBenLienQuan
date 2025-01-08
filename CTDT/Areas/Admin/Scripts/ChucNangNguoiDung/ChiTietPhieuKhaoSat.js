@@ -35,7 +35,11 @@ $(document).ready(function () {
         update.show();
 
         load_chi_tiet_update();
-    })
+    });
+    $("#btnSave").click(function (event) {
+        event.preventDefault();
+        update_survey();
+    });
 })
 
 async function load_chi_tiet_update() {
@@ -65,7 +69,71 @@ async function load_chi_tiet_update() {
 }
 
 async function update_survey() {
-
+    const tieuDe = $('#TieuDe').val();
+    const moTa = $('#MoTa').val();
+    const danhChoHe = $('input[name="DanhChoHe"]:checked').val();
+    const maDoiTuong = $('#MaDoiTuong').val();
+    const ngayBatDauInput = $('#NgayBatDau').val();
+    const ngayKetThucInput = $('#NgayKetThuc').val();
+    const trangThai = $('#TrangThai').val();
+    const dotkhaosat = $("#DotKhaoSat").val();
+    const mothongke = $("#EnableThongKe").val();
+    const maNamHoc = $("#MaNamHoc").val();
+    const ngayBatDau = new Date(ngayBatDauInput + 'Z'); 
+    const ngayKetThuc = new Date(ngayKetThucInput + 'Z')
+    const unixNgayBatDau = Math.floor(ngayBatDau.getTime() / 1000);
+    const unixNgayKetThuc = Math.floor(ngayKetThuc.getTime() / 1000);
+    const res = await $.ajax({
+        url: '/api/admin/update-phieu-khao-sat',
+        type: 'POST',
+        data: {
+            surveyID: value,
+            surveyTitle: tieuDe,
+            surveyDescription: moTa,
+            id_hedaotao: danhChoHe,
+            id_loaikhaosat: maDoiTuong,
+            id_namhoc: maNamHoc,
+            surveyTimeStart: unixNgayBatDau,
+            surveyTimeEnd: unixNgayKetThuc,
+            surveyStatus: trangThai,
+            id_dot_khao_sat: dotkhaosat,
+            mo_thong_ke: mothongke,
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
 }
 
 async function delete_phieu_khao_sat() {

@@ -127,14 +127,16 @@ async function add_new_survey() {
     const moTa = $('#MoTa').val();
     const danhChoHe = $('input[name="DanhChoHe"]:checked').val();
     const maDoiTuong = $('#MaDoiTuong').val();
-    const ngayBatDau = $('#NgayBatDau').val();
-    const ngayKetThuc = $('#NgayKetThuc').val();
+    const ngayBatDauInput = $('#NgayBatDau').val();
+    const ngayKetThucInput = $('#NgayKetThuc').val();
     const trangThai = $('#TrangThai').val();
     const dotkhaosat = $("#DotKhaoSat").val();
     const mothongke = $("#EnableThongKe").val();
     const maNamHoc = $("#MaNamHoc").val();
-    const unixNgayBatDau = Math.floor(new Date(ngayBatDau).getTime() / 1000);
-    const unixNgayKetThuc = Math.floor(new Date(ngayKetThuc).getTime() / 1000);
+    const ngayBatDau = new Date(ngayBatDauInput + 'Z');
+    const ngayKetThuc = new Date(ngayKetThucInput + 'Z')
+    const unixNgayBatDau = Math.floor(ngayBatDau.getTime() / 1000);
+    const unixNgayKetThuc = Math.floor(ngayKetThuc.getTime() / 1000);
     const res = await $.ajax({
         url: '/api/admin/them-moi-phieu-khao-sat',
         type: 'POST',

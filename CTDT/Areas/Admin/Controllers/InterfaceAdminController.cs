@@ -54,6 +54,7 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.HDT = new SelectList(db.hedaotao, "id_hedaotao", "ten_hedaotao");
             ViewBag.LKS = new SelectList(db.LoaiKhaoSat, "id_loaikhaosat", "name_loaikhaosat");
             ViewBag.Year = new SelectList(db.NamHoc, "id_namhoc", "ten_namhoc");
+            ViewBag.DotKhaoSat = new SelectList(db.dot_khao_sat, "id_dot_khao_sat", "ten_dot_khao_sat");
             return View();
         }
 
@@ -63,6 +64,7 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.HDT = new SelectList(db.hedaotao, "id_hedaotao", "ten_hedaotao");
             ViewBag.LKS = new SelectList(db.LoaiKhaoSat, "id_loaikhaosat", "name_loaikhaosat");
             ViewBag.Year = new SelectList(db.NamHoc, "id_namhoc", "ten_namhoc");
+            ViewBag.DotKhaoSat = new SelectList(db.dot_khao_sat, "id_dot_khao_sat", "ten_dot_khao_sat");
             return View();
         }
 
@@ -76,6 +78,13 @@ namespace CTDT.Areas.Admin.Controllers
         public ActionResult xem_truoc_cau_hoi_da_tao(int id)
         {
             ViewBag.id = id;
+            return View();
+        }
+
+
+        public ActionResult danh_sach_khoa()
+        {
+            ViewBag.CTDTList = new SelectList(db.ctdt.OrderBy(l => l.id_ctdt), "id_ctdt", "ten_ctdt");
             return View();
         }
     }

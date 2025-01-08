@@ -215,6 +215,10 @@ namespace CTDT.Areas.Admin.Controllers
             {
                 return Ok(new { message = "Phiếu khảo sát này đã tồn tại, vui lòng kiểm tra lại", success = false });
             }
+            if (string.IsNullOrEmpty(sv.surveyTitle))
+            {
+                return Ok(new { message = "Không được bỏ trống tên phiếu khảo sát", success = false });
+            }
             var data = new survey
             {
                 id_hedaotao = sv.id_hedaotao,
@@ -256,6 +260,31 @@ namespace CTDT.Areas.Admin.Controllers
                     x.mo_thong_ke
                 }).FirstOrDefaultAsync();
             return Ok(new { data = get_info, success = true });
+        }
+        [HttpPost]
+        [Route("api/admin/update-phieu-khao-sat")]
+        public IHttpActionResult update_survey(survey sv)
+        {
+            DateTime now = DateTime.UtcNow;
+            int unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var update_survey = db.survey.FirstOrDefault(x => x.surveyID == sv.surveyID);
+            if (string.IsNullOrEmpty(sv.surveyTitle))
+            {
+                return Ok(new { message = "Không được bỏ trống tên phiếu", success = false });
+            }
+            update_survey.id_hedaotao = sv.id_hedaotao;
+            update_survey.surveyTitle = sv.surveyTitle;
+            update_survey.surveyDescription = sv.surveyDescription;
+            update_survey.surveyTimeStart = sv.surveyTimeStart;
+            update_survey.surveyTimeEnd = sv.surveyTimeEnd;
+            update_survey.surveyStatus = sv.surveyStatus;
+            update_survey.id_loaikhaosat = sv.id_loaikhaosat;
+            update_survey.id_namhoc = sv.id_namhoc;
+            update_survey.id_dot_khao_sat = sv.id_dot_khao_sat;
+            update_survey.mo_thong_ke = sv.mo_thong_ke;
+            update_survey.surveyTimeUpdate = unixTimestamp;
+            db.SaveChanges();
+            return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
         }
         [HttpPost]
         [Route("api/admin/xoa-du-lieu-phieu-khao-sat")]

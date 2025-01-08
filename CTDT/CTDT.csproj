@@ -313,7 +313,7 @@
     <Compile Include="Areas\Admin\Controllers\GiamSatTyLeThamGiaKhaoSatAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportDataController.cs" />
     <Compile Include="Areas\Admin\Controllers\InterfaceAdminController.cs" />
-    <Compile Include="Areas\Admin\Controllers\KhoaController.cs" />
+    <Compile Include="Areas\Admin\Controllers\KhoaAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\LopController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
@@ -1381,6 +1381,7 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\chi_tiet_phieu_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\tieu_de_cau_hoi_pks.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\xem_truoc_cau_hoi_da_tao.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_khoa.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
