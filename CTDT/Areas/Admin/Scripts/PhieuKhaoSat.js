@@ -187,41 +187,6 @@ async function add_new_survey() {
         });
     }
 }
-
-function AddPKS() {
-    var tieuDe = $('#TieuDe').val();
-    var moTa = $('#MoTa').val();
-    var danhChoHe = $('input[name="DanhChoHe"]:checked').val();
-    var maDoiTuong = $('#MaDoiTuong').val();
-    var ngayBatDau = $('#NgayBatDau').val();
-    var ngayKetThuc = $('#NgayKetThuc').val();
-    var trangThai = $('#TrangThai').val();
-    var maNamHoc = $("#MaNamHoc").val();
-    var unixNgayBatDau = Math.floor(new Date(ngayBatDau).getTime() / 1000);
-    var unixNgayKetThuc = Math.floor(new Date(ngayKetThuc).getTime() / 1000);
-    var data = {
-
-    };
-    $.ajax({
-        url: '/api/admin/them-moi-phieu-khao-sat',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: response.status,
-                showConfirmButton: false,
-                timer: 2000
-            });
-            load_data();
-        },
-        error: function () {
-            alert('Lưu không thành công.');
-        }
-    });
-}
-
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);
 

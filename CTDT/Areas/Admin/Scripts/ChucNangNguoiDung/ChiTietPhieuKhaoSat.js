@@ -1,8 +1,10 @@
 ﻿const value = $("#value").text();
 $(document).ready(function () {
     const title = $("#title");
-    title.show();
     $("#btnXemBaoCao").click(function () {
+        var update = $("#load-title");
+        update.hide();
+        title.text("Danh sách người đã khảo sát phiếu")
         load_chi_tiet_cau_tra_loi();
     })
     $("#btnXoaPhieu").click(function (event) {
@@ -23,9 +25,48 @@ $(document).ready(function () {
     })
     $("#btnChinhSuaPhieu").click(function (event) {
         event.preventDefault();
-        load_phieu_khao_sat();
+        title.text("Chỉnh sửa phiếu khảo sát")
+        const body = $("#bodycontent");
+        if ($.fn.DataTable.isDataTable('#bodycontent')) {
+            $('#bodycontent').DataTable().clear().destroy();
+        }
+        body.hide();
+        var update = $("#load-title");
+        update.show();
+
+        load_chi_tiet_update();
     })
 })
+
+async function load_chi_tiet_update() {
+    const value = $("#value").text();
+    const res = await $.ajax({
+        url: "/api/admin/get-info-survey",
+        type: "POST",
+        data: {
+            surveyID: value
+        }
+    });
+    if (res.success) {
+        const item = res.data;
+        $("#TieuDe").val(item.surveyTitle);
+        $("#MoTa").text(item.surveyDescription);
+        $(`#DanhChoHe_${item.id_hedaotao}`).prop("checked", true);
+        $("#MaDoiTuong").val(item.id_loaikhaosat);
+        $("#MaNamHoc").val(item.id_namhoc);
+        $("#TrangThai").val(item.surveyStatus);
+        $("#DotKhaoSat").val(item.id_dot_khao_sat);
+        $("#EnableThongKe").val(item.mo_thong_ke);
+        const startDate = new Date(item.surveyTimeStart * 1000).toISOString().slice(0, 16);
+        $("#NgayBatDau").val(startDate);
+        const endDate = new Date(item.surveyTimeEnd * 1000).toISOString().slice(0, 16);
+        $("#NgayKetThuc").val(endDate);
+    }
+}
+
+async function update_survey() {
+
+}
 
 async function delete_phieu_khao_sat() {
     const res = await $.ajax({
@@ -54,7 +95,6 @@ async function delete_phieu_khao_sat() {
     }
 }
 
-
 async function load_chi_tiet_cau_tra_loi() {
     const res = await $.ajax({
         url: '/api/admin/danh-sach-cau-tra-loi-phieu',
@@ -64,7 +104,6 @@ async function load_chi_tiet_cau_tra_loi() {
         }
     });
     const body = $("#bodycontent");
-    const title = $("#title");
     body.empty();
     let html = ``;
     if ($.fn.DataTable.isDataTable('#bodycontent')) {
@@ -85,8 +124,6 @@ async function load_chi_tiet_cau_tra_loi() {
                 html += form_load_chi_tiet_giang_vien(items);
             }
         })
-
-        title.hide();
         body.show();
         body.html(html);
         initializeDataTable();
@@ -95,7 +132,6 @@ async function load_chi_tiet_cau_tra_loi() {
         body.html(html);
     }
 }
-
 function form_load_chi_tiet_subject(data) {
     let html = `
         <thead>
@@ -260,7 +296,6 @@ $(document).on('click', '.btnChiTiet', function () {
     $('.bd-example-modal-xl').modal('show');
 });
 
-
 async function load_chi_tiet_cau_hoi(id) {
     const res = await $.ajax({
         url: '/api/admin/chi-tiet-cau-tra-loi',
@@ -337,8 +372,6 @@ async function load_chi_tiet_cau_hoi(id) {
         body.html('<tr><td colspan="3">Không có dữ liệu.</td></tr>');
     }
 }
-
-
 function initializeDataTable() {
     const table = $("#bodycontent");
     table.DataTable({
@@ -369,8 +402,6 @@ function initializeDataTable() {
         ]
     });
 }
-
-
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);
     var weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];

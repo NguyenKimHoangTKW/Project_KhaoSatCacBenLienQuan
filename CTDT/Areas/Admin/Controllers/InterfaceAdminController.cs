@@ -60,6 +60,9 @@ namespace CTDT.Areas.Admin.Controllers
         public ActionResult chi_tiet_phieu_khao_sat(int id)
         {
             ViewBag.id = id;
+            ViewBag.HDT = new SelectList(db.hedaotao, "id_hedaotao", "ten_hedaotao");
+            ViewBag.LKS = new SelectList(db.LoaiKhaoSat, "id_loaikhaosat", "name_loaikhaosat");
+            ViewBag.Year = new SelectList(db.NamHoc, "id_namhoc", "ten_namhoc");
             return View();
         }
 

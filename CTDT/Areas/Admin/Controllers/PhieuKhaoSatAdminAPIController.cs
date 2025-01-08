@@ -237,6 +237,27 @@ namespace CTDT.Areas.Admin.Controllers
             return Ok(new { message = "Thêm mới dữ liệu thành công", success = true });
         }
         [HttpPost]
+        [Route("api/admin/get-info-survey")]
+        public async Task<IHttpActionResult> get_info_survey(survey sv)
+        {
+            var get_info = await db.survey
+                .Where(x => x.surveyID == sv.surveyID)
+                .Select(x => new
+                {
+                    x.id_hedaotao,
+                    x.surveyTitle,
+                    x.surveyDescription,
+                    x.surveyTimeStart,
+                    x.surveyTimeEnd,
+                    x.surveyStatus,
+                    x.id_loaikhaosat,
+                    x.id_namhoc,
+                    x.id_dot_khao_sat,
+                    x.mo_thong_ke
+                }).FirstOrDefaultAsync();
+            return Ok(new { data = get_info, success = true });
+        }
+        [HttpPost]
         [Route("api/admin/xoa-du-lieu-phieu-khao-sat")]
         public IHttpActionResult delete_survey(survey sv)
         {
