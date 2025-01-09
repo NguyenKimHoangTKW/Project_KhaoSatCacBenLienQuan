@@ -307,14 +307,14 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopKetQuaKhaoSatAdminAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\CBVCController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CTDTController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CTDTAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\DanhSachMonHocHocVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\DoiTuongKhaoSatController.cs" />
     <Compile Include="Areas\Admin\Controllers\GiamSatTyLeThamGiaKhaoSatAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportDataController.cs" />
     <Compile Include="Areas\Admin\Controllers\InterfaceAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhoaAPIController.cs" />
-    <Compile Include="Areas\Admin\Controllers\LopController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LopAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatAdminAPIController.cs" />
@@ -479,6 +479,7 @@
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatKetQuaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatTyLeThamGiaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Khoa.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Lop.js" />
     <Content Include="Areas\Admin\Scripts\DoiTuongKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\PhanQuyen\DanhSachTaiKhoan.js" />
     <Content Include="Areas\Admin\Scripts\PhanQuyen\PhanQuyenNguoiDung.js" />
@@ -1325,8 +1326,6 @@
     <Content Include="Areas\Admin\Views\Shared\_AdminHeaderPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_AdminFooterPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Khoa\ViewKhoa.cshtml" />
-    <Content Include="Areas\Admin\Views\Lop\ViewLop.cshtml" />
-    <Content Include="Areas\Admin\Views\CTDT\ViewCTDT.cshtml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -1382,6 +1381,8 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\tieu_de_cau_hoi_pks.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\xem_truoc_cau_hoi_da_tao.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_khoa.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_ctdt.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_lop.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
