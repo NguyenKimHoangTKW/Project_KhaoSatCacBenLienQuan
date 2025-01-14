@@ -1,6 +1,37 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
+<style>
+    .pagination-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .page-btn {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+        .page-btn:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background-color: #007bff;
+            color: white;
+        }
+
+    .dots {
+        margin: 0 5px;
+        padding: 5px 10px;
+        color: #777;
+    }
+</style>
 <div class="main-content">
     <div class="page-header">
         <h2 class="header-title">Danh Sách Sinh Viên</h2>
@@ -150,9 +181,16 @@
                         <thead></thead>
                         <tbody></tbody>
                     </table>
+                    <!-- End Modal Import Excel -->
+
                 </div>
-                <!-- End Modal Import Excel -->
+
             </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end" id="paginationControls">
+                    <!-- Phân trang sẽ được tạo động ở đây -->
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

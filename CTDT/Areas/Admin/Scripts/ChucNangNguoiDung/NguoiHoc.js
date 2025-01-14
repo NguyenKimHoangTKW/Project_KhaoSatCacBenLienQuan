@@ -1,21 +1,34 @@
 ﻿$(document).ready(function () {
     load_data();
 });
+// Sự kiện khi nhấn nút phân trang
+$(document).on("click", ".page-link", function (e) {
+    e.preventDefault();
 
-async function load_data() {
+    const page = $(this).data("page");
+    if (page) {
+        load_data(page);
+    }
+});
+
+let currentPage = 1;
+const pageSize = 7;
+
+async function load_data(page = 1) {
     const lop = $("#FilterLop").val();
     const res = await $.ajax({
         url: '/api/admin/danh-sach-nguoi-hoc',
         type: 'POST',
         data: {
-            id_lop: lop
+            id_lop: lop || 0,
+            page: page,
+            pageSize: pageSize
         }
     });
+
     const body = $("#nguoihocTable");
     let html = "";
-    if ($.fn.DataTable.isDataTable('#nguoihocTable')) {
-        $('#nguoihocTable').DataTable().clear().destroy();
-    }
+
     if (res.success) {
         let thead =
             `
@@ -42,7 +55,7 @@ async function load_data() {
             html +=
                 `
                 <tr>
-                    <td class="formatSo">${index + 1}</td>
+                     <td class="formatSo">${(page - 1) * pageSize + index + 1}</td>
                     <td class="formatSo">${item.id_sv}</td>
                     <td class="formatSo">${item.ma_sv}</td>
                     <td>${item.hovaten}</td>
@@ -64,43 +77,86 @@ async function load_data() {
                 `;
         });
         body.find("tbody").html(html);
+        renderPagination(res.totalPages, res.currentPage);
     } else {
-        html =
-            `
+        html = `
             <tr>
                 <td colspan="14" class="text-center text-danger">${res.message || 'Không có dữ liệu'}</td>
             </tr>
-            `;
-        body.find("tbody").html(html);
+        `;
+        body.html(html);
+        $("#paginationControls").html("");
     }
-    $('#nguoihocTable').DataTable({
-        pageLength: 7,
-        lengthMenu: [5, 10, 25, 50, 100],
-        ordering: true,
-        searching: true,
-        autoWidth: false,
-        responsive: true,
-        language: {
-            paginate: {
-                next: "Next",
-                previous: "Previous"
-            },
-            search: "Search",
-            lengthMenu: "Show _MENU_ entries"
-        },
-        dom: "Bfrtip",
-        buttons: [
-            {
-                extend: 'excel',
-                title: 'Danh sách Lớp'
-            },
-            {
-                extend: 'print',
-                title: 'Danh sách Lớp'
-            }
-        ]
-    });
-};
+}
+
+function renderPagination(totalPages, currentPage) {
+    const paginationContainer = $("#paginationControls");
+    let html = "";
+
+    // Nút Previous
+    html += `
+        <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+        </li>
+    `;
+
+    // Hiển thị trang đầu tiên
+    html += `
+        <li class="page-item ${currentPage === 1 ? "active" : ""}">
+            <a class="page-link" href="#" data-page="1">1</a>
+        </li>
+    `;
+
+    // Thêm dấu "..." nếu cần
+    if (currentPage > 4) {
+        html += `
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+        `;
+    }
+
+    const maxPagesToShow = 3; // Số trang hiển thị trước và sau trang hiện tại
+    const startPage = Math.max(2, currentPage - Math.floor(maxPagesToShow / 2));
+    const endPage = Math.min(totalPages - 1, currentPage + Math.floor(maxPagesToShow / 2));
+
+    for (let i = startPage; i <= endPage; i++) {
+        html += `
+            <li class="page-item ${i === currentPage ? "active" : ""}">
+                <a class="page-link" href="#" data-page="${i}">${i}</a>
+            </li>
+        `;
+    }
+
+    // Thêm dấu "..." nếu cần
+    if (currentPage < totalPages - 3) {
+        html += `
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+        `;
+    }
+
+    // Hiển thị trang cuối cùng
+    if (totalPages > 1) {
+        html += `
+            <li class="page-item ${currentPage === totalPages ? "active" : ""}">
+                <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+            </li>
+        `;
+    }
+
+    // Nút Next
+    html += `
+        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+        </li>
+    `;
+
+    paginationContainer.html(html);
+}
+
+
 
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);
