@@ -306,7 +306,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopKetQuaKhaoSatAdminAPIController.cs" />
-    <Compile Include="Areas\Admin\Controllers\CBVCController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CBVCAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\CTDTAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\DanhSachMonHocHocVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\DoiTuongKhaoSatController.cs" />
@@ -317,8 +317,8 @@
     <Compile Include="Areas\Admin\Controllers\LopAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NguoiHocAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatAdminAPIController.cs" />
-    <Compile Include="Areas\Admin\Controllers\SinhVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\testController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeKetQuaKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
@@ -480,6 +480,7 @@
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatTyLeThamGiaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Khoa.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Lop.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\NguoiHoc.js" />
     <Content Include="Areas\Admin\Scripts\DoiTuongKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\PhanQuyen\DanhSachTaiKhoan.js" />
     <Content Include="Areas\Admin\Scripts\PhanQuyen\PhanQuyenNguoiDung.js" />
@@ -1333,7 +1334,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\NguoiDung\ViewUser.cshtml" />
-    <Content Include="Areas\Admin\Views\SinhVien\ViewSinhVien.cshtml" />
     <Content Include="Areas\CTDT\Views\web.config" />
     <Content Include="Areas\CTDT\Views\_ViewStart.cshtml" />
     <Content Include="Areas\CTDT\Views\Shared\Error.cshtml" />
@@ -1383,6 +1383,8 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_khoa.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_ctdt.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_lop.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_cbvc.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

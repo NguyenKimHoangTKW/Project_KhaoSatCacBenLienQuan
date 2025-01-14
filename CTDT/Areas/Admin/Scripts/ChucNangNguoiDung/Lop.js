@@ -6,6 +6,209 @@ $(document).on("click", "#btnFilter", function (event) {
     event.preventDefault()
     load_data();
 });
+$(document).on("click", "#btnAdd", function (event) {
+    event.preventDefault();
+    $(".modal-title").text("Thêm mới lớp học")
+    const footer = $(".modal-footer");
+    footer.empty();
+    let html =
+        `
+        <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+        <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveAdd">Lưu</button>
+        `;
+    footer.html(html);
+    $("#bd-example-modal-lg").modal("show");
+});
+$(document).on("click", "#btnSaveAdd", function (event) {
+    event.preventDefault();
+    add_new();
+});
+$(document).on("click", "#btnEdit", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    $(".modal-title").text("Chỉnh sửa lớp học")
+    const footer = $(".modal-footer");
+    footer.empty();
+    let html =
+        `
+        <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+        <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveEdit">Lưu</button>
+        `;
+    footer.html(html);
+    get_info(value);
+    $("#bd-example-modal-lg").modal("show");
+    $(document).on("click", "#btnSaveEdit", function () {
+        event.preventDefault();
+        edit_change(value);
+    });
+});
+
+$(document).on("click", "#btnDelete", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    Swal.fire({
+        title: "Bạn đang thao tác xóa lớp?",
+        text: "Bạn có chắc muốn xóa lớp này không!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có, xóa luôn!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            del_change(value);
+        }
+    });
+});
+async function del_change(value) {
+    const res = await $.ajax({
+        url: '/api/admin/delete-lop',
+        type: 'POST',
+        data: {
+            id_lop: value
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+       
+    }
+}
+async function edit_change(value) {
+    const name = $("#TenLop").val();
+    const ctdt = $("#MaCTDT").val();
+    const res = await $.ajax({
+        url: '/api/admin/update-lop',
+        type: 'POST',
+        data: {
+            id_lop : value,
+            ma_lop: name,
+            id_ctdt: ctdt
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+async function get_info(value) {
+    const res = await $.ajax({
+        url: '/api/admin/get-info-lop',
+        type: 'POST',
+        data: {
+            id_lop: value
+        }
+    });
+    $("#TenLop").val(res.ma_lop);
+    $("#MaCTDT").val(res.id_ctdt).trigger("change");
+}
+async function add_new() {
+    const name = $("#TenLop").val();
+    const ctdt = $("#MaCTDT").val();
+    const res = await $.ajax({
+        url: '/api/admin/them-moi-lop',
+        type: 'POST',
+        data: {
+            ma_lop: name,
+            id_ctdt: ctdt
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
 async function load_data() {
     const ctdt = $("#FilterCTDT").val();
     const res = await $.ajax({

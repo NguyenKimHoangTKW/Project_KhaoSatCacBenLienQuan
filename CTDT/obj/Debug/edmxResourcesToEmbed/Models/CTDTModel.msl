@@ -22,7 +22,7 @@
     <EntitySetMapping Name="CanBoVienChuc">
       <EntityTypeMapping TypeName="dbSurveyModel.CanBoVienChuc">
         <MappingFragment StoreEntitySet="CanBoVienChuc">
-          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
           <ScalarProperty Name="id_chuongtrinhdaotao" ColumnName="id_chuongtrinhdaotao" />
           <ScalarProperty Name="id_chucvu" ColumnName="id_chucvu" />
@@ -265,7 +265,7 @@
     <EntitySetMapping Name="sinhvien">
       <EntityTypeMapping TypeName="dbSurveyModel.sinhvien">
         <MappingFragment StoreEntitySet="sinhvien">
-          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
           <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
           <ScalarProperty Name="namtotnghiep" ColumnName="namtotnghiep" />

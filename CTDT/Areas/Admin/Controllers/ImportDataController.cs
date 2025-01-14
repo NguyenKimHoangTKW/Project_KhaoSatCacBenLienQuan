@@ -159,7 +159,6 @@ namespace CTDT.Areas.Admin.Controllers
                     hovaten = tensv,
                     ngaycapnhat = unixTimestamp,
                     ngaytao = unixTimestamp,
-                    status = true
                 };
                 db.sinhvien.Add(existingSV);
                 db.SaveChanges();
@@ -261,7 +260,6 @@ namespace CTDT.Areas.Admin.Controllers
                     hovaten = tensv,
                     ngaycapnhat = unixTimestamp,
                     ngaytao = unixTimestamp,
-                    status = true
                 };
                 db.sinhvien.Add(sinhvien);
                 db.SaveChanges();
@@ -334,7 +332,6 @@ namespace CTDT.Areas.Admin.Controllers
                     hovaten = ten_sv,
                     ngaycapnhat = unixTimestamp,
                     ngaytao = unixTimestamp,
-                    status = true
                 };
                 db.sinhvien.Add(existingSV);
                 db.SaveChanges();

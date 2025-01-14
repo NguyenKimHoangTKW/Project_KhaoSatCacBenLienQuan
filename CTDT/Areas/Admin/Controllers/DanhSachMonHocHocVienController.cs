@@ -69,7 +69,6 @@ namespace CTDT.Areas.Admin.Controllers
                                 id_donvi = null,
                                 id_chucvu = null,
                                 id_namhoc = null,
-                                status = true
                             };
                             db.CanBoVienChuc.Add(check_giang_Vien);
                             await db.SaveChangesAsync();

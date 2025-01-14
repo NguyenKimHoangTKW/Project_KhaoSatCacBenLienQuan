@@ -34,7 +34,7 @@ namespace CTDT.Models
         public string namtotnghiep { get; set; }
         public Nullable<int> ngaycapnhat { get; set; }
         public Nullable<int> ngaytao { get; set; }
-        public Nullable<bool> status { get; set; }
+        public string description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }

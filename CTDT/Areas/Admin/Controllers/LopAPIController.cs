@@ -96,28 +96,13 @@ namespace CTDT.Areas.Admin.Controllers
             return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
         }
         [HttpPost]
-        [Route("api/admin/delete-lop-thong-thuong")]
+        [Route("api/admin/delete-lop")]
         public IHttpActionResult delete_lop(lop lop)
         {
             var check_sinh_vien = db.sinhvien.Where(x => x.id_lop == lop.id_lop).ToList();
             if (check_sinh_vien.Any())
             {
-                return Ok(new { message = "Lớp này đang tồn tại người học, không thể xóa thông thường", success = false });
-            }
-            var check_lop = db.lop.FirstOrDefault(x => x.id_lop == lop.id_lop);
-            db.lop.Remove(check_lop);
-            db.SaveChanges();
-            return Ok(new { message = "Xóa dữ liệu thành công", success = true });
-        }
-        [HttpPost]
-        [Route("api/admin/delete-lop-cung")]
-        public IHttpActionResult delete_lop_cung(lop lop)
-        {
-            var check_sinh_vien = db.sinhvien.Where(x => x.id_lop == lop.id_lop).ToList();
-            if (check_sinh_vien.Any())
-            {
-                db.sinhvien.RemoveRange(check_sinh_vien);
-                db.SaveChanges();
+                return Ok(new { message = "Lớp này đang tồn tại người học, vui lòng kiểm tra hoặc xóa người học trong lớp này để xóa lớp", success = false });
             }
             var check_lop = db.lop.FirstOrDefault(x => x.id_lop == lop.id_lop);
             db.lop.Remove(check_lop);

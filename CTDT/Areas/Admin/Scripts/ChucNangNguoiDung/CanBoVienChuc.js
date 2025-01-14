@@ -1,116 +1,105 @@
-﻿var currentPage = 1;
-var totalPages = 0;
-$("#FiterDonvi,#FilterChucvu,#FilterCTDT,#FilterNam,#Fitertrangthai").select2();
-$(document).ready(function () {
-    get_data()
-    $("#btnFilter").click(function () {
-        get_data()
+﻿
+async function load_data() {
+    const cbvc = $("#cbvcTable").val();
+    const res = await $.ajax({
+        url: '/api/admin/danh-sach-cbvc',
+        type: 'POST',
+        data: {
+            id_lop: lop
+        }
     });
-
-    $('#importExcelForm').on('submit', function (e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        Swal.fire({
-            title: 'Đang nhập dữ liệu...',
-            html: 'Vui lòng chờ.',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+    const body = $("#cbvcTable");
+    let html = "";
+    if ($.fn.DataTable.isDataTable('#cbvcTable')) {
+        $('#cbvcTable').DataTable().clear().destroy();
+    }
+    if (res.success) {
+        let thead =
+            `
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">ID Người học</th>
+                <th scope="col">Mã số người học</th>
+                <th scope="col">Tên người học</th>
+                <th scope="col">Thuộc lớp</th>
+                <th scope="col">Ngày sinh</th>
+                <th scope="col">Số điện thoại</th>
+                <th scope="col">Địa chỉ</th>
+                <th scope="col">Giới tính</th>
+                <th scope="col">Năm nhập học</th>
+                <th scope="col">Năm tốt nghiệp</th>
+                <th scope="col">Mô tả</th>
+                <th scope="col">Ngày Tạo</th>
+                <th scope="col">Cập nhật lần cuối</th>
+                <th scope="col">Chức năng</th>
+            </tr>
+            `;
+        body.find("thead").html(thead);
+        res.data.forEach((item, index) => {
+            html +=
+                `
+                <tr>
+                    <td class="formatSo">${index + 1}</td>
+                    <td class="formatSo">${item.id_sv}</td>
+                    <td class="formatSo">${item.ma_sv}</td>
+                    <td>${item.hovaten}</td>
+                    <td class="formatSo">${item.ma_lop}</td>
+                    <td class="formatSo">${item.ngaysinh}</td>
+                    <td class="formatSo">${item.sodienthoai}</td>
+                    <td>${item.diachi}</td>
+                    <td>${item.phai}</td>
+                    <td class="formatSo">${item.namnhaphoc}</td>
+                    <td class="formatSo">${item.namtotnghiep}</td>
+                    <td>${item.description}</td>
+                    <td class="formatSo">${unixTimestampToDate(item.ngaytao)}</td>
+                    <td class="formatSo">${unixTimestampToDate(item.ngaycapnhat)}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" id="btnEdit" data-id="${item.id_sv}">Sửa</button>
+                        <button class="btn btn-danger btn-sm" id="btnDelete" data-id="${item.id_sv}">Xóa</button>
+                    </td>
+                </tr>
+                `;
         });
-
-        $.ajax({
-            url: '/Admin/CBVC/UploadExcel',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                Swal.close();
-
-                if (response.status.includes('Thêm người dùng thành công')) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công',
-                        text: response.status,
-                    }).then(() => {
-                        $('#importExcelModal').modal('hide');
-                        get_data()
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: response.status,
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                Swal.close();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Đã xảy ra lỗi',
-                    text: 'Đã xảy ra lỗi: ' + error,
-                });
-            }
-        });
-    });
-});
-function get_data() {
-    var filterdonvi = $("#FiterDonvi").val();
-    var filterchucvu = $("#FilterChucvu").val();
-    var filterctdt = $("#FilterCTDT").val();
-    var filternam = $("#FilterNam").val();
-    var filtertrangthai = $("#Fitertrangthai").val()
+        body.find("tbody").html(html);
+    } else {
+        html =
+            `
+            <tr>
+                <td colspan="14" class="text-center text-danger">${res.message || 'Không có dữ liệu'}</td>
+            </tr>
+            `;
+        body.find("tbody").html(html);
+    }
     $('#cbvcTable').DataTable({
-        "processing": true,
-        "serverSide": false,
-        "autoFill": true,
-        "ajax": {
-            "url": "/Admin/CBVC/load_cbvc",
-            "type": "POST",
-            "dataSrc": "data",
-            "data": function (d) {
-                d.filterdonvi = filterdonvi;
-                d.filterchucvu = filterchucvu;
-                d.filterctdt = filterctdt;
-                d.filtertrangthai = filtertrangthai;
-                d.filternamhoatdong = filternam;
-            }
-        },
-        "columns": [
-            {
-                "data": null,
-                "render": function (data, type, row, meta) {
-                    return meta.row + 1;
-                },
-                "title": "Số Thứ Tự"
+        pageLength: 7,
+        lengthMenu: [5, 10, 25, 50, 100],
+        ordering: true,
+        searching: true,
+        autoWidth: false,
+        responsive: true,
+        language: {
+            paginate: {
+                next: "Next",
+                previous: "Previous"
             },
-            { "data": "id_cbvc" },
-            { "data": "ma_cbvc" },
-            { "data": "ten_cbvc" },
-            { "data": "ngay_sinh" },
-            { "data": "email" },
-            { "data": "don_vi" },
-            { "data": "chuc_vu" },
-            { "data": "chuong_trinh_dao_tao" },
-            { "data": "trang_thai" },
-            { "data": "nam_hoat_dong" },
+            search: "Search",
+            lengthMenu: "Show _MENU_ entries"
+        },
+        dom: "Bfrtip",
+        buttons: [
             {
-                "data": null,
-                "render": function (data, type, row) {
-                    return "<button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnEdit' data-toggle='modal' data-target='#ModalEditCTDT' data-id='" + row.id_cbvc + "'><i class='anticon anticon-edit'></i></button> " +
-                        "<button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnDelete' data-id='" + row.id_cbvc + "' data-name='" + row.ten_cbvc + "'><i class='anticon anticon-delete'></i></button>";
-                },
-                "orderable": false,
-                "title": "Chức Năng"
+                extend: 'excel',
+                title: 'Danh sách Lớp'
+            },
+            {
+                extend: 'print',
+                title: 'Danh sách Lớp'
             }
-        ],
-        "destroy": true,
-        "dom": "Bfrtip",
-        "buttons": ['csv', 'excel', 'pdf', 'print']
+        ]
     });
-} function unixTimestampToDate(unixTimestamp) {
+};
+
+function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);
 
     var weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];

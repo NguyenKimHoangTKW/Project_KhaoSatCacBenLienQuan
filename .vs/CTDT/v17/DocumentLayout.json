@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\controllers\\lopapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\controllers\\lopapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\ctdt\\areas\\admin\\views\\interfaceadmin\\danh_sach_cbvc.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\views\\interfaceadmin\\danh_sach_cbvc.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\lop.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\lop.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\canbovienchuc.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\canbovienchuc.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\views\\interfaceadmin\\danh_sach_lop.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\views\\interfaceadmin\\danh_sach_lop.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\nguoihoc.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\scripts\\chucnangnguoidung\\nguoihoc.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|d:\\ttdbcl\\project_khaosatcacbenlienquan\\ctdt\\areas\\admin\\controllers\\cbvcapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D6CEE176-D9C5-454D-9B4D-6C2D46C88776}|CTDT\\CTDT.csproj|solutionrelative:ctdt\\areas\\admin\\controllers\\cbvcapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,54 +26,58 @@
       "DocumentGroups": [
         {
           "DockedWidth": 363,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Lop.js",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\Lop.js",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\Lop.js",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\Lop.js",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\Lop.js",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAAAFYAAAAlAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "NguoiHoc.js",
+              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\NguoiHoc.js",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\NguoiHoc.js",
+              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\NguoiHoc.js",
+              "RelativeToolTip": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\NguoiHoc.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-01-09T08:50:04.308Z",
-              "IsPinned": true,
+              "WhenOpened": "2025-01-14T02:40:09.534Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "danh_sach_lop.cshtml",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_lop.cshtml",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_lop.cshtml",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_lop.cshtml",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_lop.cshtml",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAACUAAABHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-09T08:25:18.874Z",
-              "IsPinned": true,
+              "DocumentIndex": 1,
+              "Title": "CanBoVienChuc.js",
+              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\CanBoVienChuc.js",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\CanBoVienChuc.js",
+              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\CanBoVienChuc.js",
+              "RelativeToolTip": "CTDT\\Areas\\Admin\\Scripts\\ChucNangNguoiDung\\CanBoVienChuc.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEgAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-01-13T08:09:44.793Z",
               "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 363,
-          "SelectedChildIndex": 0,
-          "Children": [
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "LopAPIController.cs",
-              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\LopAPIController.cs",
-              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Controllers\\LopAPIController.cs",
-              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\LopAPIController.cs",
-              "RelativeToolTip": "CTDT\\Areas\\Admin\\Controllers\\LopAPIController.cs",
-              "ViewState": "AgIAAFwAAAAAAAAAAAAwwH0AAAAJAAAAAAAAAA==",
+              "Title": "danh_sach_cbvc.cshtml",
+              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_cbvc.cshtml",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_cbvc.cshtml",
+              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_cbvc.cshtml",
+              "RelativeToolTip": "CTDT\\Areas\\Admin\\Views\\InterfaceAdmin\\danh_sach_cbvc.cshtml",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAAAIkAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-13T08:08:52.026Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CBVCAPIController.cs",
+              "DocumentMoniker": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\CBVCAPIController.cs",
+              "RelativeDocumentMoniker": "CTDT\\Areas\\Admin\\Controllers\\CBVCAPIController.cs",
+              "ToolTip": "D:\\TTDBCL\\Project_KhaoSatCacBenLienQuan\\CTDT\\Areas\\Admin\\Controllers\\CBVCAPIController.cs",
+              "RelativeToolTip": "CTDT\\Areas\\Admin\\Controllers\\CBVCAPIController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-09T08:35:07.736Z",
-              "IsPinned": true,
+              "WhenOpened": "2025-01-13T08:09:38.227Z",
               "EditorCaption": ""
             }
           ]

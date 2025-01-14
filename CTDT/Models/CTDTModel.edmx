@@ -35,7 +35,7 @@
           <Property Name="id_chucvu" Type="int" />
           <Property Name="id_chuongtrinhdaotao" Type="int" />
           <Property Name="id_namhoc" Type="int" />
-          <Property Name="status" Type="bit" />
+          <Property Name="description" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="cbvc_khao_sat">
           <Key>
@@ -258,7 +258,7 @@
           <Property Name="namtotnghiep" Type="nvarchar" MaxLength="200" />
           <Property Name="ngaycapnhat" Type="int" />
           <Property Name="ngaytao" Type="int" />
-          <Property Name="status" Type="bit" />
+          <Property Name="description" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="survey">
           <Key>
@@ -1434,7 +1434,7 @@
           <Property Name="id_chucvu" Type="Int32" />
           <Property Name="id_chuongtrinhdaotao" Type="Int32" />
           <Property Name="id_namhoc" Type="Int32" />
-          <Property Name="status" Type="Boolean" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_CanBoVienChuc" FromRole="CanBoVienChuc" ToRole="answer_response" />
           <NavigationProperty Name="ChucVu" Relationship="dbSurveyModel.FK_CanBoVienChuc_ChucVu" FromRole="CanBoVienChuc" ToRole="ChucVu" />
           <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_CanBoVienChuc_ctdt" FromRole="CanBoVienChuc" ToRole="ctdt" />
@@ -1717,7 +1717,7 @@
           <Property Name="namtotnghiep" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="ngaycapnhat" Type="Int32" />
           <Property Name="ngaytao" Type="Int32" />
-          <Property Name="status" Type="Boolean" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_sinhvien" FromRole="sinhvien" ToRole="answer_response" />
           <NavigationProperty Name="lop" Relationship="dbSurveyModel.FK_sinhvien_lop" FromRole="sinhvien" ToRole="lop" />
           <NavigationProperty Name="nguoi_hoc_dang_co_hoc_phan" Relationship="dbSurveyModel.FK_nguoi_hoc_dang_co_hoc_phan_sinhvien" FromRole="sinhvien" ToRole="nguoi_hoc_dang_co_hoc_phan" />
@@ -2448,7 +2448,7 @@
           <EntitySetMapping Name="CanBoVienChuc">
             <EntityTypeMapping TypeName="dbSurveyModel.CanBoVienChuc">
               <MappingFragment StoreEntitySet="CanBoVienChuc">
-                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
                 <ScalarProperty Name="id_chuongtrinhdaotao" ColumnName="id_chuongtrinhdaotao" />
                 <ScalarProperty Name="id_chucvu" ColumnName="id_chucvu" />
@@ -2691,7 +2691,7 @@
           <EntitySetMapping Name="sinhvien">
             <EntityTypeMapping TypeName="dbSurveyModel.sinhvien">
               <MappingFragment StoreEntitySet="sinhvien">
-                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
                 <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
                 <ScalarProperty Name="namtotnghiep" ColumnName="namtotnghiep" />

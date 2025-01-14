@@ -30,7 +30,7 @@
     <Property Name="id_chucvu" Type="int" />
     <Property Name="id_chuongtrinhdaotao" Type="int" />
     <Property Name="id_namhoc" Type="int" />
-    <Property Name="status" Type="bit" />
+    <Property Name="description" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="cbvc_khao_sat">
     <Key>
@@ -253,7 +253,7 @@
     <Property Name="namtotnghiep" Type="nvarchar" MaxLength="200" />
     <Property Name="ngaycapnhat" Type="int" />
     <Property Name="ngaytao" Type="int" />
-    <Property Name="status" Type="bit" />
+    <Property Name="description" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="survey">
     <Key>
