@@ -31,12 +31,24 @@ namespace CTDT.Areas.Admin.Controllers
                 query = query.Where(x => x.id_lop == sv.id_lop);
             }
 
+            if (!string.IsNullOrEmpty(sv.searchTerm))
+            {
+                string keyword = sv.searchTerm.ToLower();
+                query = query.Where(x =>
+                    x.hovaten.ToLower().Contains(keyword) ||
+                    x.ma_sv.ToLower().Contains(keyword) ||
+                    x.lop.ma_lop.ToLower().Contains(keyword) ||
+                    x.diachi.ToLower().Contains(keyword) ||
+                    x.phai.ToLower().Contains(keyword) ||
+                    x.sodienthoai.Contains(keyword));
+            }
+
             int totalRecords = await query.CountAsync();
 
             var pagedData = await query
-                .OrderBy(x => x.id_sv) 
+                .OrderBy(x => x.id_sv)
                 .Skip((sv.page - 1) * sv.pageSize)
-                .Take(sv.pageSize) 
+                .Take(sv.pageSize)
                 .ToListAsync();
 
             var getData = pagedData.Select(x => new
@@ -71,7 +83,118 @@ namespace CTDT.Areas.Admin.Controllers
             public int id_lop { get; set; }
             public int page { get; set; }
             public int pageSize { get; set; }
+            public string searchTerm { get; set; }
         }
 
+        [HttpPost]
+        [Route("api/admin/them-moi-nguoi-hoc")]
+        public IHttpActionResult add_new(sinhvien sv)
+        {
+            if (string.IsNullOrEmpty(sv.ma_sv))
+            {
+                return Ok(new { message = "Không được bỏ trống mã người học", success = false });
+            }
+            if (string.IsNullOrEmpty(sv.hovaten))
+            {
+                return Ok(new { message = "Không được bỏ trống tên người học", success = false });
+            }
+            if (db.sinhvien.FirstOrDefault(x => x.id_sv == sv.id_sv) != null)
+            {
+                return Ok(new { message = "Mã người học này đã tồn tại", success = false });
+            }
+            var add_new = new sinhvien
+            {
+                ma_sv = sv.ma_sv,
+                hovaten = sv.hovaten,
+                id_lop = sv.id_lop,
+                ngaysinh = sv.ngaysinh,
+                sodienthoai = sv.sodienthoai,
+                diachi = sv.diachi,
+                phai = sv.phai,
+                namnhaphoc = sv.namnhaphoc,
+                namtotnghiep = sv.namtotnghiep,
+                description = sv.description,
+                ngaytao = unixTimestamp,
+                ngaycapnhat = unixTimestamp
+            };
+            db.sinhvien.Add(add_new);
+            db.SaveChanges();
+            return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
+        }
+        [HttpPost]
+        [Route("api/admin/get-info-nguoi-hoc")]
+        public async Task<IHttpActionResult> get_info(sinhvien sv)
+        {
+            var get_info = await db.sinhvien
+                .Where(x => x.id_sv == sv.id_sv)
+                .Select(x => new
+                {
+                    x.id_lop,
+                    x.ma_sv,
+                    x.hovaten,
+                    x.ngaysinh,
+                    x.sodienthoai,
+                    x.diachi,
+                    x.phai,
+                    x.namnhaphoc,
+                    x.namtotnghiep,
+                    x.description,
+                }).FirstOrDefaultAsync();
+            return Ok(get_info);
+        }
+        [HttpPost]
+        [Route("api/admin/update-nguoi-hoc")]
+        public IHttpActionResult update_nguoi_hoc(sinhvien sv)
+        {
+            var get_data = db.sinhvien.FirstOrDefault(x => x.id_sv == sv.id_sv);
+            if (string.IsNullOrEmpty(sv.ma_sv))
+            {
+                return Ok(new { message = "Không được bỏ trống mã người học", success = false });
+            }
+            if (string.IsNullOrEmpty(sv.hovaten))
+            {
+                return Ok(new { message = "Không được bỏ trống tên người học", success = false });
+            }
+            get_data.id_lop = sv.id_lop;
+            get_data.ma_sv = sv.ma_sv;
+            get_data.hovaten = sv.hovaten;
+            get_data.ngaysinh = sv.ngaysinh;
+            get_data.sodienthoai = sv.sodienthoai;
+            get_data.diachi = sv.diachi;
+            get_data.phai = sv.phai;
+            get_data.namnhaphoc = sv.namnhaphoc;
+            get_data.namtotnghiep = sv.namtotnghiep;
+            get_data.description = sv.description;
+            get_data.ngaycapnhat = unixTimestamp;
+            db.SaveChanges();
+            return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
+        }
+        [HttpPost]
+        [Route("api/admin/delete-nguoi-hoc")]
+        public IHttpActionResult delete_nguoi_hoc(sinhvien sv)
+        {
+            var check_danh_sach_khao_sat = db.nguoi_hoc_khao_sat.Where(x => x.id_sv == sv.id_sv).ToList();
+            var check_danh_sach_nguoi_hoc = db.nguoi_hoc_dang_co_hoc_phan.Where(x => x.id_sinh_vien == sv.id_sv).ToList();
+            var check_answer = db.answer_response.Where(x => x.id_sv == sv.id_sv).ToList();
+            if (check_danh_sach_khao_sat.Any())
+            {
+                db.nguoi_hoc_khao_sat.RemoveRange(check_danh_sach_khao_sat);
+                db.SaveChanges();
+            }
+            if (check_danh_sach_nguoi_hoc.Any())
+            {
+                db.nguoi_hoc_dang_co_hoc_phan.RemoveRange(check_danh_sach_nguoi_hoc);
+                db.SaveChanges();
+            }
+            if (check_answer.Any())
+            {
+                db.answer_response.RemoveRange(check_answer);
+                db.SaveChanges();
+            }
+            var check_nguoi_hoc = db.sinhvien.FirstOrDefault(x => x.id_sv == sv.id_sv);
+            db.sinhvien.Remove(check_nguoi_hoc);
+            db.SaveChanges();
+            return Ok(new { message = "Xóa dữ liệu thành công" });
+        }
     }
 }

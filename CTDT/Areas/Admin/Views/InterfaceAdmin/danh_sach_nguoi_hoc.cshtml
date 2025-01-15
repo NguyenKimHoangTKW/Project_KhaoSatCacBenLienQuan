@@ -51,7 +51,7 @@
                         <div class="row items-push">
                             <div class="col-3">
                                 <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo lớp</label>
-                                <select class="form-control" id="FilterLop">
+                                <select class="form-control select2" id="FilterLop">
                                     <option value="0">Tất cả</option>
                                     @foreach (var item in ViewBag.LopList)
                                     {
@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-right">
-                                    <button class="btn btn-primary m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Thêm mới</button>
+                                    <button class="btn btn-primary m-r-5" id="btnAdd">Thêm mới</button>
                                     <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#importExcelModal">Import từ Excel</button>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title h4">Thêm mới Sinh viên</h5>
+                            <h5 class="modal-title h4" id="title-update"></h5>
                             <button type="button" class="close" data-dismiss="modal">
                                 <i class="anticon anticon-close"></i>
                             </button>
@@ -122,42 +122,21 @@
                         <div class="modal-body">
                             <form id="form-validation">
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label control-label">MSSV *</label>
+                                    <label class="col-sm-2 col-form-label control-label">Mã người học *</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="MSSV" placeholder="Nhập MSSV ... *">
+                                        <input type="text" class="form-control" id="manh-val" placeholder="Bắt buộc *">
                                     </div>
-                                    <label class="col-sm-2 col-form-label control-label">Họ và tên *</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tên người học *</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="HoTen" placeholder="Nhập Họ và tên ... *">
+                                        <input type="text" class="form-control" id="tennh-val" placeholder="Bắt buộc *">
                                     </div>
-                                    <label class="col-sm-2 col-form-label control-label">Ngày sinh *</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Chọn lớp *</label>
                                     <div class="col-sm-10">
-                                        <input type="date" class="form-control" id="NgaySinh">
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label">Số điện thoại *</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="SoDienThoai" placeholder="Nhập Số điện thoại ... *">
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Giới tính *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <select id="GioiTinh" class="form-control">
-                                            <option value="">-- Chọn giới tính --</option>
-                                            <option value="Nam">Nam</option>
-                                            <option value="Nữ">Nữ</option>
-                                        </select>
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label">Năm tốt nghiệp *</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="NamTotNghiep" placeholder="Nhập năm tốt nghiệp ... *">
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label">Địa chỉ *</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" id="DiaChi" placeholder="Nhập Địa chỉ ... *"></textarea>
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn CTĐT *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <select id="MaLop" class="form-control">
-                                            <option value="">-- Chọn Lớp --</option>
+                                        <select class="form-control select2" id="lop-val">
                                             @foreach (var item in ViewBag.LopList)
                                             {
                                                 <option value="@item.Value">@item.Text</option>
@@ -165,30 +144,117 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Ngày sinh (nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control" id="ngaysinh-val">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Số điện thoại</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="sodienthoai-val" placeholder="Nhập số điện thoại (nếu có)...">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Địa chỉ</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="diachi-val" placeholder="Nhập địa chỉ (nếu có)...">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Chọn giới tính (nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="gioitinh-val">
+                                            <option value="">Bỏ trống</option>
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nữ">Nữ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Năm nhập học (mm/yyyy)</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="namnhaphoc-val" placeholder="Nhập năm nhập học (nếu có)...">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Năm tốt nghiệp (mm/yyyy)</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="namtotnghiep-val" placeholder="Nhập năm tốt nghiệp (nếu có)...">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Ghi chú</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" id="ghichu-val" style="height:100px" placeholder="Nhập ghi chú (nếu có)..."></textarea>
+                                    </div>
+                                </div>
                             </form>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
-                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
+                            <div class="modal-footer" id="modalfooterupdate">
+                                <!--data-->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- End Modal Thêm mới Lớp -->
+            <!--Modal xoa-->
+            <div class="modal fade" id="ModalXoa">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-uppercase" id="exampleModalLabel">Bạn đang thao tác xóa dữ liệu người học</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h4>Bằng cách <b>Tick</b> vào <b>Đồng ý xóa dữ liệu</b>, bạn sẽ chấp nhận việc xóa dữ liệu người học này</h4>
+                            <hr />
+                            <p style="color:black"><span style="color:red">Lưu ý: </span>Nếu bạn đồng ý xóa, toàn bộ dữ liệu liên quan đến người học này sẽ bị xóa hoàn toàn khỏi hệ thống và không khôi phục được!</p>
+                            <div class="checkbox">
+                                <input id="checkbox-confirm-del" type="checkbox">
+                                <label for="checkbox-confirm-del">Đồng ý xóa dữ liệu</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <button type="button" id="btnConfirmDelete" class="btn btn-danger m-r-5">Có, xóa luôn</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal-->
             <div class="m-t-25">
                 <div class="table-responsive">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <!-- Filter rows per page -->
+                        <div>
+                            <label for="pageSizeSelect">Hiển thị:</label>
+                            <select id="pageSizeSelect" class="form-control form-control-sm d-inline-block" style="width: auto;">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <!-- Search -->
+                        <div>
+                            <label for="searchInput">Tìm kiếm:</label>
+                            <input id="searchInput" type="search" class="form-control form-control-sm" placeholder="Nhập từ khóa" aria-controls="nguoihocTable">
+                        </div>
+                    </div>
                     <table id="nguoihocTable" class="table table-bordered">
                         <thead></thead>
                         <tbody></tbody>
                     </table>
-                    <!-- End Modal Import Excel -->
-
                 </div>
-
             </div>
+
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end" id="paginationControls">
-                    <!-- Phân trang sẽ được tạo động ở đây -->
+                    <!-- Phân trang -->
                 </ul>
             </nav>
         </div>
