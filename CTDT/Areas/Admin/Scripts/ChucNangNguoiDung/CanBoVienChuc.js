@@ -1,36 +1,78 @@
-﻿
-async function load_data() {
-    const cbvc = $("#cbvcTable").val();
+﻿$(".select2").select2();
+let value_check = "";
+let currentPage = 1;
+$(document).ready(function () {
+    load_data();
+    $("#Modal-update").on("hidden.bs.modal", function () {
+        $(this).find("input, textarea, select").val("");
+        $(this).find("input[type=checkbox], input[type=radio]").prop("checked", false);
+    });
+});
+$(document).on("click", ".page-link", function (e) {
+    e.preventDefault();
+    const page = $(this).data("page");
+    if (page) {
+        currentPage = page;
+        load_data(currentPage);
+    }
+});
+$(document).on("change", "#pageSizeSelect", function () {
+    const pageSize = $(this).val();
+    load_data(currentPage, pageSize);
+});
+$(document).on("click", "#btnFilter", function (event) {
+    event.preventDefault();
+    load_data(currentPage);
+});
+$(document).on("click", "#btnAdd", function (event) {
+    event.preventDefault();
+    $("#modal-title-update").text("Thêm mới cán bộ viên chức/giảng viên");
+    const footer = $("#modal-footer-update");
+    footer.empty();
+    let html =
+        `
+        <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+        <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveAdd">Lưu</button>
+        `;
+    footer.html(html);
+    $("#Modal-update").modal("show");
+});
+async function load_data(page = 1, pageSize = $("#pageSizeSelect").val()) {
+    const ctdt = $("#FilterCTDT").val();
+    const donvi = $("#FiterDonvi").val();
+    const chucvu = $("#FilterChucvu").val();
+    const nam = $("#FilterNam").val();
+    const searchTerm = $("#searchInput").val();
     const res = await $.ajax({
         url: '/api/admin/danh-sach-cbvc',
         type: 'POST',
         data: {
-            id_lop: lop
+            id_chuongtrinhdaotao: ctdt,
+            id_namhoc: nam,
+            id_donvi: donvi,
+            id_chucvu: chucvu,
+            page: page,
+            pageSize: pageSize,
+            searchTerm: searchTerm
         }
     });
     const body = $("#cbvcTable");
     let html = "";
-    if ($.fn.DataTable.isDataTable('#cbvcTable')) {
-        $('#cbvcTable').DataTable().clear().destroy();
-    }
     if (res.success) {
         let thead =
             `
             <tr>
                 <th scope="col">STT</th>
-                <th scope="col">ID Người học</th>
-                <th scope="col">Mã số người học</th>
-                <th scope="col">Tên người học</th>
-                <th scope="col">Thuộc lớp</th>
+                <th scope="col">ID CBVC</th>
+                <th scope="col">Mã CBVC</th>
+                <th scope="col">Tên CBVC</th>
                 <th scope="col">Ngày sinh</th>
-                <th scope="col">Số điện thoại</th>
-                <th scope="col">Địa chỉ</th>
-                <th scope="col">Giới tính</th>
-                <th scope="col">Năm nhập học</th>
-                <th scope="col">Năm tốt nghiệp</th>
+                <th scope="col">Email</th>
+                <th scope="col">Thuộc đơn vị</th>
+                <th scope="col">Chức vụ</th>
+                <th scope="col">Thuộc chương trình đào tạo</th>
+                <th scope="col">Năm hoạt động</th>
                 <th scope="col">Mô tả</th>
-                <th scope="col">Ngày Tạo</th>
-                <th scope="col">Cập nhật lần cuối</th>
                 <th scope="col">Chức năng</th>
             </tr>
             `;
@@ -39,28 +81,26 @@ async function load_data() {
             html +=
                 `
                 <tr>
-                    <td class="formatSo">${index + 1}</td>
-                    <td class="formatSo">${item.id_sv}</td>
-                    <td class="formatSo">${item.ma_sv}</td>
-                    <td>${item.hovaten}</td>
-                    <td class="formatSo">${item.ma_lop}</td>
-                    <td class="formatSo">${item.ngaysinh}</td>
-                    <td class="formatSo">${item.sodienthoai}</td>
-                    <td>${item.diachi}</td>
-                    <td>${item.phai}</td>
-                    <td class="formatSo">${item.namnhaphoc}</td>
-                    <td class="formatSo">${item.namtotnghiep}</td>
-                    <td>${item.description}</td>
-                    <td class="formatSo">${unixTimestampToDate(item.ngaytao)}</td>
-                    <td class="formatSo">${unixTimestampToDate(item.ngaycapnhat)}</td>
+                    <td class="formatSo">${(page - 1) * pageSize + index + 1}</td>  
+                    <td class="formatSo">${item.id_CBVC}</td>
+                    <td class="formatSo">${item.MaCBVC}</td>
+                    <td>${item.TenCBVC}</td>
+                    <td class="formatSo">${item.NgaySinh}</td>
+                    <td>${item.Email}</td>
+                    <td>${item.donvi}</td>
+                    <td>${item.chucvu}</td>
+                    <td>${item.ctdt}</td>
+                    <td class="formatSo">${item.NamHoc}</td>
+                    <td>${item.descripton}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" id="btnEdit" data-id="${item.id_sv}">Sửa</button>
-                        <button class="btn btn-danger btn-sm" id="btnDelete" data-id="${item.id_sv}">Xóa</button>
+                        <button class="btn btn-primary btn-sm" id="btnEdit" data-id="${item.id_CBVC}">Sửa</button>
+                        <button class="btn btn-danger btn-sm" id="btnDelete" data-id="${item.id_CBVC}">Xóa</button>
                     </td>
                 </tr>
                 `;
         });
         body.find("tbody").html(html);
+        renderPagination(res.totalPages, res.currentPage);
     } else {
         html =
             `
@@ -70,35 +110,60 @@ async function load_data() {
             `;
         body.find("tbody").html(html);
     }
-    $('#cbvcTable').DataTable({
-        pageLength: 7,
-        lengthMenu: [5, 10, 25, 50, 100],
-        ordering: true,
-        searching: true,
-        autoWidth: false,
-        responsive: true,
-        language: {
-            paginate: {
-                next: "Next",
-                previous: "Previous"
-            },
-            search: "Search",
-            lengthMenu: "Show _MENU_ entries"
-        },
-        dom: "Bfrtip",
-        buttons: [
-            {
-                extend: 'excel',
-                title: 'Danh sách Lớp'
-            },
-            {
-                extend: 'print',
-                title: 'Danh sách Lớp'
-            }
-        ]
-    });
 };
+function renderPagination(totalPages, currentPage) {
+    const paginationContainer = $("#paginationControls");
+    let html = "";
+    html += `
+        <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+        </li>
+    `;
 
+    html += `
+        <li class="page-item ${currentPage === 1 ? "active" : ""}">
+            <a class="page-link" href="#" data-page="1">1</a>
+        </li>
+    `;
+
+    if (currentPage > 4) {
+        html += `
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+        `;
+    }
+    const maxPagesToShow = 3;
+    const startPage = Math.max(2, currentPage - Math.floor(maxPagesToShow / 2));
+    const endPage = Math.min(totalPages - 1, currentPage + Math.floor(maxPagesToShow / 2));
+    for (let i = startPage; i <= endPage; i++) {
+        html += `
+            <li class="page-item ${i === currentPage ? "active" : ""}">
+                <a class="page-link" href="#" data-page="${i}">${i}</a>
+            </li>
+        `;
+    }
+    if (currentPage < totalPages - 3) {
+        html += `
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+        `;
+    }
+    if (totalPages > 1) {
+        html += `
+            <li class="page-item ${currentPage === totalPages ? "active" : ""}">
+                <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+            </li>
+        `;
+    }
+    html += `
+        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+        </li>
+    `;
+    paginationContainer.html(html);
+}
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);
 

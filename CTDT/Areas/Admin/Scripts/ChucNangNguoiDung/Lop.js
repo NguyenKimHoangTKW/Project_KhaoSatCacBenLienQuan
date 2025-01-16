@@ -1,4 +1,5 @@
 ﻿$(".select2").select2();
+let value_check = "";
 $(document).ready(function () {
     load_data();
 });
@@ -37,12 +38,13 @@ $(document).on("click", "#btnEdit", function (event) {
     footer.html(html);
     get_info(value);
     $("#bd-example-modal-lg").modal("show");
-    $(document).on("click", "#btnSaveEdit", function () {
-        event.preventDefault();
-        edit_change(value);
-    });
+    value_check = value;
+    
 });
-
+$(document).on("click", "#btnSaveEdit", function (event) {
+    event.preventDefault();
+    edit_change(value_check);
+});
 $(document).on("click", "#btnDelete", function (event) {
     event.preventDefault();
     const value = $(this).data("id");

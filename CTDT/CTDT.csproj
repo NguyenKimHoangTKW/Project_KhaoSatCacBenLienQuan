@@ -1341,9 +1341,7 @@
     <Content Include="Areas\CTDT\Views\Shared\_CTDTHeaderPartial.cshtml" />
     <Content Include="Areas\CTDT\Views\Shared\_CTDTLayout.cshtml" />
     <Content Include="Areas\CTDT\Views\Shared\_CTDTNavPartial.cshtml" />
-    <Content Include="DataExport\Mau\MauUploadSinhVien.xlsx" />
     <Content Include="DataExport\Mau\MauUploadUser.xlsx" />
-    <Content Include="Areas\Admin\Views\CBVC\ViewCBVC.cshtml" />
     <Content Include="DataExport\Mau\MauUploadCBVC.xlsx" />
     <Content Include="Areas\CTDT\Views\DoiSanhKetQuaKhaoSat\Index.cshtml" />
     <Content Include="Areas\CTDT\Views\LuuTruBaoCaoKhaoSat\Index.cshtml" />
@@ -1385,6 +1383,7 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_lop.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_cbvc.cshtml" />
+    <Content Include="DataExport\Mau\Mau_Upload_NguoiHoc.xlsx" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

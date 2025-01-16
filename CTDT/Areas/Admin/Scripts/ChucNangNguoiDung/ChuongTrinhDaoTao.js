@@ -1,4 +1,5 @@
 ﻿$('.select2').select2();
+let value_check = "";
 $(document).ready(function () {
     load_data();
     $("#btnFilter").click(function (event) {
@@ -45,10 +46,11 @@ $(document).on("click", "#btnEdit", function (event) {
     modalfooter.html(html);
     get_info(value);
     $("#bd-example-modal-lg").modal("show");
-    $(document).on("click", "#btnSaveEdit", function (event) {
-        event.preventDefault();
-        update_ctdt(value);
-    });
+    value_check = value;
+});
+$(document).on("click", "#btnSaveEdit", function (event) {
+    event.preventDefault();
+    update_ctdt(value_check);
 });
 $(document).on("click", "#btnDelete", function (event) {
     event.preventDefault();

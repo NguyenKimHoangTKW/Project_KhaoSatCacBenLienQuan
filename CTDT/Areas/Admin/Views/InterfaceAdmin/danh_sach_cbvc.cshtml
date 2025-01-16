@@ -19,11 +19,11 @@
                 <hr />
                 <fieldset class="border rounded-3 p-3">
                     <legend class="float-none w-auto px-3">Chức năng</legend>
-                    <div class="row mb-3">
+                    <div class="row mb-3" id="show-option">
                         <div class="col-md-6">
                             <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo đơn vị</label>
-                            <select class="form-control" id="FiterDonvi">
-                                <option value="">Tất cả</option>
+                            <select class="form-control select2" id="FiterDonvi">
+                                <option value="0">Tất cả</option>
                                 @foreach (var item in ViewBag.DonviList)
                                 {
                                     <option value="@item.Value">@item.Text</option>
@@ -32,8 +32,8 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo chức vụ</label>
-                            <select class="form-control" id="FilterChucvu">
-                                <option value="">Tất cả</option>
+                            <select class="form-control select2" id="FilterChucvu">
+                                <option value="0">Tất cả</option>
                                 @foreach (var item in ViewBag.ChucvuList)
                                 {
                                     <option value="@item.Value">@item.Text</option>
@@ -42,8 +42,8 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo chương trình đào tạo</label>
-                            <select class="form-control" id="FilterCTDT">
-                                <option value="">Tất cả</option>
+                            <select class="form-control select2" id="FilterCTDT">
+                                <option value="0">Tất cả</option>
                                 @foreach (var item in ViewBag.CtdtList)
                                 {
                                     <option value="@item.Value">@item.Text</option>
@@ -52,33 +52,31 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo năm hoạt động</label>
-                            <select class="form-control" id="FilterNam">
-                                <option value="">Tất cả</option>
+                            <select class="form-control select2" id="FilterNam">
+                                <option value="0">Tất cả</option>
                                 @foreach (var item in ViewBag.Year)
                                 {
                                     <option value="@item.Value">@item.Text</option>
                                 }
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo trạng thái</label>
-                            <select class="form-control" id="Fitertrangthai">
-                                <option value="-1">Tất cả</option>
-                                <option value="0">Đang đóng</option>
-                                <option value="1">Đang mở</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-12 d-flex justify-content-end">
-                            <button type="button" class="btn btn-info" id="btnFilter" style="margin-top: 10px;">Tìm kiếm</button>
+                        <div class="col-4">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo từ khóa</label>
+                            <input type="text" class="form-control" name="keywordSearch" id="searchInput" placeholder="Nhập từ khóa muốn tìm kiếm ...">
                         </div>
                     </div>
                     <hr />
                     <div class="row">
-                        <div class="col-12 d-flex">
-                            <button class="btn btn-primary m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Thêm mới</button>
-                            <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#importExcelModal">Import từ Excel</button>
+                        <div class="col-sm-6">
+                            <div class="text-left">
+                                <button type="submit" id="btnFilter" name="btnFilter" class="btn btn-primary btn-tone m-r-5">Tìm kiếm</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <button class="btn btn-primary m-r-5" id="btnAdd">Thêm mới</button>
+                                <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#importExcelModal">Import từ Excel</button>
+                            </div>
                         </div>
                     </div>
                 </fieldset>
@@ -111,12 +109,12 @@
                 </div>
             </div>
             <!-- End Modal Import Excel -->
-            <!--Modal Thêm mới Khoa-->
-            <div class="modal fade" id="bd-example-modal-lg">
+            <!--Modal-->
+            <div class="modal fade" id="Modal-update">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title h4">Thêm mới Khoa</h5>
+                            <h5 class="modal-title h4" id="modal-title-update"></h5>
                             <button type="button" class="close" data-dismiss="modal">
                                 <i class="anticon anticon-close"></i>
                             </button>
@@ -124,15 +122,86 @@
                         <div class="modal-body">
                             <form id="form-validation">
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label control-label">Tên Khoa *</label>
+                                    <label class="col-sm-2 col-form-label control-label">Mã CBVC (Nếu có)</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="ten_khoa" id="ten_khoa" placeholder="Nhập tên Khoa ... *">
+                                        <input type="text" class="form-control" id="macbvc-val">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tên CBVC *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="tencbvc-val" placeholder="Bắt buộc *">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Email (Nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="email-val">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Ngày sinh (nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <input type="date" class="form-control" id="ngaysinh-val">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Chọn đơn vị (Nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="donvi-val">
+                                            <option value="">Bỏ qua</option>
+                                            @foreach (var item in ViewBag.DonviList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Chọn chức vụ (Nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="chucvu-val">
+                                            <option value="">Bỏ qua</option>
+                                            @foreach (var item in ViewBag.ChucvuList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Chọn CTĐT (Nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="ctdt-val">
+                                            <option value="">Bỏ qua</option>
+                                            @foreach (var item in ViewBag.CtdtList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Chọn năm hoạt động (Nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="ctdt-val">
+                                            <option value="">Bỏ qua</option>
+                                            @foreach (var item in ViewBag.Year)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Ghi chú (Nếu có)</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" id="ghichu-val" style="height:100px" placeholder="Nhập ghi chú (nếu có)..."></textarea>
                                     </div>
                                 </div>
                             </form>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
-                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
+                            <div class="modal-footer" id="modal-footer-update">
+                                <!--data-->
                             </div>
                         </div>
                     </div>
@@ -141,25 +210,28 @@
             <!--End Modal Thêm mới Khoa-->
             <div class="m-t-25">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="cbvcTable">
-                        <thead>
-                            <tr>
-                                <th scope="col">STT</th>
-                                <th scope="col">ID CBVC</th>
-                                <th scope="col">Mã CBVC</th>
-                                <th scope="col">Tên CBVC</th>
-                                <th scope="col">Ngày sinh</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Đơn vị</th>
-                                <th scope="col">Chức vụ</th>
-                                <th scope="col">Chương trình đào tạo</th>
-                                <th scope="col">Hiển thị</th>
-                                <th scope="col">Năm hoạt động</th>
-                                <th scope="col">Chức năng</th>
-                            </tr>
-                        </thead>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <!-- Filter rows per page -->
+                        <div>
+                            <label for="pageSizeSelect">Hiển thị:</label>
+                            <select id="pageSizeSelect" class="form-control form-control-sm d-inline-block" style="width: auto;">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table id="cbvcTable" class="table table-bordered">
+                        <thead></thead>
+                        <tbody></tbody>
                     </table>
                 </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end" id="paginationControls">
+                        <!-- Phân trang -->
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

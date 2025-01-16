@@ -38,7 +38,7 @@ namespace CTDT.Areas.Admin.Controllers
                 .Select(x => new
                 {
                     x.id_ctdt,
-                    x.ma_ctdt,
+                    ma_ctdt = x.ma_ctdt != null ? x.ma_ctdt :"",
                     x.ten_ctdt,
                     x.khoa.ten_khoa,
                     x.hedaotao.ten_hedaotao,

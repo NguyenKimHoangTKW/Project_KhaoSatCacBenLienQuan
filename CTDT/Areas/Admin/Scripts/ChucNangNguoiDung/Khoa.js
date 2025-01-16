@@ -1,4 +1,4 @@
-﻿
+﻿let value_check = "";
 $(document).ready(function () {
     load_data();
 });
@@ -42,10 +42,11 @@ $(document).on("click", "#btnEdit", function (event) {
     event.preventDefault();
     const value = $(this).data("id");
     get_info(value);
-    $(document).on("click", "#btnSaveEdit", function () {
-        edit_khoa(value);
-        load_data();
-    });
+    value_check = value;
+});
+$(document).on("click", "#btnSaveEdit", function () {
+    edit_khoa(value_check);
+    load_data();
 });
 $(document).on("click", "#btnDelete", function (event) {
     event.preventDefault();

@@ -1,19 +1,25 @@
 ﻿$(".select2").select2();
+let value_check = "";
+let currentPage = 1;
 $(document).ready(function () {
     load_data();
-    $(document).ready(function () {
-        $("#manh-val").on("input", function () {
-            let value = $(this).val();
-            value = value.replace(/\D/g, "");
-            if (value.length > 15) {
-                value = value.substring(0, 15);
-            }
-            $(this).val(value);
-        });
+    $("#manh-val").on("input", function () {
+        let value = $(this).val();
+        value = value.replace(/\D/g, "");
+        if (value.length > 15) {
+            value = value.substring(0, 15);
+        }
+        $(this).val(value);
+    });
+    $("#ModalXoa").on("hidden.bs.modal", function () {
+        $(this).find("input, textarea, select").val("");
+        $(this).find("input[type=checkbox], input[type=radio]").prop("checked", false);
+    });
+    $("#importExcelModal").on("hidden.bs.modal", function () {
+        $(this).find("input, textarea, select").val("");
+        $(this).find("input[type=checkbox], input[type=radio]").prop("checked", false);
     });
 });
-let currentPage = 1;
-
 $(document).on("click", ".page-link", function (e) {
     e.preventDefault();
     const page = $(this).data("page");
@@ -64,40 +70,89 @@ $(document).on("click", "#btnEdit", function (event) {
     footer.html(html);
     get_info(value);
     $("#bd-example-modal-lg").modal("show");
-    $(document).on("click", "#btnSaveEdit", function () {
-        event.preventDefault();
-        update(value);
-    });
+    value_check = value;
+
+});
+$(document).on("click", "#btnSaveEdit", function (event) {
+    event.preventDefault();
+    update(value_check);
 });
 $(document).on("click", "#btnDelete", function (event) {
     event.preventDefault();
     const value = $(this).data("id");
+    value_check = value;
     $("#ModalXoa").modal("show");
-    $(document).on("click", "#btnConfirmDelete", function (event) {
-        event.preventDefault();
-        const checked = $("#checkbox-confirm-del").prop("checked");
-        if (checked) {
-            delete_nh(value); 
-        } else {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                }
-            });
-            Toast.fire({
-                icon: "error",
-                title: "Bạn cần phải chấp nhận để tiếp tục"
-            });
-        }
-    });
 });
-
+$(document).on("click", "#btnConfirmDelete", function (event) {
+    event.preventDefault();
+    const checked = $("#checkbox-confirm-del").prop("checked");
+    if (checked) {
+        delete_nh(value_check);
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: "Bạn cần phải chấp nhận để tiếp tục"
+        });
+    }
+});
+$(document).on("submit", "#importExcelForm", async function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    const res = await $.ajax({
+        url: '/api/admin/upload-excel-nguoi-hoc',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        $('#importExcelModal').modal('hide');
+        load_data(currentPage);
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+});
 async function delete_nh(value) {
     const res = await $.ajax({
         url: '/api/admin/delete-nguoi-hoc',
@@ -313,7 +368,7 @@ async function load_data(page = 1, pageSize = $("#pageSizeSelect").val()) {
             html +=
                 `
                 <tr>
-                     <td class="formatSo">${(page - 1) * pageSize + index + 1}</td>
+                    <td class="formatSo">${(page - 1) * pageSize + index + 1}</td>
                     <td class="formatSo">${item.id_sv}</td>
                     <td class="formatSo">${item.ma_sv}</td>
                     <td>${item.hovaten}</td>
@@ -399,7 +454,6 @@ function renderPagination(totalPages, currentPage) {
             <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
         </li>
     `;
-
     paginationContainer.html(html);
 }
 function unixTimestampToDate(unixTimestamp) {
