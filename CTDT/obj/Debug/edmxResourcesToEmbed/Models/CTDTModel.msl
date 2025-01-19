@@ -23,6 +23,8 @@
       <EntityTypeMapping TypeName="dbSurveyModel.CanBoVienChuc">
         <MappingFragment StoreEntitySet="CanBoVienChuc">
           <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+          <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
           <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
           <ScalarProperty Name="id_chuongtrinhdaotao" ColumnName="id_chuongtrinhdaotao" />
           <ScalarProperty Name="id_chucvu" ColumnName="id_chucvu" />

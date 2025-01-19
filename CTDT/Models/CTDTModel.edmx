@@ -35,6 +35,8 @@
           <Property Name="id_chucvu" Type="int" />
           <Property Name="id_chuongtrinhdaotao" Type="int" />
           <Property Name="id_namhoc" Type="int" />
+          <Property Name="ngaytao" Type="int" />
+          <Property Name="ngaycapnhat" Type="int" />
           <Property Name="description" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="cbvc_khao_sat">
@@ -1434,6 +1436,8 @@
           <Property Name="id_chucvu" Type="Int32" />
           <Property Name="id_chuongtrinhdaotao" Type="Int32" />
           <Property Name="id_namhoc" Type="Int32" />
+          <Property Name="ngaytao" Type="Int32" />
+          <Property Name="ngaycapnhat" Type="Int32" />
           <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_CanBoVienChuc" FromRole="CanBoVienChuc" ToRole="answer_response" />
           <NavigationProperty Name="ChucVu" Relationship="dbSurveyModel.FK_CanBoVienChuc_ChucVu" FromRole="CanBoVienChuc" ToRole="ChucVu" />
@@ -2449,6 +2453,8 @@
             <EntityTypeMapping TypeName="dbSurveyModel.CanBoVienChuc">
               <MappingFragment StoreEntitySet="CanBoVienChuc">
                 <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+                <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
                 <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
                 <ScalarProperty Name="id_chuongtrinhdaotao" ColumnName="id_chuongtrinhdaotao" />
                 <ScalarProperty Name="id_chucvu" ColumnName="id_chucvu" />

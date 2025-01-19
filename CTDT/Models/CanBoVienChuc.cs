@@ -31,6 +31,8 @@ namespace CTDT.Models
         public Nullable<int> id_chucvu { get; set; }
         public Nullable<int> id_chuongtrinhdaotao { get; set; }
         public Nullable<int> id_namhoc { get; set; }
+        public Nullable<int> ngaytao { get; set; }
+        public Nullable<int> ngaycapnhat { get; set; }
         public string description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -268,6 +268,8 @@
     <Property Name="id_chucvu" Type="Int32" />
     <Property Name="id_chuongtrinhdaotao" Type="Int32" />
     <Property Name="id_namhoc" Type="Int32" />
+    <Property Name="ngaytao" Type="Int32" />
+    <Property Name="ngaycapnhat" Type="Int32" />
     <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_CanBoVienChuc" FromRole="CanBoVienChuc" ToRole="answer_response" />
     <NavigationProperty Name="ChucVu" Relationship="dbSurveyModel.FK_CanBoVienChuc_ChucVu" FromRole="CanBoVienChuc" ToRole="ChucVu" />
