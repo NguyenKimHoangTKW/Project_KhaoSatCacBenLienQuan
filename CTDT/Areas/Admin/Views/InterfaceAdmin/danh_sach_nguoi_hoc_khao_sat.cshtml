@@ -1,0 +1,112 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<!--Chọn lớp để hiển thị danh sách người học-->
+<!--Tạo hàm duyệt nếu người học có tồn tại trong danh sách thì bỏ qua không thì thêm vào, nếu số lượng trong danh sách ít hơn số lượng duyệt thì delete-->
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <h2 class="text-uppercase">Danh sách người học khảo sát phiếu</h2>
+                <hr />
+                <fieldset class="border rounded-3 p-3">
+                    <legend class="float-none w-auto px-3">Chức năng</legend>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn hệ đào tạo</label>
+                            <select class="form-control select2" id="hedaotao">
+                                @foreach (var item in ViewBag.HeDaoTao)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
+                            <select class="form-control select2" id="year">
+                                @foreach (var item in ViewBag.Year)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn phiếu khảo sát</label>
+                            <select class="form-control select2" id="surveyid">
+                                <option value="">Chọn hệ đào tạo và năm để thống kê</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                </fieldset>
+            </div>
+
+            <!-- Modal Import Excel -->
+            <div class="modal fade" id="importExcelModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Lớp từ Excel</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="importExcelForm" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="excelFile">Chọn file Excel</label>
+                                    <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+                                </div>
+                                <button type="submit" class="btn btn-success btn-tone m-r-5">Upload</button>
+                                <a href="~/DataExport/Mau/MauUploadSinhVien.xlsx" download>
+                                    <button type="button" class="btn btn-info btn-tone m-r-5">Tải file mẫu</button>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal Import Excel -->
+            <!--Modal-->
+            <div class="modal fade" id="bd-example-modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4"></h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tên Lớp *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="TenLop" placeholder="Nhập tên Lớp ... *">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn CTĐT *</label>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <!--data-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal-->
+
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="lopTable">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/Danhsachnguoihockhaosat.js"></script>
+}

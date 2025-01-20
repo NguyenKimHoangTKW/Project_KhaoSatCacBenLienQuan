@@ -476,6 +476,7 @@
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChiTietPhieuKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChuongTrinhDaoTao.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\DanhSachMonHocHocVien.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Danhsachnguoihockhaosat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatKetQuaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatTyLeThamGiaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Khoa.js" />
@@ -1384,6 +1385,7 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_cbvc.cshtml" />
     <Content Include="DataExport\Mau\Mau_Upload_NguoiHoc.xlsx" />
     <Content Include="DataExport\Mau\Mau_Upload_CBVC.xlsx" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc_khao_sat.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

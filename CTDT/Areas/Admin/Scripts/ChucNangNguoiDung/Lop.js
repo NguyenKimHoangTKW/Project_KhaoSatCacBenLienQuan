@@ -250,8 +250,12 @@ async function load_data() {
                     <td class="formatSo">${unixTimestampToDate(item.ngaytao)}</td>
                     <td class="formatSo">${unixTimestampToDate(item.ngaycapnhat)}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" id="btnEdit" data-id="${item.id_lop}">Sửa</button>
-                        <button class="btn btn-danger btn-sm" id="btnDelete" data-id="${item.id_lop}">Xóa</button>
+                        <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" id="btnEdit" data-id="${item.id_lop}">
+                            <i class="anticon anticon-edit"></i>
+                        </button>
+                        <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" id="btnDelete" data-id="${item.id_lop}">
+                            <i class="anticon anticon-delete"></i>
+                        </button>
                     </td>
                 </tr>
                 `;
