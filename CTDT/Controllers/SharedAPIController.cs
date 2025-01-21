@@ -47,8 +47,6 @@ namespace CTDT.Controllers
             {
                 return Ok(new { message = "Không có dữ liệu phiếu khảo sát", success = false });
             }
-
         }
-
     }
 }

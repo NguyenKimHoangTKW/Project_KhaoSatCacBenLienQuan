@@ -319,6 +319,7 @@
     <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiHocAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatAdminAPIController.cs" />
+    <Compile Include="Areas\Admin\Controllers\QuanLyNguoiHocKhaoSatAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\testController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeKetQuaKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
@@ -1788,6 +1789,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Views\NguoiHocKhaoSat\" />
     <Folder Include="Areas\CTDT\Data\" />
     <Folder Include="Areas\Khoa\Data\" />
     <Folder Include="Areas\Khoa\Views\ThongKeKhaoSatKhoaAPI\" />

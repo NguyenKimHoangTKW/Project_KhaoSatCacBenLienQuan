@@ -1,4 +1,4 @@
-﻿
+﻿$(".select2").select2();
 $(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
 })
@@ -6,7 +6,7 @@ async function load_pks_by_nam() {
     const hedaotao = $("#hedaotao").val();
     const year = $("#year").val();
     const res = await $.ajax({
-        url: '/api/load_phieu_by_nam',
+        url: '/api/admin/load-phieu-by-nam-thuoc-nguoi-hoc',
         type: 'POST',
         data: {
             id_namhoc: year,

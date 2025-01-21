@@ -3,11 +3,30 @@
 }
 <!--Chọn lớp để hiển thị danh sách người học-->
 <!--Tạo hàm duyệt nếu người học có tồn tại trong danh sách thì bỏ qua không thì thêm vào, nếu số lượng trong danh sách ít hơn số lượng duyệt thì delete-->
+<style>
+    .table-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .table-wrapper {
+        width: 48%;
+    }
+
+    .table-wrapper {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        height: 600px; /* Adjust height as per your need */
+        overflow-y: auto; /* Scroll if content overflows */
+    }
+</style>
 <div class="main-content">
     <div class="card">
         <div class="card-body">
             <div class="page-header no-gutters">
-                <h2 class="text-uppercase">Danh sách người học khảo sát phiếu</h2>
+                <h2 class="text-uppercase">quản lý người học khảo sát</h2>
                 <hr />
                 <fieldset class="border rounded-3 p-3">
                     <legend class="float-none w-auto px-3">Chức năng</legend>
@@ -97,11 +116,54 @@
             <!--End Modal-->
 
             <div class="m-t-25">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="lopTable">
-                        <thead></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="container mt-4">
+                    <div class="table-container mt-4">
+                        <!-- Danh sách chưa chọn -->
+                        <div class="table-wrapper">
+                            <h5>Danh sách chưa chọn</h5>
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th><input type="checkbox" id="checkAllLeft" /></th>
+                                        <th>Mã ĐT</th>
+                                        <th>Tên ĐT</th>
+                                        <th>Mã CB</th>
+                                        <th>Tên CB</th>
+                                        <th>Mã SV</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-left">
+                                    <!-- Rows will be dynamically added -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Danh sách đã chọn -->
+                        <div class="table-wrapper">
+                            <h5>Danh sách đã chọn</h5>
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th><input type="checkbox" id="checkAllRight" /></th>
+                                        <th>Mã ĐT</th>
+                                        <th>Tên ĐT</th>
+                                        <th>Mã CB</th>
+                                        <th>Tên CB</th>
+                                        <th>Mã SV</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-right">
+                                    <!-- Rows will be dynamically added -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Buttons for transferring -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <button class="btn btn-primary me-2" id="moveToRight">Chuyển qua</button>
+                        <button class="btn btn-secondary" id="moveToLeft">Chuyển lại</button>
+                    </div>
                 </div>
             </div>
         </div>

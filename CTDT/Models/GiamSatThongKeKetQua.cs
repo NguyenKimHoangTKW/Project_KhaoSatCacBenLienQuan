@@ -14,5 +14,7 @@ namespace CTDT.Models
         public int? id_lop { get; set; }
         public int? id_mh { get; set; }
         public int? id_CBVC { get; set; }
+        public long? from_date { get; set; }
+        public long? to_date { get; set; }
     }
 }

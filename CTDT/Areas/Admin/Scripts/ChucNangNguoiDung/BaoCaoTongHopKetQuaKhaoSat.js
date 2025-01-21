@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿$(".select2").select2();
+$(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
     $("#fildata").click(function () {
         load_bao_cao();
@@ -43,10 +44,9 @@ function load_bao_cao() {
         }
     });
 
-    var namhoc = $('#year').val();
-    var hedaotao = $('#hedaotao').val();
-    var ctdt = $('#ctdt').val();
-
+    const namhoc = $('#year').val();
+    const hedaotao = $('#hedaotao').val();
+    const ctdt = $('#ctdt').val();
     $.ajax({
         url: '/api/admin/bao-cao-tong-hop-ket-qua-khao-sat',
         type: 'POST',

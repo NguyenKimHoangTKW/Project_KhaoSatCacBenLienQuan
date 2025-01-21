@@ -1,4 +1,5 @@
-﻿var check = false;
+﻿$(".select2").select2();
+var check = false;
 var check_tan_xuat = false;
 $(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);

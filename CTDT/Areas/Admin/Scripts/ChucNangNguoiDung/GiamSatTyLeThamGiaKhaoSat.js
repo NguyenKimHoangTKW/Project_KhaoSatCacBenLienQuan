@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿$(".select2").select2();
+$(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
 
     $("#fildata").click(function () {
@@ -37,13 +38,19 @@ async function LoadChartSurvey() {
     const hedaotao = $("#hedaotao").val();
     const year = $("#year").val();
     const ctdt = $("#ctdt").val();
+    const from_date = $('#from_date').val();
+    const to_date = $('#to_date').val();
+    const startTimestamp = Math.floor(new Date(from_date).getTime() / 1000);
+    const endTimestamp = Math.floor(new Date(to_date).getTime() / 1000);
     const res = await $.ajax({
         url: '/api/admin/giam-sat-ty-le-tham-gia-khao-sat',
         type: 'POST',
         data: {
             id_namhoc: year,
             id_ctdt: ctdt,
-            id_hdt: hedaotao
+            id_hdt: hedaotao,
+            from_date: startTimestamp,
+            to_date: endTimestamp
         },
     });
 
