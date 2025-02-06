@@ -52,7 +52,6 @@ namespace CTDT.Areas.Admin.Controllers
                 foreach (var items in sortedSurveys)
                 {
                     var list_ctdt = new List<dynamic>();
-
                     var mucDoHaiLongData = new List<dynamic>();
                     if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
                     {
@@ -70,7 +69,7 @@ namespace CTDT.Areas.Admin.Controllers
                             var TotalDaKhaoSat = cbvc.Count(x => x.is_khao_sat == 1);
 
                             double percentage = TotalAll > 0 ? Math.Round(((double)TotalDaKhaoSat / TotalAll) * 100, 2) : 0;
-                            muc_do_hai_long(mucDoHaiLongData, giamsat.id_ctdt, items.surveyID);
+                            await muc_do_hai_long(mucDoHaiLongData, giamsat.id_ctdt, items.surveyID);
 
                             list_ctdt.Add(new
                             {
@@ -91,7 +90,7 @@ namespace CTDT.Areas.Admin.Controllers
                             {
                                 giang_vien = giang_vien.Where(x => x.id_ctdt == giamsat.id_ctdt).ToList();
                             }
-                            muc_do_hai_long(mucDoHaiLongData, giamsat.id_ctdt, items.surveyID);
+                            await muc_do_hai_long(mucDoHaiLongData, giamsat.id_ctdt, items.surveyID);
 
                             list_ctdt.Add(new
                             {
@@ -119,7 +118,7 @@ namespace CTDT.Areas.Admin.Controllers
                             var total = check_hoc_phan.Count;
                             var TotalIsKhaoSat = check_hoc_phan.Where(x => x.da_khao_sat == 1).ToList().Count;
                             double percentage = total > 0 ? Math.Round(((double)TotalIsKhaoSat / total) * 100, 2) : 0;
-                            muc_do_hai_long(mucDoHaiLongData, giamsat.id_ctdt, items.surveyID);
+                            await muc_do_hai_long(mucDoHaiLongData, giamsat.id_ctdt, items.surveyID);
 
                             list_ctdt.Add(new
                             {
@@ -160,7 +159,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 var TotalAll = cbvc.Count();
                                 var TotalDaKhaoSat = cbvc.Count(x => x.is_khao_sat == 1);
                                 double percentage = TotalAll > 0 ? Math.Round(((double)TotalDaKhaoSat / TotalAll) * 100, 2) : 0;
-                                muc_do_hai_long(mucDoHaiLongData, getctdt.id_ctdt, items.surveyID);
+                                await muc_do_hai_long(mucDoHaiLongData, getctdt.id_ctdt, items.surveyID);
                                 list_ctdt.Add(new
                                 {
                                     ctdt = getctdt.ten_ctdt,
@@ -176,7 +175,7 @@ namespace CTDT.Areas.Admin.Controllers
                             else if (check_giang_vien)
                             {
                                 var giang_vien = await db.answer_response.Where(x => x.surveyID == items.surveyID && x.id_ctdt == getctdt.id_ctdt).ToListAsync();
-                                muc_do_hai_long(mucDoHaiLongData, getctdt.id_ctdt, items.surveyID);
+                                await muc_do_hai_long(mucDoHaiLongData, getctdt.id_ctdt, items.surveyID);
                                 list_ctdt.Add(new
                                 {
                                     ctdt = getctdt.ten_ctdt,
@@ -200,7 +199,7 @@ namespace CTDT.Areas.Admin.Controllers
                                 var total = check_hoc_phan.Count;
                                 var TotalIsKhaoSat = check_hoc_phan.Where(x => x.da_khao_sat == 1).ToList().Count;
                                 double percentage = total > 0 ? Math.Round(((double)TotalIsKhaoSat / total) * 100, 2) : 0;
-                                muc_do_hai_long(mucDoHaiLongData, getctdt.id_ctdt, items.surveyID);
+                                await muc_do_hai_long(mucDoHaiLongData, getctdt.id_ctdt, items.surveyID);
                                 list_ctdt.Add(new
                                 {
                                     ctdt = getctdt.ten_ctdt,
@@ -232,16 +231,16 @@ namespace CTDT.Areas.Admin.Controllers
             }
         }
 
-        private void muc_do_hai_long(dynamic MucDoHaiLong, int? idctdt, int? idsurvey)
+        private async Task muc_do_hai_long(dynamic MucDoHaiLong, int? idctdt, int? idsurvey)
         {
             var Mucdohailong = db.answer_response
                         .Where(d => d.surveyID == idsurvey &&
                         (idctdt != null ? d.id_ctdt == idctdt : true))
                         .AsEnumerable()
                         .AsQueryable();
-            var responses = Mucdohailong
+            var responses = await Mucdohailong
                 .Select(x => new { IDPhieu = x.surveyID, JsonAnswer = x.json_answer, SurveyJson = x.survey.surveyData })
-                .ToList();
+                .ToListAsync();
 
             var questionDataDict = new Dictionary<string, dynamic>();
             List<string> specificChoices = new List<string> {

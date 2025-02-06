@@ -1,4 +1,5 @@
 ﻿using CTDT.Models;
+using GoogleApi.Entities.Search.Common;
 using GoogleApi.Entities.Search.Video.Common;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -106,177 +107,51 @@ namespace CTDT.Areas.Admin.Controllers
         [Route("api/admin/giam-sat-ket-qua-khao-sat")]
         public async Task<IHttpActionResult> giam_sat_ket_qua_khao_sat(GiamSatThongKeKetQua aw)
         {
-            var check_answer = await db.answer_response
+            var check_answer = db.answer_response
                 .Where(x => x.surveyID == aw.surveyID
-                           && x.ctdt.id_hdt == aw.id_hdt)
-                .ToListAsync();
+                           && x.ctdt.id_hdt == aw.id_hdt).AsQueryable();
             if (aw.id_ctdt != null)
             {
-                check_answer = check_answer.Where(x => x.id_ctdt == aw.id_ctdt).ToList();
+                check_answer = check_answer.Where(x => x.id_ctdt == aw.id_ctdt);
             }
             if (aw.id_lop != null)
             {
-                check_answer = check_answer.Where(x => x.sinhvien.lop.id_lop == aw.id_lop).ToList();
+                check_answer = check_answer.Where(x => x.sinhvien.lop.id_lop == aw.id_lop);
             }
 
             if (aw.id_mh != null)
             {
-                check_answer = check_answer.Where(x => x.id_mh == aw.id_mh).ToList();
+                check_answer = check_answer.Where(x => x.id_mh == aw.id_mh);
             }
 
             if (aw.id_CBVC != null)
             {
-                check_answer = check_answer.Where(x => x.id_CBVC == aw.id_CBVC).ToList();
+                check_answer = check_answer.Where(x => x.id_CBVC == aw.id_CBVC);
             }
-            var get_data = check_answer
+
+            if (aw.from_date != null && aw.to_date != null)
+            {
+                check_answer = check_answer.Where(x => x.time >= aw.from_date && x.time <= aw.to_date);
+            }
+            var get_data = await check_answer
                 .Select(x => new
                 {
                     JsonAnswer = x.json_answer,
                     SurveyJson = x.survey.surveyData
                 })
-                .ToList();
+                .ToListAsync();
+            var list_count = new List<dynamic>();
             if (get_data.Count > 0)
             {
-                var check_group_pks = await db.survey.FirstOrDefaultAsync(x => x.surveyID == aw.surveyID);
-                var list_count = new List<dynamic>();
-
-                if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 3)
+                if (aw.from_date != null && aw.to_date != null)
                 {
-                    var count_mon_hoc = await db.nguoi_hoc_dang_co_hoc_phan
-                            .Where(x => x.surveyID == aw.surveyID)
-                            .ToListAsync();
-                    if (aw.id_lop != null)
-                    {
-                        count_mon_hoc = count_mon_hoc
-                            .Where(x => x.sinhvien.id_lop == aw.id_lop)
-                            .ToList();
-                    }
-                    if (aw.id_ctdt != null)
-                    {
-                        count_mon_hoc = count_mon_hoc
-                            .Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt)
-                            .ToList();
-                    }
-                    if (aw.id_mh != null)
-                    {
-                        count_mon_hoc = count_mon_hoc
-                            .Where(x => x.id_mon_hoc == aw.id_mh)
-                            .ToList();
-                    }
-                    if (aw.id_CBVC != null)
-                    {
-                        count_mon_hoc = count_mon_hoc
-                            .Where(x => x.id_giang_vvien == aw.id_CBVC)
-                            .ToList();
-                    }
-
-                    var count_da_tra_loi = count_mon_hoc.Where(x => x.da_khao_sat == 1).ToList();
-                    var count_chua_tra_loi = count_mon_hoc.Where(x => x.da_khao_sat == 0).ToList();
-
-                    double percentage = count_mon_hoc.Count > 0
-                        ? Math.Round(((double)count_da_tra_loi.Count / count_mon_hoc.Count) * 100, 2)
-                        : 0;
-
-                    var groupedData = count_mon_hoc
-                        .GroupBy(x => x.sinhvien.lop.ctdt.ten_ctdt)
-                        .Select(gr => new
-                        {
-                            ctdt = gr.Key,
-
-                            mon_hoc = gr.GroupBy(x => x.mon_hoc.ten_mon_hoc)
-                                        .Select(mhGr => new
-                                        {
-                                            ma_gv = mhGr.Select(x => x.CanBoVienChuc.MaCBVC).Distinct().ToList(),
-                                            ten_gv = mhGr.Select(x => x.CanBoVienChuc.TenCBVC).Distinct().ToList(),
-                                            mon_hoc = mhGr.Key,
-                                            ten_lop = mhGr.Select(x => x.sinhvien.lop.ma_lop).Distinct().ToList()
-                                        }).ToList()
-                        }).ToList();
-
-                    var get_mh = new
-                    {
-                        info_survey = groupedData,
-                        tong_khao_sat = count_mon_hoc.Count,
-                        tong_phieu_da_tra_loi = count_da_tra_loi.Count,
-                        tong_phieu_chua_tra_loi = count_chua_tra_loi.Count,
-                        ty_le_da_tra_loi = percentage,
-                        ty_le_chua_tra_loi = Math.Round(100 - percentage, 2),
-                        is_mon_hoc = true
-                    };
-
-                    list_count.Add(get_mh);
+                    list_count = await load_ty_le_co_dau_thoi_gian(aw);
                 }
-                else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 2)
+                else
                 {
-                    if (check_group_pks.id_loaikhaosat == 3)
-                    {
-                        var count_gv = await db.answer_response
-                            .Where(x => x.surveyID == aw.surveyID)
-                            .ToListAsync();
-
-                        if (aw.id_ctdt != null)
-                        {
-                            count_gv = count_gv
-                                .Where(x => x.id_ctdt == aw.id_ctdt)
-                                .ToList();
-                        }
-
-                        var groupedData = count_gv
-                            .GroupBy(x => x.ctdt.ten_ctdt)
-                            .Select(gr => new
-                            {
-                                ctdt = gr.Key
-                            })
-                            .ToList();
-
-                        var DataCTDT = new
-                        {
-                            ctdt = groupedData,
-                            tong_khao_sat = count_gv.Count(),
-                            tong_phieu_da_tra_loi = count_gv.Count(),
-                            tong_phieu_chua_tra_loi = 0,
-                            ty_le_da_tra_loi = count_gv.Count() > 0 ? 100 : 0,
-                            ty_le_chua_tra_loi = 0,
-                            is_can_bo = true
-                        };
-
-                        list_count.Add(DataCTDT);
-                    }
-
-                    else if (check_group_pks.id_loaikhaosat == 8)
-                    {
-                        var count_cbvc = await db.cbvc_khao_sat
-                            .Where(x => x.surveyID == aw.surveyID).ToListAsync();
-                        if (aw.id_ctdt != null)
-                        {
-                            count_cbvc = count_cbvc.Where(x => x.CanBoVienChuc.id_chuongtrinhdaotao == aw.id_ctdt).ToList();
-                        }
-                        var count_da_tra_loi = count_cbvc.Where(x => x.is_khao_sat == 1).ToList();
-                        var count_chua_tra_loi = count_cbvc.Where(x => x.is_khao_sat == 0).ToList();
-
-                        double percentage = count_cbvc.Count > 0
-                            ? Math.Round(((double)count_da_tra_loi.Count / count_cbvc.Count) * 100, 2)
-                            : 0;
-                        var get_gv = count_cbvc
-                            .GroupBy(x => new
-                            {
-                                x.CanBoVienChuc.ctdt.ten_ctdt,
-                            })
-                            .Select(gr => new
-                            {
-                                ctdt = gr.Key.ten_ctdt
-                            }).ToList();
-                        var DataCTDT = new
-                        {
-                            ctdt = get_gv,
-                            tong_khao_sat = count_cbvc.Count,
-                            tong_phieu_da_tra_loi = count_da_tra_loi.Count,
-                            tong_phieu_chua_tra_loi = count_chua_tra_loi.Count,
-                            ty_le_da_tra_loi = percentage,
-                            ty_le_chua_tra_loi = Math.Round(100 - percentage, 2)
-                        };
-                    }
+                    list_count = await load_ty_le_khong_dau_thoi_gian(aw);
                 }
+
                 List<object> tan_xuat_5_muc = new List<object>();
                 List<object> tan_xuat_1_lua_chon = new List<object>();
                 List<object> tan_xuat_nhieu_lua_chon = new List<object>();
@@ -304,6 +179,361 @@ namespace CTDT.Areas.Admin.Controllers
                 });
             }
         }
+        public async Task<List<dynamic>> load_ty_le_co_dau_thoi_gian(GiamSatThongKeKetQua aw)
+        {
+            var list_count = new List<dynamic>();
+            var check_group_pks = await db.survey.FirstOrDefaultAsync(x => x.surveyID == aw.surveyID);
+            if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+            {
+                var count_mon_hoc = await db.nguoi_hoc_dang_co_hoc_phan
+                        .Where(x => x.surveyID == aw.surveyID).ToListAsync();
+
+                var count_da_tra_loi = await db.answer_response
+                            .Where(x => x.time >= aw.from_date && x.time <= aw.to_date && x.surveyID == aw.surveyID).ToListAsync();
+                var get_ctdt = "Tất cả";
+                if (aw.id_lop != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.sinhvien.id_lop == aw.id_lop).ToList();
+                    count_da_tra_loi = count_da_tra_loi
+                        .Where(x => x.sinhvien.id_lop == aw.id_lop).ToList();
+                }
+                if (aw.id_ctdt != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt).ToList();
+                    count_da_tra_loi = count_da_tra_loi
+                        .Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt).ToList();
+                    get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                }
+                if (aw.id_mh != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.id_mon_hoc == aw.id_mh).ToList();
+                    count_da_tra_loi = count_da_tra_loi
+                        .Where(x => x.id_mh == aw.id_mh).ToList();
+                }
+                if (aw.id_CBVC != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.id_giang_vvien == aw.id_CBVC).ToList();
+                    count_da_tra_loi = count_da_tra_loi
+                        .Where(x => x.id_CBVC == aw.id_CBVC).ToList();
+                }
+
+
+                var count_chua_tra_loi = count_mon_hoc.Where(x => x.da_khao_sat == 0).ToList();
+
+                double percentage = count_mon_hoc.Count > 0
+                    ? Math.Round(((double)count_da_tra_loi.Count / count_mon_hoc.Count) * 100, 2)
+                    : 0;
+
+                var get_mh = new
+                {
+                    ctdt = get_ctdt,
+                    tong_khao_sat = count_mon_hoc.Count,
+                    tong_phieu_da_tra_loi = count_da_tra_loi.Count,
+                    tong_phieu_chua_tra_loi = count_chua_tra_loi.Count,
+                    ty_le_da_tra_loi = percentage,
+                    ty_le_chua_tra_loi = Math.Round(100 - percentage, 2),
+                    is_mon_hoc = true
+                };
+                list_count.Add(get_mh);
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
+            {
+                if (check_group_pks.id_loaikhaosat == 3)
+                {
+                    var count_gv = await db.answer_response
+                        .Where(x => x.surveyID == aw.surveyID)
+                        .ToListAsync();
+                    var get_ctdt = "Tất cả";
+                    if (aw.id_ctdt != null)
+                    {
+                        count_gv = count_gv
+                            .Where(x => x.id_ctdt == aw.id_ctdt)
+                            .ToList();
+                        get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                    }
+                    if (aw.from_date != null && aw.to_date != null)
+                    {
+                        count_gv = count_gv
+                            .Where(x => x.time >= aw.from_date && x.time <= aw.to_date)
+                            .ToList();
+                    }
+
+                    var groupedData = count_gv
+                        .GroupBy(x => x.ctdt.ten_ctdt)
+                        .Select(gr => new
+                        {
+                            ctdt = gr.Key
+                        })
+                        .ToList();
+
+                    var DataCTDT = new
+                    {
+                        ctdt = groupedData,
+                        tong_khao_sat = count_gv.Count(),
+                        tong_phieu_da_tra_loi = count_gv.Count(),
+                        tong_phieu_chua_tra_loi = 0,
+                        ty_le_da_tra_loi = count_gv.Count() > 0 ? 100 : 0,
+                        ty_le_chua_tra_loi = 0,
+                        is_can_bo = true
+                    };
+
+                    list_count.Add(DataCTDT);
+                }
+
+                else if (check_group_pks.id_loaikhaosat == 8)
+                {
+                    var count_cbvc = await db.cbvc_khao_sat
+                        .Where(x => x.surveyID == aw.surveyID).ToListAsync();
+                    var count_da_tra_loi = await db.answer_response
+                           .Where(x => x.time >= aw.from_date && x.time <= aw.to_date && x.surveyID == aw.surveyID).ToListAsync();
+                    var get_ctdt = "Tất cả";
+                    if (aw.id_ctdt != null)
+                    {
+                        count_cbvc = count_cbvc.Where(x => x.CanBoVienChuc.id_chuongtrinhdaotao == aw.id_ctdt).ToList();
+                        count_da_tra_loi = count_da_tra_loi.Where(x => x.id_ctdt == aw.id_ctdt).ToList();
+                        get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                    }
+                    var count_chua_tra_loi = count_cbvc.Where(x => x.is_khao_sat == 0).ToList();
+
+                    double percentage = count_cbvc.Count > 0
+                        ? Math.Round(((double)count_da_tra_loi.Count / count_cbvc.Count) * 100, 2)
+                        : 0;
+                    var get_gv = count_cbvc
+                        .GroupBy(x => new
+                        {
+                            x.CanBoVienChuc.ctdt.ten_ctdt,
+                        })
+                        .Select(gr => new
+                        {
+                            ctdt = gr.Key.ten_ctdt
+                        }).ToList();
+                    var DataCTDT = new
+                    {
+                        ctdt = get_gv,
+                        tong_khao_sat = count_cbvc.Count,
+                        tong_phieu_da_tra_loi = count_da_tra_loi.Count,
+                        tong_phieu_chua_tra_loi = count_chua_tra_loi.Count,
+                        ty_le_da_tra_loi = percentage,
+                        ty_le_chua_tra_loi = Math.Round(100 - percentage, 2)
+                    };
+                    list_count.Add(DataCTDT);
+                }
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
+            {
+                var ctdt = db.answer_response.Where(x =>
+                x.surveyID == aw.surveyID &&
+                x.time >= aw.from_date && x.time <= aw.to_date).AsQueryable();
+                var get_ctdt = "Tất cả";
+                if (aw.id_ctdt != null)
+                {
+                    ctdt = ctdt.Where(x => x.id_ctdt == aw.id_ctdt);
+                    get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                }
+                var totalall = await ctdt.ToListAsync();
+                var datactdt = new
+                {
+                    ctdt = get_ctdt,
+                    tong_khao_sat = totalall.Count,
+                    tong_phieu_da_tra_loi = totalall.Count,
+                    tong_phieu_chua_tra_loi = 0,
+                    ty_le_da_tra_loi = totalall.Count > 0 ? 100 : 0,
+                    ty_le_chua_tra_loi = 0
+                };
+                list_count.Add(datactdt);
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+            {
+                var query = await db.nguoi_hoc_khao_sat.Where(x => x.surveyID == aw.surveyID).ToListAsync();
+                var get_ctdt = "Tất cả";
+                var TotalDaKhaoSat = await db.answer_response.Where(x => x.surveyID == aw.surveyID && x.time >= aw.from_date && x.time <= aw.to_date).ToListAsync();
+                if (aw.id_ctdt != null)
+                {
+                    query = query.Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt).ToList();
+                    get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                }
+                var TotalAll = query.Count;
+                var idphieu = db.survey.Where(x => x.surveyID == aw.surveyID).FirstOrDefault();
+                double percentage = TotalAll > 0 ? Math.Round(((double)TotalDaKhaoSat.Count / TotalAll) * 100, 2) : 0;
+                var DataCBVC = new
+                {
+                    ctdt = get_ctdt,
+                    tong_khao_sat = TotalAll,
+                    tong_phieu_da_tra_loi = TotalDaKhaoSat.Count,
+                    tong_phieu_chua_tra_loi = (TotalAll - TotalDaKhaoSat.Count),
+                    ty_le_da_tra_loi = percentage,
+                    ty_le_chua_tra_loi = Math.Round(((double)100 - percentage), 2),
+                };
+                list_count.Add(DataCBVC);
+            }
+            return list_count;
+        }
+        public async Task<List<dynamic>> load_ty_le_khong_dau_thoi_gian(GiamSatThongKeKetQua aw)
+        {
+            var list_count = new List<dynamic>();
+            var check_group_pks = await db.survey.FirstOrDefaultAsync(x => x.surveyID == aw.surveyID);
+            if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+            {
+                var count_mon_hoc = await db.nguoi_hoc_dang_co_hoc_phan
+                        .Where(x => x.surveyID == aw.surveyID)
+                        .ToListAsync();
+                var get_ctdt = "Tất cả";
+                if (aw.id_lop != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.sinhvien.id_lop == aw.id_lop)
+                        .ToList();
+                }
+                if (aw.id_ctdt != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt)
+                        .ToList();
+                    get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                }
+                if (aw.id_mh != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.id_mon_hoc == aw.id_mh)
+                        .ToList();
+                }
+                if (aw.id_CBVC != null)
+                {
+                    count_mon_hoc = count_mon_hoc
+                        .Where(x => x.id_giang_vvien == aw.id_CBVC)
+                        .ToList();
+                }
+
+                var count_da_tra_loi = count_mon_hoc.Where(x => x.da_khao_sat == 1).ToList();
+                var count_chua_tra_loi = count_mon_hoc.Where(x => x.da_khao_sat == 0).ToList();
+
+                double percentage = count_mon_hoc.Count > 0
+                    ? Math.Round(((double)count_da_tra_loi.Count / count_mon_hoc.Count) * 100, 2)
+                    : 0;
+
+                var get_mh = new
+                {
+                    ctdt = get_ctdt,
+                    tong_khao_sat = count_mon_hoc.Count,
+                    tong_phieu_da_tra_loi = count_da_tra_loi.Count,
+                    tong_phieu_chua_tra_loi = count_chua_tra_loi.Count,
+                    ty_le_da_tra_loi = percentage,
+                    ty_le_chua_tra_loi = Math.Round(100 - percentage, 2),
+                    is_mon_hoc = true
+                };
+
+                list_count.Add(get_mh);
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
+            {
+                if (check_group_pks.id_loaikhaosat == 3)
+                {
+                    var count_gv = await db.answer_response
+                        .Where(x => x.surveyID == aw.surveyID)
+                        .ToListAsync();
+                    var get_ctdt = "Tất cả";
+                    if (aw.id_ctdt != null)
+                    {
+                        count_gv = count_gv
+                            .Where(x => x.id_ctdt == aw.id_ctdt)
+                            .ToList();
+                        get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                    }
+                    var DataCTDT = new
+                    {
+                        ctdt = get_ctdt,
+                        tong_khao_sat = count_gv.Count(),
+                        tong_phieu_da_tra_loi = count_gv.Count(),
+                        tong_phieu_chua_tra_loi = 0,
+                        ty_le_da_tra_loi = count_gv.Count() > 0 ? 100 : 0,
+                        ty_le_chua_tra_loi = 0,
+                        is_can_bo = true
+                    };
+
+                    list_count.Add(DataCTDT);
+                }
+
+                else if (check_group_pks.id_loaikhaosat == 8)
+                {
+                    var count_cbvc = await db.cbvc_khao_sat
+                        .Where(x => x.surveyID == aw.surveyID).ToListAsync();
+                    var get_ctdt = "Tất cả";
+                    if (aw.id_ctdt != null)
+                    {
+                        count_cbvc = count_cbvc.Where(x => x.CanBoVienChuc.id_chuongtrinhdaotao == aw.id_ctdt).ToList();
+                        get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+
+                    }
+                    var count_da_tra_loi = count_cbvc.Where(x => x.is_khao_sat == 1).ToList();
+                    var count_chua_tra_loi = count_cbvc.Where(x => x.is_khao_sat == 0).ToList();
+
+                    double percentage = count_cbvc.Count > 0
+                        ? Math.Round(((double)count_da_tra_loi.Count / count_cbvc.Count) * 100, 2)
+                        : 0;
+
+                    var DataCTDT = new
+                    {
+                        ctdt = get_ctdt,
+                        tong_khao_sat = count_cbvc.Count,
+                        tong_phieu_da_tra_loi = count_da_tra_loi.Count,
+                        tong_phieu_chua_tra_loi = count_chua_tra_loi.Count,
+                        ty_le_da_tra_loi = percentage,
+                        ty_le_chua_tra_loi = Math.Round(100 - percentage, 2)
+                    };
+                }
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
+            {
+                var ctdt = await db.answer_response.Where(x => x.surveyID == aw.surveyID).ToListAsync();
+                var get_ctdt = "Tất cả";
+                if (aw.id_ctdt != null)
+                {
+                    ctdt = ctdt.Where(x => x.id_ctdt == aw.id_ctdt).ToList();
+                    get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+
+                }
+                var datactdt = new
+                {
+                    ctdt = get_ctdt,
+                    tong_khao_sat = ctdt.Count,
+                    tong_phieu_da_tra_loi = ctdt.Count,
+                    tong_phieu_chua_tra_loi = 0,
+                    ty_le_da_tra_loi = ctdt.Count > 0 ? 100 : 0,
+                    ty_le_chua_tra_loi = 0
+                };
+                list_count.Add(datactdt);
+            }
+            else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+            {
+                var query = await db.nguoi_hoc_khao_sat.Where(x => x.surveyID == aw.surveyID).ToListAsync();
+                var get_ctdt = "Tất cả";
+                if (aw.id_ctdt != null)
+                {
+                    query = query.Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt).ToList();
+                    get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
+                }
+                var TotalAll = query.Count;
+                var idphieu = db.survey.Where(x => x.surveyID == aw.surveyID).FirstOrDefault();
+                var TotalDaKhaoSat = query.Where(x => x.is_khao_sat == 1).ToList();
+                double percentage = TotalAll > 0 ? Math.Round(((double)TotalDaKhaoSat.Count / TotalAll) * 100, 2) : 0;
+                var DataCBVC = new
+                {
+                    ctdt = get_ctdt,
+                    tong_khao_sat = TotalAll,
+                    tong_phieu_da_tra_loi = TotalDaKhaoSat.Count,
+                    tong_phieu_chua_tra_loi = (TotalAll - TotalDaKhaoSat.Count),
+                    ty_le_da_tra_loi = percentage,
+                    ty_le_chua_tra_loi = Math.Round(((double)100 - percentage), 2),
+                };
+                list_count.Add(DataCBVC);
+            }
+            return list_count;
+        }
+
         public List<object> cau_hoi_5_muc(dynamic get_data)
         {
             Dictionary<string, Dictionary<string, int>> frequency = new Dictionary<string, Dictionary<string, int>>();
@@ -742,6 +972,10 @@ namespace CTDT.Areas.Admin.Controllers
             if (aw.id_CBVC != null)
             {
                 query = query.Where(x => x.id_CBVC == aw.id_CBVC);
+            }
+            if (aw.from_date != null && aw.to_date != null)
+            {
+                query = query.Where(x => x.time >= aw.from_date && x.time <= aw.to_date);
             }
             if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 3)
             {

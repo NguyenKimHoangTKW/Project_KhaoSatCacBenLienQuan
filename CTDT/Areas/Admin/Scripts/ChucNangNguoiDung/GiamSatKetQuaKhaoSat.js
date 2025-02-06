@@ -242,14 +242,16 @@ async function load_mh_by_gv() {
 }
 
 $(document).on("click", "#fildata", async function () {
+
     var body = $('#tan_xuat_table');
+    await test();
     if (check_tan_xuat) {
         body.show();
     } else {
         body.hide();
     }
 
-    await test();
+    
 
     check_tan_xuat = !check_tan_xuat;
 });
@@ -260,6 +262,10 @@ async function test() {
     const lop = $("#lop-fil-mh").val() || $("#lop-fil-gv").val();
     const mh = $("#mh-fil-mh").val() || $("#mh-fil-gv").val();
     const gv = $("#gv-fil-mh").val() || $("gv-fil-gv").val();
+    const from_date = $("#from_date").val();
+    const to_date = $("#to_date").val();
+    const startTimestamp = Math.floor(new Date(from_date).getTime() / 1000);
+    const endTimestamp = Math.floor(new Date(to_date).getTime() / 1000);
     const res = await $.ajax({
         url: '/api/admin/giam-sat-ket-qua-khao-sat',
         type: 'POST',
@@ -269,7 +275,9 @@ async function test() {
             id_ctdt: ctdt,
             id_lop: lop,
             id_mh: mh,
-            id_CBVC: gv
+            id_CBVC: gv,
+            from_date: startTimestamp,
+            to_date: endTimestamp
         }
     })
     if (res.success) {
@@ -279,7 +287,6 @@ async function test() {
         await form_cau_hoi_nhieu_lua_chon(res.many_leves);
         await form_cau_hoi_5_muc(res.five_levels);
         await form_y_kien_khac(res.other_levels);
-        check_tan_xuat = false
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -322,69 +329,7 @@ function form_ty_le(ty_le) {
         let container = $("#ThongKeTyLeSurvey");
         let html = "";
         container.empty();
-
-
-
-        ty_le.forEach(item => {
-            if (item.is_mon_hoc) {
-                html = `
-                    <p style="font-weight:bold;font-size:15px;text-align:center;color:black">THỐNG KÊ SỐ LƯỢNG THAM GIA KHẢO SÁT</p>
-                    <div class="question-block">
-                        <p style="font-size: 20px; font-weight: bold; color: black;"></p>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead style="color:black; text-align:center; font-weight:bold;font-size:15px">
-                                    <tr>
-                                        <th scope="col" rowspan="2">Tên CTĐT</th>
-                                        <th scope="col" rowspan="2">Tên Môn Học</th>
-                                        <th scope="col" rowspan="2">Tên Lớp</th>
-                                        <th scope="col" rowspan="2">Giảng Viên</th>
-                                        <th scope="col" colspan="5">Thống kê khảo sát</th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col">Số phiếu phát ra</th>
-                                        <th scope="col">Số phiếu thu về</th>
-                                        <th scope="col">Số phiếu chưa trả lời</th>
-                                        <th scope="col">Tỷ lệ phiếu thu về</th>
-                                        <th scope="col">Tỷ lệ phiếu chưa khảo sát</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                    `;
-                item.info_survey.forEach(survey => {
-                    survey.mon_hoc.forEach(subject => {
-                        const rowSpan = subject.ten_lop.length > 1 ? subject.ten_lop.length : 1;
-
-                        subject.ten_lop.forEach((lop, index) => {
-                            let giangVienNames = subject.ten_gv.join(", ");
-
-                            html += index === 0
-                                ? `
-                                <tr>
-                                    <td rowspan="${rowSpan}">${survey.ctdt}</td>
-                                    <td rowspan="${rowSpan}">${subject.mon_hoc}</td>
-                                    <td>${lop}</td>
-                                    <td rowspan="${rowSpan}">${giangVienNames}</td>
-                                    <td class="formatSo">${item.tong_khao_sat}</td>
-                                    <td class="formatSo">${item.tong_phieu_da_tra_loi}</td>
-                                    <td class="formatSo">${item.tong_phieu_chua_tra_loi}</td>
-                                    <td class="formatSo">${item.ty_le_da_tra_loi}%</td>
-                                    <td class="formatSo">${item.ty_le_chua_tra_loi}%</td>
-                                </tr>`
-                                : `
-                                <tr>
-                                    <td>${lop}</td>
-                                    <td class="formatSo">${item.tong_khao_sat}</td>
-                                    <td class="formatSo">${item.tong_phieu_da_tra_loi}</td>
-                                    <td class="formatSo">${item.tong_phieu_chua_tra_loi}</td>
-                                    <td class="formatSo">${item.ty_le_da_tra_loi}%</td>
-                                    <td class="formatSo">${item.ty_le_chua_tra_loi}%</td>
-                                </tr>`;
-                        });
-                    });
-                });
-            } else if (item.is_can_bo) {
-                html = `
+        html = `
                 <p style="font-weight:bold;font-size:15px;text-align:center;color:black">THỐNG KÊ SỐ LƯỢNG THAM GIA KHẢO SÁT</p>
                 <div class="question-block">
                     <p style="font-size: 20px; font-weight: bold; color: black;"></p>
@@ -402,19 +347,17 @@ function form_ty_le(ty_le) {
                             </thead>
                             <tbody>
                 `;
-                item.ctdt.forEach(ctdtItem => {
-                    html += `
+        ty_le.forEach(ctdtItem => {
+            html += `
                         <tr>
                             <td>${ctdtItem.ctdt}</td>
-                            <td class="formatSo">${item.tong_khao_sat}</td>
-                            <td class="formatSo">${item.tong_phieu_da_tra_loi}</td>
-                            <td class="formatSo">${item.tong_phieu_chua_tra_loi}</td>
-                            <td class="formatSo">${item.ty_le_da_tra_loi}%</td>
-                            <td class="formatSo">${item.ty_le_chua_tra_loi}%</td>
+                            <td class="formatSo">${ctdtItem.tong_khao_sat}</td>
+                            <td class="formatSo">${ctdtItem.tong_phieu_da_tra_loi}</td>
+                            <td class="formatSo">${ctdtItem.tong_phieu_chua_tra_loi}</td>
+                            <td class="formatSo">${ctdtItem.ty_le_da_tra_loi}%</td>
+                            <td class="formatSo">${ctdtItem.ty_le_chua_tra_loi}%</td>
                         </tr>
                     `;
-                });
-            }
         });
 
         html += `

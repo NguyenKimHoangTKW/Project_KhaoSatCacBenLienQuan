@@ -103,24 +103,26 @@ namespace CTDT.Areas.Admin.Controllers
                         List_data.Add(DataGiangVien);
                     }
                 }
-                //else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
-                //{
-                //    var ctdt = db.answer_response
-                //      .Where(x => x.id_ctdt == user.id_ctdt  && x.id_sv == null)
-                //      .AsQueryable();
-                //    var TotalAll = ctdt.Count();
-                //    var DataCTDT = new
-                //    {
-                //        id_phieu = items.surveyID,
-                //        ten_phieu = items.surveyTitle,
-                //        tong_khao_sat = TotalAll,
-                //        tong_phieu_da_tra_loi = TotalAll,
-                //        tong_phieu_chua_tra_loi = 0,
-                //        ty_le_da_tra_loi = TotalAll > 0 ? 100 : 0,
-                //        ty_le_chua_tra_loi = 0
-                //    };
-                //    List_data.Add(DataCTDT);
-                //}
+                else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "phiếu doanh nghiệp")
+                {
+                    var ctdt = db.answer_response.Where(x => x.surveyID == find.surveyID).AsQueryable();
+                    if (find.id_ctdt != 0)
+                    {
+                        ctdt = ctdt.Where(x => x.id_ctdt == find.id_ctdt);
+                    }
+                    var totalall = await ctdt.ToListAsync();
+                    var datactdt = new
+                    {
+                        id_phieu = items.surveyID,
+                        ten_phieu = items.surveyTitle,
+                        tong_khao_sat = totalall,
+                        tong_phieu_da_tra_loi = totalall,
+                        tong_phieu_chua_tra_loi = 0,
+                        ty_le_da_tra_loi = totalall.Count > 0 ? 100 : 0,
+                        ty_le_chua_tra_loi = 0
+                    };
+                    List_data.Add(datactdt);
+                }
                 else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
                 {
                     bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11 }.Contains(items.id_loaikhaosat);
@@ -147,7 +149,30 @@ namespace CTDT.Areas.Admin.Controllers
                         };
                         List_data.Add(DataStudent);
                     }
-                }  
+                }
+                else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+                {
+                    var query = await db.nguoi_hoc_khao_sat.Where(x => x.surveyID == find.surveyID).ToListAsync();
+                    if (find.id_ctdt != 0)
+                    {
+                        query = query.Where(x => x.sinhvien.lop.id_ctdt == find.id_ctdt).ToList();
+                    }
+                    var TotalAll = query.Count;
+                    var idphieu = db.survey.Where(x => x.surveyID == items.surveyID).FirstOrDefault();
+                    var TotalDaKhaoSat = query.Where(x => x.is_khao_sat == 1).ToList();
+                    double percentage = TotalAll > 0 ? Math.Round(((double)TotalDaKhaoSat.Count / TotalAll) * 100, 2) : 0;
+                    var DataCBVC = new
+                    {
+                        id_phieu = items.surveyID,
+                        ten_phieu = items.surveyTitle,
+                        tong_khao_sat = TotalAll,
+                        tong_phieu_da_tra_loi = TotalDaKhaoSat.Count,
+                        tong_phieu_chua_tra_loi = (TotalAll - TotalDaKhaoSat.Count),
+                        ty_le_da_tra_loi = percentage,
+                        ty_le_chua_tra_loi = Math.Round(((double)100 - percentage), 2),
+                    };
+                    List_data.Add(DataCBVC);
+                }
             }
             return List_data;
         }
@@ -176,7 +201,7 @@ namespace CTDT.Areas.Admin.Controllers
                         {
                             cbvc = cbvc.Where(x => x.CanBoVienChuc.id_chuongtrinhdaotao == find.id_ctdt).ToList();
                             TotalDaKhaoSat = TotalDaKhaoSat
-                            .Where(x =>  x.id_ctdt == find.id_ctdt)
+                            .Where(x => x.id_ctdt == find.id_ctdt)
                             .ToList();
                         }
                         var TotalAll = cbvc.Count();
@@ -218,24 +243,28 @@ namespace CTDT.Areas.Admin.Controllers
                         List_data.Add(DataGiangVien);
                     }
                 }
-                //else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
-                //{
-                //    var ctdt = db.answer_response
-                //      .Where(x => x.id_ctdt == user.id_ctdt  && x.id_sv == null)
-                //      .AsQueryable();
-                //    var TotalAll = ctdt.Count();
-                //    var DataCTDT = new
-                //    {
-                //        id_phieu = items.surveyID,
-                //        ten_phieu = items.surveyTitle,
-                //        tong_khao_sat = TotalAll,
-                //        tong_phieu_da_tra_loi = TotalAll,
-                //        tong_phieu_chua_tra_loi = 0,
-                //        ty_le_da_tra_loi = TotalAll > 0 ? 100 : 0,
-                //        ty_le_chua_tra_loi = 0
-                //    };
-                //    List_data.Add(DataCTDT);
-                //}
+                else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "phiếu doanh nghiệp")
+                {
+                    var ctdt = db.answer_response.Where(x =>
+                    x.surveyID == find.surveyID &&
+                    x.time >= find.from_date && x.time <= find.to_date).AsQueryable();
+                    if (find.id_ctdt != 0)
+                    {
+                        ctdt = ctdt.Where(x => x.id_ctdt == find.id_ctdt);
+                    }
+                    var totalall = await ctdt.ToListAsync();
+                    var datactdt = new
+                    {
+                        id_phieu = items.surveyID,
+                        ten_phieu = items.surveyTitle,
+                        tong_khao_sat = totalall.Count,
+                        tong_phieu_da_tra_loi = totalall.Count,
+                        tong_phieu_chua_tra_loi = 0,
+                        ty_le_da_tra_loi = totalall.Count > 0 ? 100 : 0,
+                        ty_le_chua_tra_loi = 0
+                    };
+                    List_data.Add(datactdt);
+                }
                 else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
                 {
                     bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11 }.Contains(items.id_loaikhaosat);
@@ -254,7 +283,7 @@ namespace CTDT.Areas.Admin.Controllers
                             .ToList();
                         }
                         var total = check_hoc_phan.Count;
-                        
+
                         double percentage = total > 0 ? Math.Round(((double)TotalIsKhaoSat.Count / total) * 100, 2) : 0;
                         var DataStudent = new
                         {
@@ -268,6 +297,29 @@ namespace CTDT.Areas.Admin.Controllers
                         };
                         List_data.Add(DataStudent);
                     }
+                }
+                else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+                {
+                    var query = await db.nguoi_hoc_khao_sat.Where(x => x.surveyID == find.surveyID).ToListAsync();
+                    var TotalDaKhaoSat = await db.answer_response.Where(x => x.surveyID == find.surveyID && x.time >= find.from_date && x.time <= find.to_date).ToListAsync();
+                    if (find.id_ctdt != 0)
+                    {
+                        query = query.Where(x => x.sinhvien.lop.id_ctdt == find.id_ctdt).ToList();
+                    }
+                    var TotalAll = query.Count;
+                    var idphieu = db.survey.Where(x => x.surveyID == items.surveyID).FirstOrDefault();
+                    double percentage = TotalAll > 0 ? Math.Round(((double)TotalDaKhaoSat.Count / TotalAll) * 100, 2) : 0;
+                    var DataCBVC = new
+                    {
+                        id_phieu = items.surveyID,
+                        ten_phieu = items.surveyTitle,
+                        tong_khao_sat = TotalAll,
+                        tong_phieu_da_tra_loi = TotalDaKhaoSat.Count,
+                        tong_phieu_chua_tra_loi = (TotalAll - TotalDaKhaoSat.Count),
+                        ty_le_da_tra_loi = percentage,
+                        ty_le_chua_tra_loi = Math.Round(((double)100 - percentage), 2),
+                    };
+                    List_data.Add(DataCBVC);
                 }
             }
             return List_data;

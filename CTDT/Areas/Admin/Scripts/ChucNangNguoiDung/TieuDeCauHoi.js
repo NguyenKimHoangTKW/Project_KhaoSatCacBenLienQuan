@@ -688,11 +688,11 @@ async function load_option_children_title() {
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
-                <input type="text" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số">
+                <input type="text" autocomplete="off" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số">
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
-                <input type="text" class="form-control" id="edtNameChilTitle" placeholder="Nhập tên chi tiết">
+                <input type="text" autocomplete="off" class="form-control" id="edtNameChilTitle" placeholder="Nhập tên chi tiết">
             </div>
             <div class="form-group">
                 <label class="form-label">Dạng câu hỏi</label>

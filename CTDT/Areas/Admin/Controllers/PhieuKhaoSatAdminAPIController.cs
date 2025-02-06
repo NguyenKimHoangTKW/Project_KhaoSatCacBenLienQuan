@@ -291,29 +291,50 @@ namespace CTDT.Areas.Admin.Controllers
         public IHttpActionResult delete_survey(survey sv)
         {
             var check_survey = db.survey.SingleOrDefault(x => x.surveyID == sv.surveyID);
-            var check_answer = db.answer_response.SingleOrDefault(x => x.surveyID == sv.surveyID);
-            var check_nguoi_hoc_khao_sat = db.nguoi_hoc_khao_sat.SingleOrDefault(x => x.surveyID == sv.surveyID);
-            var check_nguoi_hoc_hoc_phan = db.nguoi_hoc_dang_co_hoc_phan.SingleOrDefault(x => x.surveyID == sv.surveyID);
-            var check_cbvc_khao_sat = db.cbvc_khao_sat.SingleOrDefault(x => x.surveyID == sv.surveyID);
-            if (check_answer != null)
+            var check_answer = db.answer_response.Where(x => x.surveyID == sv.surveyID).ToList();
+            var check_nguoi_hoc_khao_sat = db.nguoi_hoc_khao_sat.Where(x => x.surveyID == sv.surveyID).ToList();
+            var check_nguoi_hoc_hoc_phan = db.nguoi_hoc_dang_co_hoc_phan.Where(x => x.surveyID == sv.surveyID).ToList();
+            var check_cbvc_khao_sat = db.cbvc_khao_sat.Where(x => x.surveyID == sv.surveyID).ToList();
+            var check_title_survey = db.tieu_de_phieu_khao_sat.Where(x => x.surveyID == sv.surveyID).ToList();
+            if (check_answer.Any())
             {
-                db.answer_response.Remove(check_answer);
+                db.answer_response.RemoveRange(check_answer);
                 db.SaveChanges();
             }
-            if (check_nguoi_hoc_khao_sat != null)
+            if (check_nguoi_hoc_khao_sat.Any())
             {
-                db.nguoi_hoc_khao_sat.Remove(check_nguoi_hoc_khao_sat);
+                db.nguoi_hoc_khao_sat.RemoveRange(check_nguoi_hoc_khao_sat);
                 db.SaveChanges();
             }
-            if (check_nguoi_hoc_hoc_phan != null)
+            if (check_nguoi_hoc_hoc_phan.Any())
             {
-                db.nguoi_hoc_dang_co_hoc_phan.Remove(check_nguoi_hoc_hoc_phan);
+                db.nguoi_hoc_dang_co_hoc_phan.RemoveRange(check_nguoi_hoc_hoc_phan);
                 db.SaveChanges();
             }
-            if (check_cbvc_khao_sat != null)
+            if (check_cbvc_khao_sat.Any())
             {
-                db.cbvc_khao_sat.Remove(check_cbvc_khao_sat);
+                db.cbvc_khao_sat.RemoveRange(check_cbvc_khao_sat);
                 db.SaveChanges();
+            }
+            if (check_title_survey.Any())
+            {
+                foreach(var item in check_title_survey)
+                {
+                    var check_chil_title = db.chi_tiet_cau_hoi_tieu_de.Where(x => x.id_tieu_de_phieu == item.id_tieu_de_phieu).ToList();
+                    if (check_chil_title.Any())
+                    {
+                        foreach(var chil_item in check_chil_title)
+                        {
+                            var check_rd_cau_hoi = db.radio_cau_hoi_khac.Where(x => x.id_chi_tiet_cau_hoi_tieu_de == chil_item.id_chi_tiet_cau_hoi_tieu_de).ToList();
+                            if (check_rd_cau_hoi.Any())
+                            {
+                                db.radio_cau_hoi_khac.RemoveRange(check_rd_cau_hoi);
+                            }
+                        }
+                        db.chi_tiet_cau_hoi_tieu_de.RemoveRange(check_chil_title);
+                    }
+                }
+                db.tieu_de_phieu_khao_sat.RemoveRange(check_title_survey);
             }
             db.survey.Remove(check_survey);
             db.SaveChanges();
