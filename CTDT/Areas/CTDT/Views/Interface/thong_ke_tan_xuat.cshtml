@@ -51,11 +51,11 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Từ khoảng</label>
-                                    <input type="date" class="form-control" name="keywordSearch" id="from_date">
+                                    <input type="date" class="form-control" id="from_date">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Đến khoảng</label>
-                                    <input type="date" class="form-control" name="keywordSearch" id="to_date">
+                                    <input type="date" class="form-control" id="to_date">
                                 </div>
                             </div>
                             <hr />
@@ -63,21 +63,20 @@
                                 <button type="submit" id="btnFilter" class="btn btn-primary btn-tone" style="margin-right: 20px;">
                                     <i class="fas fa-filter"></i> Lọc dữ liệu
                                 </button>
+                                <button class="btn btn-success" id="exportExcel">
+                                    <i class="fas fa-file-excel"></i> Xuất Excel
+                                </button>
                             </div>
+
                         </fieldset>
                     </div>
                     <div class="m-t-25" id="tan_xuat_table" style="display:none">
-                        <div class="row mb-3">
-                            <div class="col-md-6 d-flex align-items-center">
-                            </div>
-                            <div class="col-md-6 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-success" id="exportExcel">Xuất Excel</button>
-                            </div>
-                        </div>
+                        <h4 id="show-time-check" style=" text-align: right; color: red"></h4>
+                        <hr />
                         <div class="table-responsive" id="ThongKeTyLeSurvey">
                             <!--Thống kê tỷ lệ-->
                         </div>
-                        <div class="accordion" id="accordion-default" style="display:none">
+                        <div class="accordion" id="accordion-default">
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title">

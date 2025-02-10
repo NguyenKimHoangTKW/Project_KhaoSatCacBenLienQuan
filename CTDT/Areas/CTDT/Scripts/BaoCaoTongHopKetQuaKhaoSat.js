@@ -116,10 +116,19 @@ function ExportExcelBaoCaoTongHop() {
         alignment: { horizontal: 'center', vertical: 'middle' },
     };
 
+    let CTDTExport = "Chương trình đào tạo: " + $("#find-ctdt option:selected").text().toUpperCase();
+    worksheet.addRow([CTDTExport]);
+    let lastRowCTDT = worksheet.lastRow.number;
+    worksheet.mergeCells(`A${lastRowCTDT}:F${lastRowCTDT}`);
+    let mergedCellCTDT = worksheet.getCell(`A${lastRowCTDT}`);
+    mergedCellCTDT.font = { bold: true, size: 14 };
+    mergedCellCTDT.alignment = { horizontal: 'center', vertical: 'middle' };
+  
+
     let SurveyYear = "NĂM HỌC: " + $("#yearGiamSat option:selected").text().toUpperCase();
     worksheet.addRow([SurveyYear]);
     let lastRowYear = worksheet.lastRow.number;
-    worksheet.mergeCells(`A${lastRowYear}:F${lastRowYear}`);
+    worksheet.mergeCells(`A${lastRowYear}:B${lastRowYear}`);
     let mergedCellYear = worksheet.getCell(`A${lastRowYear}`);
     mergedCellYear.font = { bold: true, size: 14 };
     mergedCellYear.alignment = { horizontal: 'center', vertical: 'middle' };
@@ -132,7 +141,7 @@ function ExportExcelBaoCaoTongHop() {
     mergedCellTime.font = { bold: true, size: 14 };
     mergedCellTime.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.addRow([]);
-
+   
     let table = document.querySelector('#bao_cao_tong_hop table');
     let thead = table.querySelector('thead');
     let tbody = table.querySelector('tbody');
@@ -167,10 +176,9 @@ function ExportExcelBaoCaoTongHop() {
     worksheet.columns.forEach(column => {
         column.width = 40;
     });
-    const get_ctdt = $("#find-ctdt option:selected").text();
     workbook.xlsx.writeBuffer().then(function (buffer) {
         const dateTime = getFormattedDateTime();
-        const filename = `Báo cáo tổng hợp_${get_ctdt}_${dateTime}.xlsx`;
+        const filename = `Báo cáo tổng hợp_${dateTime}.xlsx`;
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
 }
@@ -192,6 +200,7 @@ async function LoadKetQua() {
     thead.empty();
     let html = ``;
     if (res.success) {
+        $("#title_notification").hide();
         const data = JSON.parse(res.data);
         data.sort((a, b) => {
             const idA = a.phieu.split(".")[0];

@@ -23,9 +23,6 @@ namespace CTDT.Areas.CTDT.Controllers
     {
         dbSurveyEntities db = new dbSurveyEntities();
         private users user;
-        private bool is_user_hop_tac_doanh_nghiep;
-        private bool is_user_ctdt;
-        private bool is_user_khoa;
         public ThongKeKhaoSatCTDTAPIController()
         {
             user = SessionHelper.GetUser();
