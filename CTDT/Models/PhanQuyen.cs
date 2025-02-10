@@ -9,7 +9,7 @@ namespace CTDT.Models
     {
         public int ma_user {  get; set; }
         public int ma_quyen {  get; set; }
-        public int ma_ctdt { get; set; }
+        public List<int> ma_ctdt { get; set; }
         public int ma_khoa { get; set; }
         public int[] ma_chuc_nang { get; set; }
     }

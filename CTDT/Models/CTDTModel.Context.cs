@@ -48,6 +48,7 @@ namespace CTDT.Models
         public virtual DbSet<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
         public virtual DbSet<nguoi_hoc_khao_sat> nguoi_hoc_khao_sat { get; set; }
         public virtual DbSet<phan_quyen_chuc_nang_users> phan_quyen_chuc_nang_users { get; set; }
+        public virtual DbSet<phan_quyen_users> phan_quyen_users { get; set; }
         public virtual DbSet<radio_cau_hoi_khac> radio_cau_hoi_khac { get; set; }
         public virtual DbSet<sinhvien> sinhvien { get; set; }
         public virtual DbSet<survey> survey { get; set; }

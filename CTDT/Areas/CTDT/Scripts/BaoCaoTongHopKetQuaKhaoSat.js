@@ -1,4 +1,5 @@
-﻿function Loading() {
+﻿$(".select2").select2();
+function Loading() {
     Swal.fire({
         title: 'Loading...',
         text: 'Đang thống kê dữ liệu, vui lòng chờ trong giây lát !',
@@ -11,15 +12,6 @@
 function EndLoading() {
     Swal.close();
 }
-$(document).ready(async function () {
-    Loading()
-    try {
-        await LoadKetQua();
-    }
-    finally {
-        EndLoading()
-    }
-});
 $(document).on('click', '#ExportExcel', function () {
     if ($('#bao_cao_tong_hop').text().trim() === 'Không có dữ liệu báo cáo tổng hợp cho năm học này') {
         Swal.fire({
@@ -52,7 +44,8 @@ $(document).on('click', '#ExportExcel', function () {
         });
     }
 })
-$(document).on('change', '#Year', async function () {
+$(document).on('click', '#btnFilter', async function (event) {
+    event.preventDefault();
     Loading()
     try {
         await LoadKetQua();
@@ -123,7 +116,7 @@ function ExportExcelBaoCaoTongHop() {
         alignment: { horizontal: 'center', vertical: 'middle' },
     };
 
-    let SurveyYear = "NĂM HỌC: " + $("#Year option:selected").text().toUpperCase();
+    let SurveyYear = "NĂM HỌC: " + $("#yearGiamSat option:selected").text().toUpperCase();
     worksheet.addRow([SurveyYear]);
     let lastRowYear = worksheet.lastRow.number;
     worksheet.mergeCells(`A${lastRowYear}:F${lastRowYear}`);
@@ -174,53 +167,58 @@ function ExportExcelBaoCaoTongHop() {
     worksheet.columns.forEach(column => {
         column.width = 40;
     });
-
+    const get_ctdt = $("#find-ctdt option:selected").text();
     workbook.xlsx.writeBuffer().then(function (buffer) {
         const dateTime = getFormattedDateTime();
-        const filename = `Báo cáo tổng hợp_${dateTime}.xlsx`;
+        const filename = `Báo cáo tổng hợp_${get_ctdt}_${dateTime}.xlsx`;
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
 }
 async function LoadKetQua() {
-    var Year = $('#Year').val();
+    var Year = $('#yearGiamSat').val();
+    var ctdt = $('#find-ctdt').val();
     const res = await $.ajax({
-        url: '/api/bao_cao_tong_hop_ket_qua_khao_sat',
+        url: '/api/ctdt/bao-cao-tong-hop-ket-qua-khao-sat',
         type: 'POST',
-        data: { id_nam_hoc: Year }
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id_namhoc: Year,
+            id_ctdt: ctdt
+        })
     });
     let body = $('#showdata');
     let thead = $('#showthead');
     body.empty();
     thead.empty();
     let html = ``;
-    const data = res.data;
-    if (res.is_data) {
+    if (res.success) {
+        const data = JSON.parse(res.data);
         data.sort((a, b) => {
-            const idA = a.ten_phieu.split(".")[0];
-            const idB = b.ten_phieu.split(".")[0];
+            const idA = a.phieu.split(".")[0];
+            const idB = b.phieu.split(".")[0];
             return idA.localeCompare(idB, undefined, { numeric: true });
         });
         let title = `
     <tr>
         <th scope="col">STT</th>
         <th scope="col">Phiếu khảo sát</th>
-        <th scope="col">Học kỳ</th>
         <th scope="col">Tỷ lệ tham gia khảo sát</th>
+        <th scope="col">Tỷ lệ chưa tham gia khảo sát</th>
         <th scope="col">Mức độ hài lòng</th>
         <th scope="col">Điểm trung bình</th>
     </tr>
 `;
         thead.html(title);
         data.forEach(function (survey, index) {
-            survey.thong_ke_ty_le.forEach(function (tylekhaosat) {
+            survey.ty_le_tham_gia_khao_sat.forEach(function (tylekhaosat) {
                 html += `<tr>`;
                 html += `<td class="formatSo">${index + 1}</td>`;
-                html += `<td>${survey.ten_phieu}</td>`;
-                let hocKy = tylekhaosat.hoc_ky ? tylekhaosat.hoc_ky : "";
-                html += `<td>${hocKy}</td>`;
-                let ty_le_da_tra_loi = tylekhaosat.ty_le_tham_gia_khao_sat ? tylekhaosat.ty_le_tham_gia_khao_sat.ty_le_da_tra_loi : 0;
+                html += `<td>${survey.phieu}</td>`;
+                let ty_le_da_tra_loi = tylekhaosat.ty_le_da_tra_loi ? tylekhaosat.ty_le_da_tra_loi : 0;
                 html += `<td class="formatSo">${ty_le_da_tra_loi}%</td>`;
-                let muc_do_hai_long = tylekhaosat.ty_le_hai_long[0]; 
+                let ty_le_chua_tra_loi = tylekhaosat.ty_le_chua_tra_loi ? tylekhaosat.ty_le_chua_tra_loi : 0;
+                html += `<td class="formatSo">${ty_le_chua_tra_loi}%</td>`;
+                let muc_do_hai_long = tylekhaosat.muc_do_hai_long[0]; 
                 let avg_ty_le_hai_long = muc_do_hai_long ? muc_do_hai_long.avg_ty_le_hai_long : 0;
                 let avg_score = muc_do_hai_long ? muc_do_hai_long.avg_score : 0;
                 html += `<td class="formatSo">${avg_ty_le_hai_long}%</td>`;

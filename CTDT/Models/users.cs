@@ -19,6 +19,7 @@ namespace CTDT.Models
         {
             this.answer_response = new HashSet<answer_response>();
             this.phan_quyen_chuc_nang_users = new HashSet<phan_quyen_chuc_nang_users>();
+            this.phan_quyen_users = new HashSet<phan_quyen_users>();
             this.survey = new HashSet<survey>();
         }
     
@@ -32,21 +33,15 @@ namespace CTDT.Models
         public Nullable<int> ngaycapnhat { get; set; }
         public Nullable<int> ngaytao { get; set; }
         public Nullable<int> dang_nhap_lan_cuoi { get; set; }
-        public Nullable<int> id_donvi { get; set; }
-        public Nullable<int> id_ctdt { get; set; }
-        public Nullable<int> id_khoa { get; set; }
-        public Nullable<int> id_hdt { get; set; }
-        public string set_phan_quyen { get; set; }
         public string avatarUrl { get; set; }
         public Nullable<byte> status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }
-        public virtual ctdt ctdt { get; set; }
-        public virtual DonVi DonVi { get; set; }
-        public virtual khoa khoa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<phan_quyen_chuc_nang_users> phan_quyen_chuc_nang_users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<phan_quyen_users> phan_quyen_users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<survey> survey { get; set; }
         public virtual typeusers typeusers { get; set; }

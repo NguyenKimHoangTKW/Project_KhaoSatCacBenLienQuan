@@ -21,27 +21,7 @@
                     <legend class="float-none w-auto px-3">Chức năng</legend>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo chương trình đào tạo</label>
-                            <select class="form-control select2" id="FiterCTDT">
-                                <option value="">Tất cả</option>
-                                @foreach (var item in ViewBag.CTDTList)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo đơn vị</label>
-                            <select class="form-control select2" id="FilterDonVi">
-                                <option value="">Tất cả</option>
-                                @foreach (var item in ViewBag.DonVilist)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo chức vụ tài khoản</label>
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo quyền tài khoản</label>
                             <select class="form-control select2" id="FilterTrangThai">
                                 <option value="">Tất cả</option>
                                 @foreach (var item in ViewBag.TypeUserList)
@@ -49,6 +29,10 @@
                                     <option value="@item.Value">@item.Text</option>
                                 }
                             </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo từ khóa</label>
+                            <input type="text" class="form-control" name="keywordSearch" id="searchInput" placeholder="Nhập từ khóa muốn tìm kiếm ...">
                         </div>
                     </div>
 
@@ -124,12 +108,29 @@
             </div>
             <!-- End Modal Thêm mới User -->
             <div class="m-t-25">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <!-- Filter rows per page -->
+                    <div>
+                        <label for="pageSizeSelect">Hiển thị:</label>
+                        <select id="pageSizeSelect" class="form-control form-control-sm d-inline-block" style="width: auto;">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="load_data_table">
                         <!--Load Data-->
                     </table>
                 </div>
             </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end" id="paginationControls">
+                    <!-- Phân trang -->
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

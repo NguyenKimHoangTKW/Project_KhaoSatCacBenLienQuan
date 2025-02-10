@@ -1,7 +1,7 @@
 ﻿var ma_user = $('#ma_user').text();
 let selectedProgramId = null;
 let selectedKhoaId = null;
-let selectedCtdtId = null;
+let selectedCtdtIds = [];
 $(document).ready(function () {
     load_quyen_user().then(() => {
         load_phan_quyen(); 
@@ -75,8 +75,6 @@ function form_chuc_nang(items, body, headingId, collapseId, programId) {
     html += `</div></div>`;
     body.append(html);
 }
-
-
 function render_chuc_nang_section(chucNangList, programId) {
     let html = '';
     chucNangList.forEach(function (chucnang) {
@@ -105,13 +103,13 @@ function render_ctdt_table(ctdtList) {
                     <tbody>
     `;
     ctdtList.forEach(function (ctdt, index) {
-        let isChecked = selectedCtdtId === ctdt.ma_ctdt ? 'checked' : '';
+        let isChecked = selectedCtdtIds.includes(ctdt.ma_ctdt) ? 'checked' : '';
         html += `
             <tr>
                 <td class="text-center">${index + 1}</td>
                 <td>${ctdt.ten_ctdt}</td>
                 <td class="text-center">
-                    <input type="radio" name="ctdtSelection" class="form-check-input ctdt_checkbox" id="ctdt_${ctdt.ma_ctdt}" ${isChecked} onchange="handleCtdtSelection('${ctdt.ma_ctdt}')">
+                    <input type="checkbox" name="ctdtSelection" class="form-check-input ctdt_checkbox" id="ctdt_${ctdt.ma_ctdt}" ${isChecked} onchange="handleCtdtSelection('${ctdt.ma_ctdt}')">
                 </td>
             </tr>
         `;
@@ -124,6 +122,7 @@ function render_ctdt_table(ctdtList) {
 
     return html;
 }
+
 
 function render_khoa_table(khoaList) {
     let html = `
@@ -139,8 +138,9 @@ function render_khoa_table(khoaList) {
                     </thead>
                     <tbody>
     `;
+
     khoaList.forEach(function (khoa, index) {
-        let isChecked = selectedKhoaId === khoa.ma_khoa ? 'checked' : '';
+        let isChecked = selectedKhoaId == khoa.ma_khoa ? 'checked' : ''; 
         html += `
             <tr>
                 <td class="text-center">${index + 1}</td>
@@ -151,6 +151,7 @@ function render_khoa_table(khoaList) {
             </tr>
         `;
     });
+
     html += `</tbody></table></div></div>`;
 
     setTimeout(() => {
@@ -159,9 +160,6 @@ function render_khoa_table(khoaList) {
 
     return html;
 }
-
-
-
 function handleRadioSelection(programId) {
     selectedProgramId = programId;
 }
@@ -171,36 +169,56 @@ function handleKhoaSelection(khoaId) {
 }
 
 function handleCtdtSelection(ctdtId) {
-    selectedCtdtId = ctdtId;
+    let index = selectedCtdtIds.indexOf(ctdtId);
+    if (index === -1) {
+        selectedCtdtIds.push(ctdtId);
+    } else {
+        selectedCtdtIds.splice(index, 1);
+    }
 }
 async function load_quyen_user() {
     const res = await $.ajax({
         url: '/api/admin/load_quyen_user',
         type: 'POST',
-        data: { ma_user: ma_user }
+        contentType: 'application/json',
+        data: JSON.stringify({ ma_user: ma_user })
     });
 
-    if (res.data) {
-        selectedProgramId = res.data.ma_quyen;
-        selectedKhoaId = res.data.ma_khoa;
-        selectedCtdtId = res.data.ma_ctdt;
+    if (res.data && res.data.length > 0) {
+        const userData = res.data[0];
+
+        selectedProgramId = userData.ma_quyen;
+        if (selectedProgramId === 3) {
+            selectedCtdtIds = userData.ma_ctdt.map(item => item.id_ctdt);
+        }
+        if (selectedProgramId === 5 && userData.ma_khoa.length > 0) {
+            selectedKhoaId = userData.ma_khoa[0].id_khoa;
+        }
     }
 }
+
 function handleSave() {
+    selectedCtdtIds = [];
+    $('.ctdt_checkbox:checked').each(function () {
+        selectedCtdtIds.push($(this).attr('id').replace('ctdt_', ''));
+    });
+
     $.ajax({
         url: '/api/admin/save_phan_quyen',
         type: 'POST',
-        data: {
+        data: JSON.stringify({
             ma_user: ma_user,
             ma_quyen: selectedProgramId,
-            ma_ctdt: selectedCtdtId,
+            ma_ctdt: selectedCtdtIds,
             ma_khoa: selectedKhoaId
-        },
+        }),
+        contentType: 'application/json',
         success: function (res) {
-            Toast_alert("success", res.message)
+            Toast_alert("success", res.message);
         }
-    })
+    });
 }
+
 function initializeDataTable(tableClass, title) {
     $(tableClass).DataTable({
         pageLength: 10,

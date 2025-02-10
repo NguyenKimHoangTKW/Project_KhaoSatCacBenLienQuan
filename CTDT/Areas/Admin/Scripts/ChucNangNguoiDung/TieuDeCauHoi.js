@@ -1,4 +1,5 @@
-﻿// Các sự kiện
+﻿
+// Các sự kiện
 $(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
     $('#optionsTextarea').val('1. ');
@@ -515,11 +516,11 @@ async function load_option_info_children_title(value) {
                 </div>
                 <div class="form-group">
                     <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
-                    <input type="text" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số" value="${item.thu_tu}">
+                    <input type="text" class="form-control" autocomplete="off" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số" value="${item.thu_tu}">
                 </div>
                 <div class="form-group">
                     <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
-                    <input type="text" class="form-control" id="edtNameChilTitle" placeholder="Nhập tên chi tiết" value="${item.ten_cau_hoi}">
+                    <input type="text" class="form-control" autocomplete="off" id="edtNameChilTitle" placeholder="Nhập tên chi tiết" value="${item.ten_cau_hoi}">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Dạng câu hỏi</label>
@@ -557,6 +558,7 @@ async function load_option_info_children_title(value) {
 
             html += `</div>`;
             body.html(html);
+            $(".select2").select2();
             $("#chitietModal").modal("show");
             $("#edtSelectedDangCauHoi").on("change", function () {
                 const selectedValue = $(this).val();
@@ -566,7 +568,7 @@ async function load_option_info_children_title(value) {
                     let optionsHtml = `
                         <div class="form-group">
                             <label class="form-label">Nhập các tùy chọn (mỗi tùy chọn là 1 dòng)</label>
-                            <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10">`;
+                            <textarea id="optionsTextarea" autocomplete="off" class="form-control" aria-label="With textarea" rows="10">`;
                     get_rd.forEach(rd => {
                         optionsHtml += `${rd.thu_tu}. ${rd.ten_rd_cau_hoi_khac}\n`;
                     });
@@ -576,6 +578,7 @@ async function load_option_info_children_title(value) {
                 } else {
                     conditionalBlock.html("");
                 }
+                $(".select2").select2();
             });
         } else {
             Swal.fire({
@@ -817,11 +820,11 @@ async function load_pks_by_nam() {
         res.data.forEach(function (item) {
             html += `<option value="${item.id_phieu}">${item.ten_phieu}</option>`;
         });
-        $("#surveyid").empty().html(html);
+        $("#surveyid").empty().html(html).trigger("change");
     } else {
         html += `<option value="">${res.message}</option>`;
-        $("#surveyid").empty().html(html);
-        $("#ctdt").empty().html(html);
+        $("#surveyid").empty().html(html).trigger("change");
+        $("#ctdt").empty().html(html).trigger("change");
     }
 }
 async function load_tieu_de_pks() {
@@ -941,3 +944,4 @@ async function load_tieu_de_pks() {
         body.html(html);
     }
 }
+$(".select2").select2();

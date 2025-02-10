@@ -86,16 +86,16 @@ async function load_pks_by_nam() {
         res.data.forEach(function (item) {
             html += `<option value="${item.id_phieu}">${item.ten_phieu}</option>`;
         });
-        $("#surveyid").empty().html(html);
+        $("#surveyid").empty().html(html).trigger("change");
 
         res.ctdt.forEach(function (ctdt) {
             html_ctdt += `<option value="${ctdt.id_ctdt}">${ctdt.ten_ctdt}</option>`;
         });
-        $("#ctdt").empty().html(html_ctdt);
+        $("#ctdt").empty().html(html_ctdt).trigger("change");
     } else {
         html += `<option value="">${res.message}</option>`;
-        $("#surveyid").empty().html(html);
-        $("#ctdt").empty().html(html);
+        $("#surveyid").empty().html(html).trigger("change");
+        $("#ctdt").empty().html(html).trigger("change");
     }
 }
 
@@ -118,11 +118,11 @@ async function load_gv_by_mh() {
         check = true;
         const data = res.data;
         const lopSelect = $("#lop-fil-mh");
-        lopSelect.empty().append('<option value="">Tất cả</option>');
+        lopSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
         const lopData = [...new Map(data.map(item => [item.id_lop, item])).values()];
         lopData.forEach(lop => {
-            lopSelect.append(`<option value="${lop.id_lop}">${lop.lop}</option>`);
+            lopSelect.append(`<option value="${lop.id_lop}">${lop.lop}</option>`).trigger("change");
         });
 
         lopSelect.on('change', function () {
@@ -130,22 +130,22 @@ async function load_gv_by_mh() {
             const filteredSubjects = data.filter(item => item.id_lop == selectedLopId);
 
             const mhSelect = $("#mh-fil-mh");
-            mhSelect.empty().append('<option value="">Tất cả</option>');
+            mhSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
             filteredSubjects.forEach(subject => {
-                mhSelect.append(`<option value="${subject.id_hoc_phan}">${subject.ten_hoc_phan}</option>`);
+                mhSelect.append(`<option value="${subject.id_hoc_phan}">${subject.ten_hoc_phan}</option>`).trigger("change");
             });
 
-            $("#gv-fil-mh").empty().append('<option value="">Chọn giảng viên</option>');
+            $("#gv-fil-mh").empty().append('<option value="">Chọn giảng viên</option>').trigger("change");
 
             mhSelect.on('change', function () {
                 const selectedMh = $(this).val();
                 const selectedData = filteredSubjects.find(item => item.id_hoc_phan == selectedMh);
                 const gvSelect = $("#gv-fil-mh");
-                gvSelect.empty().append('<option value="">Tất cả</option>');
+                gvSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
                 if (selectedData && selectedData.giang_vien) {
                     selectedData.giang_vien.forEach(gv => {
-                        gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`);
+                        gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`).trigger("change");
                     });
                 }
             });
@@ -188,10 +188,10 @@ async function load_mh_by_gv() {
         check = true;
         const data = res.data;
         const lopSelect = $("#lop-fil-gv");
-        lopSelect.empty().append('<option value="">Tất cả</option>');
+        lopSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
         const uniqueClasses = [...new Map(data.map(item => [item.id_lop, item])).values()];
         uniqueClasses.forEach(lop => {
-            lopSelect.append(`<option value="${lop.id_lop}">${lop.ten_lop}</option>`);
+            lopSelect.append(`<option value="${lop.id_lop}">${lop.ten_lop}</option>`).trigger("change");
         });
 
         lopSelect.off('change').on('change', function () {
@@ -199,24 +199,24 @@ async function load_mh_by_gv() {
             const filteredByClass = data.filter(item => item.id_lop == selectedLopId);
 
             const gvSelect = $("#gv-fil-gv");
-            gvSelect.empty().append('<option value="">Tất cả</option>');
+            gvSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
             const uniqueLecturers = [...new Map(filteredByClass.map(item => [item.id_giang_vien, item])).values()];
             uniqueLecturers.forEach(gv => {
-                gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`);
+                gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`).trigger("change");
             });
 
-            $("#mh-fil-gv").empty().append('<option value="">Tất cả</option>');
+            $("#mh-fil-gv").empty().append('<option value="">Tất cả</option>').trigger("change");
             gvSelect.off('change').on('change', function () {
                 const selectedGVId = $(this).val();
                 const selectedLecturer = filteredByClass.find(item => item.id_giang_vien == selectedGVId);
 
                 const mhSelect = $("#mh-fil-gv");
-                mhSelect.empty().append('<option value="">Tất cả</option>');
+                mhSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
                 if (selectedLecturer && selectedLecturer.mon_hoc) {
                     selectedLecturer.mon_hoc.forEach(mh => {
-                        mhSelect.append(`<option value="${mh.id_mon_hoc}">${mh.ten_mon_hoc}</option>`);
+                        mhSelect.append(`<option value="${mh.id_mon_hoc}">${mh.ten_mon_hoc}</option>`).trigger("change");
                     });
                 }
             });

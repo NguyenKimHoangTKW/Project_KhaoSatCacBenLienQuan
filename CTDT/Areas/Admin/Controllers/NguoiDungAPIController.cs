@@ -1,12 +1,14 @@
 ﻿using CTDT.Models;
-using CTDT.Models.Admin;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.UI.WebControls;
+using static CTDT.Areas.Admin.Controllers.NguoiDungAPIController;
 namespace CTDT.Areas.Admin.Controllers
 {
     public class NguoiDungAPIController : ApiController
@@ -21,39 +23,78 @@ namespace CTDT.Areas.Admin.Controllers
         #region users
         [HttpPost]
         [Route("api/admin/load_du_lieu_users")]
-        public IHttpActionResult load_data(FindDataUsers findDataUsers)
+        public async Task<IHttpActionResult> load_data(FindDataUsers findDataUsers)
         {
 
             var query = db.users.AsQueryable();
-            if (findDataUsers.id_ctdt != 0)
-            {
-                query = query.Where(x => x.id_ctdt == findDataUsers.id_ctdt);
-            }
-            if (findDataUsers.id_donvi != 0)
-            {
-                query = query.Where(x => x.id_donvi == findDataUsers.id_donvi);
-            }
+            var get_data = new List<dynamic>();
             if (findDataUsers.id_type_user != 0)
             {
                 query = query.Where(x => x.id_typeusers == findDataUsers.id_type_user);
             }
-
-            var fil_data = query
-                .Select(x => new
+            if (!string.IsNullOrEmpty(findDataUsers.searchTerm))
+            {
+                string keyword = findDataUsers.searchTerm.ToLower();
+                query = query.Where(x =>
+                    x.email.ToLower().Contains(keyword) ||
+                    x.firstName.ToLower().Contains(keyword) ||
+                    x.lastName.ToLower().Contains(keyword) ||
+                    x.typeusers.name_typeusers.ToLower().Contains(keyword));
+            }
+            int totalRecords = await query.CountAsync();
+            var fil_data = await query.OrderBy(x => x.id_users)
+                .Skip((findDataUsers.page - 1) * findDataUsers.pageSize)
+                .Take(findDataUsers.pageSize)
+                .ToListAsync();
+            foreach (var items in fil_data)
+            {
+                var get_type = new List<dynamic>();
+                if (items.id_typeusers == 3)
                 {
-                    id_user = x.id_users,
-                    ten_user = x.firstName + " " + x.lastName,
-                    email = x.email,
-                    quyen_han = x.typeusers.name_typeusers,
-                    ngay_cap_nhat = x.ngaycapnhat,
-                    ngay_tao = x.ngaytao,
-                    dang_nhap_lan_cuoi = x.dang_nhap_lan_cuoi,
-                    don_vi = x.DonVi != null ? x.DonVi.name_donvi : "",
-                    ctdt = x.ctdt != null ? x.ctdt.ten_ctdt : ""
-                }).ToList();
-            return Ok(new { data = fil_data });
+                    var get_phan_quyen = await db.phan_quyen_users
+                    .Where(x => x.id_users == items.id_users)
+                    .Select(x => new
+                    {
+                        ten_ctdt = x.ctdt.ten_ctdt != null ? x.ctdt.ten_ctdt : "",
+                    }).ToListAsync();
+                    get_type.AddRange(get_phan_quyen);
+                }
+                else if (items.id_typeusers == 5)
+                {
+                    var get_phan_quyen = await db.phan_quyen_users
+                    .Where(x => x.id_users == items.id_users)
+                    .Select(x => new
+                    {
+                        ten_khoa = x.khoa.ten_khoa != null ? x.khoa.ten_khoa : ""
+                    }).ToListAsync();
+                    get_type.AddRange(get_phan_quyen);
+                }
+                get_data.Add(new
+                {
+                    id_user = items.id_users,
+                    ten_user = items.firstName + " " + items.lastName,
+                    email = items.email,
+                    quyen_han = items.typeusers.name_typeusers,
+                    ngay_cap_nhat = items.ngaycapnhat,
+                    ngay_tao = items.ngaytao,
+                    thuoc_chuc_quyen = get_type,
+                    dang_nhap_lan_cuoi = items.dang_nhap_lan_cuoi
+                });
+            }
+            return Ok(new { data = get_data ,
+                totalRecords = totalRecords,
+                totalPages = (int)Math.Ceiling((double)totalRecords / findDataUsers.pageSize),
+                currentPage = findDataUsers.page
+            });
         }
-
+        public class FindDataUsers
+        {
+            public int id_ctdt { get; set; }
+            public int id_type_user { get; set; }
+            public int page { get; set; }
+            public int pageSize { get; set; }
+            public string searchTerm { get; set; }
+        }
         [HttpPost]
         [Route("api/admin/add_users")]
         public IHttpActionResult Add(users us)
@@ -147,7 +188,6 @@ namespace CTDT.Areas.Admin.Controllers
 
                                 email = worksheet.Cells[row, 1].Text,
                                 id_typeusers = machucvu,
-                                id_ctdt = mactdt,
                                 ngaytao = unixTimestamp,
                                 ngaycapnhat = unixTimestamp
                             };
@@ -330,57 +370,88 @@ namespace CTDT.Areas.Admin.Controllers
 
             return NotFound();
         }
-
-
         public void save_nguoi_dung(users us, PhanQuyen phanQuyen)
         {
             us.id_typeusers = phanQuyen.ma_quyen;
-            us.id_ctdt = null;
-            us.id_khoa = null;
-            us.id_hdt = null;
             us.ngaycapnhat = unixTimestamp;
             db.SaveChanges();
+            var existingRecords = db.phan_quyen_users.Where(x => x.id_users == us.id_users).ToList();
+            if (existingRecords.Any())
+            {
+                db.phan_quyen_users.RemoveRange(existingRecords);
+                db.SaveChanges();
+            }
         }
 
         public void save_hop_tac_doanh_nghiep(users us, PhanQuyen phanQuyen)
         {
             us.id_typeusers = phanQuyen.ma_quyen;
-            us.id_ctdt = null;
-            us.id_khoa = null;
-            us.id_hdt = null;
             us.ngaycapnhat = unixTimestamp;
             db.SaveChanges();
+            var existingRecords = db.phan_quyen_users.Where(x => x.id_users == us.id_users).ToList();
+            if (existingRecords.Any())
+            {
+                db.phan_quyen_users.RemoveRange(existingRecords);
+                db.SaveChanges();
+            }
         }
 
         public void save_admin(users us, PhanQuyen phanQuyen)
         {
             us.id_typeusers = phanQuyen.ma_quyen;
-            us.id_ctdt = null;
-            us.id_khoa = null;
-            us.id_hdt = null;
             us.ngaycapnhat = unixTimestamp;
             db.SaveChanges();
+            var existingRecords = db.phan_quyen_users.Where(x => x.id_users == us.id_users).ToList();
+            if (existingRecords.Any())
+            {
+                db.phan_quyen_users.RemoveRange(existingRecords);
+                db.SaveChanges();
+            }
         }
 
         public void save_ctdt(users us, PhanQuyen phanQuyen)
         {
-            var ctdt = db.ctdt.FirstOrDefault(x => x.id_ctdt == phanQuyen.ma_ctdt);
+            var ctdtList = db.ctdt.Where(x => phanQuyen.ma_ctdt.Contains(x.id_ctdt)).ToList();
             us.id_typeusers = phanQuyen.ma_quyen;
-            us.id_ctdt = phanQuyen.ma_ctdt;
-            us.id_khoa = null;
-            us.id_hdt = ctdt?.id_hdt;
             us.ngaycapnhat = unixTimestamp;
             db.SaveChanges();
+            var existingRecords = db.phan_quyen_users.Where(x => x.id_users == us.id_users).ToList();
+            if (existingRecords.Any())
+            {
+                db.phan_quyen_users.RemoveRange(existingRecords);
+                db.SaveChanges();
+            }
+            foreach (var check_ctdt in ctdtList)
+            {
+                var newRecord = new phan_quyen_users
+                {
+                    id_users = us.id_users,
+                    id_ctdt = check_ctdt.id_ctdt
+                };
+                db.phan_quyen_users.Add(newRecord);
+            }
+            db.SaveChanges();
         }
+
 
         public void save_khoa(users us, PhanQuyen phanQuyen)
         {
             var khoa = db.khoa.FirstOrDefault(x => x.id_khoa == phanQuyen.ma_khoa);
             us.id_typeusers = phanQuyen.ma_quyen;
-            us.id_ctdt = phanQuyen.ma_ctdt;
-            us.id_khoa = khoa?.id_khoa;
-            us.id_hdt = khoa?.ctdt.FirstOrDefault()?.id_hdt;
             us.ngaycapnhat = unixTimestamp;
+            db.SaveChanges();
+            var existingRecords = db.phan_quyen_users.Where(x => x.id_users == us.id_users).ToList();
+            if (existingRecords.Any())
+            {
+                db.phan_quyen_users.RemoveRange(existingRecords);
+                db.SaveChanges();
+            }
+            var newRecord = new phan_quyen_users
+            {
+                id_users = us.id_users,
+                id_khoa = khoa.id_khoa
+            };
+            db.phan_quyen_users.Add(newRecord);
             db.SaveChanges();
         }
         #endregion
@@ -391,20 +462,52 @@ namespace CTDT.Areas.Admin.Controllers
         public IHttpActionResult LoadUserPermissions(PhanQuyen phanquyen)
         {
             var user = db.users.Find(phanquyen.ma_user);
-
             if (user != null)
             {
-                var userPermissions = new
+                var userPermissions = new List<dynamic>();
+                if (user.id_typeusers == 3)
                 {
-                    ma_quyen = user.id_typeusers,
-                    ma_ctdt = user.id_ctdt,
-                    ma_khoa = user.id_khoa,
-                    id_hdt = user.id_hdt
-                };
+                    var phan_quyen_ctdt = db.phan_quyen_users.Where(x => x.id_users == user.id_users)
+                        .Select(x => new
+                        {
+                            x.id_ctdt
+                        }).ToList();
+                    userPermissions.Add(new
+                    {
+                        ma_quyen = user.id_typeusers,
+                        ma_ctdt = phan_quyen_ctdt
+                    });
+                }
+                else if (user.id_typeusers == 1)
+                {
+                    userPermissions.Add(new
+                    {
+                        ma_quyen = user.id_typeusers,
+                    });
+                }
+                else if (user.id_typeusers == 2)
+                {
+                    userPermissions.Add(new
+                    {
+                        ma_quyen = user.id_typeusers,
+                    });
+                }
+                else if (user.id_typeusers == 5)
+                {
+                    var phan_quyen_khoa = db.phan_quyen_users.Where(x => x.id_users == user.id_users)
+                        .Select(x => new
+                        {
+                            x.id_khoa
+                        }).ToList();
+                    userPermissions.Add(new
+                    {
+                        ma_quyen = user.id_typeusers,
+                        ma_khoa = phan_quyen_khoa
+                    });
+                }
 
                 return Ok(new { data = userPermissions });
             }
-
             return NotFound();
         }
         #endregion

@@ -20,8 +20,8 @@ namespace CTDT.Models
             this.answer_response = new HashSet<answer_response>();
             this.CanBoVienChuc = new HashSet<CanBoVienChuc>();
             this.lop = new HashSet<lop>();
+            this.phan_quyen_users = new HashSet<phan_quyen_users>();
             this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
-            this.users = new HashSet<users>();
         }
     
         public int id_ctdt { get; set; }
@@ -41,8 +41,8 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<lop> lop { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
+        public virtual ICollection<phan_quyen_users> phan_quyen_users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<users> users { get; set; }
+        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
     }
 }

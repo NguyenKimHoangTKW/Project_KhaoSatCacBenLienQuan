@@ -316,19 +316,18 @@
     <Compile Include="Areas\Admin\Controllers\KhoaAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\LopAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
-    <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiHocAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatAdminAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\QuanLyNguoiHocKhaoSatAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\testController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThongKeKetQuaKhaoSatAPIController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatAPIController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\BaoCaoTongHopKetQuaKhaoSatCTDTAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\DoiSanhKetQuaKhaoSatController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\GiamSatKetQuaKhaoSatAPIController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\GiamSatKetQuaKhaoSatCTDTAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\InterfaceController.cs" />
     <Compile Include="Areas\CTDT\Controllers\LuuTruBaoCaoKhaoSatController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatAPIController.cs" />
-    <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatTheoYeuCauAPIController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\ThongKeKetQuaKhaoSatCTDTAPIController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatCTDTAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\XemChiTietThongKeKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\CTDTAreaRegistration.cs" />
     <Compile Include="Areas\Khoa\Controllers\BaoCaoTongHopKetQuaKhaoSatKhoaAPIController.cs" />
@@ -363,7 +362,6 @@
     <Compile Include="Models\dot_khao_sat.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FindDataUsers.cs" />
     <Compile Include="Models\answer_response.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -441,6 +439,9 @@
     </Compile>
     <Compile Include="Models\PhanQuyen.cs" />
     <Compile Include="Models\phan_quyen_chuc_nang_users.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\phan_quyen_users.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\radio_cau_hoi_khac.cs">

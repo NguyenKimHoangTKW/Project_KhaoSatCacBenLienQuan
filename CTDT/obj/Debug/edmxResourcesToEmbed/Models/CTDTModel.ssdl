@@ -230,6 +230,15 @@
     <Property Name="id_users" Type="int" Nullable="false" />
     <Property Name="id_chuc_nang" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="phan_quyen_users">
+    <Key>
+      <PropertyRef Name="id_phan_quyen_user" />
+    </Key>
+    <Property Name="id_phan_quyen_user" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_users" Type="int" />
+    <Property Name="id_ctdt" Type="int" />
+    <Property Name="id_khoa" Type="int" />
+  </EntityType>
   <EntityType Name="radio_cau_hoi_khac">
     <Key>
       <PropertyRef Name="id_rd_cau_hoi_khac" />
@@ -330,11 +339,6 @@
     <Property Name="ngaycapnhat" Type="int" />
     <Property Name="ngaytao" Type="int" />
     <Property Name="dang_nhap_lan_cuoi" Type="int" />
-    <Property Name="id_donvi" Type="int" />
-    <Property Name="id_ctdt" Type="int" />
-    <Property Name="id_khoa" Type="int" />
-    <Property Name="id_hdt" Type="int" />
-    <Property Name="set_phan_quyen" Type="nvarchar(max)" />
     <Property Name="avatarUrl" Type="nvarchar(max)" />
     <Property Name="status" Type="tinyint" />
   </EntityType>
@@ -750,6 +754,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_phan_quyen_users_ctdt">
+    <End Role="ctdt" Type="Self.ctdt" Multiplicity="0..1" />
+    <End Role="phan_quyen_users" Type="Self.phan_quyen_users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ctdt">
+        <PropertyRef Name="id_ctdt" />
+      </Principal>
+      <Dependent Role="phan_quyen_users">
+        <PropertyRef Name="id_ctdt" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_phan_quyen_users_khoa">
+    <End Role="khoa" Type="Self.khoa" Multiplicity="0..1" />
+    <End Role="phan_quyen_users" Type="Self.phan_quyen_users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="khoa">
+        <PropertyRef Name="id_khoa" />
+      </Principal>
+      <Dependent Role="phan_quyen_users">
+        <PropertyRef Name="id_khoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_phan_quyen_users_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="phan_quyen_users" Type="Self.phan_quyen_users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id_users" />
+      </Principal>
+      <Dependent Role="phan_quyen_users">
+        <PropertyRef Name="id_users" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_radio_cau_hoi_khac_chi_tiet_cau_hoi_tieu_de">
     <End Role="chi_tiet_cau_hoi_tieu_de" Type="Self.chi_tiet_cau_hoi_tieu_de" Multiplicity="0..1" />
     <End Role="radio_cau_hoi_khac" Type="Self.radio_cau_hoi_khac" Multiplicity="*" />
@@ -882,42 +922,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_users_ctdt">
-    <End Role="ctdt" Type="Self.ctdt" Multiplicity="0..1" />
-    <End Role="users" Type="Self.users" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ctdt">
-        <PropertyRef Name="id_ctdt" />
-      </Principal>
-      <Dependent Role="users">
-        <PropertyRef Name="id_ctdt" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_users_DonVi">
-    <End Role="DonVi" Type="Self.DonVi" Multiplicity="0..1" />
-    <End Role="users" Type="Self.users" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DonVi">
-        <PropertyRef Name="id_donvi" />
-      </Principal>
-      <Dependent Role="users">
-        <PropertyRef Name="id_donvi" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_users_khoa">
-    <End Role="khoa" Type="Self.khoa" Multiplicity="0..1" />
-    <End Role="users" Type="Self.users" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="khoa">
-        <PropertyRef Name="id_khoa" />
-      </Principal>
-      <Dependent Role="users">
-        <PropertyRef Name="id_khoa" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_users_typeusers">
     <End Role="typeusers" Type="Self.typeusers" Multiplicity="0..1" />
     <End Role="users" Type="Self.users" Multiplicity="*" />
@@ -954,6 +958,7 @@
     <EntitySet Name="nguoi_hoc_dang_co_hoc_phan" EntityType="Self.nguoi_hoc_dang_co_hoc_phan" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="nguoi_hoc_khao_sat" EntityType="Self.nguoi_hoc_khao_sat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="phan_quyen_chuc_nang_users" EntityType="Self.phan_quyen_chuc_nang_users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="phan_quyen_users" EntityType="Self.phan_quyen_users" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="radio_cau_hoi_khac" EntityType="Self.radio_cau_hoi_khac" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sinhvien" EntityType="Self.sinhvien" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="survey" EntityType="Self.survey" Schema="dbo" store:Type="Tables" />
@@ -1098,6 +1103,18 @@
       <End Role="users" EntitySet="users" />
       <End Role="phan_quyen_chuc_nang_users" EntitySet="phan_quyen_chuc_nang_users" />
     </AssociationSet>
+    <AssociationSet Name="FK_phan_quyen_users_ctdt" Association="Self.FK_phan_quyen_users_ctdt">
+      <End Role="ctdt" EntitySet="ctdt" />
+      <End Role="phan_quyen_users" EntitySet="phan_quyen_users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_phan_quyen_users_khoa" Association="Self.FK_phan_quyen_users_khoa">
+      <End Role="khoa" EntitySet="khoa" />
+      <End Role="phan_quyen_users" EntitySet="phan_quyen_users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_phan_quyen_users_users" Association="Self.FK_phan_quyen_users_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="phan_quyen_users" EntitySet="phan_quyen_users" />
+    </AssociationSet>
     <AssociationSet Name="FK_radio_cau_hoi_khac_chi_tiet_cau_hoi_tieu_de" Association="Self.FK_radio_cau_hoi_khac_chi_tiet_cau_hoi_tieu_de">
       <End Role="chi_tiet_cau_hoi_tieu_de" EntitySet="chi_tiet_cau_hoi_tieu_de" />
       <End Role="radio_cau_hoi_khac" EntitySet="radio_cau_hoi_khac" />
@@ -1141,18 +1158,6 @@
     <AssociationSet Name="FK_tieu_de_phieu_khao_sat_survey" Association="Self.FK_tieu_de_phieu_khao_sat_survey">
       <End Role="survey" EntitySet="survey" />
       <End Role="tieu_de_phieu_khao_sat" EntitySet="tieu_de_phieu_khao_sat" />
-    </AssociationSet>
-    <AssociationSet Name="FK_users_ctdt" Association="Self.FK_users_ctdt">
-      <End Role="ctdt" EntitySet="ctdt" />
-      <End Role="users" EntitySet="users" />
-    </AssociationSet>
-    <AssociationSet Name="FK_users_DonVi" Association="Self.FK_users_DonVi">
-      <End Role="DonVi" EntitySet="DonVi" />
-      <End Role="users" EntitySet="users" />
-    </AssociationSet>
-    <AssociationSet Name="FK_users_khoa" Association="Self.FK_users_khoa">
-      <End Role="khoa" EntitySet="khoa" />
-      <End Role="users" EntitySet="users" />
     </AssociationSet>
     <AssociationSet Name="FK_users_typeusers" Association="Self.FK_users_typeusers">
       <End Role="typeusers" EntitySet="typeusers" />

@@ -28,11 +28,11 @@ async function load_pks_by_nam() {
         res.ctdt.forEach(function (ctdt) {
             html_ctdt += `<option value="${ctdt.id_ctdt}">${ctdt.ten_ctdt}</option>`;
         });
-        $("#ctdt").empty().html(html_ctdt);
+        $("#ctdt").empty().html(html_ctdt).trigger("change");
     } else {
         html += `<option value="">${res.message}</option>`;
-        $("#surveyid").empty().html(html);
-        $("#ctdt").empty().html(html);
+        $("#surveyid").empty().html(html).trigger("change");
+        $("#ctdt").empty().html(html).trigger("change");
     }
 }
 

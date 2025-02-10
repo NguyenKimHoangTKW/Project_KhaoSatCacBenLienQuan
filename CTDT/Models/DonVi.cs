@@ -19,7 +19,6 @@ namespace CTDT.Models
         {
             this.answer_response = new HashSet<answer_response>();
             this.CanBoVienChuc = new HashSet<CanBoVienChuc>();
-            this.users = new HashSet<users>();
         }
     
         public int id_donvi { get; set; }
@@ -30,7 +29,5 @@ namespace CTDT.Models
         public virtual ICollection<answer_response> answer_response { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CanBoVienChuc> CanBoVienChuc { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<users> users { get; set; }
     }
 }

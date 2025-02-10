@@ -1,4 +1,5 @@
-﻿function Loading() {
+﻿$(".select2").select2();
+function Loading() {
     Swal.fire({
         title: 'Loading...',
         text: 'Đang thống kê dữ liệu, vui lòng chờ trong giây lát !',
@@ -11,17 +12,10 @@
 function EndLoading() {
     Swal.close();
 }
-$(document).ready(async function () {
-    Loading()
-    try {
-        await LoadChartSurvey();
-    }
-    finally {
-        EndLoading()
-    }
-    
-});
-$(document).on("change", "#Year", async function () {
+
+$(document).on("click", "#btnFilter", async function (event) {
+    event.preventDefault();
+    $("#title_notification").hide();
     Loading()
     try {
         await LoadChartSurvey();
@@ -31,17 +25,20 @@ $(document).on("change", "#Year", async function () {
     }
 });
 async function LoadChartSurvey() {
-    var year = $("#Year").val();
+    const year = $("#yearGiamSat").val();
+    const ctdt = $("#find-ctdt").val();
     const res = await $.ajax({
-        url: '/api/giam_sat_thong_ke_nguoi_hoc',
+        url: '/api/ctdt/giam_sat_thong_ke_nguoi_hoc',
         type: 'POST',
-        data: { id_nam_hoc: year },
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id_namhoc: year,
+            id_ctdt: ctdt
+        })
     });
-
     $('#survey-list').empty();
-
-    if (res.success && res.data.length > 0) {
-        const surveys = res.data;
+    if (res.success) {
+        const surveys = JSON.parse(res.data);
         surveys.sort((a, b) => {
             const idA = a.ten_phieu.split(".")[0].replace(/\D/g, "");
             const idB = b.ten_phieu.split(".")[0].replace(/\D/g, "");
@@ -74,8 +71,8 @@ async function LoadChartSurvey() {
                         <hr />
                         <div style="display: flex; justify-content: space-between; align-items: center; font-weight:bold">
                             <p style="margin: 0; color: black;">Tổng phiếu: ${thongKeTyLe.tong_khao_sat || '0'}</p>
-                            <p style="margin: 0; color:#ebb000;">Đã thu về: ${thongKeTyLe.tong_phieu_da_tra_loi || '0'}</p>
-                            <p style="margin: 0; color:#5029ff;">Chưa thu về: ${thongKeTyLe.tong_phieu_chua_tra_loi || '0'}</p>
+                            <p style="margin: 0; color:#5029ff;">Đã thu về: ${thongKeTyLe.tong_phieu_da_tra_loi || '0'}</p>
+                            <p style="margin: 0; color:#ebb000;">Chưa thu về: ${thongKeTyLe.tong_phieu_chua_tra_loi || '0'}</p>
                         </div>
                     </div>
                 </div>`;
@@ -112,9 +109,9 @@ async function LoadChartSurvey() {
                     labels: ['Không có dữ liệu'],
                     datasets: [{
                         fill: true,
-                        backgroundColor: ['#d3d3d3'], 
+                        backgroundColor: ['#d3d3d3'],
                         pointBackgroundColor: ['#d3d3d3'],
-                        data: [1] 
+                        data: [1]
                     }]
                 };
 
@@ -140,11 +137,3 @@ async function LoadChartSurvey() {
         $('#survey-list').append(card);
     }
 }
-
-
-
-
-$(document).on("click", "#maphieu", function () {
-    var maphieu = $(this).data("tenphieu");
-    window.location.href = `/ctdt/xem-chi-tiet-thong-ke-khao-sat/${maphieu}`;
-})

@@ -18,6 +18,7 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.CTDTList = new SelectList(db.ctdt.OrderBy(l => l.id_ctdt), "id_ctdt", "ten_ctdt");
             ViewBag.DonVilist = new SelectList(db.DonVi.OrderBy(l => l.id_donvi), "id_donvi", "name_donvi");
             ViewBag.TypeUserList = new SelectList(db.typeusers.OrderBy(l => l.id_typeusers), "id_typeusers", "name_typeusers");
+            ViewBag.KhoaList = new SelectList(db.khoa.OrderBy(x => x.id_khoa), "id_khoa", "ten_khoa");
             return View();
         }
         public ActionResult PhanQuyen(int id)
