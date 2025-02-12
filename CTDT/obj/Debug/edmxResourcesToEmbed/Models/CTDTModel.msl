@@ -296,6 +296,7 @@
     <EntitySetMapping Name="survey">
       <EntityTypeMapping TypeName="dbSurveyModel.survey">
         <MappingFragment StoreEntitySet="survey">
+          <ScalarProperty Name="ty_le_phan_tram_dat" ColumnName="ty_le_phan_tram_dat" />
           <ScalarProperty Name="mo_thong_ke" ColumnName="mo_thong_ke" />
           <ScalarProperty Name="id_dot_khao_sat" ColumnName="id_dot_khao_sat" />
           <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
@@ -330,8 +331,10 @@
         <MappingFragment StoreEntitySet="thong_ke_theo_yeu_cau">
           <ScalarProperty Name="sua_lan_cuoi" ColumnName="sua_lan_cuoi" />
           <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
-          <ScalarProperty Name="id_nam_hoc" ColumnName="id_nam_hoc" />
-          <ScalarProperty Name="json_thong_ke" ColumnName="json_thong_ke" />
+          <ScalarProperty Name="id_nguoi_thong_ke" ColumnName="id_nguoi_thong_ke" />
+          <ScalarProperty Name="id_answer" ColumnName="id_answer" />
+          <ScalarProperty Name="id_cbvc" ColumnName="id_cbvc" />
+          <ScalarProperty Name="id_sv" ColumnName="id_sv" />
           <ScalarProperty Name="id_survey" ColumnName="id_survey" />
           <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
           <ScalarProperty Name="id_thong_ke" ColumnName="id_thong_ke" />

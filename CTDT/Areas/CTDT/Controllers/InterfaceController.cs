@@ -48,9 +48,9 @@ namespace CTDT.Areas.CTDT.Controllers
         }
         public ActionResult thong_ke_tan_xuat_theo_yeu_cau()
         {
-            var user = SessionHelper.GetUser();
+            var get_ctdt = db.phan_quyen_users.Where(x => x.id_users == user.id_users).OrderBy(x => x.id_phan_quyen_user).ToList();
             ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(x => x.id_namhoc), "id_namhoc", "ten_namhoc");
-            ViewBag.Lop = new SelectList(db.lop.OrderBy(x => x.id_lop), "ma_lop", "ma_lop");
+            ViewBag.CTDT = new SelectList(get_ctdt, "ctdt.id_ctdt", "ctdt.ten_ctdt");
             return View();
         }
 

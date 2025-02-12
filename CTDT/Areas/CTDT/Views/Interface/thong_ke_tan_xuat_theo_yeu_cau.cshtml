@@ -25,18 +25,28 @@
                             <legend class="float-none w-auto px-3">Chức năng</legend>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo năm học</label>
-                                    <select class="form-control" id="year">
+                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn năm</label>
+                                    <select class="form-control select2" id="yearGiamSat">
                                         @foreach (var item in ViewBag.Year)
                                         {
-                                            <option value="@item.Text">@item.Text</option>
+                                            <option value="@item.Value">@item.Text</option>
                                         }
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Lọc theo phiếu khảo sát</label>
-                                    <select class="form-control select2" id="surveyid">
-                                        <!--List Phiếu Khảo Sát-->
+                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn chương trình đào tạo</label>
+                                    <select class="form-control select2" id="find-ctdt">
+                                        @foreach (var item in ViewBag.CTDT)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn phiếu khảo sát</label>
+                                    <select class="form-control select2" id="find-survey">
+                                        <option value="">Vui lòng chọn năm và CTĐT để hiển thị</option>
+                                        <!--data-->
                                     </select>
                                 </div>
                             </div>

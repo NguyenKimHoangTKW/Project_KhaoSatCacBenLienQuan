@@ -1,4 +1,4 @@
-﻿$(".select2").select2();
+﻿let show_time_check = ``;
 function Loading() {
     Swal.fire({
         title: 'Loading...',
@@ -49,6 +49,7 @@ $(document).on('click', '#btnFilter', async function (event) {
     Loading()
     try {
         await LoadKetQua();
+        $("#show-time-check").text(`Kết quả được thống kê từ khoảng thời gian: ${show_time_check}`);
     }
     finally {
         EndLoading()
@@ -133,6 +134,15 @@ function ExportExcelBaoCaoTongHop() {
     mergedCellYear.font = { bold: true, size: 14 };
     mergedCellYear.alignment = { horizontal: 'center', vertical: 'middle' };
 
+    let TimeCheck = "Khoảng thời gian thống kê kết quả : " + show_time_check;
+    worksheet.addRow([TimeCheck]);
+    let lastRowTimeCheck = worksheet.lastRow.number;
+    worksheet.mergeCells(`A${lastRowTimeCheck}:B${lastRowTimeCheck}`);
+    let mergedCellTimeCheck = worksheet.getCell(`A${lastRowTimeCheck}`);
+    mergedCellTimeCheck.font = { bold: true, size: 14 };
+    mergedCellTimeCheck.alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.addRow([]);
+
     let TimeExport = "Thời gian xuất kết quả : " + LayThoiGian();
     worksheet.addRow([TimeExport]);
     let lastRowTime = worksheet.lastRow.number;
@@ -185,13 +195,19 @@ function ExportExcelBaoCaoTongHop() {
 async function LoadKetQua() {
     var Year = $('#yearGiamSat').val();
     var ctdt = $('#find-ctdt').val();
+    const from_date = $("#from_date").val();
+    const to_date = $("#to_date").val();
+    const startTimestamp = convertToTimestamp(from_date);
+    const endTimestamp = convertToTimestamp(to_date);
     const res = await $.ajax({
         url: '/api/ctdt/bao-cao-tong-hop-ket-qua-khao-sat',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
             id_namhoc: Year,
-            id_ctdt: ctdt
+            id_ctdt: ctdt,
+            from_date: startTimestamp,
+            to_date: endTimestamp
         })
     });
     let body = $('#showdata');
@@ -200,6 +216,7 @@ async function LoadKetQua() {
     thead.empty();
     let html = ``;
     if (res.success) {
+        
         $("#title_notification").hide();
         const data = JSON.parse(res.data);
         data.sort((a, b) => {
@@ -234,6 +251,11 @@ async function LoadKetQua() {
                 html += `<td class="formatSo">${avg_score}</td>`;
                 html += `</tr>`;
             });
+            
+        });
+        const check_time_check = JSON.parse(res.time_check);
+        check_time_check.forEach(timecheck => {
+            show_time_check = `${unixTimestampToDate(timecheck.time_check_start)} đến ${unixTimestampToDate(timecheck.time_check_end)}`;
         });
         body.html(html);
     } else {
@@ -252,4 +274,12 @@ async function LoadKetQua() {
             `;
         body.html(html);
     }
+}
+function unixTimestampToDate(unixTimestamp) {
+    var date = new Date(unixTimestamp * 1000);
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    var year = date.getFullYear();
+    var formattedDate = day + "-" + month + "-" + year;
+    return formattedDate;
 }

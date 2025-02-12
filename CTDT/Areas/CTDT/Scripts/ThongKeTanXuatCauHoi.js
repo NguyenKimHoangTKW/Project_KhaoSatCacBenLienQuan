@@ -1,5 +1,4 @@
-﻿$(".select2").select2();
-var check_tan_xuat = false;
+﻿var check_tan_xuat = false;
 let show_time_check = ``;
 function showLoading() {
     Swal.fire({
@@ -86,8 +85,8 @@ async function load_data() {
     const ctdt = $("#find-ctdt").val();
     const from_date = $("#from_date").val();
     const to_date = $("#to_date").val();
-    const startTimestamp = Math.floor(new Date(from_date).getTime() / 1000);
-    const endTimestamp = Math.floor(new Date(to_date).getTime() / 1000);
+    const startTimestamp = convertToTimestamp(from_date);
+    const endTimestamp = convertToTimestamp(to_date);
     const res = await $.ajax({
         url: '/api/ctdt/thong-ke-ket-qua-khao-sat',
         type: 'POST',

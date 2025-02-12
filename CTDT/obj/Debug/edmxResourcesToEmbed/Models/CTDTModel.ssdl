@@ -285,6 +285,7 @@
     <Property Name="id_namhoc" Type="int" />
     <Property Name="id_dot_khao_sat" Type="int" />
     <Property Name="mo_thong_ke" Type="int" />
+    <Property Name="ty_le_phan_tram_dat" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
@@ -303,8 +304,10 @@
     <Property Name="id_thong_ke" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="id_ctdt" Type="int" Nullable="false" />
     <Property Name="id_survey" Type="int" Nullable="false" />
-    <Property Name="json_thong_ke" Type="nvarchar(max)" />
-    <Property Name="id_nam_hoc" Type="int" Nullable="false" />
+    <Property Name="id_sv" Type="int" />
+    <Property Name="id_cbvc" Type="int" />
+    <Property Name="id_answer" Type="int" />
+    <Property Name="id_nguoi_thong_ke" Type="int" />
     <Property Name="ngay_tao" Type="int" Nullable="false" />
     <Property Name="sua_lan_cuoi" Type="int" Nullable="false" />
   </EntityType>
@@ -874,6 +877,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_thong_ke_theo_yeu_cau_answer_response">
+    <End Role="answer_response" Type="Self.answer_response" Multiplicity="0..1" />
+    <End Role="thong_ke_theo_yeu_cau" Type="Self.thong_ke_theo_yeu_cau" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="answer_response">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="thong_ke_theo_yeu_cau">
+        <PropertyRef Name="id_answer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_thong_ke_theo_yeu_cau_CanBoVienChuc">
+    <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="0..1" />
+    <End Role="thong_ke_theo_yeu_cau" Type="Self.thong_ke_theo_yeu_cau" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CanBoVienChuc">
+        <PropertyRef Name="id_CBVC" />
+      </Principal>
+      <Dependent Role="thong_ke_theo_yeu_cau">
+        <PropertyRef Name="id_cbvc" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_thong_ke_theo_yeu_cau_ctdt">
     <End Role="ctdt" Type="Self.ctdt" Multiplicity="1" />
     <End Role="thong_ke_theo_yeu_cau" Type="Self.thong_ke_theo_yeu_cau" Multiplicity="*" />
@@ -886,15 +913,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_thong_ke_theo_yeu_cau_NamHoc">
-    <End Role="NamHoc" Type="Self.NamHoc" Multiplicity="1" />
+  <Association Name="FK_thong_ke_theo_yeu_cau_sinhvien">
+    <End Role="sinhvien" Type="Self.sinhvien" Multiplicity="0..1" />
     <End Role="thong_ke_theo_yeu_cau" Type="Self.thong_ke_theo_yeu_cau" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="NamHoc">
-        <PropertyRef Name="id_namhoc" />
+      <Principal Role="sinhvien">
+        <PropertyRef Name="id_sv" />
       </Principal>
       <Dependent Role="thong_ke_theo_yeu_cau">
-        <PropertyRef Name="id_nam_hoc" />
+        <PropertyRef Name="id_sv" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -907,6 +934,18 @@
       </Principal>
       <Dependent Role="thong_ke_theo_yeu_cau">
         <PropertyRef Name="id_survey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_thong_ke_theo_yeu_cau_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="thong_ke_theo_yeu_cau" Type="Self.thong_ke_theo_yeu_cau" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id_users" />
+      </Principal>
+      <Dependent Role="thong_ke_theo_yeu_cau">
+        <PropertyRef Name="id_nguoi_thong_ke" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1143,16 +1182,28 @@
       <End Role="users" EntitySet="users" />
       <End Role="survey" EntitySet="survey" />
     </AssociationSet>
+    <AssociationSet Name="FK_thong_ke_theo_yeu_cau_answer_response" Association="Self.FK_thong_ke_theo_yeu_cau_answer_response">
+      <End Role="answer_response" EntitySet="answer_response" />
+      <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
+    </AssociationSet>
+    <AssociationSet Name="FK_thong_ke_theo_yeu_cau_CanBoVienChuc" Association="Self.FK_thong_ke_theo_yeu_cau_CanBoVienChuc">
+      <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
+      <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
+    </AssociationSet>
     <AssociationSet Name="FK_thong_ke_theo_yeu_cau_ctdt" Association="Self.FK_thong_ke_theo_yeu_cau_ctdt">
       <End Role="ctdt" EntitySet="ctdt" />
       <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
     </AssociationSet>
-    <AssociationSet Name="FK_thong_ke_theo_yeu_cau_NamHoc" Association="Self.FK_thong_ke_theo_yeu_cau_NamHoc">
-      <End Role="NamHoc" EntitySet="NamHoc" />
+    <AssociationSet Name="FK_thong_ke_theo_yeu_cau_sinhvien" Association="Self.FK_thong_ke_theo_yeu_cau_sinhvien">
+      <End Role="sinhvien" EntitySet="sinhvien" />
       <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
     </AssociationSet>
     <AssociationSet Name="FK_thong_ke_theo_yeu_cau_survey" Association="Self.FK_thong_ke_theo_yeu_cau_survey">
       <End Role="survey" EntitySet="survey" />
+      <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
+    </AssociationSet>
+    <AssociationSet Name="FK_thong_ke_theo_yeu_cau_users" Association="Self.FK_thong_ke_theo_yeu_cau_users">
+      <End Role="users" EntitySet="users" />
       <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
     </AssociationSet>
     <AssociationSet Name="FK_tieu_de_phieu_khao_sat_survey" Association="Self.FK_tieu_de_phieu_khao_sat_survey">

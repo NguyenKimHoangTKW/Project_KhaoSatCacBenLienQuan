@@ -17,13 +17,18 @@ namespace CTDT.Models
         public int id_thong_ke { get; set; }
         public int id_ctdt { get; set; }
         public int id_survey { get; set; }
-        public string json_thong_ke { get; set; }
-        public int id_nam_hoc { get; set; }
+        public Nullable<int> id_sv { get; set; }
+        public Nullable<int> id_cbvc { get; set; }
+        public Nullable<int> id_answer { get; set; }
+        public Nullable<int> id_nguoi_thong_ke { get; set; }
         public int ngay_tao { get; set; }
         public int sua_lan_cuoi { get; set; }
     
+        public virtual answer_response answer_response { get; set; }
+        public virtual CanBoVienChuc CanBoVienChuc { get; set; }
         public virtual ctdt ctdt { get; set; }
-        public virtual NamHoc NamHoc { get; set; }
+        public virtual sinhvien sinhvien { get; set; }
         public virtual survey survey { get; set; }
+        public virtual users users { get; set; }
     }
 }

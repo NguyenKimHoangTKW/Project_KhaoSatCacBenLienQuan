@@ -21,6 +21,7 @@ namespace CTDT.Models
             this.phan_quyen_chuc_nang_users = new HashSet<phan_quyen_chuc_nang_users>();
             this.phan_quyen_users = new HashSet<phan_quyen_users>();
             this.survey = new HashSet<survey>();
+            this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
         }
     
         public int id_users { get; set; }
@@ -44,6 +45,8 @@ namespace CTDT.Models
         public virtual ICollection<phan_quyen_users> phan_quyen_users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<survey> survey { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
         public virtual typeusers typeusers { get; set; }
     }
 }
