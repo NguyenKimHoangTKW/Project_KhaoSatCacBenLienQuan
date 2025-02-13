@@ -232,6 +232,8 @@ async function LoadKetQua() {
         <th scope="col">Tỷ lệ chưa tham gia khảo sát</th>
         <th scope="col">Mức độ hài lòng</th>
         <th scope="col">Điểm trung bình</th>
+        <th scope="col">Tỷ lệ % để phiếu đạt</th>
+        <th scope="col">Kết quả</th>
     </tr>
 `;
         thead.html(title);
@@ -248,7 +250,9 @@ async function LoadKetQua() {
                 let avg_ty_le_hai_long = muc_do_hai_long ? muc_do_hai_long.avg_ty_le_hai_long : 0;
                 let avg_score = muc_do_hai_long ? muc_do_hai_long.avg_score : 0;
                 html += `<td class="formatSo">${avg_ty_le_hai_long}%</td>`;
-                html += `<td class="formatSo">${avg_score}</td>`;
+                html += `<td class="formatSo">${avg_score}</td>`
+                html += `<td class="formatSo">${survey.ty_le_phan_tram_dat}%</td>`
+                html += `<td class="formatSo" style="color:${avg_ty_le_hai_long >= survey.ty_le_phan_tram_dat && ty_le_da_tra_loi >= survey.ty_le_phan_tram_dat ? "green" : "red"};font-weight: bold;">${avg_ty_le_hai_long >= survey.ty_le_phan_tram_dat && ty_le_da_tra_loi >= survey.ty_le_phan_tram_dat ? "Đạt" : "Chưa đạt"}</td>`
                 html += `</tr>`;
             });
             

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -58,11 +59,11 @@ namespace CTDT.Areas.CTDT.Controllers
         public async Task<IHttpActionResult> giam_sat_ket_qua_khao_sat(get_option_ctdt aw)
         {
             var _checkctdt = await db.ctdt.FirstOrDefaultAsync(x => x.id_ctdt == aw.id_ctdt);
-            var _get_time_check = await db.survey.FirstOrDefaultAsync(x => x.surveyID == aw.surveyID);
             var check_answer = db.answer_response
                 .Where(x => x.surveyID == aw.surveyID
                            && x.ctdt.id_hdt == _checkctdt.id_hdt
                            && x.id_ctdt == aw.id_ctdt).AsQueryable();
+            var get_time_check = new List<dynamic>();
             if (aw.from_date != null && aw.to_date != null)
             {
                 check_answer = check_answer.Where(x => x.time >= aw.from_date && x.time <= aw.to_date);
@@ -75,28 +76,17 @@ namespace CTDT.Areas.CTDT.Controllers
                 })
                 .ToListAsync();
             var list_count = new List<dynamic>();
-            var get_time_check = new List<dynamic>();
             if (get_data.Count > 0)
             {
                 if (aw.from_date != null && aw.to_date != null)
                 {
                     list_count = await load_ty_le_co_dau_thoi_gian(aw);
-                    get_time_check.Add(new
-                    {
-                        time_check_start = aw.from_date,
-                        time_check_end = aw.to_date
-                    });
                 }
                 else
                 {
                     list_count = await load_ty_le_khong_dau_thoi_gian(aw);
-                    get_time_check.Add(new
-                    {
-                        time_check_start = _get_time_check.surveyTimeStart,
-                        time_check_end = _get_time_check.surveyTimeEnd
-                    });
                 }
-
+                var get_time = await time_check(get_time_check, aw);
                 List<object> tan_xuat_5_muc = new List<object>();
                 List<object> tan_xuat_1_lua_chon = new List<object>();
                 List<object> tan_xuat_nhieu_lua_chon = new List<object>();
@@ -124,6 +114,33 @@ namespace CTDT.Areas.CTDT.Controllers
                     success = false
                 });
             }
+        }
+        private async Task<dynamic> time_check(dynamic get_time_check, get_option_ctdt giamsat)
+        {
+            var check_nam = await db.NamHoc.FirstOrDefaultAsync(x => x.id_namhoc == giamsat.id_namhoc);
+            if (giamsat.from_date != null && giamsat.to_date != null)
+            {
+                get_time_check.Add(new
+                {
+                    time_check_start = giamsat.from_date,
+                    time_check_end = giamsat.to_date
+                });
+            }
+            else
+            {
+                string startDateStr = $"01/01/{check_nam.ten_namhoc}";
+                string endDateStr = $"30/12/{check_nam.ten_namhoc}";
+
+                DateTime startDate = DateTime.ParseExact(startDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime endDate = DateTime.ParseExact(endDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                get_time_check.Add(new
+                {
+                    time_check_start = new DateTimeOffset(startDate).ToUnixTimeSeconds(),
+                    time_check_end = new DateTimeOffset(endDate).ToUnixTimeSeconds()
+                });
+            }
+            return get_time_check;
         }
         public async Task<List<dynamic>> load_ty_le_khong_dau_thoi_gian(get_option_ctdt aw)
         {

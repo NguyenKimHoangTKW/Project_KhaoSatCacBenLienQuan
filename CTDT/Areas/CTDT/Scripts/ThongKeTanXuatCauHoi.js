@@ -34,6 +34,9 @@ function hideLoading() {
 $(document).on("change", "#find-ctdt", function () {
     load_survey();
 });
+$(document).on("change", "#yearGiamSat", function () {
+    load_survey();
+});
 
 
 async function load_survey() {
@@ -82,6 +85,7 @@ $(document).on("click", "#btnFilter", async function () {
 });
 async function load_data() {
     const survey = $("#find-survey").val();
+    const year = $("#yearGiamSat").val();
     const ctdt = $("#find-ctdt").val();
     const from_date = $("#from_date").val();
     const to_date = $("#to_date").val();
@@ -94,6 +98,7 @@ async function load_data() {
         data: JSON.stringify({
             id_ctdt: ctdt,
             surveyID: survey,
+            id_namhoc: year,
             from_date: startTimestamp,
             to_date: endTimestamp
         })

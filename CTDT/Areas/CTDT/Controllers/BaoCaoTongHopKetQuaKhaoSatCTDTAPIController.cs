@@ -61,6 +61,7 @@ namespace CTDT.Areas.CTDT.Controllers
                 {
                     phieu = items.id_dot_khao_sat != null ? items.surveyTitle + " - " + items.dot_khao_sat.ten_dot_khao_sat : items.surveyTitle,
                     ty_le_tham_gia_khao_sat = list_ctdt,
+                    ty_le_phan_tram_dat = items.ty_le_phan_tram_dat
                 });
                 await muc_do_hai_long(mucDoHaiLongData, items.surveyID, giamsat);
             }
