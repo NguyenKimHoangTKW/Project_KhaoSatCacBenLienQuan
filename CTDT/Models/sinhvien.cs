@@ -20,7 +20,6 @@ namespace CTDT.Models
             this.answer_response = new HashSet<answer_response>();
             this.nguoi_hoc_dang_co_hoc_phan = new HashSet<nguoi_hoc_dang_co_hoc_phan>();
             this.nguoi_hoc_khao_sat = new HashSet<nguoi_hoc_khao_sat>();
-            this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
         }
     
         public int id_sv { get; set; }
@@ -44,7 +43,5 @@ namespace CTDT.Models
         public virtual ICollection<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<nguoi_hoc_khao_sat> nguoi_hoc_khao_sat { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
     }
 }

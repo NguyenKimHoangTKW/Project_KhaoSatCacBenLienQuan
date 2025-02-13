@@ -14,6 +14,12 @@ namespace CTDT.Models
     
     public partial class cbvc_khao_sat
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public cbvc_khao_sat()
+        {
+            this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
+        }
+    
         public int id_cbvc_khao_sat { get; set; }
         public int surveyID { get; set; }
         public int id_cbvc { get; set; }
@@ -21,5 +27,7 @@ namespace CTDT.Models
     
         public virtual CanBoVienChuc CanBoVienChuc { get; set; }
         public virtual survey survey { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
     }
 }

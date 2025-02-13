@@ -14,6 +14,12 @@ namespace CTDT.Models
     
     public partial class nguoi_hoc_dang_co_hoc_phan
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public nguoi_hoc_dang_co_hoc_phan()
+        {
+            this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
+        }
+    
         public int id_nguoi_hoc_by_hoc_phan { get; set; }
         public Nullable<int> surveyID { get; set; }
         public int id_mon_hoc { get; set; }
@@ -28,5 +34,7 @@ namespace CTDT.Models
         public virtual mon_hoc mon_hoc { get; set; }
         public virtual sinhvien sinhvien { get; set; }
         public virtual survey survey { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
     }
 }
