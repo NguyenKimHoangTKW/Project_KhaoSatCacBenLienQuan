@@ -332,6 +332,7 @@
           <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
           <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
           <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
+          <ScalarProperty Name="id_answer" ColumnName="id_answer" />
           <ScalarProperty Name="id_nguoi_lap_thong_ke" ColumnName="id_nguoi_lap_thong_ke" />
           <ScalarProperty Name="id_cbvc_khao_sat" ColumnName="id_cbvc_khao_sat" />
           <ScalarProperty Name="id_nguoi_hoc_co_hoc_phan_khao_sat" ColumnName="id_nguoi_hoc_co_hoc_phan_khao_sat" />

@@ -50,6 +50,7 @@
                                     </select>
                                 </div>
                             </div>
+                            <a href="javascript:void(0)" id="dieu-huong-chon-dap-vien" style="font-size: 22px;">Bấm vào đây để chọn đáp viên thống kê</a>
                             <hr />
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-between">
@@ -59,84 +60,8 @@
                             </div>
                         </fieldset>
                     </div>
-                    <!--Modal-->
-                    <div class="modal fade bd-example-modal-lg">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <i class="anticon anticon-close"></i>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <h5 class="text-uppercase text-center">Danh sách người thực hiện khảo sát</h5>
-                                    <div>
-                                        <label for="maLopFilter">Lọc theo lớp:</label>
-                                        <select id="maLopFilter" class="form-control">
-                                            <option value="">Tất cả</option>
-                                        </select>
-                                    </div>
-                                    <hr />
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger m-r-5" data-dismiss="modal">Đóng</button>
-                                    <button class="btn btn-primary m-r-5" id="save_doi_tuong">Lưu</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end Modal-->
                 </div>
                 <!-- End Thống kê -->
-                <!--Chọn đáp viên khảo sát-->
-                <div class="tab-pane fade" id="checkdoituong" role="tabpanel" aria-labelledby="checkdoituong-tab">
-                    <div class="page-header no-gutters">
-                        <h2 class="text-uppercase">chọn đáp viên cần thống kê</h2>
-                        <hr />
-                        <fieldset class="border rounded-3 p-3">
-                            <legend class="float-none w-auto px-3">Chức năng</legend>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn năm</label>
-                                    <select class="form-control select2" id="yearGiamSat">
-                                        @foreach (var item in ViewBag.Year)
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn chương trình đào tạo</label>
-                                    <select class="form-control select2" id="find-ctdt">
-                                        @foreach (var item in ViewBag.CTDT)
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn phiếu khảo sát</label>
-                                    <select class="form-control select2" id="find-survey">
-                                        <option value="">Vui lòng chọn năm và CTĐT để hiển thị</option>
-                                        <!--data-->
-                                    </select>
-                                </div>
-
-                            </div>
-                            <hr />
-                        </fieldset>
-                    </div>
-                    <div class="card" id="body" style="display:none">
-
-                        <div class="accordion" id="accordion-default">
-                            <div class="card" id="show_title_collapsible">
-
-                                <!--Load Data Chọn đáp viên-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--End chọn đáp viên khảo sát-->
             </div>
         </div>
     </div>

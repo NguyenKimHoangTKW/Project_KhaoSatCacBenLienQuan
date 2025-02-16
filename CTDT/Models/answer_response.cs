@@ -14,6 +14,12 @@ namespace CTDT.Models
     
     public partial class answer_response
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public answer_response()
+        {
+            this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
+        }
+    
         public int id { get; set; }
         public int surveyID { get; set; }
         public Nullable<int> id_donvi { get; set; }
@@ -36,5 +42,7 @@ namespace CTDT.Models
         public virtual sinhvien sinhvien { get; set; }
         public virtual survey survey { get; set; }
         public virtual users users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
     }
 }

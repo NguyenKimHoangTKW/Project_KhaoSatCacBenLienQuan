@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using static GoogleApi.GoogleMaps;
 
 namespace CTDT.Areas.CTDT
 {
@@ -44,6 +43,11 @@ namespace CTDT.Areas.CTDT
                 "CTDT_XemChiTietThongKe",
                 "ctdt/xem-chi-tiet-thong-ke-khao-sat/{id}",
                 new { controller = "Interface", action = "xem_thong_ke_nguoi_khao_sat", id = UrlParameter.Optional }
+            );
+            context.MapRoute(
+                "CTDT_ChonDapVienThongKeTheoYeuCau",
+                "ctdt/chon-dap-vien-thong-ke-theo-yeu-cau",
+                new { controller = "Interface", action = "chon_dap_vien_thong_ke_theo_yeu_cau", id = UrlParameter.Optional }
             );
             context.MapRoute(
                 "CTDT_default",

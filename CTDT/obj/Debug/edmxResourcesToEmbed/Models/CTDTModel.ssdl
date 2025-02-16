@@ -301,11 +301,12 @@
     <Key>
       <PropertyRef Name="id_thong_ke_theo_yeu_cau" />
     </Key>
-    <Property Name="id_thong_ke_theo_yeu_cau" Type="int" Nullable="false" />
+    <Property Name="id_thong_ke_theo_yeu_cau" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="id_nguoi_hoc_khao_sat" Type="int" />
     <Property Name="id_nguoi_hoc_co_hoc_phan_khao_sat" Type="int" />
     <Property Name="id_cbvc_khao_sat" Type="int" />
     <Property Name="id_nguoi_lap_thong_ke" Type="int" />
+    <Property Name="id_answer" Type="int" />
     <Property Name="id_ctdt" Type="int" />
     <Property Name="ngay_tao" Type="int" />
     <Property Name="ngay_cap_nhat" Type="int" />
@@ -876,6 +877,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_thong_ke_theo_yeu_cau_answer_response">
+    <End Role="answer_response" Type="Self.answer_response" Multiplicity="0..1" />
+    <End Role="thong_ke_theo_yeu_cau" Type="Self.thong_ke_theo_yeu_cau" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="answer_response">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="thong_ke_theo_yeu_cau">
+        <PropertyRef Name="id_answer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_thong_ke_theo_yeu_cau_cbvc_khao_sat">
     <End Role="cbvc_khao_sat" Type="Self.cbvc_khao_sat" Multiplicity="0..1" />
     <End Role="thong_ke_theo_yeu_cau" Type="Self.thong_ke_theo_yeu_cau" Multiplicity="*" />
@@ -1168,6 +1181,10 @@
     <AssociationSet Name="FK_survey_users" Association="Self.FK_survey_users">
       <End Role="users" EntitySet="users" />
       <End Role="survey" EntitySet="survey" />
+    </AssociationSet>
+    <AssociationSet Name="FK_thong_ke_theo_yeu_cau_answer_response" Association="Self.FK_thong_ke_theo_yeu_cau_answer_response">
+      <End Role="answer_response" EntitySet="answer_response" />
+      <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
     </AssociationSet>
     <AssociationSet Name="FK_thong_ke_theo_yeu_cau_cbvc_khao_sat" Association="Self.FK_thong_ke_theo_yeu_cau_cbvc_khao_sat">
       <End Role="cbvc_khao_sat" EntitySet="cbvc_khao_sat" />

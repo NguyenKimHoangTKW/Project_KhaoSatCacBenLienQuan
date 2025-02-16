@@ -109,27 +109,22 @@ namespace CTDT.Areas.CTDT.Controllers
                 }
                 else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
                 {
-                    bool hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong = new[] { 11 }.Contains(items.id_loaikhaosat);
-                    bool hoc_vien_co_hoc_phan_tot_nghiep = new[] { 13 }.Contains(items.id_loaikhaosat);
-                    if (hoc_vien_co_hoc_phan_ly_thuyet_dang_hoc_tai_truong)
+                    var check_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan.Where(x => x.surveyID == items.surveyID && x.sinhvien.lop.id_ctdt == find.id_ctdt).ToListAsync();
+                    var total = check_hoc_phan.Count;
+                    var TotalIsKhaoSat = check_hoc_phan.Where(x => x.da_khao_sat == 1).ToList().Count;
+                    double percentage = total > 0 ? Math.Round(((double)TotalIsKhaoSat / total) * 100, 2) : 0;
+                    double unpercentage = total > 0 ? Math.Round(((double)100 - percentage), 2) : 0;
+                    var DataStudent = new
                     {
-                        var check_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan.Where(x => x.surveyID == items.surveyID && x.sinhvien.lop.id_ctdt == find.id_ctdt).ToListAsync();
-                        var total = check_hoc_phan.Count;
-                        var TotalIsKhaoSat = check_hoc_phan.Where(x => x.da_khao_sat == 1).ToList().Count;
-                        double percentage = total > 0 ? Math.Round(((double)TotalIsKhaoSat / total) * 100, 2) : 0;
-                        double unpercentage = total > 0 ? Math.Round(((double)100 - percentage), 2) : 0;
-                        var DataStudent = new
-                        {
-                            id_phieu = items.surveyID,
-                            ten_phieu = items.id_dot_khao_sat != null ? items.surveyTitle + " - "+ items.dot_khao_sat.ten_dot_khao_sat : items.surveyTitle,
-                            tong_khao_sat = total,
-                            tong_phieu_da_tra_loi = TotalIsKhaoSat,
-                            tong_phieu_chua_tra_loi = (total - TotalIsKhaoSat),
-                            ty_le_da_tra_loi = percentage,
-                            ty_le_chua_tra_loi = unpercentage,
-                        };
-                        List_data.Add(DataStudent);
-                    }
+                        id_phieu = items.surveyID,
+                        ten_phieu = items.id_dot_khao_sat != null ? items.surveyTitle + " - " + items.dot_khao_sat.ten_dot_khao_sat : items.surveyTitle,
+                        tong_khao_sat = total,
+                        tong_phieu_da_tra_loi = TotalIsKhaoSat,
+                        tong_phieu_chua_tra_loi = (total - TotalIsKhaoSat),
+                        ty_le_da_tra_loi = percentage,
+                        ty_le_chua_tra_loi = unpercentage,
+                    };
+                    List_data.Add(DataStudent);
                 }
                 else if (items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || items.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
                 {

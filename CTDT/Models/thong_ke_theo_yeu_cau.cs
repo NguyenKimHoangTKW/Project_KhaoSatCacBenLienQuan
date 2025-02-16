@@ -19,10 +19,12 @@ namespace CTDT.Models
         public Nullable<int> id_nguoi_hoc_co_hoc_phan_khao_sat { get; set; }
         public Nullable<int> id_cbvc_khao_sat { get; set; }
         public Nullable<int> id_nguoi_lap_thong_ke { get; set; }
+        public Nullable<int> id_answer { get; set; }
         public Nullable<int> id_ctdt { get; set; }
         public Nullable<int> ngay_tao { get; set; }
         public Nullable<int> ngay_cap_nhat { get; set; }
     
+        public virtual answer_response answer_response { get; set; }
         public virtual cbvc_khao_sat cbvc_khao_sat { get; set; }
         public virtual ctdt ctdt { get; set; }
         public virtual nguoi_hoc_dang_co_hoc_phan nguoi_hoc_dang_co_hoc_phan { get; set; }

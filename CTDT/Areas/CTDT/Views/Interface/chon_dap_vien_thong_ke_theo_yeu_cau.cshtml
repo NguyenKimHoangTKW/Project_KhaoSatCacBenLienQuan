@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "Kết quả khảo sát theo yêu cầu - TDMU";
+    Layout = "~/Areas/CTDT/Views/Shared/_CTDTLayout.cshtml";
+}
+<style>
+   
+</style>
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Báo cáo tổng hợp</a>
+                </li>
+            </ul>
+            <div class="tab-content m-t-15" id="myTabContent">
+
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="page-header no-gutters">
+                        <h2 class="text-uppercase">Báo cáo tổng hợp kết quả khảo sát thuộc chương trình đào tạo</h2>
+                        <hr />
+                        <fieldset class="border rounded-3 p-3">
+                            <legend class="float-none w-auto px-3">Chức năng</legend>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn năm</label>
+                                    <select class="form-control select2" id="yearGiamSat">
+                                        @foreach (var item in ViewBag.Year)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn chương trình đào tạo</label>
+                                    <select class="form-control select2" id="find-ctdt">
+                                        @foreach (var item in ViewBag.CTDT)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn phiếu khảo sát</label>
+                                    <select class="form-control select2" id="find-survey">
+                                        <option value="">Vui lòng chọn năm và CTĐT để hiển thị</option>
+                                        <!--data-->
+                                    </select>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="submit" id="btnFilter" class="btn btn-primary btn-tone" style="margin-right: 20px;">
+                                    <i class="fas fa-filter"></i> Lọc dữ liệu
+                                </button>
+                                <button class="btn btn-success" id="ExportExcel">
+                                    <i class="fas fa-file-excel"></i> Xuất Excel
+                                </button>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="m-t-25" id="showalldata">
+                        <div class="table-container" id="dap-vien-khao-sat">
+                            <h2 id="title_notification" class="text-uppercase" style="color:red">vui lòng chọn chức năng lọc để tiếp tục</h2>
+                            <table class="table table-bordered">
+                                <thead style="color:black; text-align:center; font-weight:bold" id="showthead">
+                                    <!--Load Thead-->
+                                </thead>
+                                <tbody id="showdata">
+                                    <!--Load Data-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsCTDT{
+    <script src="~/Areas/CTDT/Scripts/DoiTuongThongKeTheoYeuCau.js"></script>
+}

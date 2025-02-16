@@ -21,7 +21,10 @@ function Toast_alert(type, message) {
 $(document).on("change", "#find-ctdt", function () {
     load_survey();
 });
-
+$(document).on("click", "#dieu-huong-chon-dap-vien", function (event) {
+    event.preventDefault()
+    window.open(`/ctdt/chon-dap-vien-thong-ke-theo-yeu-cau`, '_blank');
+});
 
 async function load_survey() {
     const year = $("#yearGiamSat").val();

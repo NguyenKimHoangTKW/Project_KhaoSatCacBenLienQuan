@@ -327,6 +327,7 @@
     <Compile Include="Areas\CTDT\Controllers\InterfaceController.cs" />
     <Compile Include="Areas\CTDT\Controllers\LuuTruBaoCaoKhaoSatController.cs" />
     <Compile Include="Areas\CTDT\Controllers\ThongKeKetQuaKhaoSatCTDTAPIController.cs" />
+    <Compile Include="Areas\CTDT\Controllers\ThongKeKetQuaKhaoSatTheoYeuCauCTDTAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\ThongKeKhaoSatCTDTAPIController.cs" />
     <Compile Include="Areas\CTDT\Controllers\XemChiTietThongKeKhaoSatAPIController.cs" />
     <Compile Include="Areas\CTDT\CTDTAreaRegistration.cs" />
@@ -1044,6 +1045,7 @@
     <Content Include="Areas\assets\vendors\select2\select2_locale_zh-TW.js" />
     <Content Include="Areas\CTDT\Scripts\BaoCaoTongHopKetQuaKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\DoiSanhKetQuaKhaoSat.js" />
+    <Content Include="Areas\CTDT\Scripts\DoiTuongThongKeTheoYeuCau.js" />
     <Content Include="Areas\CTDT\Scripts\GiamSatKeuQuaKhaoSat.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeKetQuaKhaoSatTheoYeuCau.js" />
     <Content Include="Areas\CTDT\Scripts\ThongKeNguoiDungKhaoSat.js" />
@@ -1388,6 +1390,7 @@
     <Content Include="DataExport\Mau\Mau_Upload_NguoiHoc.xlsx" />
     <Content Include="DataExport\Mau\Mau_Upload_CBVC.xlsx" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc_khao_sat.cshtml" />
+    <Content Include="Areas\CTDT\Views\Interface\chon_dap_vien_thong_ke_theo_yeu_cau.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
