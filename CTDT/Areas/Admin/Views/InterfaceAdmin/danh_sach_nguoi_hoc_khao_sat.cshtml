@@ -1,27 +1,6 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-<!--Chọn lớp để hiển thị danh sách người học-->
-<!--Tạo hàm duyệt nếu người học có tồn tại trong danh sách thì bỏ qua không thì thêm vào, nếu số lượng trong danh sách ít hơn số lượng duyệt thì delete-->
-<style>
-    .table-container {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .table-wrapper {
-        width: 48%;
-    }
-
-    .table-wrapper {
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        height: 600px; /* Adjust height as per your need */
-        overflow-y: auto; /* Scroll if content overflows */
-    }
-</style>
 <div class="main-content">
     <div class="card">
         <div class="card-body">
@@ -57,113 +36,69 @@
                         </div>
                     </div>
                     <hr />
-                </fieldset>
-            </div>
-
-            <!-- Modal Import Excel -->
-            <div class="modal fade" id="importExcelModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Import Lớp từ Excel</h5>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <i class="anticon anticon-close"></i>
-                            </button>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn lớp đáp viên cần thêm vào phiếu</label>
+                            <select class="form-control select2" name="states[]" multiple="multiple" id="lop">
+                                <option value=""></option>
+                            </select>
                         </div>
-                        <div class="modal-body">
-                            <form id="importExcelForm" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <label for="excelFile">Chọn file Excel</label>
-                                    <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
-                                </div>
-                                <button type="submit" class="btn btn-success btn-tone m-r-5">Upload</button>
-                                <a href="~/DataExport/Mau/MauUploadSinhVien.xlsx" download>
-                                    <button type="button" class="btn btn-info btn-tone m-r-5">Tải file mẫu</button>
-                                </a>
-                            </form>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Nhập mã học viên để lọc đáp viên đặc biệt (mỗi tùy chọn là 1 dòng)</label>
+                            <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10"></textarea>
                         </div>
                     </div>
-                </div>
+                    <p style="color:red;font-weight:bold;font-style:italic">* Lưu ý: Để lọc được lớp thì phải Clear hết dữ liệu trong ô lọc đáp viên đặc biệt</p>
+                    <hr />
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="submit" id="btnFilter" class="btn btn-primary btn-tone" style="margin-right: 20px;">
+                            <i class="fas fa-filter"></i> Lọc dữ liệu
+                        </button>
+                        <button type="submit" id="btnInfoDapVien" class="btn btn-primary btn-tone" style="margin-right: 20px;">
+                            <i class="fas fa-address-card"></i> Xem chi tiết đáp viên đã chọn của phiếu
+                        </button>
+                        <button class="btn btn-success" id="SaveData">
+                            <i class="fas fa-file-excel"></i> Save dữ liệu
+                        </button>
+                    </div>
+                </fieldset>
             </div>
-            <!-- End Modal Import Excel -->
             <!--Modal-->
-            <div class="modal fade" id="bd-example-modal-lg">
+            <div class="modal fade bd-example-modal-lg">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title h4"></h5>
+                            <h5 class="modal-title h4">Danh sách các đáp viên đã chọn</h5>
                             <button type="button" class="close" data-dismiss="modal">
                                 <i class="anticon anticon-close"></i>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="form-validation">
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label control-label">Tên Lớp *</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="TenLop" placeholder="Nhập tên Lớp ... *">
-                                    </div>
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn CTĐT *</label>
-                                </div>
-                            </form>
-                            <div class="modal-footer">
-                                <!--data-->
-                            </div>
+                            <h5 id="show-title-survey"></h5>
+                            <table class="table table-bordered" id="data-table-info">
+                                <thead style="color:black; text-align:center; font-weight:bold" id="showthead-info">
+                                    <!--Load Thead-->
+                                </thead>
+                                <tbody id="showdata-info">
+                                    <!--Load Data-->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
             <!--End Modal-->
-
-            <div class="m-t-25">
-                <div class="container mt-4">
-                    <div class="table-container mt-4">
-                        <!-- Danh sách chưa chọn -->
-                        <div class="table-wrapper">
-                            <h5>Danh sách chưa chọn</h5>
-                            <table class="table table-bordered table-striped">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th><input type="checkbox" id="checkAllLeft" /></th>
-                                        <th>Mã ĐT</th>
-                                        <th>Tên ĐT</th>
-                                        <th>Mã CB</th>
-                                        <th>Tên CB</th>
-                                        <th>Mã SV</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table-left">
-                                    <!-- Rows will be dynamically added -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Danh sách đã chọn -->
-                        <div class="table-wrapper">
-                            <h5>Danh sách đã chọn</h5>
-                            <table class="table table-bordered table-striped">
-                                <thead class="table-primary">
-                                    <tr>
-                                        <th><input type="checkbox" id="checkAllRight" /></th>
-                                        <th>Mã ĐT</th>
-                                        <th>Tên ĐT</th>
-                                        <th>Mã CB</th>
-                                        <th>Tên CB</th>
-                                        <th>Mã SV</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table-right">
-                                    <!-- Rows will be dynamically added -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Buttons for transferring -->
-                    <div class="d-flex justify-content-center mt-4">
-                        <button class="btn btn-primary me-2" id="moveToRight">Chuyển qua</button>
-                        <button class="btn btn-secondary" id="moveToLeft">Chuyển lại</button>
-                    </div>
+            <div class="m-t-25" id="showalldata">
+                <div class="table-container" id="dap-vien-khao-sat">
+                    <h2 id="title_notification" class="text-uppercase" style="color:red">vui lòng chọn chức năng lọc để tiếp tục</h2>
+                    <table class="table table-bordered" id="data-table">
+                        <thead style="color:black; text-align:center; font-weight:bold" id="showthead">
+                            <!--Load Thead-->
+                        </thead>
+                        <tbody id="showdata">
+                            <!--Load Data-->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -14,18 +14,9 @@ namespace CTDT.Models
     
     public partial class group_mon_hoc
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public group_mon_hoc()
-        {
-            this.mon_hoc = new HashSet<mon_hoc>();
-        }
-    
         public int id_group_mh { get; set; }
         public string ten_group_mh { get; set; }
         public int ngay_tao { get; set; }
         public int ngay_cap_nhat { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<mon_hoc> mon_hoc { get; set; }
     }
 }

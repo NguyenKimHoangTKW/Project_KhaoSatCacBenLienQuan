@@ -201,9 +201,9 @@
     <EntitySetMapping Name="mon_hoc">
       <EntityTypeMapping TypeName="dbSurveyModel.mon_hoc">
         <MappingFragment StoreEntitySet="mon_hoc">
+          <ScalarProperty Name="id_nam_hoc" ColumnName="id_nam_hoc" />
           <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
           <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
-          <ScalarProperty Name="id_group_mh" ColumnName="id_group_mh" />
           <ScalarProperty Name="id_hoc_phan" ColumnName="id_hoc_phan" />
           <ScalarProperty Name="id_lop" ColumnName="id_lop" />
           <ScalarProperty Name="ten_mon_hoc" ColumnName="ten_mon_hoc" />
@@ -337,6 +337,7 @@
           <ScalarProperty Name="id_cbvc_khao_sat" ColumnName="id_cbvc_khao_sat" />
           <ScalarProperty Name="id_nguoi_hoc_co_hoc_phan_khao_sat" ColumnName="id_nguoi_hoc_co_hoc_phan_khao_sat" />
           <ScalarProperty Name="id_nguoi_hoc_khao_sat" ColumnName="id_nguoi_hoc_khao_sat" />
+          <ScalarProperty Name="surveyID" ColumnName="surveyID" />
           <ScalarProperty Name="id_thong_ke_theo_yeu_cau" ColumnName="id_thong_ke_theo_yeu_cau" />
         </MappingFragment>
       </EntityTypeMapping>

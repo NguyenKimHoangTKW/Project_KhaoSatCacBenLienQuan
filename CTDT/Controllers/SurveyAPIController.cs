@@ -34,9 +34,9 @@ namespace CTDT.Controllers
             var list_thong_tin = new List<dynamic>();
             switch (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
             {
-                case "Phiếu học viên":
+                case "Phiếu người học":
                     var nguoi_hoc = await db.sinhvien
-                        .Where(x => sxt.nguoi_hoc != null ? x.id_sv == sxt.nguoi_hoc : x.ma_sv == ms_nguoi_hoc)
+                        .Where(x => x.ma_sv == ms_nguoi_hoc)
                         .Select(x => new
                         {
                             email = user.email,
@@ -141,7 +141,7 @@ namespace CTDT.Controllers
 
                 switch (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
                 {
-                    case "Phiếu học viên":
+                    case "Phiếu người học":
                         var nguoi_hoc = await db.sinhvien.FirstOrDefaultAsync(x => x.ma_sv == saveForm.ma_nguoi_hoc);
                         aw = new answer_response()
                         {
@@ -242,7 +242,7 @@ namespace CTDT.Controllers
             var list_info = new List<dynamic>();
             switch (answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
             {
-                case "Phiếu học viên":
+                case "Phiếu người học":
                     var data_hoc_vien = new
                     {
                         phieu_khao_sat = answer_responses.survey.surveyData,

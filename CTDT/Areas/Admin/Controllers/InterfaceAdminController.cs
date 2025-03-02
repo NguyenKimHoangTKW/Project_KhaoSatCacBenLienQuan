@@ -117,7 +117,18 @@ namespace CTDT.Areas.Admin.Controllers
         public ActionResult danh_sach_nguoi_hoc_khao_sat()
         {
             ViewBag.Year = new SelectList(db.NamHoc.OrderBy(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
-            ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.ten_hedaotao), "id_hedaotao", "ten_hedaotao");
+            ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.id_hedaotao), "id_hedaotao", "ten_hedaotao");
+            return View();
+        }
+        public ActionResult danh_sach_can_bo_vien_chuc_khao_sat()
+        {
+            ViewBag.Year = new SelectList(db.NamHoc.OrderBy(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
+            ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.id_hedaotao), "id_hedaotao", "ten_hedaotao");
+            return View();
+        }
+        public ActionResult danh_sach_mon_hoc()
+        {
+            ViewBag.HocPhan = new SelectList(db.hoc_phan.OrderBy(l => l.id_hoc_phan), "id_hoc_phan", "ten_hoc_phan");
             return View();
         }
     }

@@ -52,14 +52,41 @@
                             <hr />
                             <div class="d-flex justify-content-end gap-2">
                                 <button type="submit" id="btnFilter" class="btn btn-primary btn-tone" style="margin-right: 20px;">
-                                    <i class="fas fa-filter"></i> Lọc dữ liệu
+                                    <i class="fas fa-filter"></i> Xem các đáp viên đã chọn để thống kê
                                 </button>
-                                <button class="btn btn-success" id="ExportExcel">
-                                    <i class="fas fa-file-excel"></i> Xuất Excel
+                                <button class="btn btn-success" id="SaveData">
+                                    <i class="fas fa-file-excel"></i> Save dữ liệu
                                 </button>
                             </div>
                         </fieldset>
                     </div>
+                    <!--Modal-->
+                    <div class="modal fade bd-example-modal-lg" id="exampleModalCenter">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title h4" id="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <i class="anticon anticon-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead style="color:black; text-align:center; font-weight:bold" id="showheadinfo">
+                                                <!--Load Thead-->
+                                            </thead>
+                                            <tbody id="showdatainfo">
+                                                <!--Load Data-->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--End Modal-->
                     <div class="m-t-25" id="showalldata">
                         <div class="table-container" id="dap-vien-khao-sat">
                             <h2 id="title_notification" class="text-uppercase" style="color:red">vui lòng chọn chức năng lọc để tiếp tục</h2>

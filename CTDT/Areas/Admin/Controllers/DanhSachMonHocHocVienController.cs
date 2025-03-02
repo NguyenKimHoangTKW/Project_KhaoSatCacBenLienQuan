@@ -81,7 +81,6 @@ namespace CTDT.Areas.Admin.Controllers
                                 ten_mon_hoc = tenmonhoc,
                                 id_lop = check_lop.id_lop,
                                 id_hoc_phan = check_hoc_phan.id_hoc_phan,
-                                id_group_mh = null,
                                 ngay_cap_nhat = (int)unixTimestamp,
                                 ngay_tao = (int)unixTimestamp
 

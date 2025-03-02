@@ -184,7 +184,6 @@ namespace CTDT.Areas.Admin.Controllers
                     ten_mon_hoc = monhoc,
                     ma_mon_hoc = mamh,
                     id_hoc_phan = existingHocPhan.id_hoc_phan,
-                    id_group_mh = existingGroupMonHoc.id_group_mh,
                     ngay_cap_nhat = unixTimestamp,
                     ngay_tao = unixTimestamp,
                 };

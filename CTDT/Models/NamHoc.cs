@@ -19,6 +19,7 @@ namespace CTDT.Models
         {
             this.answer_response = new HashSet<answer_response>();
             this.CanBoVienChuc = new HashSet<CanBoVienChuc>();
+            this.mon_hoc = new HashSet<mon_hoc>();
             this.survey = new HashSet<survey>();
         }
     
@@ -30,6 +31,8 @@ namespace CTDT.Models
         public virtual ICollection<answer_response> answer_response { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CanBoVienChuc> CanBoVienChuc { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<mon_hoc> mon_hoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<survey> survey { get; set; }
     }

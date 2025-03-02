@@ -753,8 +753,6 @@ namespace CTDT.Areas.CTDT.Controllers
                     }
                 }
             }
-
-
             return questionDataList;
         }
 

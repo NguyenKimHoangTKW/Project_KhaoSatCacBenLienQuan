@@ -26,15 +26,15 @@ namespace CTDT.Models
         public string ten_mon_hoc { get; set; }
         public Nullable<int> id_lop { get; set; }
         public Nullable<int> id_hoc_phan { get; set; }
-        public Nullable<int> id_group_mh { get; set; }
         public Nullable<int> ngay_tao { get; set; }
         public Nullable<int> ngay_cap_nhat { get; set; }
+        public Nullable<int> id_nam_hoc { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }
-        public virtual group_mon_hoc group_mon_hoc { get; set; }
         public virtual hoc_phan hoc_phan { get; set; }
         public virtual lop lop { get; set; }
+        public virtual NamHoc NamHoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<nguoi_hoc_dang_co_hoc_phan> nguoi_hoc_dang_co_hoc_phan { get; set; }
     }

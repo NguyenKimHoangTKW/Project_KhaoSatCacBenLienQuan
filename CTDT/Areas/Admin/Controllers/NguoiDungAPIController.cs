@@ -426,7 +426,8 @@ namespace CTDT.Areas.Admin.Controllers
                 var newRecord = new phan_quyen_users
                 {
                     id_users = us.id_users,
-                    id_ctdt = check_ctdt.id_ctdt
+                    id_ctdt = check_ctdt.id_ctdt,
+                    
                 };
                 db.phan_quyen_users.Add(newRecord);
             }

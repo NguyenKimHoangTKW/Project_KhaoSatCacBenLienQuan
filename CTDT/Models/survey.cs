@@ -21,6 +21,7 @@ namespace CTDT.Models
             this.cbvc_khao_sat = new HashSet<cbvc_khao_sat>();
             this.nguoi_hoc_dang_co_hoc_phan = new HashSet<nguoi_hoc_dang_co_hoc_phan>();
             this.nguoi_hoc_khao_sat = new HashSet<nguoi_hoc_khao_sat>();
+            this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
             this.tieu_de_phieu_khao_sat = new HashSet<tieu_de_phieu_khao_sat>();
         }
     
@@ -54,6 +55,8 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<nguoi_hoc_khao_sat> nguoi_hoc_khao_sat { get; set; }
         public virtual users users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tieu_de_phieu_khao_sat> tieu_de_phieu_khao_sat { get; set; }
     }
