@@ -1,4 +1,18 @@
 ﻿$(".select2").select2();
+let value_check = "";
+$(document).ready(function () {
+    $("#bd-example-modal-lg").on("hidden.bs.modal", function () {
+        $(this).find("input, textarea, select").val("");
+        $(this).find("input[type=checkbox], input[type=radio]").prop("checked", false);
+    });
+});
+$(document).on("change", "#nam-hoc", function () {
+    load_data();
+});
+$("#nam-hoc").trigger("change");
+$(document).on("change", "#hoc-phan", function () {
+    load_data();
+});
 
 $(document).on("click", "#btnFilter", function (event) {
     event.preventDefault();
@@ -7,9 +21,56 @@ $(document).on("click", "#btnFilter", function (event) {
 
 $(document).on("click", "#btnEdit", function (event) {
     event.preventDefault();
+    const value = $(this).data("id");
+    let html = "";
+    $(".modal-title").text("CẬP NHẬT MÔN HỌC");
+    html +=
+        `
+        <button type="button" class="btn btn-default m-r-10" data-dismiss="modal">Thoát</button>
+        <button type="button" id="btnUpdateObject" class="btn btn-primary">Lưu thay đổi</button>
+        `;
+    $(".modal-footer").html(html);
+    value_check = value;
+    get_info(value);
     $("#bd-example-modal-lg").modal("show");
 });
-
+$(document).on("click", "#btnAdd", function (event) {
+    event.preventDefault();
+    let html = "";
+    $(".modal-title").text("THÊM MỚI MÔN HỌC");
+    html +=
+        `
+        <button type="button" class="btn btn-default m-r-10" data-dismiss="modal">Thoát</button>
+        <button type="button" id="btnAddNew" class="btn btn-primary">Lưu thay đổi</button>
+        `;
+    $(".modal-footer").html(html);
+    $("#bd-example-modal-lg").modal("show");
+});
+$(document).on("click", "#btnAddNew", function (event) {
+    event.preventDefault();
+    add_new();
+});
+$(document).on("click", "#btnUpdateObject", function (event) {
+    event.preventDefault();
+    update(value_check);
+})
+$(document).on("click", "#btnDelete", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    Swal.fire({
+        title: "Bạn đang thao tác xóa?",
+        text: "Bạn chắc chắc muốn xóa dữ liệu!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có, xóa luôn!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            _delete(value);
+        }
+    });
+});
 async function load_data() {
     const namhoc = $("#nam-hoc").val();
     const hocphan = $("#hoc-phan").val();
@@ -115,6 +176,187 @@ async function load_data() {
         Toast.fire({
             icon: "error",
             title: res.message
+        });
+    }
+}
+
+async function add_new() {
+    const mamonhoc = $("#ma-mon-hoc-val").val();
+    const tenmonhoc = $("#ten-mon-hoc-val").val();
+    const hocphan = $("#hoc-phan-val").val();
+    const lop = $("#lop-val").val();
+    const namhoc = $("#nam-hoc-val").val();
+    const res = await $.ajax({
+        url: '/api/admin/them-moi-mon-hoc',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            ma_mon_hoc: mamonhoc,
+            ten_mon_hoc: tenmonhoc,
+            id_lop: lop,
+            id_hoc_phan: hocphan,
+            id_nam_hoc: namhoc
+        })
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+
+async function get_info(value) {
+    const res = await $.ajax({
+        url: '/api/admin/info-mon-hoc',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id_mon_hoc: value
+        })
+    });
+    if (res.success) {
+        const items = res.data;
+        $("#ma-mon-hoc-val").val(items.ma_mon_hoc);
+        $("#ten-mon-hoc-val").val(items.ten_mon_hoc);
+        $("#hoc-phan-val").val(items.hoc_phan).trigger("change");
+        $("#lop-val").val(items.lop).trigger("change");
+        $("#nam-hoc-val").val(items.nam_hoc).trigger("change");
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+};
+
+async function update(value) {
+    const mamonhoc = $("#ma-mon-hoc-val").val();
+    const tenmonhoc = $("#ten-mon-hoc-val").val();
+    const hocphan = $("#hoc-phan-val").val();
+    const lop = $("#lop-val").val();
+    const namhoc = $("#nam-hoc-val").val();
+    const res = await $.ajax({
+        url: '/api/admin/update-mon-hoc',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id_mon_hoc: value,
+            ma_mon_hoc: mamonhoc,
+            ten_mon_hoc: tenmonhoc,
+            id_lop: lop,
+            id_hoc_phan: hocphan,
+            id_nam_hoc: namhoc
+        })
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+async function _delete(value) {
+    const res = await $.ajax({
+        url: '/api/admin/delete-mon-hoc',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id_mon_hoc: value
+        })
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    }
+    else {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: res.message,
         });
     }
 }
