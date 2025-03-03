@@ -315,6 +315,7 @@
     <Compile Include="Areas\Admin\Controllers\InterfaceAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhoaAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\LopAPIController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MonHocAdminAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiDungAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\NguoiHocAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhieuKhaoSatAdminAPIController.cs" />

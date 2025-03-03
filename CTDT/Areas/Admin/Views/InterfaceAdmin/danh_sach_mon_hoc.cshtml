@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "danh_sach_mon_hoc";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
@@ -13,8 +12,17 @@
                         <p style="font-weight:bold;font-size:25px;text-align:center;color:black">DANH SÁCH MÔN HỌC</p>
                         <div class="row items-push">
                             <div class="col-3">
+                                <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo năm học</label>
+                                <select class="form-control select2" id="nam-hoc">
+                                    @foreach (var items in ViewBag.Year)
+                                    {
+                                        <option value="@items.Value">@items.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3">
                                 <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo học phần</label>
-                                <select class="form-control select2" id="FilterCTDT">
+                                <select class="form-control select2" id="hoc-phan">
                                     <option value="0">Tất cả</option>
                                     @foreach (var items in ViewBag.HocPhan)
                                     {
@@ -81,13 +89,55 @@
                         <div class="modal-body">
                             <form id="form-validation">
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label control-label">Tên Lớp *</label>
+                                    <label class="col-sm-2 col-form-label control-label">Mã môn học</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="TenLop" placeholder="Nhập tên Lớp ... *">
+                                        <input type="text" class="form-control" id="ma-mon-hoc-val" placeholder="Nhập tên Lớp ... *">
                                     </div>
-                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn CTĐT *</label>
-                                    <div class="col-sm-10" style="margin-top: 10px;">
-                                        <select id="MaCTDT" class="form-control select2">
+                                </div>
+                            </form>
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tên môn học</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="ten-mon-hoc-val" placeholder="Nhập tên Lớp ... *">
+                                    </div>
+                                </div>
+                            </form>
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Thuộc học phần</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="hoc-phan-val">
+                                            @foreach (var items in ViewBag.HocPhan)
+                                            {
+                                                <option value="@items.Value">@items.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Thuộc lớp</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="lop-val">
+                                            @foreach (var items in ViewBag.Lop)
+                                            {
+                                                <option value="@items.Value">@items.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Thuộc năm học</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control select2" id="nam-hoc-val">
+                                            @foreach (var items in ViewBag.Year)
+                                            {
+                                                <option value="@items.Value">@items.Text</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
@@ -101,14 +151,18 @@
             </div>
             <!--End Modal-->
 
-            <div class="m-t-25">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="lopTable">
-                        <thead></thead>
-                        <tbody></tbody>
+            <div class="m-t-25" id="showalldata">
+                <div class="table-container" id="dap-vien-khao-sat">
+                    <h2 id="title_notification" class="text-uppercase" style="color:red">vui lòng chọn chức năng lọc để tiếp tục</h2>
+                    <table class="table table-bordered" id="mon-hoc-table">
+                        <thead style="color:black; text-align:center; font-weight:bold" id="showthead">
+                            <!--Load Thead-->
+                        </thead>
+                        <tbody id="showdata">
+                            <!--Load Data-->
+                        </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
