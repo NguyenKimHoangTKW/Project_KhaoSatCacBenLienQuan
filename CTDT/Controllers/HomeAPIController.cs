@@ -1,5 +1,6 @@
 ﻿using CTDT.Helper;
 using CTDT.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -34,10 +35,10 @@ namespace CTDT.Controllers
             if (!isUserLoggedIn)
             {
                 var message = "Vui lòng đăng nhập để thực hiện chức năng";
-                return Ok(new { data = hedaotao, message, islogin = false });
+                return Ok(new { data = JsonConvert.SerializeObject(hedaotao), message, islogin = false });
             }
 
-            var response = new { data = hedaotao, islogin = true };
+            var response = new { data = JsonConvert.SerializeObject(hedaotao), islogin = true };
 
             switch (user.id_typeusers)
             {

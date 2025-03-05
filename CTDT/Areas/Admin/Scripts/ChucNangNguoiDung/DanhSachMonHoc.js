@@ -5,6 +5,10 @@ $(document).ready(function () {
         $(this).find("input, textarea, select").val("");
         $(this).find("input[type=checkbox], input[type=radio]").prop("checked", false);
     });
+    $('#importExcelModal').on('hidden.bs.modal', function () {
+        $(this).find('form')[0].reset(); 
+    });
+
 });
 $(document).on("change", "#nam-hoc", function () {
     load_data();
@@ -71,6 +75,53 @@ $(document).on("click", "#btnDelete", function (event) {
         }
     });
 });
+$(document).on("submit", "#importExcelForm", async function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    const res = await $.ajax({
+        url: '/api/admin/upload-excel-mon-hoc',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        $('#importExcelModal').modal('hide');
+        load_data();
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+});
 async function load_data() {
     const namhoc = $("#nam-hoc").val();
     const hocphan = $("#hoc-phan").val();
@@ -92,6 +143,7 @@ async function load_data() {
     thead.empty();
     tbody.empty();
     if (res.success) {
+        const data = JSON.parse(res.data);
         title.hide();
         let htmlThead = `
         <tr>    
@@ -109,7 +161,7 @@ async function load_data() {
     `;
         thead.html(htmlThead);
         let htmlTbody = "";
-        res.data.forEach((item, index) => {
+        data.forEach((item, index) => {
             htmlTbody += `
             <tr>
                 <td class="formatSo">${index + 1}</td>
@@ -244,7 +296,7 @@ async function get_info(value) {
         })
     });
     if (res.success) {
-        const items = res.data;
+        const items = JSON.parse(res.data);
         $("#ma-mon-hoc-val").val(items.ma_mon_hoc);
         $("#ten-mon-hoc-val").val(items.ten_mon_hoc);
         $("#hoc-phan-val").val(items.hoc_phan).trigger("change");

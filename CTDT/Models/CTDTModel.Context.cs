@@ -26,6 +26,7 @@ namespace CTDT.Models
         }
     
         public virtual DbSet<answer_response> answer_response { get; set; }
+        public virtual DbSet<bo_mon> bo_mon { get; set; }
         public virtual DbSet<CanBoVienChuc> CanBoVienChuc { get; set; }
         public virtual DbSet<cbvc_khao_sat> cbvc_khao_sat { get; set; }
         public virtual DbSet<chi_tiet_cau_hoi_tieu_de> chi_tiet_cau_hoi_tieu_de { get; set; }
@@ -36,7 +37,6 @@ namespace CTDT.Models
         public virtual DbSet<DonVi> DonVi { get; set; }
         public virtual DbSet<dot_khao_sat> dot_khao_sat { get; set; }
         public virtual DbSet<group_loaikhaosat> group_loaikhaosat { get; set; }
-        public virtual DbSet<group_mon_hoc> group_mon_hoc { get; set; }
         public virtual DbSet<hedaotao> hedaotao { get; set; }
         public virtual DbSet<hoc_ky> hoc_ky { get; set; }
         public virtual DbSet<hoc_phan> hoc_phan { get; set; }

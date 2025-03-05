@@ -19,6 +19,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="bo_mon">
+      <EntityTypeMapping TypeName="dbSurveyModel.bo_mon">
+        <MappingFragment StoreEntitySet="bo_mon">
+          <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
+          <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
+          <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
+          <ScalarProperty Name="ten_bo_mon" ColumnName="ten_bo_mon" />
+          <ScalarProperty Name="id_bo_mon" ColumnName="id_bo_mon" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="CanBoVienChuc">
       <EntityTypeMapping TypeName="dbSurveyModel.CanBoVienChuc">
         <MappingFragment StoreEntitySet="CanBoVienChuc">
@@ -126,16 +137,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="group_mon_hoc">
-      <EntityTypeMapping TypeName="dbSurveyModel.group_mon_hoc">
-        <MappingFragment StoreEntitySet="group_mon_hoc">
-          <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
-          <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
-          <ScalarProperty Name="ten_group_mh" ColumnName="ten_group_mh" />
-          <ScalarProperty Name="id_group_mh" ColumnName="id_group_mh" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="hedaotao">
       <EntityTypeMapping TypeName="dbSurveyModel.hedaotao">
         <MappingFragment StoreEntitySet="hedaotao">
@@ -169,6 +170,7 @@
         <MappingFragment StoreEntitySet="khoa">
           <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
           <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
+          <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />
           <ScalarProperty Name="ten_khoa" ColumnName="ten_khoa" />
           <ScalarProperty Name="ma_khoa" ColumnName="ma_khoa" />
           <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />

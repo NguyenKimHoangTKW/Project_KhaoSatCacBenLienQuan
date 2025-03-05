@@ -17,6 +17,7 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public khoa()
         {
+            this.bo_mon = new HashSet<bo_mon>();
             this.ctdt = new HashSet<ctdt>();
             this.phan_quyen_users = new HashSet<phan_quyen_users>();
         }
@@ -24,11 +25,15 @@ namespace CTDT.Models
         public int id_khoa { get; set; }
         public string ma_khoa { get; set; }
         public string ten_khoa { get; set; }
+        public Nullable<int> id_namhoc { get; set; }
         public int ngaycapnhat { get; set; }
         public int ngaytao { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<bo_mon> bo_mon { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ctdt> ctdt { get; set; }
+        public virtual NamHoc NamHoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<phan_quyen_users> phan_quyen_users { get; set; }
     }

@@ -352,6 +352,9 @@
     <Compile Include="Helper\SessionHelper.cs" />
     <Compile Include="Helper\UserAuthorizeAttribute.cs" />
     <Compile Include="Helper\VisitorHub.cs" />
+    <Compile Include="Models\bo_mon.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ChildrenTitleSurvey.cs" />
     <Compile Include="Models\cbvc_khao_sat.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
@@ -403,9 +406,6 @@
     <Compile Include="Models\GetNguoiHoc.cs" />
     <Compile Include="Models\GiamSatThongKeKetQua.cs" />
     <Compile Include="Models\group_loaikhaosat.cs">
-      <DependentUpon>CTDTModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\group_mon_hoc.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\hedaotao.cs">
@@ -1397,6 +1397,8 @@
     <Content Include="Areas\CTDT\Views\Interface\chon_dap_vien_thong_ke_theo_yeu_cau.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_can_bo_vien_chuc_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_mon_hoc.cshtml" />
+    <Content Include="DataExport\Mau\Mau_Upload_Mon_Hoc.xlsx" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc_co_hoc_phan_khao_sat.cshtml" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />

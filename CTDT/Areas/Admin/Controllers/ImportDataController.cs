@@ -163,18 +163,7 @@ namespace CTDT.Areas.Admin.Controllers
                 db.sinhvien.Add(existingSV);
                 db.SaveChanges();
             }
-            var existingGroupMonHoc = db.group_mon_hoc.SingleOrDefault(x => x.ten_group_mh == nhommonhoc);
-            if (existingGroupMonHoc == null)
-            {
-                existingGroupMonHoc = new group_mon_hoc
-                {
-                    ten_group_mh = nhommonhoc,
-                    ngay_cap_nhat = unixTimestamp,
-                    ngay_tao = unixTimestamp,
-                };
-                db.group_mon_hoc.Add(existingGroupMonHoc);
-                db.SaveChanges();
-            }
+           
             var existingMonHoc = db.mon_hoc.SingleOrDefault(x => x.ten_mon_hoc == monhoc);
             var existingHocPhan = db.hoc_phan.SingleOrDefault(x => x.ten_hoc_phan == hocphan);
             if (existingMonHoc == null)

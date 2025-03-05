@@ -7,20 +7,21 @@ async function load_he_dao_tao() {
         url: '/api/load_he_dao_tao',
         type: 'POST',
     })
+    const data = JSON.parse(res.data);
     if (res.islogin && res.ctdt) {
-        form_ctdt(res.data)
+        form_ctdt(data)
     }
     else if (res.islogin && res.client) {
-        form_client(res.data)
+        form_client(data)
     }
     else if (res.islogin && res.admin) {
         window.location.href = "/admin/danh-sach-phieu-khao-sat";
     }
     else if (res.islogin && res.khoa) {
-        form_khoa(res.data)
+        form_khoa(data)
     }
     else {
-        form_no_login(res.data)
+        form_no_login(data)
     }
 }
 

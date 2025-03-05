@@ -126,6 +126,10 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.HeDaoTao = new SelectList(db.hedaotao.OrderBy(l => l.id_hedaotao), "id_hedaotao", "ten_hedaotao");
             return View();
         }
+        public ActionResult danh_sach_nguoi_hoc_co_hoc_phan_khao_sat()
+        {
+            return View();
+        }
         public ActionResult danh_sach_mon_hoc()
         {
             ViewBag.HocPhan = new SelectList(db.hoc_phan.OrderBy(l => l.id_hoc_phan), "id_hoc_phan", "ten_hoc_phan");
