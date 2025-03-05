@@ -91,6 +91,7 @@
     <Property Name="ma_ctdt" Type="nvarchar" MaxLength="10" />
     <Property Name="id_khoa" Type="int" Nullable="false" />
     <Property Name="ten_ctdt" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="id_bo_mon" Type="int" />
     <Property Name="id_hdt" Type="int" />
     <Property Name="ngaycapnhat" Type="int" Nullable="false" />
     <Property Name="ngaytao" Type="int" Nullable="false" />
@@ -573,6 +574,18 @@
       </Principal>
       <Dependent Role="chuc_nang_users">
         <PropertyRef Name="id_typeusers" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ctdt_bo_mon">
+    <End Role="bo_mon" Type="Self.bo_mon" Multiplicity="0..1" />
+    <End Role="ctdt" Type="Self.ctdt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="bo_mon">
+        <PropertyRef Name="id_bo_mon" />
+      </Principal>
+      <Dependent Role="ctdt">
+        <PropertyRef Name="id_bo_mon" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1120,6 +1133,10 @@
     <AssociationSet Name="FK_chuc_nang_users_typeusers" Association="Self.FK_chuc_nang_users_typeusers">
       <End Role="typeusers" EntitySet="typeusers" />
       <End Role="chuc_nang_users" EntitySet="chuc_nang_users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ctdt_bo_mon" Association="Self.FK_ctdt_bo_mon">
+      <End Role="bo_mon" EntitySet="bo_mon" />
+      <End Role="ctdt" EntitySet="ctdt" />
     </AssociationSet>
     <AssociationSet Name="FK_ctdt_hedaotao" Association="Self.FK_ctdt_hedaotao">
       <End Role="hedaotao" EntitySet="hedaotao" />

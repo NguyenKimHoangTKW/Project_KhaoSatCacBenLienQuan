@@ -97,6 +97,7 @@
           <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
           <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
           <ScalarProperty Name="id_hdt" ColumnName="id_hdt" />
+          <ScalarProperty Name="id_bo_mon" ColumnName="id_bo_mon" />
           <ScalarProperty Name="ten_ctdt" ColumnName="ten_ctdt" />
           <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
           <ScalarProperty Name="ma_ctdt" ColumnName="ma_ctdt" />

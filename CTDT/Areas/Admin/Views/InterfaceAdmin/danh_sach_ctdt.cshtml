@@ -41,6 +41,16 @@
                                 }
                             </select>
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo bộ môn</label>
+                            <select class="form-control select2" id="FilterBoMon">
+                                <option value="0">Tất cả</option>
+                                @foreach (var item in ViewBag.BoMonList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -125,6 +135,18 @@
                                     <div class="col-sm-9">
                                         <select id="MaHDT" name="id_khoa" class="form-control select2">
                                             @foreach (var item in ViewBag.HDT)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="MaBoMon" class="col-sm-3 col-form-label">Chọn Bộ môn</label>
+                                    <div class="col-sm-9">
+                                        <select id="MaBoMon" name="id_khoa" class="form-control select2">
+                                            <option value="">Bỏ qua</option>
+                                            @foreach (var item in ViewBag.BoMonList)
                                             {
                                                 <option value="@item.Value">@item.Text</option>
                                             }

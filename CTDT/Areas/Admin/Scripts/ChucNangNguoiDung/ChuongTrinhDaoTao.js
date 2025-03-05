@@ -219,12 +219,14 @@ async function add_ctdt() {
 async function load_data() {
     const hdt = $("#FilterHDT").val();
     const khoa = $("#FilterKhoa").val();
+    const bomon = $("#FilterBoMon").val();
     const res = await $.ajax({
         url: '/api/admin/danh-sach-ctdt',
         type: 'POST',
         data: {
             id_khoa: khoa,
-            id_hdt: hdt
+            id_hdt: hdt,
+            id_bo_mon: bomon
         }
     });
 
@@ -242,6 +244,7 @@ async function load_data() {
                 <th scope="col">Mã CTĐT</th>
                 <th scope="col">Tên CTĐT</th>
                 <th scope="col">Thuộc khoa/Viện</th>
+                <th scope="col">Thuộc bộ môn</th>
                 <th scope="col">Thuộc hệ đào tạo</th>
                 <th scope="col">Ngày Tạo</th>
                 <th scope="col">Cập nhật lần cuối</th>
@@ -249,7 +252,8 @@ async function load_data() {
             </tr>
             `;
         body.find("thead").html(thead);
-        res.data.forEach((item, index) => {
+        const data = JSON.parse(res.data);
+        data.forEach((item, index) => {
             html +=
                 `
                 <tr>
@@ -258,6 +262,7 @@ async function load_data() {
                     <td>${item.ma_ctdt}</td>
                     <td>${item.ten_ctdt}</td>
                     <td>${item.ten_khoa}</td>
+                    <td>${item.ten_bo_mon}</td>
                     <td>${item.ten_hedaotao}</td>
                     <td class="formatSo">${unixTimestampToDate(item.ngaytao)}</td>
                     <td class="formatSo">${unixTimestampToDate(item.ngaycapnhat)}</td>

@@ -1,4 +1,5 @@
 ﻿using CTDT.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -33,21 +34,25 @@ namespace CTDT.Areas.Admin.Controllers
             {
                 get_data = get_data.Where(x => x.id_hdt == ctdt.id_hdt);
             }
-
+            if(ctdt.id_bo_mon != 0)
+            {
+                get_data = get_data.Where(x => x.id_bo_mon == ctdt.id_bo_mon);
+            }
             var query = await get_data
                 .Select(x => new
                 {
                     x.id_ctdt,
                     ma_ctdt = x.ma_ctdt != null ? x.ma_ctdt :"",
                     x.ten_ctdt,
-                    x.khoa.ten_khoa,
-                    x.hedaotao.ten_hedaotao,
+                    ten_khoa = x.id_khoa != null ? x.khoa.ten_khoa :"",
+                    ten_hedaotao = x.id_hdt != null ? x.hedaotao.ten_hedaotao:"",
+                    ten_bo_mon = x.id_bo_mon != null ? x.bo_mon.ten_bo_mon : "",
                     x.ngaytao,
                     x.ngaycapnhat
                 }).ToListAsync();
             if (query.Any())
             {
-                return Ok(new { data = query, success = true });
+                return Ok(new { data = JsonConvert.SerializeObject(query), success = true });
             }
             else
             {

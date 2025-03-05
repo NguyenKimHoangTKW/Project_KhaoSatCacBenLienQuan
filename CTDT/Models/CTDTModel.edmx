@@ -96,6 +96,7 @@
           <Property Name="ma_ctdt" Type="nvarchar" MaxLength="10" />
           <Property Name="id_khoa" Type="int" Nullable="false" />
           <Property Name="ten_ctdt" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_bo_mon" Type="int" />
           <Property Name="id_hdt" Type="int" />
           <Property Name="ngaycapnhat" Type="int" Nullable="false" />
           <Property Name="ngaytao" Type="int" Nullable="false" />
@@ -578,6 +579,18 @@
             </Principal>
             <Dependent Role="chuc_nang_users">
               <PropertyRef Name="id_typeusers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ctdt_bo_mon">
+          <End Role="bo_mon" Type="Self.bo_mon" Multiplicity="0..1" />
+          <End Role="ctdt" Type="Self.ctdt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bo_mon">
+              <PropertyRef Name="id_bo_mon" />
+            </Principal>
+            <Dependent Role="ctdt">
+              <PropertyRef Name="id_bo_mon" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1126,6 +1139,10 @@
             <End Role="typeusers" EntitySet="typeusers" />
             <End Role="chuc_nang_users" EntitySet="chuc_nang_users" />
           </AssociationSet>
+          <AssociationSet Name="FK_ctdt_bo_mon" Association="Self.FK_ctdt_bo_mon">
+            <End Role="bo_mon" EntitySet="bo_mon" />
+            <End Role="ctdt" EntitySet="ctdt" />
+          </AssociationSet>
           <AssociationSet Name="FK_ctdt_hedaotao" Association="Self.FK_ctdt_hedaotao">
             <End Role="hedaotao" EntitySet="hedaotao" />
             <End Role="ctdt" EntitySet="ctdt" />
@@ -1352,6 +1369,10 @@
             <End Role="khoa" EntitySet="khoa" />
             <End Role="bo_mon" EntitySet="bo_mon" />
           </AssociationSet>
+          <AssociationSet Name="FK_ctdt_bo_mon" Association="dbSurveyModel.FK_ctdt_bo_mon">
+            <End Role="bo_mon" EntitySet="bo_mon" />
+            <End Role="ctdt" EntitySet="ctdt" />
+          </AssociationSet>
           <AssociationSet Name="FK_CanBoVienChuc_ChucVu" Association="dbSurveyModel.FK_CanBoVienChuc_ChucVu">
             <End Role="ChucVu" EntitySet="ChucVu" />
             <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
@@ -1566,6 +1587,7 @@
           <Property Name="ngay_tao" Type="Int32" />
           <Property Name="ngay_cap_nhat" Type="Int32" />
           <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_bo_mon_khoa" FromRole="bo_mon" ToRole="khoa" />
+          <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_ctdt_bo_mon" FromRole="bo_mon" ToRole="ctdt" />
         </EntityType>
         <EntityType Name="CanBoVienChuc">
           <Key>
@@ -1647,10 +1669,12 @@
           <Property Name="ma_ctdt" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="id_khoa" Type="Int32" Nullable="false" />
           <Property Name="ten_ctdt" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_bo_mon" Type="Int32" />
           <Property Name="id_hdt" Type="Int32" />
           <Property Name="ngaycapnhat" Type="Int32" Nullable="false" />
           <Property Name="ngaytao" Type="Int32" Nullable="false" />
           <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_ctdt" FromRole="ctdt" ToRole="answer_response" />
+          <NavigationProperty Name="bo_mon" Relationship="dbSurveyModel.FK_ctdt_bo_mon" FromRole="ctdt" ToRole="bo_mon" />
           <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_ctdt" FromRole="ctdt" ToRole="CanBoVienChuc" />
           <NavigationProperty Name="hedaotao" Relationship="dbSurveyModel.FK_ctdt_hedaotao" FromRole="ctdt" ToRole="hedaotao" />
           <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_ctdt_khoa" FromRole="ctdt" ToRole="khoa" />
@@ -2116,6 +2140,18 @@
             </Principal>
             <Dependent Role="bo_mon">
               <PropertyRef Name="id_khoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ctdt_bo_mon">
+          <End Type="dbSurveyModel.bo_mon" Role="bo_mon" Multiplicity="0..1" />
+          <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bo_mon">
+              <PropertyRef Name="id_bo_mon" />
+            </Principal>
+            <Dependent Role="ctdt">
+              <PropertyRef Name="id_bo_mon" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2753,6 +2789,7 @@
                 <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
                 <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
                 <ScalarProperty Name="id_hdt" ColumnName="id_hdt" />
+                <ScalarProperty Name="id_bo_mon" ColumnName="id_bo_mon" />
                 <ScalarProperty Name="ten_ctdt" ColumnName="ten_ctdt" />
                 <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
                 <ScalarProperty Name="ma_ctdt" ColumnName="ma_ctdt" />

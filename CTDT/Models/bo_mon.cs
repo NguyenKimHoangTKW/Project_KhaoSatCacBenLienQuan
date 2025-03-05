@@ -14,6 +14,12 @@ namespace CTDT.Models
     
     public partial class bo_mon
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public bo_mon()
+        {
+            this.ctdt = new HashSet<ctdt>();
+        }
+    
         public int id_bo_mon { get; set; }
         public string ten_bo_mon { get; set; }
         public Nullable<int> id_khoa { get; set; }
@@ -21,5 +27,7 @@ namespace CTDT.Models
         public Nullable<int> ngay_cap_nhat { get; set; }
     
         public virtual khoa khoa { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ctdt> ctdt { get; set; }
     }
 }

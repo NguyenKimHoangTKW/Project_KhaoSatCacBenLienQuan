@@ -1,4 +1,5 @@
 ﻿using CTDT.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -14,22 +15,24 @@ namespace CTDT.Areas.Admin.Controllers
     {
         dbSurveyEntities db = new dbSurveyEntities();
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/admin/load-danh-sach-khoa")]
-        public async Task<IHttpActionResult> load_danh_sach_khoa()
+        public async Task<IHttpActionResult> load_danh_sach_khoa(khoa items)
         {
             var get_data = await db.khoa
+               .Where(x => items.id_namhoc == null || x.id_namhoc == items.id_namhoc)
                 .Select(x => new
                 {
                     x.id_khoa,
                     x.ma_khoa,
                     x.ten_khoa,
+                    x.NamHoc.ten_namhoc,
                     x.ngaycapnhat,
                     x.ngaytao
                 }).ToListAsync();
-            if (get_data.Count > 0)
+            if (get_data.Any())
             {
-                return Ok(new { data = get_data, success = true });
+                return Ok(new { data = JsonConvert.SerializeObject(get_data), success = true });
             }
             else
             {

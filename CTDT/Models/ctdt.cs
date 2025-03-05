@@ -28,12 +28,14 @@ namespace CTDT.Models
         public string ma_ctdt { get; set; }
         public int id_khoa { get; set; }
         public string ten_ctdt { get; set; }
+        public Nullable<int> id_bo_mon { get; set; }
         public Nullable<int> id_hdt { get; set; }
         public int ngaycapnhat { get; set; }
         public int ngaytao { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }
+        public virtual bo_mon bo_mon { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CanBoVienChuc> CanBoVienChuc { get; set; }
         public virtual hedaotao hedaotao { get; set; }

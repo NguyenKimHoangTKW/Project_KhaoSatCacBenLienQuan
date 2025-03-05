@@ -1,4 +1,5 @@
-﻿let value_check = "";
+﻿$(".select2").select2();
+let value_check = "";
 $(document).ready(function () {
     load_data();
 });
@@ -32,7 +33,7 @@ $(document).on("click", "#btnAdd", function (event) {
         </div>
         `;
     body.html(html);
-    $("#bd-example-modal-lg").show("modal");
+    $("#bd-example-modal-lg").modal("show");
 });
 $(document).on("click", "#btnSaveAdd", function (event) {
     event.preventDefault();
@@ -64,6 +65,9 @@ $(document).on("click", "#btnDelete", function (event) {
             delete_khoa(value);
         }
     });
+});
+$(document).on("change", "#nam-hoc", function () {
+    load_data();
 });
 async function delete_khoa(value) {
     const res = await $.ajax({
@@ -239,37 +243,43 @@ async function add_khoa() {
 }
 async function load_data() {
     const table = $("#khoaTable");
-    let theadHtml = `
+    const year = $("#nam-hoc").val();
+    const res = await $.ajax({
+        url: '/api/admin/load-danh-sach-khoa',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id_namhoc: year
+        })
+    });
+    if ($.fn.DataTable.isDataTable('#khoaTable')) {
+        $('#khoaTable').DataTable().clear().destroy();
+    }
+    if (res.success) {
+        let theadHtml = `
         <tr>
             <th scope="col">Số Thứ Tự</th>
             <th scope="col">ID Khoa/Viện</th>
             <th scope="col">Mã Khoa/Viện</th>
             <th scope="col">Tên Khoa/Viện</th>
+            <th scope="col">Năm hoạt động</th>
             <th scope="col">Ngày tạo</th>
             <th scope="col">Ngày cập nhật</th>
             <th scope="col">Chức năng</th>
         </tr>
     `;
-    let tbodyHtml = ``;
+        let tbodyHtml = ``;
 
-    table.find("thead").html(theadHtml);
-    try {
-        const res = await $.ajax({
-            url: '/api/admin/load-danh-sach-khoa',
-            type: 'GET'
-        });
-
-        if ($.fn.DataTable.isDataTable('#khoaTable')) {
-            $('#khoaTable').DataTable().clear().destroy();
-        }
-        if (res.success) {
-            res.data.forEach((item, index) => {
-                tbodyHtml += `
+        table.find("thead").html(theadHtml);
+        const data = JSON.parse(res.data);
+        data.forEach((item, index) => {
+            tbodyHtml += `
                     <tr>
                         <td class="formatSo">${index + 1}</td>
                         <td class="formatSo">${item.id_khoa}</td>
                         <td>${item.ma_khoa}</td>
                         <td>${item.ten_khoa}</td>
+                        <td class="formatSo">${item.ten_namhoc}</td>
                         <td class="formatSo">${unixTimestampToDate(item.ngaytao)}</td>
                         <td class="formatSo">${unixTimestampToDate(item.ngaycapnhat)}</td>
                         <td>
@@ -282,50 +292,52 @@ async function load_data() {
                         </td>
                     </tr>
                 `;
-            });
-        } else {
-            tbodyHtml = `
-                <tr>
-                    <td colspan="7" class="text-center text-danger">${res.message || 'Không có dữ liệu'}</td>
-                </tr>
-            `;
-        }
-    } catch (error) {
-        tbodyHtml = `
-            <tr>
-                <td colspan="7" class="text-center text-danger">Lỗi tải dữ liệu từ server</td>
-            </tr>
-        `;
-    }
-
-    table.find("tbody").html(tbodyHtml);
-    $('#khoaTable').DataTable({
-        pageLength: 7,
-        lengthMenu: [5, 10, 25, 50, 100],
-        ordering: true,
-        searching: true,
-        autoWidth: false,
-        responsive: true,
-        language: {
-            paginate: {
-                next: "Next",
-                previous: "Previous"
+        });
+        table.find("tbody").html(tbodyHtml);
+        $('#khoaTable').DataTable({
+            pageLength: 7,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
+            searching: true,
+            autoWidth: false,
+            responsive: true,
+            language: {
+                paginate: {
+                    next: "Next",
+                    previous: "Previous"
+                },
+                search: "Search",
+                lengthMenu: "Show _MENU_ entries"
             },
-            search: "Search",
-            lengthMenu: "Show _MENU_ entries"
-        },
-        dom: "Bfrtip",
-        buttons: [
-            {
-                extend: 'excel',
-                title: 'Danh sách khoa/viện'
-            },
-            {
-                extend: 'print',
-                title: 'Danh sách khoa/viện'
+            dom: "Bfrtip",
+            buttons: [
+                {
+                    extend: 'excel',
+                    title: 'Danh sách khoa/viện'
+                },
+                {
+                    extend: 'print',
+                    title: 'Danh sách khoa/viện'
+                }
+            ]
+        });
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
             }
-        ]
-    });
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
 }
 
 function unixTimestampToDate(unixTimestamp) {
