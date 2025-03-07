@@ -131,7 +131,6 @@ namespace CTDT.Areas.Admin.Controllers
                     {
                         ma_kq = x.id,
                         email = x.users.email,
-                        ten_khoa = x.ctdt.khoa.ten_khoa ?? "",
                         ten_ctdt = x.ctdt.ten_ctdt,
                         thoi_gian_thuc_hien = x.time,
                     }).ToListAsync();

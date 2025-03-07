@@ -26,7 +26,6 @@ namespace CTDT.Models
     
         public int id_ctdt { get; set; }
         public string ma_ctdt { get; set; }
-        public int id_khoa { get; set; }
         public string ten_ctdt { get; set; }
         public Nullable<int> id_bo_mon { get; set; }
         public Nullable<int> id_hdt { get; set; }
@@ -39,7 +38,6 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CanBoVienChuc> CanBoVienChuc { get; set; }
         public virtual hedaotao hedaotao { get; set; }
-        public virtual khoa khoa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<lop> lop { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

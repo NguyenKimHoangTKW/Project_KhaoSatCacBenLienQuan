@@ -18,7 +18,7 @@ namespace CTDT.Areas.Admin.Controllers
             ViewBag.CTDTList = new SelectList(db.ctdt.OrderBy(l => l.id_ctdt), "id_ctdt", "ten_ctdt");
             ViewBag.DonVilist = new SelectList(db.DonVi.OrderBy(l => l.id_donvi), "id_donvi", "name_donvi");
             ViewBag.TypeUserList = new SelectList(db.typeusers.OrderBy(l => l.id_typeusers), "id_typeusers", "name_typeusers");
-            ViewBag.KhoaList = new SelectList(db.khoa.OrderBy(x => x.id_khoa), "id_khoa", "ten_khoa");
+            ViewBag.KhoaList = new SelectList(db.khoa_vien_truong.OrderBy(x => x.id_khoa), "id_khoa", "ten_khoa");
             return View();
         }
         public ActionResult PhanQuyen(int id)
@@ -83,7 +83,7 @@ namespace CTDT.Areas.Admin.Controllers
         }
 
 
-        public ActionResult danh_sach_khoa()
+        public ActionResult danh_sach_khoa_vien_truong()
         {
             ViewBag.CTDTList = new SelectList(db.ctdt.OrderBy(l => l.id_ctdt), "id_ctdt", "ten_ctdt");
             ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
@@ -91,7 +91,7 @@ namespace CTDT.Areas.Admin.Controllers
         }
         public ActionResult danh_sach_ctdt()
         {
-            ViewBag.KhoaList = new SelectList(db.khoa.OrderBy(l => l.id_khoa), "id_khoa", "ten_khoa");
+            ViewBag.KhoaList = new SelectList(db.khoa_vien_truong.OrderBy(l => l.id_khoa), "id_khoa", "ten_khoa");
             ViewBag.HDT = new SelectList(db.hedaotao.OrderBy(l => l.id_hedaotao), "id_hedaotao", "ten_hedaotao");
             ViewBag.CTDTList = new SelectList(db.ctdt.OrderBy(l => l.id_ctdt), "id_ctdt", "ten_ctdt");
             ViewBag.BoMonList = new SelectList(db.bo_mon.OrderBy(l => l.id_bo_mon), "id_bo_mon", "ten_bo_mon");

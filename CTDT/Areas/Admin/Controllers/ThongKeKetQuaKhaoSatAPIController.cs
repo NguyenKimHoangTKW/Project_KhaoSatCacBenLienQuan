@@ -993,7 +993,6 @@ namespace CTDT.Areas.Admin.Controllers
                               NgaySinh = (DateTime?)x.sinhvien.ngaysinh,
                               Lop = x.sinhvien.lop.ma_lop,
                               CTDT = x.ctdt.ten_ctdt,
-                              Khoa = x.ctdt.khoa.ten_khoa,
                               SDT = x.sinhvien.sodienthoai,
                           }).ToList();
                 foreach (var answer in answers)
@@ -1008,7 +1007,6 @@ namespace CTDT.Areas.Admin.Controllers
                     answerObject["NgaySinh"] = answer.NgaySinh?.ToString("dd-MM-yyyy");
                     answerObject["Lop"] = answer.Lop;
                     answerObject["CTDT"] = answer.CTDT;
-                    answerObject["Khoa"] = answer.Khoa;
                     answerObject["SDT"] = answer.SDT;
                     surveyData.Add(answerObject);
                 }
@@ -1027,7 +1025,6 @@ namespace CTDT.Areas.Admin.Controllers
                               NgaySinh = (DateTime?)x.sinhvien.ngaysinh,
                               Lop = x.sinhvien.lop.ma_lop,
                               CTDT = x.ctdt.ten_ctdt,
-                              Khoa = x.ctdt.khoa.ten_khoa,
                               SDT = x.sinhvien.sodienthoai,
                           }).ToList();
                 foreach (var answer in answers)
@@ -1040,7 +1037,6 @@ namespace CTDT.Areas.Admin.Controllers
                     answerObject["NgaySinh"] = answer.NgaySinh?.ToString("dd-MM-yyyy");
                     answerObject["Lop"] = answer.Lop;
                     answerObject["CTDT"] = answer.CTDT;
-                    answerObject["Khoa"] = answer.Khoa;
                     answerObject["SDT"] = answer.SDT;
                     surveyData.Add(answerObject);
                 }

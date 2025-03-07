@@ -16,7 +16,8 @@
     <EntitySet Name="hedaotao" EntityType="dbSurveyModel.hedaotao" />
     <EntitySet Name="hoc_ky" EntityType="dbSurveyModel.hoc_ky" />
     <EntitySet Name="hoc_phan" EntityType="dbSurveyModel.hoc_phan" />
-    <EntitySet Name="khoa" EntityType="dbSurveyModel.khoa" />
+    <EntitySet Name="khoa_children" EntityType="dbSurveyModel.khoa_children" />
+    <EntitySet Name="khoa_vien_truong" EntityType="dbSurveyModel.khoa_vien_truong" />
     <EntitySet Name="LoaiKhaoSat" EntityType="dbSurveyModel.LoaiKhaoSat" />
     <EntitySet Name="lop" EntityType="dbSurveyModel.lop" />
     <EntitySet Name="mon_hoc" EntityType="dbSurveyModel.mon_hoc" />
@@ -73,8 +74,8 @@
       <End Role="answer_response" EntitySet="answer_response" />
       <End Role="thong_ke_theo_yeu_cau" EntitySet="thong_ke_theo_yeu_cau" />
     </AssociationSet>
-    <AssociationSet Name="FK_bo_mon_khoa" Association="dbSurveyModel.FK_bo_mon_khoa">
-      <End Role="khoa" EntitySet="khoa" />
+    <AssociationSet Name="FK_bo_mon_khoa_children" Association="dbSurveyModel.FK_bo_mon_khoa_children">
+      <End Role="khoa_children" EntitySet="khoa_children" />
       <End Role="bo_mon" EntitySet="bo_mon" />
     </AssociationSet>
     <AssociationSet Name="FK_ctdt_bo_mon" Association="dbSurveyModel.FK_ctdt_bo_mon">
@@ -137,10 +138,6 @@
       <End Role="hedaotao" EntitySet="hedaotao" />
       <End Role="ctdt" EntitySet="ctdt" />
     </AssociationSet>
-    <AssociationSet Name="FK_ctdt_khoa" Association="dbSurveyModel.FK_ctdt_khoa">
-      <End Role="khoa" EntitySet="khoa" />
-      <End Role="ctdt" EntitySet="ctdt" />
-    </AssociationSet>
     <AssociationSet Name="FK_lop_ctdt" Association="dbSurveyModel.FK_lop_ctdt">
       <End Role="ctdt" EntitySet="ctdt" />
       <End Role="lop" EntitySet="lop" />
@@ -173,12 +170,16 @@
       <End Role="hoc_phan" EntitySet="hoc_phan" />
       <End Role="mon_hoc" EntitySet="mon_hoc" />
     </AssociationSet>
+    <AssociationSet Name="FK_khoa_children_khoa_vien_truong" Association="dbSurveyModel.FK_khoa_children_khoa_vien_truong">
+      <End Role="khoa_vien_truong" EntitySet="khoa_vien_truong" />
+      <End Role="khoa_children" EntitySet="khoa_children" />
+    </AssociationSet>
     <AssociationSet Name="FK_khoa_NamHoc" Association="dbSurveyModel.FK_khoa_NamHoc">
       <End Role="NamHoc" EntitySet="NamHoc" />
-      <End Role="khoa" EntitySet="khoa" />
+      <End Role="khoa_vien_truong" EntitySet="khoa_vien_truong" />
     </AssociationSet>
     <AssociationSet Name="FK_phan_quyen_users_khoa" Association="dbSurveyModel.FK_phan_quyen_users_khoa">
-      <End Role="khoa" EntitySet="khoa" />
+      <End Role="khoa_vien_truong" EntitySet="khoa_vien_truong" />
       <End Role="phan_quyen_users" EntitySet="phan_quyen_users" />
     </AssociationSet>
     <AssociationSet Name="FK_survey_LoaiKhaoSat" Association="dbSurveyModel.FK_survey_LoaiKhaoSat">
@@ -291,10 +292,10 @@
     </Key>
     <Property Name="id_bo_mon" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ten_bo_mon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="id_khoa" Type="Int32" />
+    <Property Name="id_khoa_children" Type="Int32" />
     <Property Name="ngay_tao" Type="Int32" />
     <Property Name="ngay_cap_nhat" Type="Int32" />
-    <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_bo_mon_khoa" FromRole="bo_mon" ToRole="khoa" />
+    <NavigationProperty Name="khoa_children" Relationship="dbSurveyModel.FK_bo_mon_khoa_children" FromRole="bo_mon" ToRole="khoa_children" />
     <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_ctdt_bo_mon" FromRole="bo_mon" ToRole="ctdt" />
   </EntityType>
   <EntityType Name="CanBoVienChuc">
@@ -375,7 +376,6 @@
     </Key>
     <Property Name="id_ctdt" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ma_ctdt" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-    <Property Name="id_khoa" Type="Int32" Nullable="false" />
     <Property Name="ten_ctdt" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="id_bo_mon" Type="Int32" />
     <Property Name="id_hdt" Type="Int32" />
@@ -385,7 +385,6 @@
     <NavigationProperty Name="bo_mon" Relationship="dbSurveyModel.FK_ctdt_bo_mon" FromRole="ctdt" ToRole="bo_mon" />
     <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_ctdt" FromRole="ctdt" ToRole="CanBoVienChuc" />
     <NavigationProperty Name="hedaotao" Relationship="dbSurveyModel.FK_ctdt_hedaotao" FromRole="ctdt" ToRole="hedaotao" />
-    <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_ctdt_khoa" FromRole="ctdt" ToRole="khoa" />
     <NavigationProperty Name="lop" Relationship="dbSurveyModel.FK_lop_ctdt" FromRole="ctdt" ToRole="lop" />
     <NavigationProperty Name="phan_quyen_users" Relationship="dbSurveyModel.FK_phan_quyen_users_ctdt" FromRole="ctdt" ToRole="phan_quyen_users" />
     <NavigationProperty Name="thong_ke_theo_yeu_cau" Relationship="dbSurveyModel.FK_thong_ke_theo_yeu_cau_ctdt" FromRole="ctdt" ToRole="thong_ke_theo_yeu_cau" />
@@ -454,7 +453,19 @@
     <Property Name="ngay_cap_nhat" Type="Int32" Nullable="false" />
     <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_hoc_phan" FromRole="hoc_phan" ToRole="mon_hoc" />
   </EntityType>
-  <EntityType Name="khoa">
+  <EntityType Name="khoa_children">
+    <Key>
+      <PropertyRef Name="id_khoa_children" />
+    </Key>
+    <Property Name="id_khoa_children" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ten_khoa_children" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="id_khoa_vien_truong" Type="Int32" />
+    <Property Name="ngay_tao" Type="Int32" />
+    <Property Name="ngay_cap_nhat" Type="Int32" />
+    <NavigationProperty Name="bo_mon" Relationship="dbSurveyModel.FK_bo_mon_khoa_children" FromRole="khoa_children" ToRole="bo_mon" />
+    <NavigationProperty Name="khoa_vien_truong" Relationship="dbSurveyModel.FK_khoa_children_khoa_vien_truong" FromRole="khoa_children" ToRole="khoa_vien_truong" />
+  </EntityType>
+  <EntityType Name="khoa_vien_truong">
     <Key>
       <PropertyRef Name="id_khoa" />
     </Key>
@@ -464,10 +475,9 @@
     <Property Name="id_namhoc" Type="Int32" />
     <Property Name="ngaycapnhat" Type="Int32" Nullable="false" />
     <Property Name="ngaytao" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="bo_mon" Relationship="dbSurveyModel.FK_bo_mon_khoa" FromRole="khoa" ToRole="bo_mon" />
-    <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_ctdt_khoa" FromRole="khoa" ToRole="ctdt" />
-    <NavigationProperty Name="NamHoc" Relationship="dbSurveyModel.FK_khoa_NamHoc" FromRole="khoa" ToRole="NamHoc" />
-    <NavigationProperty Name="phan_quyen_users" Relationship="dbSurveyModel.FK_phan_quyen_users_khoa" FromRole="khoa" ToRole="phan_quyen_users" />
+    <NavigationProperty Name="khoa_children" Relationship="dbSurveyModel.FK_khoa_children_khoa_vien_truong" FromRole="khoa_vien_truong" ToRole="khoa_children" />
+    <NavigationProperty Name="NamHoc" Relationship="dbSurveyModel.FK_khoa_NamHoc" FromRole="khoa_vien_truong" ToRole="NamHoc" />
+    <NavigationProperty Name="phan_quyen_users" Relationship="dbSurveyModel.FK_phan_quyen_users_khoa" FromRole="khoa_vien_truong" ToRole="phan_quyen_users" />
   </EntityType>
   <EntityType Name="LoaiKhaoSat">
     <Key>
@@ -522,7 +532,7 @@
     <Property Name="status" Type="Boolean" />
     <NavigationProperty Name="answer_response" Relationship="dbSurveyModel.FK_answer_response_NamHoc" FromRole="NamHoc" ToRole="answer_response" />
     <NavigationProperty Name="CanBoVienChuc" Relationship="dbSurveyModel.FK_CanBoVienChuc_NamHoc" FromRole="NamHoc" ToRole="CanBoVienChuc" />
-    <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_khoa_NamHoc" FromRole="NamHoc" ToRole="khoa" />
+    <NavigationProperty Name="khoa_vien_truong" Relationship="dbSurveyModel.FK_khoa_NamHoc" FromRole="NamHoc" ToRole="khoa_vien_truong" />
     <NavigationProperty Name="mon_hoc" Relationship="dbSurveyModel.FK_mon_hoc_NamHoc" FromRole="NamHoc" ToRole="mon_hoc" />
     <NavigationProperty Name="survey" Relationship="dbSurveyModel.FK_survey_NamHoc" FromRole="NamHoc" ToRole="survey" />
   </EntityType>
@@ -576,7 +586,7 @@
     <Property Name="id_ctdt" Type="Int32" />
     <Property Name="id_khoa" Type="Int32" />
     <NavigationProperty Name="ctdt" Relationship="dbSurveyModel.FK_phan_quyen_users_ctdt" FromRole="phan_quyen_users" ToRole="ctdt" />
-    <NavigationProperty Name="khoa" Relationship="dbSurveyModel.FK_phan_quyen_users_khoa" FromRole="phan_quyen_users" ToRole="khoa" />
+    <NavigationProperty Name="khoa_vien_truong" Relationship="dbSurveyModel.FK_phan_quyen_users_khoa" FromRole="phan_quyen_users" ToRole="khoa_vien_truong" />
     <NavigationProperty Name="users" Relationship="dbSurveyModel.FK_phan_quyen_users_users" FromRole="phan_quyen_users" ToRole="users" />
   </EntityType>
   <EntityType Name="radio_cau_hoi_khac">
@@ -839,15 +849,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_bo_mon_khoa">
-    <End Type="dbSurveyModel.khoa" Role="khoa" Multiplicity="0..1" />
+  <Association Name="FK_bo_mon_khoa_children">
+    <End Type="dbSurveyModel.khoa_children" Role="khoa_children" Multiplicity="0..1" />
     <End Type="dbSurveyModel.bo_mon" Role="bo_mon" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="khoa">
-        <PropertyRef Name="id_khoa" />
+      <Principal Role="khoa_children">
+        <PropertyRef Name="id_khoa_children" />
       </Principal>
       <Dependent Role="bo_mon">
-        <PropertyRef Name="id_khoa" />
+        <PropertyRef Name="id_khoa_children" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1033,18 +1043,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ctdt_khoa">
-    <End Type="dbSurveyModel.khoa" Role="khoa" Multiplicity="1" />
-    <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="khoa">
-        <PropertyRef Name="id_khoa" />
-      </Principal>
-      <Dependent Role="ctdt">
-        <PropertyRef Name="id_khoa" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_lop_ctdt">
     <End Type="dbSurveyModel.ctdt" Role="ctdt" Multiplicity="1" />
     <End Type="dbSurveyModel.lop" Role="lop" Multiplicity="*" />
@@ -1141,23 +1139,35 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_khoa_children_khoa_vien_truong">
+    <End Type="dbSurveyModel.khoa_vien_truong" Role="khoa_vien_truong" Multiplicity="0..1" />
+    <End Type="dbSurveyModel.khoa_children" Role="khoa_children" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="khoa_vien_truong">
+        <PropertyRef Name="id_khoa" />
+      </Principal>
+      <Dependent Role="khoa_children">
+        <PropertyRef Name="id_khoa_vien_truong" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_khoa_NamHoc">
     <End Type="dbSurveyModel.NamHoc" Role="NamHoc" Multiplicity="0..1" />
-    <End Type="dbSurveyModel.khoa" Role="khoa" Multiplicity="*" />
+    <End Type="dbSurveyModel.khoa_vien_truong" Role="khoa_vien_truong" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="NamHoc">
         <PropertyRef Name="id_namhoc" />
       </Principal>
-      <Dependent Role="khoa">
+      <Dependent Role="khoa_vien_truong">
         <PropertyRef Name="id_namhoc" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_phan_quyen_users_khoa">
-    <End Type="dbSurveyModel.khoa" Role="khoa" Multiplicity="0..1" />
+    <End Type="dbSurveyModel.khoa_vien_truong" Role="khoa_vien_truong" Multiplicity="0..1" />
     <End Type="dbSurveyModel.phan_quyen_users" Role="phan_quyen_users" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="khoa">
+      <Principal Role="khoa_vien_truong">
         <PropertyRef Name="id_khoa" />
       </Principal>
       <Dependent Role="phan_quyen_users">

@@ -19,7 +19,7 @@ namespace CTDT.Models
         {
             this.answer_response = new HashSet<answer_response>();
             this.CanBoVienChuc = new HashSet<CanBoVienChuc>();
-            this.khoa = new HashSet<khoa>();
+            this.khoa_vien_truong = new HashSet<khoa_vien_truong>();
             this.mon_hoc = new HashSet<mon_hoc>();
             this.survey = new HashSet<survey>();
         }
@@ -33,7 +33,7 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CanBoVienChuc> CanBoVienChuc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<khoa> khoa { get; set; }
+        public virtual ICollection<khoa_vien_truong> khoa_vien_truong { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<mon_hoc> mon_hoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -65,7 +65,7 @@ namespace CTDT.Areas.Admin.Controllers
                     .Where(x => x.id_users == items.id_users)
                     .Select(x => new
                     {
-                        ten_khoa = x.khoa.ten_khoa != null ? x.khoa.ten_khoa : ""
+                        ten_khoa = x.khoa_vien_truong.ten_khoa != null ? x.khoa_vien_truong.ten_khoa : ""
                     }).ToListAsync();
                     get_type.AddRange(get_phan_quyen);
                 }
@@ -296,7 +296,7 @@ namespace CTDT.Areas.Admin.Controllers
         }
         private void chuc_nang_quyen_khoa(dynamic data_list, int id_typeusers, string name_typeusers)
         {
-            var khoa = db.khoa
+            var khoa = db.khoa_vien_truong
                         .Select(x => new
                         {
                             ma_khoa = x.id_khoa,
@@ -437,7 +437,7 @@ namespace CTDT.Areas.Admin.Controllers
 
         public void save_khoa(users us, PhanQuyen phanQuyen)
         {
-            var khoa = db.khoa.FirstOrDefault(x => x.id_khoa == phanQuyen.ma_khoa);
+            var khoa = db.khoa_vien_truong.FirstOrDefault(x => x.id_khoa == phanQuyen.ma_khoa);
             us.id_typeusers = phanQuyen.ma_quyen;
             us.ngaycapnhat = unixTimestamp;
             db.SaveChanges();

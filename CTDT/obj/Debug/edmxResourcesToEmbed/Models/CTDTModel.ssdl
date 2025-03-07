@@ -23,7 +23,7 @@
     </Key>
     <Property Name="id_bo_mon" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ten_bo_mon" Type="nvarchar" MaxLength="50" />
-    <Property Name="id_khoa" Type="int" />
+    <Property Name="id_khoa_children" Type="int" />
     <Property Name="ngay_tao" Type="int" />
     <Property Name="ngay_cap_nhat" Type="int" />
   </EntityType>
@@ -89,7 +89,6 @@
     </Key>
     <Property Name="id_ctdt" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ma_ctdt" Type="nvarchar" MaxLength="10" />
-    <Property Name="id_khoa" Type="int" Nullable="false" />
     <Property Name="ten_ctdt" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="id_bo_mon" Type="int" />
     <Property Name="id_hdt" Type="int" />
@@ -150,7 +149,17 @@
     <Property Name="ngay_tao" Type="int" Nullable="false" />
     <Property Name="ngay_cap_nhat" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="khoa">
+  <EntityType Name="khoa_children">
+    <Key>
+      <PropertyRef Name="id_khoa_children" />
+    </Key>
+    <Property Name="id_khoa_children" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ten_khoa_children" Type="nvarchar" MaxLength="50" />
+    <Property Name="id_khoa_vien_truong" Type="int" />
+    <Property Name="ngay_tao" Type="int" />
+    <Property Name="ngay_cap_nhat" Type="int" />
+  </EntityType>
+  <EntityType Name="khoa_vien_truong">
     <Key>
       <PropertyRef Name="id_khoa" />
     </Key>
@@ -457,15 +466,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_bo_mon_khoa">
-    <End Role="khoa" Type="Self.khoa" Multiplicity="0..1" />
+  <Association Name="FK_bo_mon_khoa_children">
+    <End Role="khoa_children" Type="Self.khoa_children" Multiplicity="0..1" />
     <End Role="bo_mon" Type="Self.bo_mon" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="khoa">
-        <PropertyRef Name="id_khoa" />
+      <Principal Role="khoa_children">
+        <PropertyRef Name="id_khoa_children" />
       </Principal>
       <Dependent Role="bo_mon">
-        <PropertyRef Name="id_khoa" />
+        <PropertyRef Name="id_khoa_children" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -601,26 +610,26 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ctdt_khoa">
-    <End Role="khoa" Type="Self.khoa" Multiplicity="1" />
-    <End Role="ctdt" Type="Self.ctdt" Multiplicity="*" />
+  <Association Name="FK_khoa_children_khoa_vien_truong">
+    <End Role="khoa_vien_truong" Type="Self.khoa_vien_truong" Multiplicity="0..1" />
+    <End Role="khoa_children" Type="Self.khoa_children" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="khoa">
+      <Principal Role="khoa_vien_truong">
         <PropertyRef Name="id_khoa" />
       </Principal>
-      <Dependent Role="ctdt">
-        <PropertyRef Name="id_khoa" />
+      <Dependent Role="khoa_children">
+        <PropertyRef Name="id_khoa_vien_truong" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_khoa_NamHoc">
     <End Role="NamHoc" Type="Self.NamHoc" Multiplicity="0..1" />
-    <End Role="khoa" Type="Self.khoa" Multiplicity="*" />
+    <End Role="khoa_vien_truong" Type="Self.khoa_vien_truong" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="NamHoc">
         <PropertyRef Name="id_namhoc" />
       </Principal>
-      <Dependent Role="khoa">
+      <Dependent Role="khoa_vien_truong">
         <PropertyRef Name="id_namhoc" />
       </Dependent>
     </ReferentialConstraint>
@@ -810,10 +819,10 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_phan_quyen_users_khoa">
-    <End Role="khoa" Type="Self.khoa" Multiplicity="0..1" />
+    <End Role="khoa_vien_truong" Type="Self.khoa_vien_truong" Multiplicity="0..1" />
     <End Role="phan_quyen_users" Type="Self.phan_quyen_users" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="khoa">
+      <Principal Role="khoa_vien_truong">
         <PropertyRef Name="id_khoa" />
       </Principal>
       <Dependent Role="phan_quyen_users">
@@ -1041,7 +1050,8 @@
     <EntitySet Name="hedaotao" EntityType="Self.hedaotao" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hoc_ky" EntityType="Self.hoc_ky" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hoc_phan" EntityType="Self.hoc_phan" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="khoa" EntityType="Self.khoa" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="khoa_children" EntityType="Self.khoa_children" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="khoa_vien_truong" EntityType="Self.khoa_vien_truong" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LoaiKhaoSat" EntityType="Self.LoaiKhaoSat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="lop" EntityType="Self.lop" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="mon_hoc" EntityType="Self.mon_hoc" Schema="dbo" store:Type="Tables" />
@@ -1094,8 +1104,8 @@
       <End Role="users" EntitySet="users" />
       <End Role="answer_response" EntitySet="answer_response" />
     </AssociationSet>
-    <AssociationSet Name="FK_bo_mon_khoa" Association="Self.FK_bo_mon_khoa">
-      <End Role="khoa" EntitySet="khoa" />
+    <AssociationSet Name="FK_bo_mon_khoa_children" Association="Self.FK_bo_mon_khoa_children">
+      <End Role="khoa_children" EntitySet="khoa_children" />
       <End Role="bo_mon" EntitySet="bo_mon" />
     </AssociationSet>
     <AssociationSet Name="FK_CanBoVienChuc_ChucVu" Association="Self.FK_CanBoVienChuc_ChucVu">
@@ -1142,13 +1152,13 @@
       <End Role="hedaotao" EntitySet="hedaotao" />
       <End Role="ctdt" EntitySet="ctdt" />
     </AssociationSet>
-    <AssociationSet Name="FK_ctdt_khoa" Association="Self.FK_ctdt_khoa">
-      <End Role="khoa" EntitySet="khoa" />
-      <End Role="ctdt" EntitySet="ctdt" />
+    <AssociationSet Name="FK_khoa_children_khoa_vien_truong" Association="Self.FK_khoa_children_khoa_vien_truong">
+      <End Role="khoa_vien_truong" EntitySet="khoa_vien_truong" />
+      <End Role="khoa_children" EntitySet="khoa_children" />
     </AssociationSet>
     <AssociationSet Name="FK_khoa_NamHoc" Association="Self.FK_khoa_NamHoc">
       <End Role="NamHoc" EntitySet="NamHoc" />
-      <End Role="khoa" EntitySet="khoa" />
+      <End Role="khoa_vien_truong" EntitySet="khoa_vien_truong" />
     </AssociationSet>
     <AssociationSet Name="FK_LoaiKhaoSat_group_loaikhaosat" Association="Self.FK_LoaiKhaoSat_group_loaikhaosat">
       <End Role="group_loaikhaosat" EntitySet="group_loaikhaosat" />
@@ -1211,7 +1221,7 @@
       <End Role="phan_quyen_users" EntitySet="phan_quyen_users" />
     </AssociationSet>
     <AssociationSet Name="FK_phan_quyen_users_khoa" Association="Self.FK_phan_quyen_users_khoa">
-      <End Role="khoa" EntitySet="khoa" />
+      <End Role="khoa_vien_truong" EntitySet="khoa_vien_truong" />
       <End Role="phan_quyen_users" EntitySet="phan_quyen_users" />
     </AssociationSet>
     <AssociationSet Name="FK_phan_quyen_users_users" Association="Self.FK_phan_quyen_users_users">

@@ -105,28 +105,27 @@ namespace CTDT.Areas.Admin.Controllers
             if (uniqueRecords.Contains(recordIdentifier))
                 return false;
             uniqueRecords.Add(recordIdentifier);
-            var existingKhoa = db.khoa.SingleOrDefault(x => x.ten_khoa == tenkhoa);
+            var existingKhoa = db.khoa_vien_truong.SingleOrDefault(x => x.ten_khoa == tenkhoa);
             if (existingKhoa == null)
             {
-                existingKhoa = new khoa
+                existingKhoa = new khoa_vien_truong
                 {
                     ma_khoa = makhoa,
                     ten_khoa = tenkhoa,
                     ngaycapnhat = unixTimestamp,
                     ngaytao = unixTimestamp,
                 };
-                db.khoa.Add(existingKhoa);
+                db.khoa_vien_truong.Add(existingKhoa);
                 db.SaveChanges();
             }
 
             var existingHedaotao = db.hedaotao.SingleOrDefault(x => x.ten_hedaotao == hedaotao);
-            var existingCTDT = db.ctdt.SingleOrDefault(x => x.ten_ctdt.Trim() == tennganh && x.id_khoa == existingKhoa.id_khoa);
+            var existingCTDT = db.ctdt.SingleOrDefault(x => x.ten_ctdt.Trim() == tennganh );
             if (existingCTDT == null)
             {
                 existingCTDT = new ctdt
                 {
                     ma_ctdt = manganh,
-                    id_khoa = existingKhoa.id_khoa,
                     ten_ctdt = tennganh,
                     id_hdt = existingHedaotao?.id_hedaotao,
                     ngaycapnhat = unixTimestamp,
@@ -196,26 +195,25 @@ namespace CTDT.Areas.Admin.Controllers
                 return false;
 
             uniqueRecords.Add(recordIdentifier);
-            var existingKhoa = db.khoa.SingleOrDefault(x => x.ten_khoa == tenKhoa);
+            var existingKhoa = db.khoa_vien_truong.SingleOrDefault(x => x.ten_khoa == tenKhoa);
             if (existingKhoa == null)
             {
-                existingKhoa = new khoa
+                existingKhoa = new khoa_vien_truong
                 {
                     ma_khoa = worksheet.Cells[row, 11].Text.Trim(),
                     ten_khoa = tenKhoa,
                     ngaycapnhat = unixTimestamp,
                     ngaytao = unixTimestamp,
                 };
-                db.khoa.Add(existingKhoa);
+                db.khoa_vien_truong.Add(existingKhoa);
                 db.SaveChanges();
             }
-            var existingCTDT = db.ctdt.SingleOrDefault(x => x.ten_ctdt == tenctdt && x.id_khoa == existingKhoa.id_khoa);
+            var existingCTDT = db.ctdt.SingleOrDefault(x => x.ten_ctdt == tenctdt);
             if (existingCTDT == null)
             {
                 existingCTDT = new ctdt
                 {
                     ma_ctdt = worksheet.Cells[row, 9].Text.Trim(),
-                    id_khoa = existingKhoa.id_khoa,
                     ten_ctdt = tenctdt,
                     id_hdt = 1,
                     ngaycapnhat = unixTimestamp,
@@ -268,26 +266,25 @@ namespace CTDT.Areas.Admin.Controllers
                 return false;
 
             uniqueRecords.Add(recordIdentifier);
-            var existingKhoa = db.khoa.SingleOrDefault(x => x.ten_khoa == ten_khoa);
+            var existingKhoa = db.khoa_vien_truong.SingleOrDefault(x => x.ten_khoa == ten_khoa);
             if (existingKhoa == null)
             {
-                existingKhoa = new khoa
+                existingKhoa = new khoa_vien_truong
                 {
                     ma_khoa = null,
                     ten_khoa = ten_khoa,
                     ngaycapnhat = unixTimestamp,
                     ngaytao = unixTimestamp,
                 };
-                db.khoa.Add(existingKhoa);
+                db.khoa_vien_truong.Add(existingKhoa);
                 db.SaveChanges();
             }
-            var existingCTDT = db.ctdt.SingleOrDefault(x => x.ten_ctdt == ten_ctdt && x.id_khoa == existingKhoa.id_khoa);
+            var existingCTDT = db.ctdt.SingleOrDefault(x => x.ten_ctdt == ten_ctdt);
             if (existingCTDT == null)
             {
                 existingCTDT = new ctdt
                 {
                     ma_ctdt =null,
-                    id_khoa = existingKhoa.id_khoa,
                     ten_ctdt = ten_ctdt,
                     id_hdt = 1,
                     ngaycapnhat = unixTimestamp,

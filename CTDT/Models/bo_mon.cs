@@ -22,11 +22,11 @@ namespace CTDT.Models
     
         public int id_bo_mon { get; set; }
         public string ten_bo_mon { get; set; }
-        public Nullable<int> id_khoa { get; set; }
+        public Nullable<int> id_khoa_children { get; set; }
         public Nullable<int> ngay_tao { get; set; }
         public Nullable<int> ngay_cap_nhat { get; set; }
     
-        public virtual khoa khoa { get; set; }
+        public virtual khoa_children khoa_children { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ctdt> ctdt { get; set; }
     }

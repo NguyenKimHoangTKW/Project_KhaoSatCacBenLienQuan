@@ -42,7 +42,6 @@ namespace CTDT.Controllers
                             email = user.email,
                             ma_nguoi_hoc = x.ma_sv,
                             ten_nguoi_hoc = x.hovaten,
-                            khoa = x.lop.ctdt.khoa.ten_khoa,
                             ctdt = x.lop.ctdt.ten_ctdt,
                         })
                         .FirstOrDefaultAsync();
@@ -288,7 +287,6 @@ namespace CTDT.Controllers
                         ma_nguoi_hoc = answer_responses.sinhvien.ma_sv,
                         lop = answer_responses.sinhvien.lop.ma_lop,
                         ctdt = answer_responses.ctdt.ten_ctdt,
-                        khoa = answer_responses.ctdt.khoa.ten_khoa,
                         mon_hoc = answer_responses.mon_hoc.ten_mon_hoc,
                         hoc_phan = answer_responses.mon_hoc.hoc_phan.ten_hoc_phan,
                         ten_giang_vien = answer_responses.CanBoVienChuc.TenCBVC,
@@ -363,7 +361,6 @@ namespace CTDT.Controllers
                             nguoi_hoc = x.sinhvien.hovaten,
                             ma_nguoi_hoc = x.sinhvien.ma_sv,
                             ctdt = x.ctdt.ten_ctdt,
-                            khoa = x.ctdt.khoa.ten_khoa,
                             nam_hoc = x.NamHoc.ten_namhoc,
                             thoi_gian_khao_sat = x.time,
                             page = currentTime > x.time ? "/phieu-khao-sat/dap-an/" + x.id + "/" + x.surveyID : "Ngoài thời gian thực hiện khảo sát"
@@ -383,7 +380,6 @@ namespace CTDT.Controllers
                         {
                             email = user.email,
                             ctdt = x.ctdt.ten_ctdt,
-                            khoa = x.ctdt.khoa.ten_khoa,
                             nam_hoc = x.NamHoc.ten_namhoc,
                             thoi_gian_khao_sat = x.time,
                             page = currentTime > x.time ? "/phieu-khao-sat/dap-an/" + x.id + "/" + x.surveyID : "Ngoài thời gian thực hiện khảo sát"
@@ -403,7 +399,6 @@ namespace CTDT.Controllers
                             email = user.email,
                             ten_cbcv = x.CanBoVienChuc.TenCBVC,
                             ctdt = x.ctdt.ten_ctdt,
-                            khoa = x.ctdt.khoa.ten_khoa,
                             nam_hoc = x.NamHoc.ten_namhoc,
                             thoi_gian_khao_sat = x.time,
                             page = currentTime > x.time ? "/phieu-khao-sat/dap-an/" + x.id + "/" + x.surveyID : "Ngoài thời gian thực hiện khảo sát"

@@ -25,10 +25,6 @@ namespace CTDT.Areas.Admin.Controllers
         public async Task<IHttpActionResult> danh_sach_ctdt(ctdt ctdt)
         {
             var get_data = db.ctdt.AsQueryable();
-            if (ctdt.id_khoa != 0)
-            {
-                get_data = get_data.Where(x => x.id_khoa == ctdt.id_khoa);
-            }
 
             if (ctdt.id_hdt != 0)
             {
@@ -44,7 +40,6 @@ namespace CTDT.Areas.Admin.Controllers
                     x.id_ctdt,
                     ma_ctdt = x.ma_ctdt != null ? x.ma_ctdt :"",
                     x.ten_ctdt,
-                    ten_khoa = x.id_khoa != null ? x.khoa.ten_khoa :"",
                     ten_hedaotao = x.id_hdt != null ? x.hedaotao.ten_hedaotao:"",
                     ten_bo_mon = x.id_bo_mon != null ? x.bo_mon.ten_bo_mon : "",
                     x.ngaytao,
@@ -70,7 +65,6 @@ namespace CTDT.Areas.Admin.Controllers
             var add_data = new ctdt
             {
                 ma_ctdt = ctdt.ma_ctdt,
-                id_khoa = ctdt.id_khoa,
                 ten_ctdt = ctdt.ten_ctdt,
                 id_hdt = ctdt.id_hdt,
                 ngaycapnhat = unixTimestamp,
@@ -90,7 +84,6 @@ namespace CTDT.Areas.Admin.Controllers
                 {
                     x.ma_ctdt,
                     x.ten_ctdt,
-                    x.id_khoa,
                     x.id_hdt
                 }).FirstOrDefaultAsync();
             return Ok(get_info);
@@ -106,7 +99,6 @@ namespace CTDT.Areas.Admin.Controllers
             }
             check_ctdt.ma_ctdt = ctdt.ma_ctdt;
             check_ctdt.ten_ctdt = ctdt.ten_ctdt;
-            check_ctdt.id_khoa = ctdt.id_khoa;
             check_ctdt.id_hdt = ctdt.id_hdt;
             check_ctdt.ngaytao = unixTimestamp;
             check_ctdt.ngaycapnhat = unixTimestamp;

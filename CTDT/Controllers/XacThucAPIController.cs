@@ -26,154 +26,154 @@ namespace CTDT.Controllers
         {
             user = SessionHelper.GetUser();
         }
-        [HttpPost]
-        [Route("api/xac_thuc")]
-        public async Task<IHttpActionResult> load_select_xac_thuc(survey Sv)
-        {
-            var survey = await db.survey.FirstOrDefaultAsync(x => x.surveyID == Sv.surveyID);
-            if (survey != null)
-            {
-                if (survey.id_loaikhaosat == 2 || survey.id_loaikhaosat == 6)
-                {
-                    var list_khoa = await db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
-                    .Select(x => new
-                    {
-                        ma_khoa = x.id_khoa,
-                        ten_khoa = x.khoa.ten_khoa
-                    })
-                    .Distinct()
-                    .ToListAsync();
-                    var list_ctdt = new List<dynamic>();
-                    var list_lop = new List<dynamic>();
-                    var list_sinh_vien = new List<dynamic>();
-                    foreach (var item in list_khoa)
-                    {
-                        var get_ctdt = db.ctdt.Where(x => x.id_khoa == item.ma_khoa)
-                            .Select(x => new
-                            {
-                                ma_khoa = x.id_khoa,
-                                ma_ctdt = x.id_ctdt,
-                                ten_ctdt = x.ten_ctdt,
-                            })
-                            .ToList();
-                        foreach (var l in get_ctdt)
-                        {
-                            var get_lop = await db.lop
-                                .Where(x => x.id_ctdt == l.ma_ctdt)
-                                .Select(x => new
-                                {
-                                    ma_ctdt = x.id_ctdt,
-                                    ma_lop = x.id_lop,
-                                    ten_lop = x.ma_lop
-                                })
-                                .ToListAsync();
-                            list_lop.Add(get_lop);
-                            foreach (var sv in get_lop)
-                            {
-                                var get_sv = db.sinhvien
-                                    .Where(x => x.id_lop == sv.ma_lop)
-                                    .Select(x => new
-                                    {
-                                        ma_lop = x.id_lop,
-                                        id_nguoi_hoc = x.id_sv,
-                                        ma_nguoi_hoc = x.ma_sv,
-                                        ten_nguoi_hoc = x.hovaten,
-                                        ngay_sinh = x.ngaysinh,
-                                    })
-                                    .ToList();
-                                list_sinh_vien.Add(get_sv);
-                            }
-                        }
-                        list_ctdt.Add(get_ctdt);
-                    }
-                    var get_data = new
-                    {
-                        list_khoa = list_khoa,
-                        list_ctdt = list_ctdt,
-                        list_lop = list_lop,
-                        list_nguoi_hoc = list_sinh_vien,
-                        is_nguoi_hoc = true
-                    };
-                    return Ok(new { data = get_data });
-                }
-                else if (survey.id_loaikhaosat == 5)
-                {
-                    var list_khoa = await db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
-                    .Select(x => new
-                    {
-                        ma_khoa = x.id_khoa,
-                        ten_khoa = x.khoa.ten_khoa
-                    })
-                    .Distinct()
-                    .ToListAsync();
-                    var list_ctdt = new List<dynamic>();
-                    foreach (var item in list_khoa)
-                    {
-                        var get_ctdt = db.ctdt.Where(x => x.id_khoa == item.ma_khoa)
-                            .Select(x => new
-                            {
-                                ma_khoa = x.id_khoa,
-                                ma_ctdt = x.id_ctdt,
-                                ten_ctdt = x.ten_ctdt,
-                            })
-                            .ToList();
-                        list_ctdt.Add(get_ctdt);
-                    }
-                    var get_data = new
-                    {
-                        list_khoa = list_khoa,
-                        list_ctdt = list_ctdt,
-                        is_doanh_nghiep = true
-                    };
-                    return Ok(new { data = get_data });
-                }
-                else if (survey.id_loaikhaosat == 3)
-                {
-                    var list_khoa = db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
-                    .Select(x => new
-                    {
-                        ma_khoa = x.id_khoa,
-                        ten_khoa = x.khoa.ten_khoa
-                    })
-                    .Distinct()
-                    .ToList();
-                    var list_don_vi = db.DonVi
-                        .Select(x => new
-                        {
-                            ma_don_vi = x.id_donvi,
-                            ten_don_vi = x.name_donvi,
-                        })
-                        .ToList();
-                    var list_ctdt = new List<dynamic>();
-                    foreach (var item in list_khoa)
-                    {
-                        var get_ctdt = db.ctdt.Where(x => x.id_khoa == item.ma_khoa)
-                            .Select(x => new
-                            {
-                                ma_khoa = x.id_khoa,
-                                ma_ctdt = x.id_ctdt,
-                                ten_ctdt = x.ten_ctdt,
-                            })
-                            .ToList();
-                        list_ctdt.Add(get_ctdt);
-                    }
-                    var get_data = new
-                    {
-                        list_khoa = list_khoa,
-                        list_ctdt = list_ctdt,
-                        list_don_vi = list_don_vi,
-                        is_giang_vien = true
-                    };
-                    return Ok(new { data = get_data });
-                }
+        //[HttpPost]
+        //[Route("api/xac_thuc")]
+        //public async Task<IHttpActionResult> load_select_xac_thuc(survey Sv)
+        //{
+        //    var survey = await db.survey.FirstOrDefaultAsync(x => x.surveyID == Sv.surveyID);
+        //    if (survey != null)
+        //    {
+        //        if (survey.id_loaikhaosat == 2 || survey.id_loaikhaosat == 6)
+        //        {
+        //            var list_khoa = await db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
+        //            .Select(x => new
+        //            {
+        //                ma_khoa = x.id_bo_mon,
+        //                ten_khoa = x.bo_mon.ten_bo_mon
+        //            })
+        //            .Distinct()
+        //            .ToListAsync();
+        //            var list_ctdt = new List<dynamic>();
+        //            var list_lop = new List<dynamic>();
+        //            var list_sinh_vien = new List<dynamic>();
+        //            foreach (var item in list_khoa)
+        //            {
+        //                var get_ctdt = db.ctdt.Where(x => x.id_khoa == item.ma_khoa)
+        //                    .Select(x => new
+        //                    {
+        //                        ma_khoa = x.id_khoa,
+        //                        ma_ctdt = x.id_ctdt,
+        //                        ten_ctdt = x.ten_ctdt,
+        //                    })
+        //                    .ToList();
+        //                foreach (var l in get_ctdt)
+        //                {
+        //                    var get_lop = await db.lop
+        //                        .Where(x => x.id_ctdt == l.ma_ctdt)
+        //                        .Select(x => new
+        //                        {
+        //                            ma_ctdt = x.id_ctdt,
+        //                            ma_lop = x.id_lop,
+        //                            ten_lop = x.ma_lop
+        //                        })
+        //                        .ToListAsync();
+        //                    list_lop.Add(get_lop);
+        //                    foreach (var sv in get_lop)
+        //                    {
+        //                        var get_sv = db.sinhvien
+        //                            .Where(x => x.id_lop == sv.ma_lop)
+        //                            .Select(x => new
+        //                            {
+        //                                ma_lop = x.id_lop,
+        //                                id_nguoi_hoc = x.id_sv,
+        //                                ma_nguoi_hoc = x.ma_sv,
+        //                                ten_nguoi_hoc = x.hovaten,
+        //                                ngay_sinh = x.ngaysinh,
+        //                            })
+        //                            .ToList();
+        //                        list_sinh_vien.Add(get_sv);
+        //                    }
+        //                }
+        //                list_ctdt.Add(get_ctdt);
+        //            }
+        //            var get_data = new
+        //            {
+        //                list_khoa = list_khoa,
+        //                list_ctdt = list_ctdt,
+        //                list_lop = list_lop,
+        //                list_nguoi_hoc = list_sinh_vien,
+        //                is_nguoi_hoc = true
+        //            };
+        //            return Ok(new { data = get_data });
+        //        }
+        //        else if (survey.id_loaikhaosat == 5)
+        //        {
+        //            var list_khoa = await db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
+        //            .Select(x => new
+        //            {
+        //                ma_khoa = x.id_bo_mon,
+        //                ten_khoa = x.bo_mon.ten_bo_mon
+        //            })
+        //            .Distinct()
+        //            .ToListAsync();
+        //            var list_ctdt = new List<dynamic>();
+        //            foreach (var item in list_khoa)
+        //            {
+        //                var get_ctdt = db.ctdt.Where(x => x.id_khoa == item.ma_khoa)
+        //                    .Select(x => new
+        //                    {
+        //                        ma_khoa = x.id_khoa,
+        //                        ma_ctdt = x.id_ctdt,
+        //                        ten_ctdt = x.ten_ctdt,
+        //                    })
+        //                    .ToList();
+        //                list_ctdt.Add(get_ctdt);
+        //            }
+        //            var get_data = new
+        //            {
+        //                list_khoa = list_khoa,
+        //                list_ctdt = list_ctdt,
+        //                is_doanh_nghiep = true
+        //            };
+        //            return Ok(new { data = get_data });
+        //        }
+        //        else if (survey.id_loaikhaosat == 3)
+        //        {
+        //            var list_khoa = db.ctdt.Where(x => x.hedaotao.id_hedaotao == survey.id_hedaotao)
+        //            .Select(x => new
+        //            {
+        //                ma_khoa = x.id_khoa,
+        //                ten_khoa = x.khoa_vien_truong.ten_khoa
+        //            })
+        //            .Distinct()
+        //            .ToList();
+        //            var list_don_vi = db.DonVi
+        //                .Select(x => new
+        //                {
+        //                    ma_don_vi = x.id_donvi,
+        //                    ten_don_vi = x.name_donvi,
+        //                })
+        //                .ToList();
+        //            var list_ctdt = new List<dynamic>();
+        //            foreach (var item in list_khoa)
+        //            {
+        //                var get_ctdt = db.ctdt.Where(x => x.id_khoa == item.ma_khoa)
+        //                    .Select(x => new
+        //                    {
+        //                        ma_khoa = x.id_khoa,
+        //                        ma_ctdt = x.id_ctdt,
+        //                        ten_ctdt = x.ten_ctdt,
+        //                    })
+        //                    .ToList();
+        //                list_ctdt.Add(get_ctdt);
+        //            }
+        //            var get_data = new
+        //            {
+        //                list_khoa = list_khoa,
+        //                list_ctdt = list_ctdt,
+        //                list_don_vi = list_don_vi,
+        //                is_giang_vien = true
+        //            };
+        //            return Ok(new { data = get_data });
+        //        }
 
-                return Ok(new { data = (object)null });
-            }
-            else
-            {
-                return BadRequest("Survey not found");
-            }
-        }
+        //        return Ok(new { data = (object)null });
+        //    }
+        //    else
+        //    {
+        //        return BadRequest("Survey not found");
+        //    }
+        //}
 
         [HttpPost]
         [Route("api/check_xac_thuc")]

@@ -24,7 +24,7 @@
         <MappingFragment StoreEntitySet="bo_mon">
           <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
           <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
-          <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
+          <ScalarProperty Name="id_khoa_children" ColumnName="id_khoa_children" />
           <ScalarProperty Name="ten_bo_mon" ColumnName="ten_bo_mon" />
           <ScalarProperty Name="id_bo_mon" ColumnName="id_bo_mon" />
         </MappingFragment>
@@ -99,7 +99,6 @@
           <ScalarProperty Name="id_hdt" ColumnName="id_hdt" />
           <ScalarProperty Name="id_bo_mon" ColumnName="id_bo_mon" />
           <ScalarProperty Name="ten_ctdt" ColumnName="ten_ctdt" />
-          <ScalarProperty Name="id_khoa" ColumnName="id_khoa" />
           <ScalarProperty Name="ma_ctdt" ColumnName="ma_ctdt" />
           <ScalarProperty Name="id_ctdt" ColumnName="id_ctdt" />
         </MappingFragment>
@@ -166,9 +165,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="khoa">
-      <EntityTypeMapping TypeName="dbSurveyModel.khoa">
-        <MappingFragment StoreEntitySet="khoa">
+    <EntitySetMapping Name="khoa_children">
+      <EntityTypeMapping TypeName="dbSurveyModel.khoa_children">
+        <MappingFragment StoreEntitySet="khoa_children">
+          <ScalarProperty Name="ngay_cap_nhat" ColumnName="ngay_cap_nhat" />
+          <ScalarProperty Name="ngay_tao" ColumnName="ngay_tao" />
+          <ScalarProperty Name="id_khoa_vien_truong" ColumnName="id_khoa_vien_truong" />
+          <ScalarProperty Name="ten_khoa_children" ColumnName="ten_khoa_children" />
+          <ScalarProperty Name="id_khoa_children" ColumnName="id_khoa_children" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="khoa_vien_truong">
+      <EntityTypeMapping TypeName="dbSurveyModel.khoa_vien_truong">
+        <MappingFragment StoreEntitySet="khoa_vien_truong">
           <ScalarProperty Name="ngaytao" ColumnName="ngaytao" />
           <ScalarProperty Name="ngaycapnhat" ColumnName="ngaycapnhat" />
           <ScalarProperty Name="id_namhoc" ColumnName="id_namhoc" />

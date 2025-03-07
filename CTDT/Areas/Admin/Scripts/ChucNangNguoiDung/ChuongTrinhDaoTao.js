@@ -278,43 +278,50 @@ async function load_data() {
                 `;
         });
         body.find("tbody").html(html);
+        $('#ctdtTable').DataTable({
+            pageLength: 7,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
+            searching: true,
+            autoWidth: false,
+            responsive: true,
+            language: {
+                paginate: {
+                    next: "Next",
+                    previous: "Previous"
+                },
+                search: "Search",
+                lengthMenu: "Show _MENU_ entries"
+            },
+            dom: "Bfrtip",
+            buttons: [
+                {
+                    extend: 'excel',
+                    title: 'Danh sách khoa/viện'
+                },
+                {
+                    extend: 'print',
+                    title: 'Danh sách khoa/viện'
+                }
+            ]
+        });
     } else {
-        html =
-            `
-            <tr>
-                <td colspan="7" class="text-center text-danger">${res.message || 'Không có dữ liệu'}</td>
-            </tr>
-            `;
-        body.find("tbody").html(html);
-    }
-    $('#ctdtTable').DataTable({
-        pageLength: 7,
-        lengthMenu: [5, 10, 25, 50, 100],
-        ordering: true,
-        searching: true,
-        autoWidth: false,
-        responsive: true,
-        language: {
-            paginate: {
-                next: "Next",
-                previous: "Previous"
-            },
-            search: "Search",
-            lengthMenu: "Show _MENU_ entries"
-        },
-        dom: "Bfrtip",
-        buttons: [
-            {
-                extend: 'excel',
-                title: 'Danh sách khoa/viện'
-            },
-            {
-                extend: 'print',
-                title: 'Danh sách khoa/viện'
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
             }
-        ]
-    });
-    
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }   
 }
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);

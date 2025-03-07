@@ -40,7 +40,8 @@ namespace CTDT.Models
         public virtual DbSet<hedaotao> hedaotao { get; set; }
         public virtual DbSet<hoc_ky> hoc_ky { get; set; }
         public virtual DbSet<hoc_phan> hoc_phan { get; set; }
-        public virtual DbSet<khoa> khoa { get; set; }
+        public virtual DbSet<khoa_children> khoa_children { get; set; }
+        public virtual DbSet<khoa_vien_truong> khoa_vien_truong { get; set; }
         public virtual DbSet<LoaiKhaoSat> LoaiKhaoSat { get; set; }
         public virtual DbSet<lop> lop { get; set; }
         public virtual DbSet<mon_hoc> mon_hoc { get; set; }

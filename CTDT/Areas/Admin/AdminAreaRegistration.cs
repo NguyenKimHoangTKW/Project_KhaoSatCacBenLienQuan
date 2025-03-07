@@ -50,9 +50,9 @@ namespace CTDT.Areas.Admin
                 new { controller = "InterfaceAdmin", action = "chi_tiet_phieu_khao_sat", id = UrlParameter.Optional }
             );
             context.MapRoute(
-                "Admin_DanhSachKhoa",
-                "admin/danh-sach-khoa",
-                new { controller = "InterfaceAdmin", action = "danh_sach_khoa" }
+                "Admin_DanhSachKhoaVienTruong",
+                "admin/danh-sach-khoa-vien-truong",
+                new { controller = "InterfaceAdmin", action = "danh_sach_khoa_vien_truong" }
             );
             context.MapRoute(
                 "Admin_DanhSachCTDT",

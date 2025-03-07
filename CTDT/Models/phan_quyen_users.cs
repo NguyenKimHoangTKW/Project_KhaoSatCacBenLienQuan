@@ -20,7 +20,7 @@ namespace CTDT.Models
         public Nullable<int> id_khoa { get; set; }
     
         public virtual ctdt ctdt { get; set; }
-        public virtual khoa khoa { get; set; }
+        public virtual khoa_vien_truong khoa_vien_truong { get; set; }
         public virtual users users { get; set; }
     }
 }
