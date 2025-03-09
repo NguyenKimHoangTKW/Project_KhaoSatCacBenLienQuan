@@ -57,25 +57,40 @@
 <div class="main-content">
     <div class="card">
         <div class="page-header no-gutters">
-            <h2 class="text-uppercase">Thống kê tỷ lệ tham gia khảo sát</h2>
+            <h2 class="text-uppercase">Thống kê tỷ lệ tham gia khảo sát thuộc chương trình đào tạo</h2>
             <hr />
             <fieldset class="border rounded-3 p-3">
                 <legend class="float-none w-auto px-3">Chức năng</legend>
-                <div class="col-md-4">
-                    <!-- Điều chỉnh số lượng cột để thay đổi độ rộng -->
-                    <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc theo năm học</label>
-                    <select class="form-control" id="Year">
-                        @foreach (var item in ViewBag.Year)
-                        {
-                            <option value="@item.Value">@item.Text</option>
-                        }
-                    </select>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn năm</label>
+                        <select class="form-control select2" id="yearGiamSat">
+                            @foreach (var item in ViewBag.Year)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Chọn chương trình đào tạo</label>
+                        <select class="form-control select2" id="find-ctdt">
+                            @foreach (var item in ViewBag.CTDT)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
                 </div>
                 <hr />
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="submit" id="btnFilter" class="btn btn-primary btn-tone" style="margin-right: 20px;">
+                        <i class="fas fa-filter"></i> Lọc dữ liệu
+                    </button>
+                </div>
             </fieldset>
         </div>
         <div class="col-lg-14">
-            <hr />
+            <h2 id="title_notification" class="text-uppercase" style="color:red">vui lòng chọn chức năng lọc để tiếp tục</h2>
             <div id="survey-list">
                 <!-- Surveys will be appended here -->
             </div>

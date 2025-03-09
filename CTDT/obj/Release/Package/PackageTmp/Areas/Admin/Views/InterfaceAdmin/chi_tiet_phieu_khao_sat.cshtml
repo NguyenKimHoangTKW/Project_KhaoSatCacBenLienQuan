@@ -1,0 +1,208 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    #wp-content {
+        display: flex;
+        width: 100%;
+    }
+
+    #content {
+        flex: 2;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px;
+    }
+
+    #sidebar {
+        flex: 0.3;
+        background: #f9f9f9;
+        border: 1px solid #d6d6d6;
+        border-radius: 8px;
+        padding: 10px;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        #sidebar h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #555;
+            text-align: center;
+        }
+
+        #sidebar .menu-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+            background: #007bff;
+            color: #fff;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 20px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+            #sidebar .menu-icon:hover {
+                background: #0056b3;
+                transform: scale(1.1);
+            }
+
+            #sidebar .menu-icon i {
+                font-size: 22px;
+            }
+</style>
+
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="text-uppercase">Chi tiết phiếu khảo sát</h2>
+            <p id="value" hidden>@ViewBag.id</p>
+            <div id="wp-content">
+                <!-- Sidebar -->
+                <div id="sidebar">
+                    <h4>Chức năng</h4>
+                    <a href="#" class="menu-icon" id="btnXemBaoCao" title="Xem báo cáo">
+                        <i class="fas fa-chart-bar"></i>
+                    </a>
+                    <a href="#" id="btnChinhSuaPhieu" class="menu-icon" title="Chỉnh sửa phiếu">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="#" id="btnXoaPhieu" class="menu-icon" title="Xóa phiếu">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                    <a href="/admin/danh-sach-phieu-khao-sat" class="menu-icon" title="Quay lại danh sách">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+                <!-- Nội dung chính -->
+                <div id="content">
+                    <div class="table-responsive">
+                        <h3 style="text-align:center;" id="title">Vui lòng chọn chức năng để tiếp tục</h3>
+                        <table style="display:none" id="bodycontent" class="table table-bordered">
+                            <!--data-->
+                        </table>
+                        <div class="container" id="load-title" style="display:none">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tiêu đề *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="TieuDe" placeholder="Nhập tiêu đề ... *">
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Mô tả *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <textarea class="form-control" id="MoTa" placeholder="Nhập Mô tả ... *"></textarea>
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Dành cho hệ *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        @foreach (var item in ViewBag.HDT)
+                                        {
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" class="form-check-input" name="DanhChoHe" value="@item.Value" id="DanhChoHe_@item.Value">
+                                                <label class="form-check-label" for="DanhChoHe_@item.Value">@item.Text</label>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Đối tượng *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="MaDoiTuong" class="form-control select2">
+                                            @foreach (var item in ViewBag.LKS)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Ngày bắt đầu *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <input type="datetime-local" class="form-control" id="NgayBatDau" />
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Ngày kết thúc *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <input type="datetime-local" class="form-control" id="NgayKetThuc" />
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Năm học *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="MaNamHoc" class="form-control select2">
+                                            @foreach (var item in ViewBag.Year)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Trạng thái *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="TrangThai" class="form-control select2">
+                                            <option value="1">Mở</option>
+                                            <option value="0">Đóng</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Đợt khảo sát (Đợt/ Học kỳ) *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="DotKhaoSat" class="form-control select2">
+                                            <option value="">Không áp dụng</option>
+                                            @foreach (var item in ViewBag.DotKhaoSat)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+
+                                            }
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Mở thống kê *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="EnableThongKe" class="form-control select2">
+                                            <option value="1">Mở</option>
+                                            <option value="0">Đóng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--modal chi tiết câu trả lời-->
+                <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">BẢNG CHI TIẾT CÂU TRẢ LỜI</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="table-responsive">
+                                    <table id="datatable" class="table table-bordered">
+                                        <!---->
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thêm liên kết tới FontAwesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/ChiTietPhieuKhaoSat.js"></script>
+}

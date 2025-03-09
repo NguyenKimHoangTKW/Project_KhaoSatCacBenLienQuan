@@ -21,7 +21,7 @@ async function load_mon_hoc() {
                     <tbody id="showdata">`;
         res.data.forEach(function (items, index) {
             const style_check = items.tinh_trang_khao_sat == "Chưa khảo sát" ? "color:red" : "color:green";
-                html += ` 
+            html += ` 
                     <tr data-items='${JSON.stringify(items)}' style="cursor: pointer;">
                         <td class="text-center">${index + 1}</td>
                         <td class="text-center">${items.ten_giang_vien}</td>
@@ -34,8 +34,16 @@ async function load_mon_hoc() {
 
         html += ` </tbody>
                 </table>`;
-        body.html(html);
     }
+    else {
+        html = `
+                    <div class="container" id="showdata">
+                        <div class="alert alert-info" style="text-align: center;">
+                           ${res.message}
+                        </div>
+                    </div>`;
+    }
+    body.html(html);
 }
 $('#show-data').on('click', 'tr', function () {
     const items = $(this).data('items');

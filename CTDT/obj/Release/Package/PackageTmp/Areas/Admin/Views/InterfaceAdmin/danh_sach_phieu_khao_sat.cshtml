@@ -1,0 +1,202 @@
+﻿﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content">
+    <div class="page-header no-gutters">
+        <div class="col-lg-12">
+            <div class="mb-4" style="border: 1px solid #9caab9; padding: 15px; border-radius: 8px; background-color: #fcfcfc;">
+                <p style="font-weight:bold;font-size:25px;text-align:center;color:black">DANH SÁCH PHIẾU KHẢO SÁT</p>
+                <div class="row items-push">
+                    <div class="col-3">
+                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo hệ đào tạo</label>
+                        <select class="form-control select2" name="surveyTypeTS" id="hdtid">
+                            <option value="0">Tất cả</option>
+                            @foreach (var item in ViewBag.HDT)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo đối tượng</label>
+                        <select class="form-control select2" name="surveyType" id="loaikhaosatid">
+                            <option value="0">Tất cả</option>
+                            @foreach (var item in ViewBag.LKS)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo năm</label>
+                        <select class="form-control select2" name="surveyType" id="namid">
+                            <option value="0">Tất cả</option>
+                            @foreach (var item in ViewBag.Year)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo trạng thái</label>
+                        <select class="form-control select2" name="surveyType" id="StatusSurvey">
+                            <option value="-1">Tất cả</option>
+                            <option value="1">Đang mở</option>
+                            <option value="0">Đang đóng</option>
+                        </select>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="text-left">
+                            <button type="submit" id="btnFilter" name="btnFilter" class="btn btn-primary btn-tone m-r-5">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-right">
+                            <button class="btn btn-primary m-r-5" data-toggle="modal" data-target="#bd-example-modal-lg">Thêm mới</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal Thêm mới Phiếu-->
+            <div class="modal fade" id="bd-example-modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Thêm mới Phiếu khảo sát</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tiêu đề *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="TieuDe" placeholder="Nhập tiêu đề ... *">
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Mô tả *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <textarea class="form-control" id="MoTa" placeholder="Nhập Mô tả ... *"></textarea>
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Dành cho hệ *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        @foreach (var item in ViewBag.HDT)
+                                        {
+                                            <div class="form-check form-check-inline">
+                                                <input type="radio" class="form-check-input" name="DanhChoHe" value="@item.Value" id="DanhChoHe_@item.Value">
+                                                <label class="form-check-label" for="DanhChoHe_@item.Value">@item.Text</label>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Đối tượng *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="MaDoiTuong" class="form-control select2">
+                                            @foreach (var item in ViewBag.LKS)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Ngày bắt đầu *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <input type="datetime-local" class="form-control" id="NgayBatDau" />
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Ngày kết thúc *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <input type="datetime-local" class="form-control" id="NgayKetThuc" />
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Năm học *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="MaNamHoc" class="form-control select2">
+                                            @foreach (var item in ViewBag.Year)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Trạng thái *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="TrangThai" class="form-control select2">
+                                            <option value="1">Mở</option>
+                                            <option value="0">Đóng</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Đợt khảo sát (Đợt/ Học kỳ) *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="DotKhaoSat" class="form-control select2">
+                                            <option value="">Không áp dụng</option>
+                                            @foreach (var item in ViewBag.DotKhaoSat)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+
+                                            }
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Mở thống kê *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="EnableThongKe" class="form-control select2">
+                                            <option value="1">Mở</option>
+                                            <option value="0">Đóng</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-tone m-r-5" id="cancelmodalAdd" data-dismiss="modal">Thoát</button>
+                                <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSave">Lưu</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--End Modal Thêm mới Phiếu-->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-11 mx-auto">
+            <!-- Card View -->
+            <div class="row">
+                <div class="table-responsive">
+                    <table id="datatable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">Người tạo</th>
+                                <th scope="col">Hệ đào tạo</th>
+                                <th scope="col">Phiếu</th>
+                                <th scope="col">Mô tả</th>
+                                <th scope="col">Loại khảo sát</th>
+                                <th scope="col">Ngày bắt đầu</th>
+                                <th scope="col">Ngày kết thúc</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Cập nhật lần cuối</th>
+                                <th scope="col">Năm học</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Chi tiết chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="card-view">
+                            <!---->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/PhieuKhaoSat.js"></script>
+}

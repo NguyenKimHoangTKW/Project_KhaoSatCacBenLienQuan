@@ -55,6 +55,16 @@ namespace CTDT.Areas.Admin
                 new { controller = "InterfaceAdmin", action = "danh_sach_khoa_vien_truong" }
             );
             context.MapRoute(
+                "Admin_DanhSachKhoaDuoiCap",
+                "admin/danh-sach-khoa-duoi-cap",
+                new { controller = "InterfaceAdmin", action = "danh_sach_khoa_duoi_cap" }
+            );
+            context.MapRoute(
+                "Admin_DanhSachBoMon",
+                "admin/danh-sach-bo-mon",
+                new { controller = "InterfaceAdmin", action = "danh_sach_bo_mon" }
+            );
+            context.MapRoute(
                 "Admin_DanhSachCTDT",
                 "admin/danh-sach-ctdt",
                 new { controller = "InterfaceAdmin", action = "danh_sach_ctdt" }

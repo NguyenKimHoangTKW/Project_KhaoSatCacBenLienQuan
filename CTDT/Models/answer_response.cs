@@ -28,17 +28,24 @@ namespace CTDT.Models
         public Nullable<int> id_users { get; set; }
         public Nullable<int> id_mh { get; set; }
         public Nullable<int> id_sv { get; set; }
+        public Nullable<int> id_cbvc_khao_sat { get; set; }
+        public Nullable<int> id_nguoi_hoc_khao_sat { get; set; }
+        public Nullable<int> id_nguoi_hoc_co_hp_khao_sat { get; set; }
         public Nullable<int> id_ctdt { get; set; }
+        public string email { get; set; }
         public string json_answer { get; set; }
         public Nullable<int> time { get; set; }
         public Nullable<int> id_namhoc { get; set; }
     
         public virtual CanBoVienChuc CanBoVienChuc { get; set; }
+        public virtual cbvc_khao_sat cbvc_khao_sat { get; set; }
         public virtual ctdt ctdt { get; set; }
         public virtual DonVi DonVi { get; set; }
         public virtual hoc_ky hoc_ky { get; set; }
         public virtual mon_hoc mon_hoc { get; set; }
         public virtual NamHoc NamHoc { get; set; }
+        public virtual nguoi_hoc_dang_co_hoc_phan nguoi_hoc_dang_co_hoc_phan { get; set; }
+        public virtual nguoi_hoc_khao_sat nguoi_hoc_khao_sat { get; set; }
         public virtual sinhvien sinhvien { get; set; }
         public virtual survey survey { get; set; }
         public virtual users users { get; set; }

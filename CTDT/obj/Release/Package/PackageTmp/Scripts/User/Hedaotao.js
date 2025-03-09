@@ -7,20 +7,25 @@ async function load_he_dao_tao() {
         url: '/api/load_he_dao_tao',
         type: 'POST',
     })
+    
     if (res.islogin && res.ctdt) {
-        form_ctdt(res.data)
+        const data = JSON.parse(res.data);
+        form_ctdt(data)
     }
     else if (res.islogin && res.client) {
-        form_client(res.data)
+        const data = JSON.parse(res.data);
+        form_client(data)
     }
     else if (res.islogin && res.admin) {
-        window.location.href = "/Admin/PhieuKhaoSat/Index";
+        window.location.href = "/admin/danh-sach-phieu-khao-sat";
     }
     else if (res.islogin && res.khoa) {
-        form_khoa(res.data)
+        const data = JSON.parse(res.data);
+        form_khoa(data)
     }
     else {
-        form_no_login(res.data)
+        const data = JSON.parse(res.data);
+        form_no_login(data)
     }
 }
 
@@ -131,12 +136,12 @@ function form_ctdt(check) {
                     <div class="row">
                     <div class="col-md-12">
                             <div class="course align-self-stretch">
-                                <a href="javascript:void(0)" onclick="window.location.href='/ctdt/giam-sat-ty-le-tham-gia-khao-sat'" class="img" style="background-image: url(/Style/assets/ctdt.png)"></a>
+                                <a href="javascript:void(0)" onclick="window.location.href='/ctdt/giam-sat-ket-qua-khao-sat'" class="img" style="background-image: url(/Style/assets/ctdt.png)"></a>
                                 <div class="text p-4">
                                     <p class="category"><span>KHẢO SÁT CÁC BÊN LIÊN QUAN</span></p>
-                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick="window.location.href='/ctdt/giam-sat-ty-le-tham-gia-khao-sat'">DÀNH CHO HỆ CHƯƠNG TRÌNH ĐÀO TẠO</a></h3>
+                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick="window.location.href='/ctdt/giam-sat-ket-qua-khao-sat'">DÀNH CHO HỆ CHƯƠNG TRÌNH ĐÀO TẠO</a></h3>
                                     <p>Thống kê kết quả khảo sát ý kiến, đánh giá, góp ý của Cán Bộ Viên Chức Giảng viên, Sinh viên, Cựu Sinh Viên, Doanh Nghiệp theo Chương trình đào tạo ...</p>
-                                    <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick="window.location.href='/ctdt/giam-sat-ty-le-tham-gia-khao-sat'" class="btn btn-primary">Đi đến</a></p>
+                                    <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick="window.location.href='/ctdt/giam-sat-ket-qua-khao-sat'" class="btn btn-primary">Đi đến</a></p>
                                 </div>
                             </div>
                         </div>

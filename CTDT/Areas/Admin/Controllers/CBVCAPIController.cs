@@ -217,15 +217,16 @@ namespace CTDT.Areas.Admin.Controllers
                         {
                             DateTime? ngaysinh = null;
 
-                            var macbvc = worksheet.Cells[row, 1].Text;
-                            var hoten = worksheet.Cells[row, 2].Text;
-                            var ngaysinhText = worksheet.Cells[row, 3].Text;
+                            var macbvc = worksheet.Cells[row, 2].Text;
+                            var hoten = worksheet.Cells[row, 3].Text;
                             var Email = worksheet.Cells[row, 4].Text;
-                            var donvi = worksheet.Cells[row, 5].Text;
-                            var chucvu = worksheet.Cells[row, 6].Text;
-                            var chuongtrinhdaotao = worksheet.Cells[row, 7].Text;
-                            var namhoatdong = worksheet.Cells[row, 8].Text;
-                            var mota = worksheet.Cells[row, 9].Text;
+                            var ngaysinhText = worksheet.Cells[row, 5].Text;
+                            var trinh_do = worksheet.Cells[row, 6].Text;
+                            var chuc_vu = worksheet.Cells[row, 7].Text;
+                            var don_vi = worksheet.Cells[row, 8].Text;
+                            var bo_mon = worksheet.Cells[row, 9].Text;
+                            var nganh_dao_tao = worksheet.Cells[row, 10].Text;
+                            var namhoatdong = worksheet.Cells[row, 11].Text;
                             if (!string.IsNullOrWhiteSpace(ngaysinhText))
                             {
                                 if (DateTime.TryParseExact(ngaysinhText, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
@@ -237,23 +238,57 @@ namespace CTDT.Areas.Admin.Controllers
                                     return Ok(new { message = $"Ngày sinh không đúng định dạng ở dòng {row}. Vui lòng kiểm tra và thử lại.", success = false });
                                 }
                             }
-                            var check_don_vi = await db.DonVi?.FirstOrDefaultAsync(x => x.name_donvi.ToLower().Trim() == donvi.ToLower().Trim());
-                            var check_chuc_vu = await db.ChucVu?.FirstOrDefaultAsync(x => x.name_chucvu.ToLower().Trim() == chucvu.ToLower().Trim());
-                            var check_ctdt = await db.ctdt?.FirstOrDefaultAsync(x => x.ten_ctdt.ToLower().Trim() == chucvu.ToLower().Trim());
+
+                            if (string.IsNullOrWhiteSpace(namhoatdong))
+                            {
+                                return Ok(new { message = $"Ô năm hoạt động đang có 1 ô bị bỏ trống, vui lòng kiểm tra lại", success = false });
+                            }
                             var check_nam_hoat_dong = await db.NamHoc?.FirstOrDefaultAsync(x => x.ten_namhoc.ToLower().Trim() == namhoatdong.ToLower().Trim());
-                            if (check_don_vi != null)
+
+                            if (check_nam_hoat_dong == null)
                             {
-                                return Ok(new { message = $"Đơn vị {donvi} không tồn tại, vui lòng thêm đơn vị này vào hệ thống và upload lại!", success = false });
+                                return Ok(new { message = $"Năm {namhoatdong} không tồn tại hoạt sai định dạng, vui lòng kiểm tra lại", success = false });
                             }
-                            if (check_chuc_vu != null)
+
+                            if (string.IsNullOrWhiteSpace(trinh_do))
                             {
-                                return Ok(new { message = $"Chức vụ {chucvu} không tồn tại, vui lòng thêm chức vụ này vào hệ thống và upload lại!", success = false });
+                                return Ok(new { message = $"Ô Trình độ đang có 1 ô bị bỏ trống, vui lòng kiểm tra lại", success = false });
                             }
-                            if (check_ctdt != null)
+                            var check_trinh_do = await db.trinh_do.FirstOrDefaultAsync(x => x.ten_trinh_do.ToLower().Trim() == trinh_do.ToLower().Trim());
+                            if (check_trinh_do == null)
                             {
-                                return Ok(new { message = $"CTĐT {chuongtrinhdaotao} không tồn tại, vui lòng thêm CTĐT này vào hệ thống và upload lại!", success = false });
+                                return Ok(new { message = $"Trình độ {trinh_do} không tồn tại hoạt sai định dạng, vui lòng kiểm tra lại", success = false });
                             }
-                            var check_cbvc = await db.CanBoVienChuc.FirstOrDefaultAsync(x => x.MaCBVC.ToLower().Trim() == macbvc.ToLower().Trim() && x.TenCBVC.ToLower().Trim() == hoten.ToLower().Trim());
+
+                            var check_chuc_vu = await db.ChucVu.FirstOrDefaultAsync(x => x.name_chucvu.ToLower().Trim() == chuc_vu.ToLower().Trim());
+                            if (!string.IsNullOrWhiteSpace(chuc_vu) && check_chuc_vu == null)
+                            {
+                                return Ok(new { message = $"Chức vụ {chuc_vu} không tồn tại hoạt sai định dạng, vui lòng kiểm tra lại", success = false });
+                            }
+                            if (string.IsNullOrWhiteSpace(don_vi))
+                            {
+                                return Ok(new { message = $"Ô Đơn vị đang có 1 ô bị bỏ trống, vui lòng kiểm tra lại", success = false });
+                            }
+
+                            var check_don_vi = await db.khoa_vien_truong
+                                .FirstOrDefaultAsync(x => x.ten_khoa.ToLower().Trim() == don_vi.ToLower().Trim()
+                                                        && x.id_namhoc == check_nam_hoat_dong.id_namhoc);
+
+                            if (check_don_vi == null)
+                            {
+                                return Ok(new { message = $"Đơn vị {don_vi} không tồn tại hoặc sai định dạng, vui lòng kiểm tra lại", success = false });
+                            }
+
+                            var check_bo_mon = await db.bo_mon.FirstOrDefaultAsync(x => x.ten_bo_mon.ToLower().Trim() == bo_mon.ToLower().Trim() && x.id_nam_hoc == check_nam_hoat_dong.id_namhoc);
+                            if (!string.IsNullOrWhiteSpace(bo_mon) && check_bo_mon == null)
+                            {
+                                return Ok(new { message = $"{bo_mon} không tồn tại hoạt sai định dạng, vui lòng kiểm tra lại", success = false });
+                            }
+                            var check_cbvc = await db.CanBoVienChuc
+                                .FirstOrDefaultAsync(x =>
+                                x.MaCBVC.ToLower().Trim() == macbvc.ToLower().Trim() &&
+                                x.TenCBVC.ToLower().Trim() == hoten.ToLower().Trim() &&
+                                x.id_namhoc == check_nam_hoat_dong.id_namhoc);
                             if (check_cbvc == null)
                             {
                                 check_cbvc = new CanBoVienChuc
@@ -262,28 +297,28 @@ namespace CTDT.Areas.Admin.Controllers
                                     TenCBVC = hoten,
                                     NgaySinh = ngaysinh,
                                     Email = Email ?? "",
-                                    id_donvi = donvi != "" ? check_don_vi.id_donvi : (int?)null,
-                                    id_chucvu = chucvu != "" ? check_chuc_vu.id_chucvu : (int?)null,
-                                    id_chuongtrinhdaotao = chuongtrinhdaotao != "" ? check_ctdt.id_ctdt : (int?)null,
+                                    id_trinh_do = check_trinh_do.id_trinh_do,
+                                    id_chucvu = string.IsNullOrWhiteSpace(chuc_vu) ? (int?)null : check_chuc_vu.id_chucvu,
+                                    id_don_vi = check_don_vi.id_khoa,
+                                    id_bo_mon = string.IsNullOrWhiteSpace(bo_mon) ? (int?)null : check_bo_mon.id_bo_mon,
+                                    nganh_dao_tao = nganh_dao_tao,
                                     id_namhoc = check_nam_hoat_dong.id_namhoc,
                                     ngaycapnhat = unixTimestamp,
                                     ngaytao = unixTimestamp,
-                                    description = mota ?? ""
                                 };
                                 db.CanBoVienChuc.Add(check_cbvc);
                             }
                             else
                             {
                                 check_cbvc.MaCBVC = macbvc ?? "";
-                                check_cbvc.TenCBVC = hoten;
                                 check_cbvc.NgaySinh = ngaysinh;
                                 check_cbvc.Email = Email ?? "";
-                                check_cbvc.id_donvi = donvi != "" ? check_don_vi.id_donvi : (int?)null;
-                                check_cbvc.id_chucvu = chucvu != "" ? check_chuc_vu.id_chucvu : (int?)null;
-                                check_cbvc.id_chuongtrinhdaotao = chuongtrinhdaotao != "" ? check_ctdt.id_ctdt : (int?)null;
+                                check_cbvc.id_trinh_do = check_trinh_do.id_trinh_do;
+                                check_cbvc.id_chucvu = string.IsNullOrWhiteSpace(chuc_vu) ? (int?)null : check_chuc_vu.id_chucvu;
+                                check_cbvc.id_don_vi = check_don_vi.id_khoa;
+                                check_cbvc.id_bo_mon = string.IsNullOrWhiteSpace(bo_mon) ? (int?)null : check_bo_mon.id_bo_mon;
                                 check_cbvc.id_namhoc = check_nam_hoat_dong.id_namhoc;
                                 check_cbvc.ngaycapnhat = unixTimestamp;
-                                check_cbvc.description = mota ?? "";
                             }
                             await db.SaveChangesAsync();
                         }

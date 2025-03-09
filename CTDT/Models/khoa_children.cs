@@ -18,16 +18,24 @@ namespace CTDT.Models
         public khoa_children()
         {
             this.bo_mon = new HashSet<bo_mon>();
+            this.ctdt = new HashSet<ctdt>();
+            this.phan_quyen_users = new HashSet<phan_quyen_users>();
         }
     
         public int id_khoa_children { get; set; }
         public string ten_khoa_children { get; set; }
         public Nullable<int> id_khoa_vien_truong { get; set; }
+        public Nullable<int> id_nam_hoc { get; set; }
         public Nullable<int> ngay_tao { get; set; }
         public Nullable<int> ngay_cap_nhat { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<bo_mon> bo_mon { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ctdt> ctdt { get; set; }
         public virtual khoa_vien_truong khoa_vien_truong { get; set; }
+        public virtual NamHoc NamHoc { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<phan_quyen_users> phan_quyen_users { get; set; }
     }
 }

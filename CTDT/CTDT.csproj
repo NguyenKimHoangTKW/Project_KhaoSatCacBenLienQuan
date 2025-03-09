@@ -306,6 +306,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaoCaoTongHopKetQuaKhaoSatAdminAPIController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BoMonAdminAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\CBVCAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\CTDTAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\DanhSachMonHocHocVienController.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="Areas\Admin\Controllers\GiamSatTyLeThamGiaKhaoSatAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\ImportDataController.cs" />
     <Compile Include="Areas\Admin\Controllers\InterfaceAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\KhoaDuoiCapAdminAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhoaVienTruongAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\LopAPIController.cs" />
     <Compile Include="Areas\Admin\Controllers\MonHocAdminAPIController.cs" />
@@ -454,7 +456,6 @@
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SaveForm.cs" />
-    <Compile Include="Models\SaveXacThuc.cs" />
     <Compile Include="Models\sinhvien.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -470,6 +471,9 @@
     <Compile Include="Models\tieu_de_phieu_khao_sat.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\trinh_do.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\typeusers.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -480,6 +484,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\BaoCaoTongHopKetQuaKhaoSat.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\BoMon.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\CanBoVienChuc.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChiTietPhieuKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\ChuongTrinhDaoTao.js" />
@@ -489,6 +494,7 @@
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Danhsachnguoihockhaosat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatKetQuaKhaoSat.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\GiamSatTyLeThamGiaKhaoSat.js" />
+    <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\KhoaDuoiCap.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Khoa_Vien_Truong.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\Lop.js" />
     <Content Include="Areas\Admin\Scripts\ChucNangNguoiDung\NguoiHoc.js" />
@@ -1353,7 +1359,6 @@
     <Content Include="Areas\CTDT\Views\Shared\_CTDTHeaderPartial.cshtml" />
     <Content Include="Areas\CTDT\Views\Shared\_CTDTLayout.cshtml" />
     <Content Include="Areas\CTDT\Views\Shared\_CTDTNavPartial.cshtml" />
-    <Content Include="DataExport\Mau\MauUploadUser.xlsx" />
     <Content Include="Areas\CTDT\Views\DoiSanhKetQuaKhaoSat\Index.cshtml" />
     <Content Include="Areas\CTDT\Views\LuuTruBaoCaoKhaoSat\Index.cshtml" />
     <Content Include="Areas\Admin\Views\DoiTuongKhaoSat\ViewDoiTuongKhaoSat.cshtml" />
@@ -1394,15 +1399,56 @@
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_lop.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_cbvc.cshtml" />
-    <Content Include="DataExport\Mau\Mau_Upload_NguoiHoc.xlsx" />
-    <Content Include="DataExport\Mau\Mau_Upload_CBVC.xlsx" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc_khao_sat.cshtml" />
     <Content Include="Areas\CTDT\Views\Interface\chon_dap_vien_thong_ke_theo_yeu_cau.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_can_bo_vien_chuc_khao_sat.cshtml" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_mon_hoc.cshtml" />
-    <Content Include="DataExport\Mau\Mau_Upload_Mon_Hoc.xlsx" />
     <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_nguoi_hoc_co_hoc_phan_khao_sat.cshtml" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_khoa_duoi_cap.cshtml" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240711093520.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240711093523.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240711150607.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240711150611.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240715160147.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240715160150.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240716082929.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240716082933.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240726090605.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240726090608.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240726091739.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240726091742.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240726110244.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\DoiTuongKhaoSat_20240726110248.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\Đối tượng khảo sát_20240726091931.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\Đối tượng khảo sát_20240726091935.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\Đối tượng khảo sát_20240823105909.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\Đối tượng khảo sát_20240823105912.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\Đối tượng khảo sát_20240823105954.xlsx" />
+    <Content Include="DataExport\DoiTuongKhaoSat-CTDT\Đối tượng khảo sát_20240823105957.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20240715215724.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20240726155341.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20240728190424.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20240813202819.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20240813215305.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20240813225052.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241023152229.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241210154620.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241215103511.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241215103742.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241215104326.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241215104459.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241215105143.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241215113801.xlsx" />
+    <Content Include="DataExport\KetQuaPKS\KetQuaKhaoSat_20241215113949.xlsx" />
+    <Content Include="DataExport\Mau\MauUploadUser.xlsx" />
     <Content Include="DataExport\Mau\Mau_Upload_Khoa.xlsx" />
+    <Content Include="DataExport\Mau\Mau_Upload_Mon_Hoc.xlsx" />
+    <Content Include="DataExport\Mau\Mau_Upload_NguoiHoc.xlsx" />
+    <Content Include="Areas\Admin\Views\InterfaceAdmin\danh_sach_bo_mon.cshtml" />
+    <Content Include="DataExport\Mau\Mau_Upload_BoMon.xlsx" />
+    <Content Include="DataExport\Mau\Mau_Upload_CTDT.xlsx" />
+    <Content Include="DataExport\Mau\Mau_Upload_KhoaDuoiCap.xlsx" />
+    <Content Include="DataExport\Mau\Mau_Upload_CBVC.xlsx" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\CounterCount.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
@@ -1810,10 +1856,6 @@
     <Folder Include="Areas\Khoa\Data\" />
     <Folder Include="Areas\Khoa\Views\ThongKeKhaoSatKhoaAPI\" />
     <Folder Include="Content\Exports\" />
-    <Folder Include="DataExport\DoiTuongKhaoSat-CTDT\" />
-    <Folder Include="DataExport\DoiTuongKhaoSat-DonVi\" />
-    <Folder Include="DataExport\DoiTuongKhaoSat\" />
-    <Folder Include="DataExport\KetQuaPKS\" />
     <Folder Include="Models\Admin\" />
     <Folder Include="Models\Khoa\" />
     <Folder Include="Scripts\Admin\" />

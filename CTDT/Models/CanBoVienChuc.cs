@@ -30,17 +30,25 @@ namespace CTDT.Models
         public Nullable<int> id_donvi { get; set; }
         public Nullable<int> id_chucvu { get; set; }
         public Nullable<int> id_chuongtrinhdaotao { get; set; }
+        public Nullable<int> id_khoa_vien_truong { get; set; }
+        public Nullable<int> id_bo_mon { get; set; }
         public Nullable<int> id_namhoc { get; set; }
+        public Nullable<int> id_don_vi { get; set; }
+        public Nullable<int> id_trinh_do { get; set; }
+        public string nganh_dao_tao { get; set; }
         public Nullable<int> ngaytao { get; set; }
         public Nullable<int> ngaycapnhat { get; set; }
         public string description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }
+        public virtual bo_mon bo_mon { get; set; }
         public virtual ChucVu ChucVu { get; set; }
         public virtual ctdt ctdt { get; set; }
         public virtual DonVi DonVi { get; set; }
+        public virtual khoa_vien_truong khoa_vien_truong { get; set; }
         public virtual NamHoc NamHoc { get; set; }
+        public virtual trinh_do trinh_do { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cbvc_khao_sat> cbvc_khao_sat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

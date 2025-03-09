@@ -31,8 +31,7 @@ namespace CTDT.Areas.Admin.Controllers
                 .Where(x => x.id_namhoc == survey.id_namhoc
                             && x.id_hedaotao == survey.id_hedaotao
                             && x.mo_thong_ke == 1
-                            && validGroupIds.Contains(x.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat)
-                            && x.id_loaikhaosat != 3)
+                            && validGroupIds.Contains(x.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat))
                 .Select(x => new
                 {
                     id_phieu = x.surveyID,
@@ -76,8 +75,11 @@ namespace CTDT.Areas.Admin.Controllers
                     ma_cbvc = x.MaCBVC != null ? x.MaCBVC : "",
                     ten_cbvc = x.TenCBVC,
                     email = x.Email != null ? x.Email : "",
-                    don_vi = x.id_donvi != null ? x.DonVi.name_donvi : "",
-                    ctdt = x.id_chuongtrinhdaotao != null ? x.ctdt.ten_ctdt : "",
+                    chuc_vu = x.ChucVu.name_chucvu,
+                    trinh_do = x.trinh_do.ten_trinh_do,
+                    bo_mon = x.id_bo_mon != null ? x.bo_mon.ten_bo_mon :"",
+                    don_vi = x.id_don_vi != null ? x.khoa_vien_truong.ten_khoa : "",
+                    nganh_dao_tao = x.nganh_dao_tao != null ? x.nganh_dao_tao : "",
                     nam_hoat_dong = x.NamHoc.ten_namhoc,
                     mo_ta = x.description != null ? x.description : ""
                 })
@@ -150,8 +152,11 @@ namespace CTDT.Areas.Admin.Controllers
                     ma_cbvc = x.CanBoVienChuc.MaCBVC != null ? x.CanBoVienChuc.MaCBVC : "",
                     ten_cbvc = x.CanBoVienChuc.TenCBVC,
                     email = x.CanBoVienChuc.Email != null ? x.CanBoVienChuc.Email : "",
-                    don_vi = x.CanBoVienChuc.id_donvi != null ? x.CanBoVienChuc.DonVi.name_donvi : "",
-                    ctdt = x.CanBoVienChuc.id_chuongtrinhdaotao != null ? x.CanBoVienChuc.ctdt.ten_ctdt : "",
+                    chuc_vu = x.CanBoVienChuc.ChucVu.name_chucvu,
+                    trinh_do = x.CanBoVienChuc.trinh_do.ten_trinh_do,
+                    bo_mon = x.CanBoVienChuc.id_bo_mon != null ? x.CanBoVienChuc.bo_mon.ten_bo_mon : "",
+                    don_vi = x.CanBoVienChuc.id_don_vi != null ? x.CanBoVienChuc.khoa_vien_truong.ten_khoa : "",
+                    nganh_dao_tao = x.CanBoVienChuc.nganh_dao_tao != null ? x.CanBoVienChuc.nganh_dao_tao : "",
                     nam_hoat_dong = x.CanBoVienChuc.NamHoc.ten_namhoc,
                     mo_ta = x.CanBoVienChuc.description != null ? x.CanBoVienChuc.description : ""
                 })

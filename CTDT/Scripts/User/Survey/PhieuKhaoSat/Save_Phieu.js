@@ -191,3 +191,36 @@ function save_answer_form() {
         });
     }
 }
+function save_answer_form() {
+    var id = $('#id').val();
+    var form = save_phieu_khao_sat();
+
+    if (form.valid) {
+        $.ajax({
+            url: '/api/save_answer_form',
+            type: 'POST',
+            dataType: 'JSON',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                id: id,
+                json_answer: JSON.stringify(form.data)
+            }),
+            success: function (res) {
+                Swal.fire({
+                    title: "Cập nhật dữ liệu thành công",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    goBack();
+                });
+            },
+        });
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Vui lòng điền đầy đủ thông tin bắt buộc"
+        });
+    }
+}

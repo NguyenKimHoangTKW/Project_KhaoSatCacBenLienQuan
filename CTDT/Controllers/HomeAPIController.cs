@@ -18,6 +18,12 @@ namespace CTDT.Controllers
     public class HomeAPIController : ApiController
     {
         dbSurveyEntities db = new dbSurveyEntities();
+        private int unixTimestamp;
+        public HomeAPIController()
+        {
+            DateTime now = DateTime.UtcNow;
+            unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
         [HttpPost]
         [Route("api/load_he_dao_tao")]
         public async Task<IHttpActionResult> LoadHeDaoTao()
@@ -62,45 +68,63 @@ namespace CTDT.Controllers
         [Route("api/bo_phieu_khao_sat")]
         public async Task<IHttpActionResult> load_phieu_khao_sat(hedaotao hdt)
         {
+            var user = SessionHelper.GetUser();
+
             if (hdt == null || string.IsNullOrEmpty(hdt.ten_hedaotao))
             {
-                return BadRequest("Dữ liệu không hợp lệ");
+                return Ok(new { message = "Dữ liệu không hợp lệ", success = false });
             }
-            if (!db.hedaotao.Any(x => x.ten_hedaotao == hdt.ten_hedaotao))
+
+            var check_hdt = await db.hedaotao.FirstOrDefaultAsync(x => x.ten_hedaotao == hdt.ten_hedaotao);
+            if (check_hdt == null)
             {
-                return BadRequest("Hệ đào tạo không tồn tại");
+                return Ok(new { message = "Hệ đào tạo không tồn tại", success = false });
             }
-            var user = SessionHelper.GetUser();
+
             if (user == null)
             {
-                return BadRequest("Không thể phân loại được tài khoản");
+                return Ok(new { message = "Không thể phân loại được tài khoản", success = false });
             }
+
             var phieukhaosat = await db.survey
-               .Where(c => c.surveyStatus == 1 && c.hedaotao.ten_hedaotao == hdt.ten_hedaotao).ToListAsync();
-            var list_phieu_khao_sat = new List<dynamic>();
+                .Where(c => c.id_hedaotao == check_hdt.id_hedaotao)
+                .ToListAsync();
+
             foreach (var item in phieukhaosat)
             {
-                AddSurveyToList(list_phieu_khao_sat, item.surveyID);
+                if (item.surveyTimeStart <= unixTimestamp && item.surveyTimeEnd > unixTimestamp)
+                {
+                    item.surveyStatus = 1;
+                }
+                else
+                {
+                    item.surveyStatus = 0;
+                }
             }
-            var get_data = new
+
+            await db.SaveChangesAsync();
+
+            var list_phieu_khao_sat = phieukhaosat
+                .Where(item => item.surveyStatus == 1)
+                .Select(item => new
+                {
+                    MaPhieu = item.surveyID,
+                    TenPKS = item.surveyTitle,
+                    MoTaPhieu = item.surveyDescription,
+                    MaHDT = item.id_hedaotao,
+                    TenHDT = item.hedaotao.ten_hedaotao,
+                    TenLoaiKhaoSat = item.LoaiKhaoSat.name_loaikhaosat
+                }).ToList();
+
+            if (list_phieu_khao_sat.Count > 0)
             {
-                survey = list_phieu_khao_sat,
-            };
-            return Ok(new { data = get_data });
-        }
-        private void AddSurveyToList(List<dynamic> list, int? surveyid)
-        {
-            var survey = db.survey.FirstOrDefault(x => x.surveyID == surveyid);
-            var surveyDetails = new
+                return Ok(new { data = JsonConvert.SerializeObject(list_phieu_khao_sat), success = true });
+            }
+            else
             {
-                MaPhieu = survey.surveyID,
-                TenPKS = survey.surveyTitle,
-                MoTaPhieu = survey.surveyDescription,
-                MaHDT = survey.id_hedaotao,
-                TenHDT = survey.hedaotao.ten_hedaotao,
-                TenLoaiKhaoSat = survey.LoaiKhaoSat.name_loaikhaosat
-            };
-            list.Add(surveyDetails);
+                return Ok(new { message = "Không có dữ liệu biểu mẫu khảo sát", success = false });
+            }
         }
+
     }
 }

@@ -18,7 +18,9 @@ namespace CTDT.Models
         public NamHoc()
         {
             this.answer_response = new HashSet<answer_response>();
+            this.bo_mon = new HashSet<bo_mon>();
             this.CanBoVienChuc = new HashSet<CanBoVienChuc>();
+            this.khoa_children = new HashSet<khoa_children>();
             this.khoa_vien_truong = new HashSet<khoa_vien_truong>();
             this.mon_hoc = new HashSet<mon_hoc>();
             this.survey = new HashSet<survey>();
@@ -31,7 +33,11 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<answer_response> answer_response { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<bo_mon> bo_mon { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CanBoVienChuc> CanBoVienChuc { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<khoa_children> khoa_children { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<khoa_vien_truong> khoa_vien_truong { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

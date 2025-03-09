@@ -1,4 +1,5 @@
-﻿function Loading() {
+﻿let show_time_check = ``;
+function Loading() {
     Swal.fire({
         title: 'Loading...',
         text: 'Đang thống kê dữ liệu, vui lòng chờ trong giây lát !',
@@ -11,15 +12,6 @@
 function EndLoading() {
     Swal.close();
 }
-$(document).ready(async function () {
-    Loading()
-    try {
-        await LoadKetQua();
-    }
-    finally {
-        EndLoading()
-    }
-});
 $(document).on('click', '#ExportExcel', function () {
     if ($('#bao_cao_tong_hop').text().trim() === 'Không có dữ liệu báo cáo tổng hợp cho năm học này') {
         Swal.fire({
@@ -52,10 +44,12 @@ $(document).on('click', '#ExportExcel', function () {
         });
     }
 })
-$(document).on('change', '#Year', async function () {
+$(document).on('click', '#btnFilter', async function (event) {
+    event.preventDefault();
     Loading()
     try {
         await LoadKetQua();
+        $("#show-time-check").text(`Kết quả được thống kê từ khoảng thời gian: ${show_time_check}`);
     }
     finally {
         EndLoading()
@@ -123,13 +117,31 @@ function ExportExcelBaoCaoTongHop() {
         alignment: { horizontal: 'center', vertical: 'middle' },
     };
 
-    let SurveyYear = "NĂM HỌC: " + $("#Year option:selected").text().toUpperCase();
+    let CTDTExport = "Chương trình đào tạo: " + $("#find-ctdt option:selected").text().toUpperCase();
+    worksheet.addRow([CTDTExport]);
+    let lastRowCTDT = worksheet.lastRow.number;
+    worksheet.mergeCells(`A${lastRowCTDT}:F${lastRowCTDT}`);
+    let mergedCellCTDT = worksheet.getCell(`A${lastRowCTDT}`);
+    mergedCellCTDT.font = { bold: true, size: 14 };
+    mergedCellCTDT.alignment = { horizontal: 'center', vertical: 'middle' };
+  
+
+    let SurveyYear = "NĂM HỌC: " + $("#yearGiamSat option:selected").text().toUpperCase();
     worksheet.addRow([SurveyYear]);
     let lastRowYear = worksheet.lastRow.number;
-    worksheet.mergeCells(`A${lastRowYear}:F${lastRowYear}`);
+    worksheet.mergeCells(`A${lastRowYear}:B${lastRowYear}`);
     let mergedCellYear = worksheet.getCell(`A${lastRowYear}`);
     mergedCellYear.font = { bold: true, size: 14 };
     mergedCellYear.alignment = { horizontal: 'center', vertical: 'middle' };
+
+    let TimeCheck = "Khoảng thời gian thống kê kết quả : " + show_time_check;
+    worksheet.addRow([TimeCheck]);
+    let lastRowTimeCheck = worksheet.lastRow.number;
+    worksheet.mergeCells(`A${lastRowTimeCheck}:B${lastRowTimeCheck}`);
+    let mergedCellTimeCheck = worksheet.getCell(`A${lastRowTimeCheck}`);
+    mergedCellTimeCheck.font = { bold: true, size: 14 };
+    mergedCellTimeCheck.alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.addRow([]);
 
     let TimeExport = "Thời gian xuất kết quả : " + LayThoiGian();
     worksheet.addRow([TimeExport]);
@@ -139,7 +151,7 @@ function ExportExcelBaoCaoTongHop() {
     mergedCellTime.font = { bold: true, size: 14 };
     mergedCellTime.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.addRow([]);
-
+   
     let table = document.querySelector('#bao_cao_tong_hop table');
     let thead = table.querySelector('thead');
     let tbody = table.querySelector('tbody');
@@ -174,7 +186,6 @@ function ExportExcelBaoCaoTongHop() {
     worksheet.columns.forEach(column => {
         column.width = 40;
     });
-
     workbook.xlsx.writeBuffer().then(function (buffer) {
         const dateTime = getFormattedDateTime();
         const filename = `Báo cáo tổng hợp_${dateTime}.xlsx`;
@@ -182,51 +193,73 @@ function ExportExcelBaoCaoTongHop() {
     });
 }
 async function LoadKetQua() {
-    var Year = $('#Year').val();
+    var Year = $('#yearGiamSat').val();
+    var ctdt = $('#find-ctdt').val();
+    const from_date = $("#from_date").val();
+    const to_date = $("#to_date").val();
+    const startTimestamp = convertToTimestamp(from_date);
+    const endTimestamp = convertToTimestamp(to_date);
     const res = await $.ajax({
-        url: '/api/bao_cao_tong_hop_ket_qua_khao_sat',
+        url: '/api/ctdt/bao-cao-tong-hop-ket-qua-khao-sat',
         type: 'POST',
-        data: { id_nam_hoc: Year }
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id_namhoc: Year,
+            id_ctdt: ctdt,
+            from_date: startTimestamp,
+            to_date: endTimestamp
+        })
     });
     let body = $('#showdata');
     let thead = $('#showthead');
     body.empty();
     thead.empty();
     let html = ``;
-    const data = res.data;
-    if (res.is_data) {
+    if (res.success) {
+        
+        $("#title_notification").hide();
+        const data = JSON.parse(res.data);
         data.sort((a, b) => {
-            const idA = a.ten_phieu.split(".")[0];
-            const idB = b.ten_phieu.split(".")[0];
+            const idA = a.phieu.split(".")[0];
+            const idB = b.phieu.split(".")[0];
             return idA.localeCompare(idB, undefined, { numeric: true });
         });
         let title = `
     <tr>
         <th scope="col">STT</th>
         <th scope="col">Phiếu khảo sát</th>
-        <th scope="col">Học kỳ</th>
         <th scope="col">Tỷ lệ tham gia khảo sát</th>
+        <th scope="col">Tỷ lệ chưa tham gia khảo sát</th>
         <th scope="col">Mức độ hài lòng</th>
         <th scope="col">Điểm trung bình</th>
+        <th scope="col">Tỷ lệ % để phiếu đạt</th>
+        <th scope="col">Kết quả</th>
     </tr>
 `;
         thead.html(title);
         data.forEach(function (survey, index) {
-            survey.thong_ke_ty_le.forEach(function (tylekhaosat) {
+            survey.ty_le_tham_gia_khao_sat.forEach(function (tylekhaosat) {
                 html += `<tr>`;
                 html += `<td class="formatSo">${index + 1}</td>`;
-                html += `<td>${survey.ten_phieu}</td>`;
-                let hocKy = tylekhaosat.hoc_ky ? tylekhaosat.hoc_ky : "";
-                html += `<td>${hocKy}</td>`;
-                let ty_le_da_tra_loi = tylekhaosat.ty_le_tham_gia_khao_sat ? tylekhaosat.ty_le_tham_gia_khao_sat.ty_le_da_tra_loi : 0;
+                html += `<td>${survey.phieu}</td>`;
+                let ty_le_da_tra_loi = tylekhaosat.ty_le_da_tra_loi ? tylekhaosat.ty_le_da_tra_loi : 0;
                 html += `<td class="formatSo">${ty_le_da_tra_loi}%</td>`;
-                let muc_do_hai_long = tylekhaosat.ty_le_hai_long[0]; 
+                let ty_le_chua_tra_loi = tylekhaosat.ty_le_chua_tra_loi ? tylekhaosat.ty_le_chua_tra_loi : 0;
+                html += `<td class="formatSo">${ty_le_chua_tra_loi}%</td>`;
+                let muc_do_hai_long = tylekhaosat.muc_do_hai_long[0]; 
                 let avg_ty_le_hai_long = muc_do_hai_long ? muc_do_hai_long.avg_ty_le_hai_long : 0;
                 let avg_score = muc_do_hai_long ? muc_do_hai_long.avg_score : 0;
                 html += `<td class="formatSo">${avg_ty_le_hai_long}%</td>`;
-                html += `<td class="formatSo">${avg_score}</td>`;
+                html += `<td class="formatSo">${avg_score}</td>`
+                html += `<td class="formatSo">${survey.ty_le_phan_tram_dat}%</td>`
+                html += `<td class="formatSo" style="color:${avg_ty_le_hai_long >= survey.ty_le_phan_tram_dat && ty_le_da_tra_loi >= survey.ty_le_phan_tram_dat ? "green" : "red"};font-weight: bold;">${avg_ty_le_hai_long >= survey.ty_le_phan_tram_dat && ty_le_da_tra_loi >= survey.ty_le_phan_tram_dat ? "Đạt" : "Chưa đạt"}</td>`
                 html += `</tr>`;
             });
+            
+        });
+        const check_time_check = JSON.parse(res.time_check);
+        check_time_check.forEach(timecheck => {
+            show_time_check = `${unixTimestampToDate(timecheck.time_check_start)} đến ${unixTimestampToDate(timecheck.time_check_end)}`;
         });
         body.html(html);
     } else {
@@ -245,4 +278,12 @@ async function LoadKetQua() {
             `;
         body.html(html);
     }
+}
+function unixTimestampToDate(unixTimestamp) {
+    var date = new Date(unixTimestamp * 1000);
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    var year = date.getFullYear();
+    var formattedDate = day + "-" + month + "-" + year;
+    return formattedDate;
 }

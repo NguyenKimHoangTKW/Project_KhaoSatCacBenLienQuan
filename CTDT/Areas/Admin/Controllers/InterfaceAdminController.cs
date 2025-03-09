@@ -85,7 +85,19 @@ namespace CTDT.Areas.Admin.Controllers
 
         public ActionResult danh_sach_khoa_vien_truong()
         {
-            ViewBag.CTDTList = new SelectList(db.ctdt.OrderBy(l => l.id_ctdt), "id_ctdt", "ten_ctdt");
+            ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
+            return View();
+        }
+        public ActionResult danh_sach_khoa_duoi_cap()
+        {
+            ViewBag.KhoaVienTruong = new SelectList(db.khoa_vien_truong.OrderBy(l => l.id_khoa), "id_khoa", "ten_khoa");
+            ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
+            return View();
+        }
+        public ActionResult danh_sach_bo_mon()
+        {
+            ViewBag.KhoaVienTruong = new SelectList(db.khoa_vien_truong.OrderBy(l => l.id_khoa), "id_khoa", "ten_khoa");
+            ViewBag.KhoaDuoiCap = new SelectList(db.khoa_children.OrderBy(l => l.id_khoa_children), "id_khoa_children", "ten_khoa_children");
             ViewBag.Year = new SelectList(db.NamHoc.OrderByDescending(l => l.id_namhoc), "id_namhoc", "ten_namhoc");
             return View();
         }

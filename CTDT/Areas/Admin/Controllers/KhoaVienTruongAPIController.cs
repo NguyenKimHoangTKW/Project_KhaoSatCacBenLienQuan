@@ -150,7 +150,7 @@ namespace CTDT.Areas.Admin.Controllers
                             {
                                 check_khoa = new khoa_vien_truong
                                 {
-                                    ma_khoa = ma_khoa.ToUpper(),
+                                    ma_khoa = string.IsNullOrWhiteSpace(ma_khoa) ? null : ma_khoa.ToUpper(),
                                     ten_khoa = ten_khoa,
                                     id_namhoc = check_nam_hoc.id_namhoc,
                                     ngaytao = unixTimestamp,

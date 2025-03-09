@@ -14,30 +14,58 @@
 
                 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
                     <div class="page-header no-gutters">
-                        <h2 class="text-uppercase">Báo cáo tổng hợp kết quả khảo sát</h2>
+                        <h2 class="text-uppercase">Báo cáo tổng hợp kết quả khảo sát thuộc chương trình đào tạo</h2>
                         <hr />
                         <fieldset class="border rounded-3 p-3">
                             <legend class="float-none w-auto px-3">Chức năng</legend>
-                            <div class="col-md-4">
-                                <!-- Điều chỉnh số lượng cột để thay đổi độ rộng -->
-                                <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Lọc năm học cần báo cáo</label>
-                                <select class="form-control select2" id="Year">
-                                    @foreach (var items in ViewBag.Year)
-                                    {
-                                        <option value="@items.Value">@items.Text</option>
-                                    }
-                                </select>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-dark" style="font-size: 16px; font-weight: bold;">Chọn năm</label>
+                                    <select class="form-control select2" id="yearGiamSat">
+                                        @foreach (var item in ViewBag.Year)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-dark" style="font-size: 16px; font-weight: bold;">Chọn chương trình đào tạo</label>
+                                    <select class="form-control select2" id="find-ctdt">
+                                        @foreach (var item in ViewBag.CTDT)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
                             <hr />
-                            <div class="row">
-                                <div class="col-12 d-flex justify-content-between">
-                                    <button class="btn btn-success m-r-5" id="ExportExcel">Xuất Excel</button>
+                            <h4 class="text-center text-uppercase">Chọn dấu thời gian cần thống kê (Nếu có)</h4>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Từ khoảng</label>
+                                    <input type="text" class="form-control datetime-input" name="keywordSearch" id="from_date">
                                 </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Đến khoảng</label>
+                                    <input type="text" class="form-control datetime-input" name="keywordSearch" id="to_date">
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="submit" id="btnFilter" class="btn btn-primary btn-tone" style="margin-right: 20px;">
+                                    <i class="fas fa-filter"></i> Lọc dữ liệu
+                                </button>
+                                <button class="btn btn-success" id="ExportExcel">
+                                    <i class="fas fa-file-excel"></i> Xuất Excel
+                                </button>
                             </div>
                         </fieldset>
                     </div>
                     <div class="m-t-25" id="showalldata">
+                        <h4 id="show-time-check" style=" text-align: right; color: red"></h4>
+                        <hr />
                         <div class="table-responsive" id="bao_cao_tong_hop">
+                            <h2 id="title_notification" class="text-uppercase" style="color:red">vui lòng chọn chức năng lọc để tiếp tục</h2>
                             <table class="table table-bordered">
                                 <thead style="color:black; text-align:center; font-weight:bold" id="showthead">
                                     <!--Load Thead-->

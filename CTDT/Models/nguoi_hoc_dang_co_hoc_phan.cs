@@ -17,6 +17,7 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public nguoi_hoc_dang_co_hoc_phan()
         {
+            this.answer_response = new HashSet<answer_response>();
             this.thong_ke_theo_yeu_cau = new HashSet<thong_ke_theo_yeu_cau>();
         }
     
@@ -29,6 +30,8 @@ namespace CTDT.Models
         public string thang_by_hoc_phan { get; set; }
         public Nullable<int> da_khao_sat { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<answer_response> answer_response { get; set; }
         public virtual CanBoVienChuc CanBoVienChuc { get; set; }
         public virtual dot_khao_sat dot_khao_sat { get; set; }
         public virtual mon_hoc mon_hoc { get; set; }

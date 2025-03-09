@@ -1,0 +1,109 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <h2 class="text-uppercase">quản lý người học khảo sát</h2>
+                <hr />
+                <fieldset class="border rounded-3 p-3">
+                    <legend class="float-none w-auto px-3">Chức năng</legend>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn hệ đào tạo</label>
+                            <select class="form-control select2" id="hedaotao">
+                                @foreach (var item in ViewBag.HeDaoTao)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn năm học</label>
+                            <select class="form-control select2" id="year">
+                                @foreach (var item in ViewBag.Year)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn phiếu khảo sát</label>
+                            <select class="form-control select2" id="surveyid">
+                                <option value="">Chọn hệ đào tạo và năm để thống kê</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn lớp đáp viên cần thêm vào phiếu</label>
+                            <select class="form-control select2" name="states[]" multiple="multiple" id="lop">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Nhập mã học viên để lọc đáp viên đặc biệt (mỗi tùy chọn là 1 dòng)</label>
+                            <textarea id="optionsTextarea" class="form-control" aria-label="With textarea" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <p style="color:red;font-weight:bold;font-style:italic">* Lưu ý: Để lọc được lớp thì phải Clear hết dữ liệu trong ô lọc đáp viên đặc biệt</p>
+                    <hr />
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="submit" id="btnFilter" class="btn btn-primary btn-tone" style="margin-right: 20px;">
+                            <i class="fas fa-filter"></i> Lọc dữ liệu
+                        </button>
+                        <button type="submit" id="btnInfoDapVien" class="btn btn-primary btn-tone" style="margin-right: 20px;">
+                            <i class="fas fa-address-card"></i> Xem chi tiết đáp viên đã chọn của phiếu
+                        </button>
+                        <button class="btn btn-success" id="SaveData">
+                            <i class="fas fa-file-excel"></i> Save dữ liệu
+                        </button>
+                    </div>
+                </fieldset>
+            </div>
+            <!--Modal-->
+            <div class="modal fade bd-example-modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4">Danh sách các đáp viên đã chọn</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5 id="show-title-survey"></h5>
+                            <table class="table table-bordered" id="data-table-info">
+                                <thead style="color:black; text-align:center; font-weight:bold" id="showthead-info">
+                                    <!--Load Thead-->
+                                </thead>
+                                <tbody id="showdata-info">
+                                    <!--Load Data-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Modal-->
+            <div class="m-t-25" id="showalldata">
+                <div class="table-container" id="dap-vien-khao-sat">
+                    <h2 id="title_notification" class="text-uppercase" style="color:red">vui lòng chọn chức năng lọc để tiếp tục</h2>
+                    <table class="table table-bordered" id="data-table">
+                        <thead style="color:black; text-align:center; font-weight:bold" id="showthead">
+                            <!--Load Thead-->
+                        </thead>
+                        <tbody id="showdata">
+                            <!--Load Data-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/Danhsachnguoihockhaosat.js"></script>
+}

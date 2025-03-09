@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿$(".select2").select2();
+$(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
 
     $("#fildata").click(function () {
@@ -25,11 +26,9 @@ async function load_pks_by_nam() {
         res.ctdt.forEach(function (ctdt) {
             html_ctdt += `<option value="${ctdt.id_ctdt}">${ctdt.ten_ctdt}</option>`;
         });
-        $("#ctdt").empty().html(html_ctdt);
+        $("#ctdt").empty().html(html_ctdt).trigger("change");
     } else {
-        html += `<option value="">${res.message}</option>`;
-        $("#surveyid").empty().html(html);
-        $("#ctdt").empty().html(html);
+        $("#ctdt").empty().html(`<option value="">${res.message}</option>`).trigger('change');
     }
 }
 
@@ -37,13 +36,19 @@ async function LoadChartSurvey() {
     const hedaotao = $("#hedaotao").val();
     const year = $("#year").val();
     const ctdt = $("#ctdt").val();
+    const from_date = $('#from_date').val();
+    const to_date = $('#to_date').val();
+    const startTimestamp = Math.floor(new Date(from_date).getTime() / 1000);
+    const endTimestamp = Math.floor(new Date(to_date).getTime() / 1000);
     const res = await $.ajax({
         url: '/api/admin/giam-sat-ty-le-tham-gia-khao-sat',
         type: 'POST',
         data: {
             id_namhoc: year,
             id_ctdt: ctdt,
-            id_hdt: hedaotao
+            id_hdt: hedaotao,
+            from_date: startTimestamp,
+            to_date: endTimestamp
         },
     });
 
@@ -83,8 +88,8 @@ async function LoadChartSurvey() {
                         <hr />
                         <div style="display: flex; justify-content: space-between; align-items: center; font-weight:bold">
                             <p style="margin: 0; color: black;">Tổng phiếu: ${thongKeTyLe.tong_khao_sat || '0'}</p>
-                            <p style="margin: 0; color:#ebb000;">Đã thu về: ${thongKeTyLe.tong_phieu_da_tra_loi || '0'}</p>
-                            <p style="margin: 0; color:#5029ff;">Chưa thu về: ${thongKeTyLe.tong_phieu_chua_tra_loi || '0'}</p>
+                            <p style="margin: 0; color:#5029ff;">Đã thu về: ${thongKeTyLe.tong_phieu_da_tra_loi || '0'}</p>
+                            <p style="margin: 0; color:#ebb000;">Chưa thu về: ${thongKeTyLe.tong_phieu_chua_tra_loi || '0'}</p>
                         </div>
                     </div>
                 </div>`;

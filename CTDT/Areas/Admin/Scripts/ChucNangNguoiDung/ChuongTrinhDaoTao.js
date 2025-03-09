@@ -16,6 +16,13 @@ $(document).ready(function () {
             $(this).val(value.substring(0, maxLength));
         }
     });
+    $("#bd-example-modal-lg").on("hidden.bs.modal", function () {
+        $(this).find("input, textarea, select").val("");
+        $(this).find("input[type=checkbox], input[type=radio]").prop("checked", false);
+    });
+    $('#importExcelModal').on('hidden.bs.modal', function () {
+        $(this).find('form')[0].reset();
+    });
 });
 $(document).on("click", "#btnAdd", function (event) {
     event.preventDefault();
@@ -68,6 +75,53 @@ $(document).on("click", "#btnDelete", function (event) {
             delete_ctdt(value);
         }
     });
+});
+$(document).on("submit", "#importExcelForm", async function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    const res = await $.ajax({
+        url: '/api/admin/upload-excel-ctdt',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        $('#importExcelModal').modal('hide');
+        load_data();
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
 });
 async function delete_ctdt(value) {
     const res = await $.ajax({
@@ -243,7 +297,8 @@ async function load_data() {
                 <th scope="col">ID CTĐT</th>
                 <th scope="col">Mã CTĐT</th>
                 <th scope="col">Tên CTĐT</th>
-                <th scope="col">Thuộc khoa/Viện</th>
+                <th scope="col">Thuộc đơn vị</th>
+                <th scope="col">Thuộc khoa</th>
                 <th scope="col">Thuộc bộ môn</th>
                 <th scope="col">Thuộc hệ đào tạo</th>
                 <th scope="col">Ngày Tạo</th>
@@ -261,6 +316,7 @@ async function load_data() {
                     <td class="formatSo">${item.id_ctdt}</td>
                     <td>${item.ma_ctdt}</td>
                     <td>${item.ten_ctdt}</td>
+                    <td>${item.ten_don_vi}</td>
                     <td>${item.ten_khoa}</td>
                     <td>${item.ten_bo_mon}</td>
                     <td>${item.ten_hedaotao}</td>

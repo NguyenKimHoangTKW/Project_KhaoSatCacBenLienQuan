@@ -17,9 +17,13 @@ namespace CTDT.Models
         public int id_phan_quyen_user { get; set; }
         public Nullable<int> id_users { get; set; }
         public Nullable<int> id_ctdt { get; set; }
+        public Nullable<int> id_don_vi { get; set; }
         public Nullable<int> id_khoa { get; set; }
+        public Nullable<int> id_bo_mon { get; set; }
     
+        public virtual bo_mon bo_mon { get; set; }
         public virtual ctdt ctdt { get; set; }
+        public virtual khoa_children khoa_children { get; set; }
         public virtual khoa_vien_truong khoa_vien_truong { get; set; }
         public virtual users users { get; set; }
     }

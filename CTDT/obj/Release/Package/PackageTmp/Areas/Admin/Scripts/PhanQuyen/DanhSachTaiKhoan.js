@@ -1,4 +1,24 @@
-﻿load_data();
+﻿$(".select2").select2();
+let currentPage = 1;
+$(document).ready(function () {
+    load_data();
+});
+$(document).on("click", ".page-link", function (e) {
+    e.preventDefault();
+    const page = $(this).data("page");
+    if (page) {
+        currentPage = page;
+        load_data(currentPage);
+    }
+});
+$(document).on("change", "#pageSizeSelect", function () {
+    const pageSize = $(this).val();
+    load_data(currentPage, pageSize);
+});
+$(document).on("change", "#pageSizeSelect", function () {
+    const pageSize = $(this).val();
+    load_data(currentPage, pageSize);
+});
 function Toast_alert(type, message) {
     const Toast = Swal.mixin({
         toast: true,
@@ -64,18 +84,17 @@ $(document).on('submit', '#importExcelForm', function () {
     });
 });
 
-async function load_data() {
-    var ctdt_select = $('#FiterCTDT').val();
-    var donvi_select = $('#FilterDonVi').val();
+async function load_data(page = 1, pageSize = $("#pageSizeSelect").val()) {
     var trangthai_select = $('#FilterTrangThai').val();
-
+    const searchTerm = $("#searchInput").val();
     const res = await $.ajax({
         url: '/api/admin/load_du_lieu_users',
         type: 'POST',
         data: {
-            id_ctdt: ctdt_select,
-            id_donvi: donvi_select,
-            id_type_user: trangthai_select
+            id_type_user: trangthai_select,
+            page: page,
+            pageSize: pageSize,
+            searchTerm: searchTerm
         }
     });
     if (res && res.data.length > 0) {
@@ -95,26 +114,27 @@ async function load_data() {
         html += "<th>Ngày tạo</th>";
         html += "<th>Ngày cập nhật</th>";
         html += "<th>Đăng nhập lần cuối</th>";
-        html += "<th>Đơn vị</th>";
-        html += "<th>Chương trình đào tạo</th>";
+        html += "<th>Thuộc quyền CTĐT</th>";
+        html += "<th>Thuộc quyền Khoa</th>";
         html += "<th>Chức năng</th>";
         html += "</tr>";
         html += "</thead>";
         html += "<tbody>";
         res.data.forEach(function (items, index) {
             html += "<tr>";
-            html += `<td>${index + 1}</td>`;
-            html += `<td>${items.id_user}</td>`;
+            html += `<td class="formatSo">${(page - 1) * pageSize + index + 1}</td>`;
+            html += `<td class="formatSo">${items.id_user}</td>`;
             html += `<td>${items.ten_user}</td>`;
             html += `<td>${items.email}</td>`;
-            html += `<td>${items.quyen_han}</td>`;
-            html += `<td>${unixTimestampToDate(items.ngay_tao)}</td>`;
-            html += `<td>${unixTimestampToDate(items.ngay_cap_nhat)}</td>`;
-            html += `<td>${items.dang_nhap_lan_cuoi != null ? unixTimestampToDate(items.dang_nhap_lan_cuoi) :""}</td>`;
-
-            html += `<td>${items.don_vi}</td>`;
-            html += `<td>${items.ctdt}</td>`;
-            html += `<td>`;
+            html += `<td class="formatSo">${items.quyen_han}</td>`;
+            html += `<td class="formatSo">${unixTimestampToDate(items.ngay_tao)}</td>`;
+            html += `<td class="formatSo">${unixTimestampToDate(items.ngay_cap_nhat)}</td>`;
+            html += `<td class="formatSo">${items.dang_nhap_lan_cuoi != null ? unixTimestampToDate(items.dang_nhap_lan_cuoi) : ""}</td>`;
+            const ctdtList = items.thuoc_chuc_quyen.map(quyen => quyen.ten_ctdt).join(" - ");
+            html += `<td style="font-weight: bold;">${ctdtList}</td>`;
+            const khoalist = items.thuoc_chuc_quyen.map(quyen => quyen.ten_khoa);
+            html += `<td>${khoalist}</td>`;
+            html += `<td  class="formatSo">`;
             html += `<button class="btn btn-hover btn-sm btn-rounded pull-right" id="btnEdit" data-id="${items.id_user}">Cấp quyền</button>`;
             html += `<button class="btn btn-hover btn-sm btn-rounded pull-right" id="btnDel" data-id="${items.id_user}">Xóa</button>`;
             html += `</td>`;
@@ -122,42 +142,7 @@ async function load_data() {
         })
         html += "</tbody>";
         body.html(html);
-        $('#load_data_table').DataTable({
-            pageLength: 10,
-            lengthMenu: [5, 10, 25, 50, 100],
-            ordering: true,
-            searching: true,
-            autoWidth: false,
-            responsive: true,
-            language: {
-                paginate: {
-                    next: "Next",
-                    previous: "Previous"
-                },
-                search: "Search",
-                lengthMenu: "Show _MENU_ entries"
-            },
-            dom: "Bfrtip",
-            buttons: [
-                {
-                    extend: 'csv',
-                    title: 'Danh sách người dùng - CSV'
-                },
-                {
-                    extend: 'excel',
-                    title: 'Danh sách người dùng - Excel'
-                },
-                {
-                    extend: 'pdf',
-                    title: 'Danh sách người dùng PDF'
-                },
-                {
-                    extend: 'print',
-                    title: 'Danh sách người dùng'
-                }
-            ]
-        });
-
+        renderPagination(res.totalPages, res.currentPage);
     }
 };
 
@@ -198,6 +183,59 @@ function DelNguoiDung(id) {
             load_data()
         }
     });
+}
+function renderPagination(totalPages, currentPage) {
+    const paginationContainer = $("#paginationControls");
+    let html = "";
+    html += `
+        <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+        </li>
+    `;
+
+    html += `
+        <li class="page-item ${currentPage === 1 ? "active" : ""}">
+            <a class="page-link" href="#" data-page="1">1</a>
+        </li>
+    `;
+
+    if (currentPage > 4) {
+        html += `
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+        `;
+    }
+    const maxPagesToShow = 3;
+    const startPage = Math.max(2, currentPage - Math.floor(maxPagesToShow / 2));
+    const endPage = Math.min(totalPages - 1, currentPage + Math.floor(maxPagesToShow / 2));
+    for (let i = startPage; i <= endPage; i++) {
+        html += `
+            <li class="page-item ${i === currentPage ? "active" : ""}">
+                <a class="page-link" href="#" data-page="${i}">${i}</a>
+            </li>
+        `;
+    }
+    if (currentPage < totalPages - 3) {
+        html += `
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+        `;
+    }
+    if (totalPages > 1) {
+        html += `
+            <li class="page-item ${currentPage === totalPages ? "active" : ""}">
+                <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+            </li>
+        `;
+    }
+    html += `
+        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+            <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+        </li>
+    `;
+    paginationContainer.html(html);
 }
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);

@@ -88,6 +88,19 @@
                     </div>
                 </div>
                 <hr />
+                <h4 class="text-center text-uppercase">Chọn dấu thời gian cần thống kê (Nếu có)</h4>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Từ khoảng</label>
+                        <input type="date" class="form-control" name="keywordSearch" id="from_date">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Đến khoảng</label>
+                        <input type="date" class="form-control" name="keywordSearch" id="to_date">
+                    </div>
+                </div>
+               
+                <hr />
                 <div class="row mb-3">
                     <div class="col-md-6 d-flex align-items-center">
                         <button type="button" class="btn btn-info" id="fildata">Lọc dữ liệu</button>
@@ -99,6 +112,9 @@
             <hr />
             <div id="survey-list">
                 <!-- Surveys will be appended here -->
+                <div class="alert alert-primary">
+                    This is a primary alert—check it out!
+                </div>
             </div>
         </div>
     </div>

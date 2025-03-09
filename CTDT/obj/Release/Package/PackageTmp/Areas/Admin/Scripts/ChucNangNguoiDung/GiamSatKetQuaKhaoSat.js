@@ -1,4 +1,5 @@
-﻿var check = false;
+﻿$(".select2").select2();
+var check = false;
 var check_tan_xuat = false;
 $(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
@@ -59,6 +60,10 @@ $(document).ready(function () {
             }
         });
     });
+
+    $("#exportExcelTho").click(function () {
+        XuatExcel();
+    })
 });
 
 
@@ -81,16 +86,16 @@ async function load_pks_by_nam() {
         res.data.forEach(function (item) {
             html += `<option value="${item.id_phieu}">${item.ten_phieu}</option>`;
         });
-        $("#surveyid").empty().html(html);
+        $("#surveyid").empty().html(html).trigger("change");
 
         res.ctdt.forEach(function (ctdt) {
             html_ctdt += `<option value="${ctdt.id_ctdt}">${ctdt.ten_ctdt}</option>`;
         });
-        $("#ctdt").empty().html(html_ctdt);
+        $("#ctdt").empty().html(html_ctdt).trigger("change");
     } else {
         html += `<option value="">${res.message}</option>`;
-        $("#surveyid").empty().html(html);
-        $("#ctdt").empty().html(html);
+        $("#surveyid").empty().html(html).trigger("change");
+        $("#ctdt").empty().html(html).trigger("change");
     }
 }
 
@@ -113,11 +118,11 @@ async function load_gv_by_mh() {
         check = true;
         const data = res.data;
         const lopSelect = $("#lop-fil-mh");
-        lopSelect.empty().append('<option value="">Tất cả</option>');
+        lopSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
         const lopData = [...new Map(data.map(item => [item.id_lop, item])).values()];
         lopData.forEach(lop => {
-            lopSelect.append(`<option value="${lop.id_lop}">${lop.lop}</option>`);
+            lopSelect.append(`<option value="${lop.id_lop}">${lop.lop}</option>`).trigger("change");
         });
 
         lopSelect.on('change', function () {
@@ -125,22 +130,22 @@ async function load_gv_by_mh() {
             const filteredSubjects = data.filter(item => item.id_lop == selectedLopId);
 
             const mhSelect = $("#mh-fil-mh");
-            mhSelect.empty().append('<option value="">Tất cả</option>');
+            mhSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
             filteredSubjects.forEach(subject => {
-                mhSelect.append(`<option value="${subject.id_hoc_phan}">${subject.ten_hoc_phan}</option>`);
+                mhSelect.append(`<option value="${subject.id_hoc_phan}">${subject.ten_hoc_phan}</option>`).trigger("change");
             });
 
-            $("#gv-fil-mh").empty().append('<option value="">Chọn giảng viên</option>');
+            $("#gv-fil-mh").empty().append('<option value="">Chọn giảng viên</option>').trigger("change");
 
             mhSelect.on('change', function () {
                 const selectedMh = $(this).val();
                 const selectedData = filteredSubjects.find(item => item.id_hoc_phan == selectedMh);
                 const gvSelect = $("#gv-fil-mh");
-                gvSelect.empty().append('<option value="">Tất cả</option>');
+                gvSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
                 if (selectedData && selectedData.giang_vien) {
                     selectedData.giang_vien.forEach(gv => {
-                        gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`);
+                        gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`).trigger("change");
                     });
                 }
             });
@@ -183,10 +188,10 @@ async function load_mh_by_gv() {
         check = true;
         const data = res.data;
         const lopSelect = $("#lop-fil-gv");
-        lopSelect.empty().append('<option value="">Tất cả</option>');
+        lopSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
         const uniqueClasses = [...new Map(data.map(item => [item.id_lop, item])).values()];
         uniqueClasses.forEach(lop => {
-            lopSelect.append(`<option value="${lop.id_lop}">${lop.ten_lop}</option>`);
+            lopSelect.append(`<option value="${lop.id_lop}">${lop.ten_lop}</option>`).trigger("change");
         });
 
         lopSelect.off('change').on('change', function () {
@@ -194,24 +199,24 @@ async function load_mh_by_gv() {
             const filteredByClass = data.filter(item => item.id_lop == selectedLopId);
 
             const gvSelect = $("#gv-fil-gv");
-            gvSelect.empty().append('<option value="">Tất cả</option>');
+            gvSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
             const uniqueLecturers = [...new Map(filteredByClass.map(item => [item.id_giang_vien, item])).values()];
             uniqueLecturers.forEach(gv => {
-                gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`);
+                gvSelect.append(`<option value="${gv.id_giang_vien}">${gv.ma_giang_vien} - ${gv.ten_giang_vien}</option>`).trigger("change");
             });
 
-            $("#mh-fil-gv").empty().append('<option value="">Tất cả</option>');
+            $("#mh-fil-gv").empty().append('<option value="">Tất cả</option>').trigger("change");
             gvSelect.off('change').on('change', function () {
                 const selectedGVId = $(this).val();
                 const selectedLecturer = filteredByClass.find(item => item.id_giang_vien == selectedGVId);
 
                 const mhSelect = $("#mh-fil-gv");
-                mhSelect.empty().append('<option value="">Tất cả</option>');
+                mhSelect.empty().append('<option value="">Tất cả</option>').trigger("change");
 
                 if (selectedLecturer && selectedLecturer.mon_hoc) {
                     selectedLecturer.mon_hoc.forEach(mh => {
-                        mhSelect.append(`<option value="${mh.id_mon_hoc}">${mh.ten_mon_hoc}</option>`);
+                        mhSelect.append(`<option value="${mh.id_mon_hoc}">${mh.ten_mon_hoc}</option>`).trigger("change");
                     });
                 }
             });
@@ -237,14 +242,16 @@ async function load_mh_by_gv() {
 }
 
 $(document).on("click", "#fildata", async function () {
+
     var body = $('#tan_xuat_table');
+    await test();
     if (check_tan_xuat) {
         body.show();
     } else {
         body.hide();
     }
 
-    await test();
+    
 
     check_tan_xuat = !check_tan_xuat;
 });
@@ -255,6 +262,10 @@ async function test() {
     const lop = $("#lop-fil-mh").val() || $("#lop-fil-gv").val();
     const mh = $("#mh-fil-mh").val() || $("#mh-fil-gv").val();
     const gv = $("#gv-fil-mh").val() || $("gv-fil-gv").val();
+    const from_date = $("#from_date").val();
+    const to_date = $("#to_date").val();
+    const startTimestamp = Math.floor(new Date(from_date).getTime() / 1000);
+    const endTimestamp = Math.floor(new Date(to_date).getTime() / 1000);
     const res = await $.ajax({
         url: '/api/admin/giam-sat-ket-qua-khao-sat',
         type: 'POST',
@@ -264,7 +275,9 @@ async function test() {
             id_ctdt: ctdt,
             id_lop: lop,
             id_mh: mh,
-            id_CBVC: gv
+            id_CBVC: gv,
+            from_date: startTimestamp,
+            to_date: endTimestamp
         }
     })
     if (res.success) {
@@ -274,7 +287,6 @@ async function test() {
         await form_cau_hoi_nhieu_lua_chon(res.many_leves);
         await form_cau_hoi_5_muc(res.five_levels);
         await form_y_kien_khac(res.other_levels);
-        check_tan_xuat = false
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -309,7 +321,7 @@ async function test() {
             title: res.message
         });
     }
-   
+
 }
 
 function form_ty_le(ty_le) {
@@ -317,69 +329,7 @@ function form_ty_le(ty_le) {
         let container = $("#ThongKeTyLeSurvey");
         let html = "";
         container.empty();
-
-       
-
-        ty_le.forEach(item => {
-            if (item.is_mon_hoc) {
-                html = `
-                    <p style="font-weight:bold;font-size:15px;text-align:center;color:black">THỐNG KÊ SỐ LƯỢNG THAM GIA KHẢO SÁT</p>
-                    <div class="question-block">
-                        <p style="font-size: 20px; font-weight: bold; color: black;"></p>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead style="color:black; text-align:center; font-weight:bold;font-size:15px">
-                                    <tr>
-                                        <th scope="col" rowspan="2">Tên CTĐT</th>
-                                        <th scope="col" rowspan="2">Tên Môn Học</th>
-                                        <th scope="col" rowspan="2">Tên Lớp</th>
-                                        <th scope="col" rowspan="2">Giảng Viên</th>
-                                        <th scope="col" colspan="5">Thống kê khảo sát</th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col">Số phiếu phát ra</th>
-                                        <th scope="col">Số phiếu thu về</th>
-                                        <th scope="col">Số phiếu chưa trả lời</th>
-                                        <th scope="col">Tỷ lệ phiếu thu về</th>
-                                        <th scope="col">Tỷ lệ phiếu chưa khảo sát</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                    `;
-                item.info_survey.forEach(survey => {
-                    survey.mon_hoc.forEach(subject => {
-                        const rowSpan = subject.ten_lop.length > 1 ? subject.ten_lop.length : 1;
-
-                        subject.ten_lop.forEach((lop, index) => {
-                            let giangVienNames = subject.ten_gv.join(", ");
-
-                            html += index === 0
-                                ? `
-                                <tr>
-                                    <td rowspan="${rowSpan}">${survey.ctdt}</td>
-                                    <td rowspan="${rowSpan}">${subject.mon_hoc}</td>
-                                    <td>${lop}</td>
-                                    <td rowspan="${rowSpan}">${giangVienNames}</td>
-                                    <td class="formatSo">${item.tong_khao_sat}</td>
-                                    <td class="formatSo">${item.tong_phieu_da_tra_loi}</td>
-                                    <td class="formatSo">${item.tong_phieu_chua_tra_loi}</td>
-                                    <td class="formatSo">${item.ty_le_da_tra_loi}%</td>
-                                    <td class="formatSo">${item.ty_le_chua_tra_loi}%</td>
-                                </tr>`
-                                : `
-                                <tr>
-                                    <td>${lop}</td>
-                                    <td class="formatSo">${item.tong_khao_sat}</td>
-                                    <td class="formatSo">${item.tong_phieu_da_tra_loi}</td>
-                                    <td class="formatSo">${item.tong_phieu_chua_tra_loi}</td>
-                                    <td class="formatSo">${item.ty_le_da_tra_loi}%</td>
-                                    <td class="formatSo">${item.ty_le_chua_tra_loi}%</td>
-                                </tr>`;
-                        });
-                    });
-                });
-            } else if (item.is_can_bo) {
-                html = `
+        html = `
                 <p style="font-weight:bold;font-size:15px;text-align:center;color:black">THỐNG KÊ SỐ LƯỢNG THAM GIA KHẢO SÁT</p>
                 <div class="question-block">
                     <p style="font-size: 20px; font-weight: bold; color: black;"></p>
@@ -397,19 +347,17 @@ function form_ty_le(ty_le) {
                             </thead>
                             <tbody>
                 `;
-                item.ctdt.forEach(ctdtItem => {
-                    html += `
+        ty_le.forEach(ctdtItem => {
+            html += `
                         <tr>
                             <td>${ctdtItem.ctdt}</td>
-                            <td class="formatSo">${item.tong_khao_sat}</td>
-                            <td class="formatSo">${item.tong_phieu_da_tra_loi}</td>
-                            <td class="formatSo">${item.tong_phieu_chua_tra_loi}</td>
-                            <td class="formatSo">${item.ty_le_da_tra_loi}%</td>
-                            <td class="formatSo">${item.ty_le_chua_tra_loi}%</td>
+                            <td class="formatSo">${ctdtItem.tong_khao_sat}</td>
+                            <td class="formatSo">${ctdtItem.tong_phieu_da_tra_loi}</td>
+                            <td class="formatSo">${ctdtItem.tong_phieu_chua_tra_loi}</td>
+                            <td class="formatSo">${ctdtItem.ty_le_da_tra_loi}%</td>
+                            <td class="formatSo">${ctdtItem.ty_le_chua_tra_loi}%</td>
                         </tr>
                     `;
-                });
-            }
         });
 
         html += `
@@ -423,9 +371,6 @@ function form_ty_le(ty_le) {
         container.empty();
     }
 }
-
-
-
 function form_cau_hoi_1_lua_chon(ty_le) {
     if (ty_le) {
         let container = $("#surveyContainerSingle");
@@ -829,7 +774,7 @@ function ExportExcelKetQuaKhaoSat() {
         });
 
         worksheet.columns.forEach(column => {
-            column.width = 20; 
+            column.width = 20;
         });
 
         worksheet.addRow([]);
@@ -1101,4 +1046,170 @@ function ExportExcelKetQuaKhaoSat() {
         const filename = `Kết quả khảo sát_${dateTime}.xlsx`;
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
+}
+
+async function XuatExcel() {
+    const hdtid = $("#hedaotao").val();
+    const surveyid = $("#surveyid").val();
+    const ctdt = $("#ctdt").val();
+    const lop = $("#lop-fil-mh").val() || $("#lop-fil-gv").val();
+    const mh = $("#mh-fil-mh").val() || $("#mh-fil-gv").val();
+    const gv = $("#gv-fil-mh").val() || $("gv-fil-gv").val();
+    const res = await $.ajax({
+        url: '/api/admin/export-du-lieu-tho',
+        type: 'POST',
+        data: {
+            surveyID: surveyid,
+            id_hdt: hdtid,
+            id_ctdt: ctdt,
+            id_lop: lop,
+            id_mh: mh,
+            id_CBVC: gv
+        }
+    });
+    if (res.success) {
+        let timerInterval;
+        Swal.fire({
+            title: "Đang xuất dữ liệu ra Excel!",
+            html: "Vui lòng đợi trong <b></b> giây.",
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+                exportToExcel(res, res.data);
+            }
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Không có dữ liệu',
+            text: res.message
+        });
+    }
+};
+
+function exportToExcel(check, data) {
+    var surveytitle = $("#surveyid option:selected").text();
+    var workbook = XLSX.utils.book_new();
+    var worksheet = XLSX.utils.aoa_to_sheet([]);
+
+    var excelData = [];
+    var titleRow = [surveytitle];
+    var headerRow;
+    if (check.is_subject) {
+        headerRow = ["Dấu thời gian", "Email", "Môn học", "Giảng viên", "MSSV", "Họ và tên", "Ngày sinh", "Thuộc lớp", "Thuộc CTĐT", "Thuộc Khoa", "Số điện thoại"];
+    } else if (check.is_program) {
+        headerRow = ["Dấu thời gian", "Email", "Thuộc CTĐT"];
+    } else if (check.is_staff) {
+        headerRow = ["Dấu thời gian", "Email", "Họ và tên","Khảo sát CTĐT", "Thuộc đơn vị", "Thuộc chức danh"];
+    }
+
+    if (data.length > 0 && data[0].pages && data[0].pages.length > 0) {
+        data[0].pages.forEach(function (page) {
+            page.elements.forEach(function (element) {
+                headerRow.push(element.title);
+            });
+        });
+    }
+    excelData.push(titleRow);
+    excelData.push(headerRow);
+
+    data.forEach(function (survey) {
+        var rowData = [];
+        if (check.is_subject) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.MonHoc || "",
+                survey.GiangVien || "",
+                survey.MSSV || "",
+                survey.HoTen || "",
+                survey.NgaySinh || "",
+                survey.Lop || "",
+                survey.CTDT || "",
+                survey.Khoa || "",
+                survey.SDT || ""
+            ];
+        } else if (check.is_program) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.CTDT || ""
+            ];
+        } else if (check.is_staff) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.HoTen || "",
+                survey.KhaoSatCTDT || "",
+                survey.DonVi || "",
+                survey.ChucDanh || ""
+            ];
+        }
+
+        survey.pages.forEach(function (page) {
+            page.elements.forEach(function (element) {
+                if (element.type === "text" || element.type === "comment") {
+                    rowData.push(element.response ? element.response.text || "" : "");
+                } else if (element.type === "radiogroup") {
+                    rowData.push(element.response ? element.response.text || "" : "");
+                } else if (element.type === "checkbox") {
+                    let checkboxResponses = Array.isArray(element.response.text) ? element.response.text.join(", ") : "";
+                    rowData.push(checkboxResponses);
+                } else if (element.type === "dropdown") {
+                    rowData.push(element.response ? element.response.text || "" : "");
+                } else {
+                    rowData.push("");
+                }
+            });
+        });
+
+        excelData.push(rowData);
+    });
+
+    excelData.forEach(function (row) {
+        XLSX.utils.sheet_add_aoa(worksheet, [row], { origin: -1 });
+    });
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'SurveyData');
+
+    var now = new Date();
+    var timestamp = now.getFullYear().toString() +
+        ('0' + (now.getMonth() + 1)).slice(-2) +
+        ('0' + now.getDate()).slice(-2) +
+        ('0' + now.getHours()).slice(-2) +
+        ('0' + now.getMinutes()).slice(-2) +
+        ('0' + now.getSeconds()).slice(-2);
+    var fileName = 'DuLieuTho-' + timestamp + '.xlsx';
+
+    XLSX.writeFile(workbook, fileName);
+
+    var excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    var blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    var formData = new FormData();
+    formData.append('file', blob, 'DuLieuTho.xlsx');
+}
+function unixTimestampToDate(unixTimestamp) {
+    var date = new Date(unixTimestamp * 1000);
+    var weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+    var dayOfWeek = weekdays[date.getDay()];
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    var year = date.getFullYear();
+    var hours = ("0" + date.getHours()).slice(-2);
+    var minutes = ("0" + date.getMinutes()).slice(-2);
+    var seconds = ("0" + date.getSeconds()).slice(-2);
+    var formattedDate = dayOfWeek + ', ' + day + "-" + month + "-" + year + " " + ', ' + hours + ":" + minutes + ":" + seconds;
+    return formattedDate;
 }

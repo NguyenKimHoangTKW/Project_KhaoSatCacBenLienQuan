@@ -56,6 +56,7 @@ namespace CTDT.Models
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<thong_ke_theo_yeu_cau> thong_ke_theo_yeu_cau { get; set; }
         public virtual DbSet<tieu_de_phieu_khao_sat> tieu_de_phieu_khao_sat { get; set; }
+        public virtual DbSet<trinh_do> trinh_do { get; set; }
         public virtual DbSet<typeusers> typeusers { get; set; }
         public virtual DbSet<users> users { get; set; }
     }

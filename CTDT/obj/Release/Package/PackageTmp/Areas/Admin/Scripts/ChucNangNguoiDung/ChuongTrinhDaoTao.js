@@ -1,217 +1,384 @@
 ﻿$('.select2').select2();
+let value_check = "";
 $(document).ready(function () {
-    get_data()
-    $(document).on("click", "#btnSave", function () {
-        AddCTDT();
+    load_data();
+    $("#btnFilter").click(function (event) {
+        event.preventDefault();
+        load_data();
+    })
+    $("#bd-example-modal-lg").on("hidden.bs.modal", function () {
+        $(this).find("form").trigger("reset"); 
     });
-    $("#btnFilter").click(function () {
-        get_data()
-    });
-    $(document).on("click", "#btnEdit", function () {
-        var MaCTDT = $(this).data("id");
-        GetByID(MaCTDT);
-    });
-
-    $(document).on("click", "#btnSaveChange", function () {
-        EditCTDT();
-    });
-
-    $(document).on("click", "#btnDelete", function () {
-        var MaCTDT = $(this).data("id");
-        var TenCTDT = $(this).data("name");
-        if (confirm("Bạn có chắc muốn xóa khoa '" + TenCTDT + "' không?")) {
-            DelCTDT(MaCTDT);
+    $(document).on('input', '#ma_ctdt', function () {
+        const maxLength = 10;
+        const value = $(this).val();
+        if (value.length > maxLength) {
+            $(this).val(value.substring(0, maxLength));
         }
     });
-    $('#importExcelForm').on('submit', function (e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        Swal.fire({
-            title: 'Đang nhập dữ liệu...',
-            html: 'Vui lòng chờ.',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        $.ajax({
-            url: '/Admin/CTDT/UploadExcel',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                Swal.close();
-
-                if (response.status.includes('Thêm người dùng thành công')) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công',
-                        text: response.status,
-                    }).then(() => {
-                        $('#importExcelModal').modal('hide');
-                        LoadData(currentPage);
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: response.status,
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                Swal.close();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Đã xảy ra lỗi',
-                    text: 'Đã xảy ra lỗi: ' + error,
-                });
-            }
-        });
+    $("#bd-example-modal-lg").on("hidden.bs.modal", function () {
+        $(this).find("input, textarea, select").val("");
+        $(this).find("input[type=checkbox], input[type=radio]").prop("checked", false);
+    });
+    $('#importExcelModal').on('hidden.bs.modal', function () {
+        $(this).find('form')[0].reset();
     });
 });
-function get_data() {
-    var filterctdt = $("#FiterCTDT").val();
-    var filterkhoa = $("#FilterKhoa").val();
-    var filterhdt = $("#FilterHDT").val();
-    $('#ctdtTable').DataTable({
-
-        "processing": true,
-        "serverSide": false,
-        "autoFill": true,
-        "ajax": {
-            "url": "/Admin/CTDT/load_ctdt",
-            "type": "GET",
-            "dataSrc": "data",
-            "data": function (d) {
-                d.filctdt = filterctdt;
-                d.filkhoa = filterkhoa;
-                d.filhdt = filterhdt;
-            }
-        },
-        "columns": [
-            {
-                "data": null,
-                "render": function (data, type, row, meta) {
-                    return meta.row + 1;
-                },
-                "title": "Số Thứ Tự"
-            },
-            { "data": "id_ctdt" },
-            { "data": "ma_ctdt" },
-            { "data": "ten_khoa" },
-            { "data": "ten_ctdt" },
-            { "data": "ten_hdt" },
-            {
-                "data": "ngay_tao",
-                "render": function (data, type, row) {
-                    return unixTimestampToDate(data);
-                }
-            },
-            {
-                "data": "ngay_cap_nhat",
-                "render": function (data, type, row) {
-                    return unixTimestampToDate(data);
-                }
-            },
-            {
-                "data": null,
-                "render": function (data, type, row) {
-                    return "<button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnEdit' data-toggle='modal' data-target='#ModalEditCTDT' data-id='" + row.id_ctdt + "'><i class='anticon anticon-edit'></i></button> " +
-                        "<button class='btn btn-icon btn-hover btn-sm btn-rounded pull-right' id='btnDelete' data-id='" + row.id_ctdt + "' data-name='" + row.ten_ctdt + "'><i class='anticon anticon-delete'></i></button>";
-                },
-                "orderable": false,
-                "title": "Chức Năng"
-            }
-        ],
-        "destroy": true,
-        "language": {
-            "emptyTable": "Không có dữ liệu tồn tại, vui lòng <b>Thêm mới</b>"
-        },
-        "dom": "Bfrtip",
-        "buttons": ['csv', 'excel', 'pdf', 'print']
-    });
-}
-
-function GetByID(id) {
-    $.ajax({
-        url: '/Admin/CTDT/GetByID',
-        type: 'GET',
-        data: { id: id },
-        success: function (res) {
-            $('#Edit_MaCTDT').val(res.data.MaCTDT);
-            $('#Edit_TenCTDT').val(res.data.TenCTDT);
-            $('#Edit_Ma_Khoa').val(res.data.MaKhoa);
-            $('#change_Ngay_Tao').val(res.data.NgayTao);
-            $('#change_Ngay_Cap_Nhat').val(res.data.NgayCapNhat);
+$(document).on("click", "#btnAdd", function (event) {
+    event.preventDefault();
+    var modalfooter = $(".modal-footer");
+    $(".modal-title").text("Thêm mới chương trình đào tạo");
+    let html =
+        `
+         <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+        <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveAdd">Lưu</button>
+        `;
+    modalfooter.html(html);
+    $("#bd-example-modal-lg").modal("show");
+});
+$(document).on("click", "#btnSaveAdd", function (event) {
+    event.preventDefault();
+    add_ctdt();
+});
+$(document).on("click", "#btnEdit", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    var modalfooter = $(".modal-footer");
+    $(".modal-title").text("Thêm mới chương trình đào tạo");
+    let html =
+        `
+         <button type="button" class="btn btn-danger btn-tone m-r-5" data-dismiss="modal">Thoát</button>
+        <button type="button" class="btn btn-success btn-tone m-r-5" id="btnSaveEdit">Lưu</button>
+        `;
+    modalfooter.html(html);
+    get_info(value);
+    $("#bd-example-modal-lg").modal("show");
+    value_check = value;
+});
+$(document).on("click", "#btnSaveEdit", function (event) {
+    event.preventDefault();
+    update_ctdt(value_check);
+});
+$(document).on("click", "#btnDelete", function (event) {
+    event.preventDefault();
+    const value = $(this).data("id");
+    Swal.fire({
+        title: "Bạn đang thao tác xóa?",
+        text: "Khi xóa sẽ mất hoàn toàn dữ liệu!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có, xóa luôn!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            delete_ctdt(value);
         }
     });
-}
-function AddCTDT() {
-    var ten_ctdt = $("#ten_ctdt").val().trim();
-    var MaKhoa = $("#MaKhoa").val().trim();
-    $.ajax({
-        url: '/Admin/CTDT/Add',
+});
+$(document).on("submit", "#importExcelForm", async function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    const res = await $.ajax({
+        url: '/api/admin/upload-excel-ctdt',
         type: 'POST',
-        dataType: 'JSON',
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({
+        data: formData,
+        contentType: false,
+        processData: false
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        $('#importExcelModal').modal('hide');
+        load_data();
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+});
+async function delete_ctdt(value) {
+    const res = await $.ajax({
+        url: '/api/admin/delete-ctdt',
+        type: 'POST',
+        data: {
+            id_ctdt : value
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: res.message,
+        });
+    }
+}
+async function update_ctdt(value) {
+    const ma_ctdt = $("#ma_ctdt").val();
+    const ten_ctdt = $("#ten_ctdt").val();
+    const MaKhoa = $("#MaKhoa").val();
+    const MaHDT = $("#MaHDT").val();
+    const res = await $.ajax({
+        url: '/api/admin/cap-nhat-ctdt',
+        type: 'POST',
+        data: {
+            id_ctdt :value,
+            ma_ctdt: ma_ctdt,
             ten_ctdt: ten_ctdt,
+            id_hdt: MaHDT,
             id_khoa: MaKhoa
-        }),
-        success: function (response) {
-            alert(response.status);
-            LoadData(currentPage);
-        },
-        error: function (response) {
-            alert(response.status)
-        },
-    });
-};
-
-function EditCTDT() {
-    var TenCTDT = $('#Edit_TenCTDT').val();
-    var MaCTDT = $('#Edit_MaCTDT').val()
-    var MaKhoa = $('#Edit_Ma_Khoa').val();
-    var NgayTao = $('#change_Ngay_Tao').val();
-    var NgayCapNhat = $('#change_Ngay_Cap_Nhat').val();
-    var ctdt = {
-        id_ctdt: MaCTDT,
-        ten_ctdt: TenCTDT,
-        id_khoa: MaKhoa,
-        ngaycapnhat: NgayCapNhat,
-        ngaytao: NgayTao,
-    };
-
-    $.ajax({
-        type: 'POST',
-        url: '/Admin/CTDT/Edit',
-        dataType: 'JSON',
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(ctdt),
-        success: function (response) {
-            alert(response.status);
-            LoadData(currentPage);
         }
     });
-};
-
-function DelCTDT(id) {
-    $.ajax({
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+async function get_info(value) {
+    const res = await $.ajax({
+        url: '/api/admin/get-info-ctdt',
         type: 'POST',
-        url: '/Admin/CTDT/Delete',
-        data: { id: id },
-        success: function (response) {
-            alert(response.status);
-            LoadData(currentPage);
-        },
-        error: function (response) {
-            alert(response.status)
-        },
+        data: {
+            id_ctdt: value
+        }
     });
-};
+    $("#ma_ctdt").val(res.ma_ctdt);
+    $("#ten_ctdt").val(res.ten_ctdt);
+    $("#MaKhoa").val(res.id_khoa).trigger('change');
+    $("#MaHDT").val(res.id_hdt).trigger('change');
+}
+async function add_ctdt() {
+    const ma_ctdt = $("#ma_ctdt").val();
+    const ten_ctdt = $("#ten_ctdt").val();
+    const MaKhoa = $("#MaKhoa").val();
+    const MaHDT = $("#MaHDT").val();
+    const res = await $.ajax({
+        url: '/api/admin/them-moi-ctdt',
+        type: 'POST',
+        data: {
+            ma_ctdt: ma_ctdt,
+            ten_ctdt: ten_ctdt,
+            id_hdt: MaHDT,
+            id_khoa: MaKhoa
+        }
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_data();
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+async function load_data() {
+    const hdt = $("#FilterHDT").val();
+    const khoa = $("#FilterKhoa").val();
+    const bomon = $("#FilterBoMon").val();
+    const res = await $.ajax({
+        url: '/api/admin/danh-sach-ctdt',
+        type: 'POST',
+        data: {
+            id_khoa: khoa,
+            id_hdt: hdt,
+            id_bo_mon: bomon
+        }
+    });
+
+    const body = $("#ctdtTable");
+    let html = "";
+    if ($.fn.DataTable.isDataTable('#ctdtTable')) {
+        $('#ctdtTable').DataTable().clear().destroy();
+    }
+    if (res.success) {
+        let thead =
+            `
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">ID CTĐT</th>
+                <th scope="col">Mã CTĐT</th>
+                <th scope="col">Tên CTĐT</th>
+                <th scope="col">Thuộc đơn vị</th>
+                <th scope="col">Thuộc khoa</th>
+                <th scope="col">Thuộc bộ môn</th>
+                <th scope="col">Thuộc hệ đào tạo</th>
+                <th scope="col">Ngày Tạo</th>
+                <th scope="col">Cập nhật lần cuối</th>
+                <th scope="col">Chức năng</th>
+            </tr>
+            `;
+        body.find("thead").html(thead);
+        const data = JSON.parse(res.data);
+        data.forEach((item, index) => {
+            html +=
+                `
+                <tr>
+                    <td class="formatSo">${index + 1}</td>
+                    <td class="formatSo">${item.id_ctdt}</td>
+                    <td>${item.ma_ctdt}</td>
+                    <td>${item.ten_ctdt}</td>
+                    <td>${item.ten_don_vi}</td>
+                    <td>${item.ten_khoa}</td>
+                    <td>${item.ten_bo_mon}</td>
+                    <td>${item.ten_hedaotao}</td>
+                    <td class="formatSo">${unixTimestampToDate(item.ngaytao)}</td>
+                    <td class="formatSo">${unixTimestampToDate(item.ngaycapnhat)}</td>
+                    <td>
+                        <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" id="btnEdit" data-id="${item.id_ctdt}">
+                            <i class="anticon anticon-edit"></i>
+                        </button>
+                        <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" id="btnDelete" data-id="${item.id_ctdt}">
+                            <i class="anticon anticon-delete"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+        });
+        body.find("tbody").html(html);
+        $('#ctdtTable').DataTable({
+            pageLength: 7,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
+            searching: true,
+            autoWidth: false,
+            responsive: true,
+            language: {
+                paginate: {
+                    next: "Next",
+                    previous: "Previous"
+                },
+                search: "Search",
+                lengthMenu: "Show _MENU_ entries"
+            },
+            dom: "Bfrtip",
+            buttons: [
+                {
+                    extend: 'excel',
+                    title: 'Danh sách khoa/viện'
+                },
+                {
+                    extend: 'print',
+                    title: 'Danh sách khoa/viện'
+                }
+            ]
+        });
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }   
+}
 function unixTimestampToDate(unixTimestamp) {
     var date = new Date(unixTimestamp * 1000);
     var weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];

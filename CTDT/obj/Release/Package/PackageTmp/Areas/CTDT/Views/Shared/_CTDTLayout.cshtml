@@ -12,12 +12,20 @@
     <!-- page css -->
     <link href="~/Areas/assets/vendors/datatables/dataTables.bootstrap.min.css" rel="stylesheet">
     <link href="~/Areas/assets/vendors/select2/select2.css" rel="stylesheet" />
+    <link href="~/Areas/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <!-- Core css -->
     <link href="~/Areas/assets/css/app.min.css" rel="stylesheet" />
     <link href="~/Areas/assets/vendors/datatables/dataTables.bootstrap.min.css" rel="stylesheet">
+    <style>
+        .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+            width: 50%;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -209,10 +217,49 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/CTDT/js")
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-    function goBack() {
-        window.history.back();
-    }
+        $(document).ready(function () {
+            $("input").attr("autocomplete", "off");
+        })
+        function goBack() {
+            window.history.back();
+        }
+        $(".datetime-input").datepicker({
+            closeText: "Đóng",
+            prevText: "Trước",
+            nextText: "Sau",
+            currentText: "Hôm nay",
+            monthNames: ["Tháng một", "Tháng hai", "Tháng ba", "Tháng tư", "Tháng năm", "Tháng sáu", "Tháng bảy", "Tháng tám", "Tháng chín", "Tháng mười", "Tháng mười một", "Tháng mười hai"],
+            monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+            dayNames: ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+            dayNamesShort: ["CN", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy"],
+            dayNamesMin: ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+            weekHeader: "Tuần",
+            dateFormat: "dd/mm/yy",
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: "",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-70:+5"
+        }).datepicker("refresh");
+        $('.select2').select2();
+        function convertToTimestamp(dateStr) {
+            if (!dateStr) return null;
+
+            const parts = dateStr.split("/");
+            if (parts.length !== 3) return null;
+
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1; 
+            const year = parseInt(parts[2], 10);
+
+            const dateObj = new Date(year, month, day);
+            return Math.floor(dateObj.getTime() / 1000);
+        }
+        
     </script>
     @RenderSection("scriptsCTDT", required: false)
 </body>

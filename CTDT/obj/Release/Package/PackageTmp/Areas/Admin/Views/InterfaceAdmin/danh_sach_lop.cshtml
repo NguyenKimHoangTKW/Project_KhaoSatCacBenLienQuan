@@ -1,0 +1,132 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Danh Sách Lớp</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+                <span class="breadcrumb-item active">Danh sách Lớp</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="page-header no-gutters">
+                <div class="col-lg-12">
+                    <div class="mb-4" style="border: 1px solid #9caab9; padding: 15px; border-radius: 8px; background-color: #fcfcfc;">
+                        <p style="font-weight:bold;font-size:25px;text-align:center;color:black">DANH SÁCH LỚP</p>
+                        <div class="row items-push">
+                            <div class="col-3">
+                                <label class="form-label" style="font-size: 16px;font-weight: bold;color: #333">Tìm theo chương trình đào tạo</label>
+                                <select class="form-control select2" id="FilterCTDT">
+                                    <option value="0">Tất cả</option>
+                                    @foreach (var item in ViewBag.CTDTList)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="text-left">
+                                    <button type="submit" id="btnFilter" name="btnFilter" class="btn btn-primary btn-tone m-r-5">Tìm kiếm</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-right">
+                                    <button class="btn btn-primary m-r-5" id="btnAdd">Thêm mới</button>
+                                    <button class="btn btn-success m-r-5" data-toggle="modal" data-target="#importExcelModal">Import từ Excel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal Import Excel -->
+            <div class="modal fade" id="importExcelModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Import Lớp từ Excel</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="importExcelForm" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="excelFile">Chọn file Excel</label>
+                                    <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+                                </div>
+                                <button type="submit" class="btn btn-success btn-tone m-r-5">Upload</button>
+                                <a href="~/DataExport/Mau/MauUploadSinhVien.xlsx" download>
+                                    <button type="button" class="btn btn-info btn-tone m-r-5">Tải file mẫu</button>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal Import Excel -->
+            <!--Modal-->
+            <div class="modal fade" id="bd-example-modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title h4"></h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="anticon anticon-close"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-validation">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label control-label">Tên Lớp *</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="TenLop" placeholder="Nhập tên Lớp ... *">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label control-label" style="margin-top: 10px;">Chọn CTĐT *</label>
+                                    <div class="col-sm-10" style="margin-top: 10px;">
+                                        <select id="MaCTDT" class="form-control select2">
+                                            @foreach (var item in ViewBag.CTDTList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <!--data-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+            <!--End Modal-->
+
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="lopTable">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scriptsAdmin{
+    <script src="~/Areas/Admin/Scripts/ChucNangNguoiDung/Lop.js"></script>
+}
+
+
