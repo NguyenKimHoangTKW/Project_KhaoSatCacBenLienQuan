@@ -1,5 +1,4 @@
 ﻿$('.select2').select2();
-
 $(document).ready(function () {
     $('.select2').select2();
     load_phieu_khao_sat();
@@ -36,11 +35,17 @@ async function load_phieu_khao_sat() {
             let get_info = JSON.parse(res.info);
             surveyData = JSON.parse(res.data);
             TenPhieu = surveyData.title;
-            if (res.is_cbvc) { 
+            if (res.is_cbvc) {
                 get_tempData = TenPhieu + "_" + get_info.MaCBVC + "_" + get_info.TenCBVC;
             }
-            if (res.is_gv) {
+            else if (res.is_gv) {
                 get_tempData = TenPhieu + "_" + get_info.MaCBVC + "_" + get_info.TenCBVC;
+            }
+            else if (res.is_nh) {
+                get_tempData = TenPhieu + "_" + get_info.ma_nh + "_" + get_info.ten_nh;
+            }
+            else if (res.is_nh_co_hp) {
+                get_tempData = TenPhieu + "_" + get_info.ma_nh + "_" + get_info.ten_nh + "_" + get_info.mon_hoc + "_" + get_info.giang_vien_giang_day ;
             }
             let tempData = localStorage.getItem(get_tempData);
             tempData = tempData ? JSON.parse(tempData) : {};
@@ -64,7 +69,22 @@ async function load_phieu_khao_sat() {
                 html += `<p><b>Chức vụ</b> : ${get_info.name_chucvu}</p>`;
                 html += `<p><b>Thuộc đơn vị</b> : ${get_info.ten_khoa}</p>`;
                 html += `<p><b>Ngành đào tạo</b> : ${get_info.nganh_dao_tao}</p>`;
-                html += `<p><b>Khảo sát cho CTĐT</b> : ${get_info.khao_sat_cho}</p>`;
+                html += `<p><b>Khảo sát cho chương trình đào tạo</b> : ${get_info.khao_sat_cho}</p>`;
+            }
+            else if (res.is_nh) {
+                html += `<p><b>Mã người học</b> : ${get_info.ma_nh}</p>`;
+                html += `<p><b>Tên người học</b> : ${get_info.ten_nh}</p>`;
+                html += `<p><b>Thuộc lớp</b> : ${get_info.thuoc_lop}</p>`;
+                html += `<p><b>Thuộc chương trình đào tạo</b> : ${get_info.thuoc_ctdt}</p>`;
+            }
+            else if (res.is_nh_co_hp) {
+                html += `<p><b>Mã người học</b> : ${get_info.ma_nh}</p>`;
+                html += `<p><b>Tên người học</b> : ${get_info.ten_nh}</p>`;
+                html += `<p><b>Học phần</b> : ${get_info.hoc_phan}</p>`;
+                html += `<p><b>Mã môn học</b> : ${get_info.ma_mh}</p>`;
+                html += `<p><b>Tên môn học</b> : ${get_info.mon_hoc}</p>`;
+                html += `<p><b>Lớp</b> : ${get_info.lop}</p>`;
+                html += `<p><b>Giảng viên giảng dạy</b> : ${get_info.giang_vien_giang_day}</p>`;
             }
             html += `<hr />
                 <form>
@@ -86,88 +106,12 @@ async function load_phieu_khao_sat() {
                             html += `
                                 <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
                                     <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" placeholder="Vui lòng điền ${element.title} tại đây!" value="${luutru || ''}">
+                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" autocomplete="off" placeholder="Vui lòng điền ${element.title} tại đây!" value="${luutru || ''}">
                                     <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
                                 </div>
                             `;
                             break;
-                        //Load Thông tin người học
-                        case 'NameSV':
-                            html += `
-                                <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
-                                    <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].ten_nguoi_hoc}">
-                                    <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
-                                </div>
-                            `;
-                            break;
-                        case 'MSSV':
-                            html += `
-                                <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
-                                    <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].ma_nguoi_hoc}">
-                                    <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
-                                </div>
-                            `;
-                            break;
-                        case 'Khoa':
-                            html += `
-                                <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
-                                    <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].khoa}">
-                                    <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
-                                </div>
-                            `;
-                            break;
-                        case 'NganhDaoTao':
-                            html += `
-                                <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
-                                    <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].ctdt}">
-                                    <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
-                                </div>
-                            `;
-                            break;
-                        // Load thông tin CBVC
-                        case 'NameCBVC':
-                            html += `
-                                <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
-                                    <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].ten_cbvc}">
-                                    <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
-                                </div>
-                            `;
-                            break;
-                        case 'DonViCBVC':
-                            html += `
-                                <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
-                                    <label for="${element.name}">${element.title} <span style="color : ${css_required};">*</span> </label>
-                                    <input type="text" class="form-control input-bottom-border" id="${element.name}" name="${element.name}" value="${get_info[0].don_vi}">
-                                    <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
-                                </div>
-                            `;
-                            break;
-                        case 'ChucDanhCBVC':
-                            html += `
-                                <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
-                                    <label for="industry">${element.title}</label>
-                                    <select class="form-control input-bottom-border select2" id="industry" name="${element.name}">
-                            `;
-                            var selectedChucVu = get_info[0].chuc_vu;
-                            element.choices.forEach(function (choice) {
-                                let selected = (choice.text === selectedChucVu) ? 'selected' : '';
-                                html += `
-                                    <option value="${choice.name}" ${selected}>${choice.text}</option>
-                                `;
-                            });
-
-                            html += `
-                                    </select>
-                                    <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
-                                </div>
-                            `;
-                            break;
-
+                      
                         case 'radiogroup':
                             var isHorizontal = element.choices.length >= 5;
                             var layoutClass = isHorizontal ? 'horizontal-group d-flex justify-content-between' : '';
@@ -229,7 +173,7 @@ async function load_phieu_khao_sat() {
                             html += `
                                 <div class="form-group" id="group-${element.name}" style="display: ${visible ? 'block' : 'none'};">
                                     <label for="suggestions">${element.title}</label>
-                                    <textarea class="form-control input-bottom-border" id="${element.name}" name="${element.name}" rows="4" placeholder="Vui lòng điền ${element.title} tại đây!">${luutru || ''}</textarea>
+                                    <textarea class="form-control input-bottom-border" autocomplete="off" id="${element.name}" name="${element.name}" rows="4" placeholder="Vui lòng điền ${element.title} tại đây!">${luutru || ''}</textarea>
                                     <p style="color: red;font-style: italic;text-align: right;display :none" class="error_${element.name}"></p>
                                 </div>
                             `;

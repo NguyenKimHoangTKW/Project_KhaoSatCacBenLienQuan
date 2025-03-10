@@ -46,8 +46,8 @@ namespace CTDT
             );
             routes.MapRoute(
                name: "XacThucMonHoc",
-               url: "xac-thuc-mon-hoc",
-               defaults: new { controller = "InterfaceClient", action = "Xac_thuc_mon_hoc" }
+               url: "xac-thuc-mon-hoc/{id}",
+               defaults: new { controller = "InterfaceClient", action = "Xac_thuc_mon_hoc", id = UrlParameter.Optional }
             );
             routes.MapRoute(
                 name: "Default",

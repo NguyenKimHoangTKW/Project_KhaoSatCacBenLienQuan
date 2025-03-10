@@ -1,5 +1,6 @@
 ﻿using CTDT.Helper;
 using CTDT.Models;
+using GoogleApi.Entities.Search.Video.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,8 +59,9 @@ namespace CTDT.Controllers
             return View();
         }
         [CheckLoginHelper]
-        public ActionResult Xac_thuc_mon_hoc()
+        public ActionResult Xac_thuc_mon_hoc(int id)
         {
+            ViewBag.Id = id;
             return View();
         }
         [CheckLoginHelper]

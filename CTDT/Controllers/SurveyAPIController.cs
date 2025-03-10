@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Globalization;
 using System.Linq;
 using System.Management;
@@ -41,7 +42,7 @@ namespace CTDT.Controllers
             var js_data = get_data.surveyData;
             if (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
-                if(get_data.id_loaikhaosat == 3)
+                if (get_data.id_loaikhaosat == 3)
                 {
                     var get_value = (int)HttpContext.Current.Session["id_cbvc_ks"];
                     var get_ctdt = (int)HttpContext.Current.Session["id_cbvc_ks_ctdt"];
@@ -78,7 +79,39 @@ namespace CTDT.Controllers
                         .FirstOrDefaultAsync();
                     return Ok(new { data = js_data, info = JsonConvert.SerializeObject(cbvc), success = true, is_cbvc = true });
                 }
-              
+            }
+            else if (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+            {
+                var get_value = (int)HttpContext.Current.Session["id_nghoc_ks"];
+                var nguoi_hoc_khao_sat = await db.nguoi_hoc_khao_sat
+                    .Where(x => x.id_nguoi_hoc_khao_sat == get_value)
+                    .Select(x => new
+                    {
+                        ma_nh = x.sinhvien.ma_sv,
+                        ten_nh = x.sinhvien.hovaten,
+                        thuoc_lop = x.sinhvien.lop.ma_lop,
+                        thuoc_ctdt = x.sinhvien.lop.ctdt.ten_ctdt
+                    })
+                    .FirstOrDefaultAsync();
+                return Ok(new { data = js_data, info = JsonConvert.SerializeObject(nguoi_hoc_khao_sat), success = true, is_nh = true });
+            }
+            else if (get_data.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+            {
+                var get_value = (int)HttpContext.Current.Session["id_nh_co_hp_ks"];
+                var nguoi_hoc_co_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan
+                    .Where(x => x.id_nguoi_hoc_by_hoc_phan == get_value)
+                    .Select(x => new
+                    {
+                        ma_nh = x.sinhvien.ma_sv,
+                        ten_nh = x.sinhvien.hovaten,
+                        hoc_phan = x.mon_hoc.hoc_phan.ten_hoc_phan,
+                        ma_mh = x.mon_hoc.ma_mon_hoc,
+                        mon_hoc = x.mon_hoc.ten_mon_hoc,
+                        lop = x.mon_hoc.id_lop != null ? x.mon_hoc.lop.ma_lop : "",
+                        giang_vien_giang_day = x.CanBoVienChuc.TenCBVC
+                    })
+                    .FirstOrDefaultAsync();
+                return Ok(new { data = js_data, info = JsonConvert.SerializeObject(nguoi_hoc_co_hoc_phan), success = true, is_nh_co_hp = true });
             }
             return Ok(new { message = "Vui lòng xác thực để thực hiện khảo sát" });
         }
@@ -95,14 +128,14 @@ namespace CTDT.Controllers
             answer_response aw = null;
             if (survey == null)
             {
-                return Ok(new {message = "Biểu mẫu không tồn tại",success = false});
+                return Ok(new { message = "Biểu mẫu không tồn tại", success = false });
             }
 
             if (ModelState.IsValid)
             {
-                if(survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
+                if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
                 {
-                    if(survey.id_loaikhaosat == 3)
+                    if (survey.id_loaikhaosat == 3)
                     {
                         var get_value = (int)HttpContext.Current.Session["id_cbvc_ks"];
                         var get_ctdt = (int)HttpContext.Current.Session["id_cbvc_ks_ctdt"];
@@ -137,8 +170,42 @@ namespace CTDT.Controllers
                         };
                     }
                 }
+                else if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+                {
+                    var get_value = (int)HttpContext.Current.Session["id_nghoc_ks"];
+                    var nguoi_hoc = await db.nguoi_hoc_khao_sat
+                        .FirstOrDefaultAsync(x => x.surveyID == saveForm.idsurvey && x.id_nguoi_hoc_khao_sat == get_value);
+                    aw = new answer_response()
+                    {
+                        time = unixTimestamp,
+                        id_users = user.id_users,
+                        id_namhoc = survey.id_namhoc,
+                        id_nguoi_hoc_khao_sat = nguoi_hoc.id_nguoi_hoc_khao_sat,
+                        surveyID = survey.surveyID,
+                        json_answer = saveForm.json_answer
+                    };
+                }
+                else if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+                {
+                    var get_value = (int)HttpContext.Current.Session["id_nh_co_hp_ks"];
+                    var get_nhchp = await db.nguoi_hoc_dang_co_hoc_phan
+                        .FirstOrDefaultAsync(x => x.surveyID == saveForm.idsurvey && x.id_nguoi_hoc_by_hoc_phan == get_value);
+                    aw = new answer_response()
+                    {
+                        time = unixTimestamp,
+                        id_users = user.id_users,
+                        id_namhoc = survey.id_namhoc,
+                        id_nguoi_hoc_co_hp_khao_sat = get_nhchp.id_nguoi_hoc_by_hoc_phan,
+                        surveyID = survey.surveyID,
+                        json_answer = saveForm.json_answer
+                    };
+                }
                 db.answer_response.Add(aw);
                 await db.SaveChangesAsync();
+                HttpContext.Current.Session.Remove("id_nghoc_ks");
+                HttpContext.Current.Session.Remove("id_cbvc_ks");
+                HttpContext.Current.Session.Remove("id_cbvc_ks_ctdt");
+                HttpContext.Current.Session.Remove("id_nh_co_hp_ks");
                 return Ok(new { success = true, message = "Khảo sát thành công" });
             }
             return Ok(new { message = "Không thể lưu khảo sát", success = false });
@@ -151,62 +218,98 @@ namespace CTDT.Controllers
             var answer_responses = await db.answer_response
                 .FirstOrDefaultAsync(x => x.id == loadAnswerPKS.id_answer && x.surveyID == loadAnswerPKS.id_survey);
             var list_info = new List<dynamic>();
-            switch (answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat)
+            if (answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
             {
-                case "Phiếu người học":
-                    var data_hoc_vien = new
-                    {
-                        phieu_khao_sat = answer_responses.survey.surveyData,
-                        dap_an = answer_responses.json_answer
-                    };
-                    list_info.Add(new
-                    {
-                        email = answer_responses.users.email,
-                        ten_nguoi_hoc = answer_responses.sinhvien.hovaten,
-                        ma_nguoi_hoc = answer_responses.sinhvien.ma_sv,
-                        lop = answer_responses.sinhvien.lop.ma_lop,
-                        ctdt = answer_responses.ctdt.ten_ctdt,
-                        khao_sat_lan_cuoi = answer_responses.time
-                    });
-                    return Ok(new { data = data_hoc_vien, info = list_info, is_nguoi_hoc = true });
-                case "Phiếu giảng viên":
-                    var data_cbvc = new
-                    {
-                        phieu_khao_sat = answer_responses.survey.surveyData,
-                        dap_an = answer_responses.json_answer
-                    };
-
-                    return Ok(new { data = data_cbvc, info = list_info });
-
-                case "Phiếu doanh nghiệp":
-                    var data_doanh_nghiep = new
-                    {
-                        phieu_khao_sat = answer_responses.survey.surveyData,
-                        dap_an = answer_responses.json_answer
-                    };
-                    return Ok(new { data = data_doanh_nghiep, info = list_info });
-
-                case "Phiếu người học có học phần":
-                    var data_ho_vien_mon_hoc = new
-                    {
-                        phieu_khao_sat = answer_responses.survey.surveyData,
-                        dap_an = answer_responses.json_answer
-                    };
-                    list_info.Add(new
-                    {
-                        email = answer_responses.users.email,
-                        ten_nguoi_hoc = answer_responses.sinhvien.hovaten,
-                        ma_nguoi_hoc = answer_responses.sinhvien.ma_sv,
-                        lop = answer_responses.sinhvien.lop.ma_lop,
-                        ctdt = answer_responses.ctdt.ten_ctdt,
-                        mon_hoc = answer_responses.mon_hoc.ten_mon_hoc,
-                        hoc_phan = answer_responses.mon_hoc.hoc_phan.ten_hoc_phan,
-                        ten_giang_vien = answer_responses.CanBoVienChuc.TenCBVC,
-                        khao_sat_lan_cuoi = answer_responses.time
-                    });
-                    return Ok(new { data = data_ho_vien_mon_hoc, info = list_info, is_hoc_phan_nguoi_hoc = true });
+                var data_hoc_vien = new
+                {
+                    phieu_khao_sat = answer_responses.survey.surveyData,
+                    dap_an = answer_responses.json_answer
+                };
+                list_info.Add(new
+                {
+                    ten_nh = answer_responses.nguoi_hoc_khao_sat.sinhvien.hovaten,
+                    ma_nh = answer_responses.nguoi_hoc_khao_sat.sinhvien.ma_sv,
+                    thuoc_lop = answer_responses.nguoi_hoc_khao_sat.sinhvien.lop.ma_lop,
+                    thuoc_ctdt = answer_responses.nguoi_hoc_khao_sat.sinhvien.lop.ctdt.ten_ctdt,
+                    khao_sat_lan_cuoi = answer_responses.time
+                });
+                return Ok(new { data = data_hoc_vien, info = JsonConvert.SerializeObject(list_info), success = true, is_nh = true });
             }
-            return BadRequest();
+            else if (answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
+            {
+                var data_cbvc = new
+                {
+                    phieu_khao_sat = answer_responses.survey.surveyData,
+                    dap_an = answer_responses.json_answer
+                };
+                if (answer_responses.survey.id_loaikhaosat == 3)
+                {
+                    list_info.Add(new
+                    {
+                        MaCBVC = answer_responses.cbvc_khao_sat.CanBoVienChuc.MaCBVC,
+                        TenCBVC = answer_responses.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
+                        ten_trinh_do = answer_responses.cbvc_khao_sat.CanBoVienChuc.trinh_do.ten_trinh_do,
+                        name_chucvu = answer_responses.cbvc_khao_sat.CanBoVienChuc.ChucVu.name_chucvu,
+                        ten_khoa = answer_responses.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong.ten_khoa,
+                        nganh_dao_tao = answer_responses.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao,
+                        khao_sat_cho = answer_responses.ctdt.ten_ctdt,
+                        khao_sat_lan_cuoi = answer_responses.time
+                    });
+                    return Ok(new { data = data_cbvc, info = JsonConvert.SerializeObject(list_info), success = true, is_gv = true });
+                }
+                else
+                {
+                    list_info.Add(new
+                    {
+                        MaCBVC = answer_responses.cbvc_khao_sat.CanBoVienChuc.MaCBVC,
+                        TenCBVC = answer_responses.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
+                        ten_trinh_do = answer_responses.cbvc_khao_sat.CanBoVienChuc.trinh_do.ten_trinh_do,
+                        name_chucvu = answer_responses.cbvc_khao_sat.CanBoVienChuc.ChucVu.name_chucvu,
+                        ten_khoa = answer_responses.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong.ten_khoa,
+                        nganh_dao_tao = answer_responses.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao,
+                        khao_sat_lan_cuoi = answer_responses.time
+                    });
+                    return Ok(new { data = data_cbvc, info = JsonConvert.SerializeObject(list_info), success = true, is_cbvc = true });
+                }
+            }
+            else if (answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
+            {
+                var data_doanh_nghiep = new
+                {
+                    phieu_khao_sat = answer_responses.survey.surveyData,
+                    dap_an = answer_responses.json_answer
+                };
+                list_info.Add(new
+                {
+                    user_ks = answer_responses.users.firstName + " " + answer_responses.users.lastName,
+                    email_ks = answer_responses.email,
+                    khao_sat_cho = answer_responses.ctdt.ten_ctdt,
+                    khao_sat_lan_cuoi = answer_responses.time
+                });
+                return Ok(new { data = data_doanh_nghiep, info = JsonConvert.SerializeObject(list_info), success = true, is_dn = true });
+            }
+            else if (answer_responses.survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+            {
+                var data_ho_vien_mon_hoc = new
+                {
+                    phieu_khao_sat = answer_responses.survey.surveyData,
+                    dap_an = answer_responses.json_answer
+                };
+                list_info.Add(new
+                {
+                    test = answer_responses.id_nguoi_hoc_co_hp_khao_sat,
+                    ma_nh = answer_responses.nguoi_hoc_dang_co_hoc_phan.sinhvien.ma_sv,
+                    ten_nh = answer_responses.nguoi_hoc_dang_co_hoc_phan.sinhvien.hovaten,
+                    hoc_phan = answer_responses.nguoi_hoc_dang_co_hoc_phan.mon_hoc.hoc_phan.ten_hoc_phan,
+                    ma_mh = answer_responses.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ma_mon_hoc,
+                    mon_hoc = answer_responses.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ten_mon_hoc,
+                    lop = answer_responses.nguoi_hoc_dang_co_hoc_phan.mon_hoc.id_lop != null ? answer_responses.nguoi_hoc_dang_co_hoc_phan.mon_hoc.lop.ma_lop : "",
+                    giang_vien_giang_day = answer_responses.nguoi_hoc_dang_co_hoc_phan.CanBoVienChuc.TenCBVC,
+                    khao_sat_lan_cuoi = answer_responses.time
+                });
+                return Ok(new { data = data_ho_vien_mon_hoc, info = JsonConvert.SerializeObject(list_info), success = true, is_hoc_phan_nguoi_hoc = true });
+            }
+            return Ok(new { message = "Không thể xác thực, vui lòng thử lại sau", success = false });
         }
         [HttpPost]
         [Route("api/save_answer_form")]
