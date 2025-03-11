@@ -114,21 +114,6 @@ namespace CTDT.Areas.Admin.Controllers
             {
                 check_answer = check_answer.Where(x => x.id_ctdt == aw.id_ctdt);
             }
-            if (aw.id_lop != null)
-            {
-                check_answer = check_answer.Where(x => x.sinhvien.lop.id_lop == aw.id_lop);
-            }
-
-            if (aw.id_mh != null)
-            {
-                check_answer = check_answer.Where(x => x.id_mh == aw.id_mh);
-            }
-
-            if (aw.id_CBVC != null)
-            {
-                check_answer = check_answer.Where(x => x.id_CBVC == aw.id_CBVC);
-            }
-
             if (aw.from_date != null && aw.to_date != null)
             {
                 check_answer = check_answer.Where(x => x.time >= aw.from_date && x.time <= aw.to_date);
@@ -196,14 +181,14 @@ namespace CTDT.Areas.Admin.Controllers
                     count_mon_hoc = count_mon_hoc
                         .Where(x => x.sinhvien.id_lop == aw.id_lop).ToList();
                     count_da_tra_loi = count_da_tra_loi
-                        .Where(x => x.sinhvien.id_lop == aw.id_lop).ToList();
+                        .Where(x => x.nguoi_hoc_dang_co_hoc_phan.sinhvien.id_lop == aw.id_lop).ToList();
                 }
                 if (aw.id_ctdt != null)
                 {
                     count_mon_hoc = count_mon_hoc
                         .Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt).ToList();
                     count_da_tra_loi = count_da_tra_loi
-                        .Where(x => x.sinhvien.lop.id_ctdt == aw.id_ctdt).ToList();
+                        .Where(x => x.nguoi_hoc_dang_co_hoc_phan.sinhvien.lop.id_ctdt == aw.id_ctdt).ToList();
                     get_ctdt = await db.ctdt.Where(x => x.id_ctdt == aw.id_ctdt).Select(x => x.ten_ctdt).FirstOrDefaultAsync();
                 }
                 if (aw.id_mh != null)
@@ -211,14 +196,14 @@ namespace CTDT.Areas.Admin.Controllers
                     count_mon_hoc = count_mon_hoc
                         .Where(x => x.id_mon_hoc == aw.id_mh).ToList();
                     count_da_tra_loi = count_da_tra_loi
-                        .Where(x => x.id_mh == aw.id_mh).ToList();
+                        .Where(x => x.nguoi_hoc_dang_co_hoc_phan.id_mon_hoc == aw.id_mh).ToList();
                 }
                 if (aw.id_CBVC != null)
                 {
                     count_mon_hoc = count_mon_hoc
                         .Where(x => x.id_giang_vvien == aw.id_CBVC).ToList();
                     count_da_tra_loi = count_da_tra_loi
-                        .Where(x => x.id_CBVC == aw.id_CBVC).ToList();
+                        .Where(x => x.nguoi_hoc_dang_co_hoc_phan.id_giang_vvien == aw.id_CBVC).ToList();
                 }
 
 
@@ -947,36 +932,9 @@ namespace CTDT.Areas.Admin.Controllers
             bool is_student = false;
             bool is_staff = false;
             bool is_program = false;
+            bool is_gv = false;
             List<JObject> surveyData = new List<JObject>();
 
-            if (aw.id_hdt != null)
-            {
-                query = query.Where(x => x.ctdt.id_hdt == aw.id_hdt);
-            }
-
-            if (aw.id_ctdt != null)
-            {
-                query = query.Where(x => x.id_ctdt == aw.id_ctdt);
-            }
-
-            if (aw.id_lop != null)
-            {
-                query = query.Where(x => x.sinhvien.lop.id_lop == aw.id_lop);
-            }
-
-            if (aw.id_mh != null)
-            {
-                query = query.Where(x => x.id_mh == aw.id_mh);
-            }
-
-            if (aw.id_CBVC != null)
-            {
-                query = query.Where(x => x.id_CBVC == aw.id_CBVC);
-            }
-            if (aw.from_date != null && aw.to_date != null)
-            {
-                query = query.Where(x => x.time >= aw.from_date && x.time <= aw.to_date);
-            }
             if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 3)
             {
                 is_subject = true;
@@ -986,28 +944,26 @@ namespace CTDT.Areas.Admin.Controllers
                               DauThoiGian = x.time,
                               x.json_answer,
                               Email = x.users.email,
-                              MonHoc = x.mon_hoc.ten_mon_hoc,
-                              GiangVien = x.CanBoVienChuc.TenCBVC,
-                              MSSV = x.sinhvien.ma_sv,
-                              HoTen = x.sinhvien.hovaten,
-                              NgaySinh = (DateTime?)x.sinhvien.ngaysinh,
-                              Lop = x.sinhvien.lop.ma_lop,
-                              CTDT = x.ctdt.ten_ctdt,
-                              SDT = x.sinhvien.sodienthoai,
+                              ma_nh = x.nguoi_hoc_dang_co_hoc_phan.sinhvien.ma_sv,
+                              ten_nh = x.nguoi_hoc_dang_co_hoc_phan.sinhvien.hovaten,
+                              hoc_phan = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.hoc_phan.ten_hoc_phan,
+                              ma_mh = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ma_mon_hoc,
+                              mon_hoc = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ten_mon_hoc,
+                              lop = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.id_lop != null ? x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.lop.ma_lop : "",
+                              giang_vien_giang_day = x.nguoi_hoc_dang_co_hoc_phan.CanBoVienChuc.TenCBVC
                           }).ToList();
                 foreach (var answer in answers)
                 {
                     JObject answerObject = JObject.Parse(answer.json_answer);
                     answerObject["DauThoiGian"] = answer.DauThoiGian;
                     answerObject["Email"] = answer.Email;
-                    answerObject["MonHoc"] = answer.MonHoc;
-                    answerObject["GiangVien"] = answer.GiangVien;
-                    answerObject["MSSV"] = answer.MSSV;
-                    answerObject["HoTen"] = answer.HoTen;
-                    answerObject["NgaySinh"] = answer.NgaySinh?.ToString("dd-MM-yyyy");
-                    answerObject["Lop"] = answer.Lop;
-                    answerObject["CTDT"] = answer.CTDT;
-                    answerObject["SDT"] = answer.SDT;
+                    answerObject["MaNH"] = answer.ma_nh;
+                    answerObject["TenNH"] = answer.ten_nh;
+                    answerObject["HocPhan"] = answer.hoc_phan;
+                    answerObject["MaMH"] = answer.ma_mh;
+                    answerObject["TenMH"] = answer.mon_hoc;
+                    answerObject["Lop"] = answer.lop;
+                    answerObject["GiangVienGiangDay"] = answer.giang_vien_giang_day;
                     surveyData.Add(answerObject);
                 }
             }
@@ -1020,24 +976,20 @@ namespace CTDT.Areas.Admin.Controllers
                               DauThoiGian = x.time,
                               x.json_answer,
                               Email = x.users.email,
-                              MSSV = x.sinhvien.ma_sv,
-                              HoTen = x.sinhvien.hovaten,
-                              NgaySinh = (DateTime?)x.sinhvien.ngaysinh,
-                              Lop = x.sinhvien.lop.ma_lop,
-                              CTDT = x.ctdt.ten_ctdt,
-                              SDT = x.sinhvien.sodienthoai,
+                              ma_nh = x.nguoi_hoc_khao_sat.sinhvien.ma_sv,
+                              ten_nh = x.nguoi_hoc_khao_sat.sinhvien.hovaten,
+                              thuoc_lop = x.nguoi_hoc_khao_sat.sinhvien.lop.ma_lop,
+                              thuoc_ctdt = x.nguoi_hoc_khao_sat.sinhvien.lop.ctdt.ten_ctdt
                           }).ToList();
                 foreach (var answer in answers)
                 {
                     JObject answerObject = JObject.Parse(answer.json_answer);
                     answerObject["DauThoiGian"] = answer.DauThoiGian;
                     answerObject["Email"] = answer.Email;
-                    answerObject["MSSV"] = answer.MSSV;
-                    answerObject["HoTen"] = answer.HoTen;
-                    answerObject["NgaySinh"] = answer.NgaySinh?.ToString("dd-MM-yyyy");
-                    answerObject["Lop"] = answer.Lop;
-                    answerObject["CTDT"] = answer.CTDT;
-                    answerObject["SDT"] = answer.SDT;
+                    answerObject["MaNH"] = answer.ma_nh;
+                    answerObject["TenNH"] = answer.ten_nh;
+                    answerObject["ThuocLop"] = answer.thuoc_lop;
+                    answerObject["ThuocCTDT"] = answer.thuoc_ctdt;
                     surveyData.Add(answerObject);
                 }
             }
@@ -1064,30 +1016,75 @@ namespace CTDT.Areas.Admin.Controllers
             }
             else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 2)
             {
-                is_staff = true;
-                var answers = query
-                         .Select(x => new
-                         {
-                             DauThoiGian = x.time,
-                             x.json_answer,
-                             HoTen = x.CanBoVienChuc.TenCBVC,
-                             Email = x.users.email,
-                             KhaoSatCTDT = x.ctdt.ten_ctdt,
-                             DonVi = x.DonVi.name_donvi,
-                             ChucDanh = x.CanBoVienChuc.ChucVu.name_chucvu,
-                         }).ToList();
-
-                foreach (var answer in answers)
+                if(check_group_pks.id_loaikhaosat == 3)
                 {
-                    JObject answerObject = JObject.Parse(answer.json_answer);
-                    answerObject["DauThoiGian"] = answer.DauThoiGian;
-                    answerObject["Email"] = answer.Email;
-                    answerObject["HoTen"] = answer.HoTen;
-                    answerObject["KhaoSatCTDT"] = answer.KhaoSatCTDT;
-                    answerObject["DonVi"] = answer.DonVi;
-                    answerObject["ChucDanh"] = answer.ChucDanh;
-                    surveyData.Add(answerObject);
+                    is_gv = true;
+                    var answers = query
+                             .Select(x => new
+                             {
+                                 DauThoiGian = x.time,
+                                 x.json_answer,
+                                 Email = x.users.email,
+                                 ma_vien_chuc = x.cbvc_khao_sat.CanBoVienChuc.MaCBVC != null ? x.cbvc_khao_sat.CanBoVienChuc.MaCBVC :"",
+                                 ten_vien_chuc = x.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
+                                 trinh_do = x.cbvc_khao_sat.CanBoVienChuc.id_trinh_do != null ? x.cbvc_khao_sat.CanBoVienChuc.trinh_do.ten_trinh_do : "",
+                                 chuc_vu = x.cbvc_khao_sat.CanBoVienChuc.id_chucvu != null ? x.cbvc_khao_sat.CanBoVienChuc.ChucVu.name_chucvu : "",
+                                 don_vi = x.cbvc_khao_sat.CanBoVienChuc.id_don_vi != null ? x.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong.ten_khoa : "",
+                                 bo_mon = x.cbvc_khao_sat.CanBoVienChuc.id_bo_mon != null ? x.cbvc_khao_sat.CanBoVienChuc.bo_mon.ten_bo_mon : "",
+                                 nganh_dao_tao = x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao != null ? x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao : "",
+                                 KhaoSatCTDT = x.ctdt.ten_ctdt,
+                             }).ToList();
+
+                    foreach (var answer in answers)
+                    {
+                        JObject answerObject = JObject.Parse(answer.json_answer);
+                        answerObject["DauThoiGian"] = answer.DauThoiGian;
+                        answerObject["Email"] = answer.Email;
+                        answerObject["MaVienChuc"] = answer.ma_vien_chuc;
+                        answerObject["TenVienChuc"] = answer.ten_vien_chuc;
+                        answerObject["TrinhDo"] = answer.trinh_do;
+                        answerObject["ChucVu"] = answer.chuc_vu;
+                        answerObject["DonVi"] = answer.don_vi;
+                        answerObject["BoMon"] = answer.bo_mon;
+                        answerObject["NganhDaoTao"] = answer.nganh_dao_tao;
+                        answerObject["KhaoSatCTDT"] = answer.KhaoSatCTDT;
+                        surveyData.Add(answerObject);
+                    }
                 }
+                else if(check_group_pks.id_loaikhaosat == 8)
+                {
+                    is_staff = true;
+                    var answers = query
+                             .Select(x => new
+                             {
+                                 DauThoiGian = x.time,
+                                 x.json_answer,
+                                 Email = x.users.email,
+                                 ma_vien_chuc = x.cbvc_khao_sat.CanBoVienChuc.MaCBVC != null ? x.cbvc_khao_sat.CanBoVienChuc.MaCBVC : "",
+                                 ten_vien_chuc = x.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
+                                 trinh_do = x.cbvc_khao_sat.CanBoVienChuc.id_trinh_do != null ? x.cbvc_khao_sat.CanBoVienChuc.trinh_do.ten_trinh_do : "",
+                                 chuc_vu = x.cbvc_khao_sat.CanBoVienChuc.id_chucvu != null ? x.cbvc_khao_sat.CanBoVienChuc.ChucVu.name_chucvu : "",
+                                 don_vi = x.cbvc_khao_sat.CanBoVienChuc.id_don_vi != null ? x.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong.ten_khoa : "",
+                                 bo_mon = x.cbvc_khao_sat.CanBoVienChuc.id_bo_mon != null ? x.cbvc_khao_sat.CanBoVienChuc.bo_mon.ten_bo_mon : "",
+                                 nganh_dao_tao = x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao != null ? x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao : "",
+                             }).ToList();
+
+                    foreach (var answer in answers)
+                    {
+                        JObject answerObject = JObject.Parse(answer.json_answer);
+                        answerObject["DauThoiGian"] = answer.DauThoiGian;
+                        answerObject["Email"] = answer.Email;
+                        answerObject["MaVienChuc"] = answer.ma_vien_chuc;
+                        answerObject["TenVienChuc"] = answer.ten_vien_chuc;
+                        answerObject["TrinhDo"] = answer.trinh_do;
+                        answerObject["ChucVu"] = answer.chuc_vu;
+                        answerObject["DonVi"] = answer.don_vi;
+                        answerObject["BoMon"] = answer.bo_mon;
+                        answerObject["NganhDaoTao"] = answer.nganh_dao_tao;
+                        surveyData.Add(answerObject);
+                    }
+                }
+                
             }
             if (surveyData.Count > 0)
             {
@@ -1106,6 +1103,10 @@ namespace CTDT.Areas.Admin.Controllers
                 else if (is_staff)
                 {
                     return Ok(new { data = surveyData, success = true, is_staff = true });
+                }
+                else if (is_gv)
+                {
+                    return Ok(new { data = surveyData, success = true, is_gv = true });
                 }
             }
             return Ok(new { message = "Không tìm thấy dữ liệu", success = false });

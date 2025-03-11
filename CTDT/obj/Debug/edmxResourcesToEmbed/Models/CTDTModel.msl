@@ -12,12 +12,7 @@
           <ScalarProperty Name="id_nguoi_hoc_co_hp_khao_sat" ColumnName="id_nguoi_hoc_co_hp_khao_sat" />
           <ScalarProperty Name="id_nguoi_hoc_khao_sat" ColumnName="id_nguoi_hoc_khao_sat" />
           <ScalarProperty Name="id_cbvc_khao_sat" ColumnName="id_cbvc_khao_sat" />
-          <ScalarProperty Name="id_sv" ColumnName="id_sv" />
-          <ScalarProperty Name="id_mh" ColumnName="id_mh" />
           <ScalarProperty Name="id_users" ColumnName="id_users" />
-          <ScalarProperty Name="id_hk" ColumnName="id_hk" />
-          <ScalarProperty Name="id_CBVC" ColumnName="id_CBVC" />
-          <ScalarProperty Name="id_donvi" ColumnName="id_donvi" />
           <ScalarProperty Name="surveyID" ColumnName="surveyID" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
@@ -153,6 +148,8 @@
     <EntitySetMapping Name="hedaotao">
       <EntityTypeMapping TypeName="dbSurveyModel.hedaotao">
         <MappingFragment StoreEntitySet="hedaotao">
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="describe" ColumnName="describe" />
           <ScalarProperty Name="ten_hedaotao" ColumnName="ten_hedaotao" />
           <ScalarProperty Name="id_hedaotao" ColumnName="id_hedaotao" />
         </MappingFragment>
@@ -352,6 +349,17 @@
           <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
           <ScalarProperty Name="principal_id" ColumnName="principal_id" />
           <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="thong_bao_loi">
+      <EntityTypeMapping TypeName="dbSurveyModel.thong_bao_loi">
+        <MappingFragment StoreEntitySet="thong_bao_loi">
+          <ScalarProperty Name="ngay_khac_phuc" ColumnName="ngay_khac_phuc" />
+          <ScalarProperty Name="ngay_gui_loi" ColumnName="ngay_gui_loi" />
+          <ScalarProperty Name="noi_dung_ma_loi" ColumnName="noi_dung_ma_loi" />
+          <ScalarProperty Name="tieu_de_ma_loi" ColumnName="tieu_de_ma_loi" />
+          <ScalarProperty Name="id_ma_loi" ColumnName="id_ma_loi" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

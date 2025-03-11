@@ -47,10 +47,9 @@ async function load_chi_tiet_update() {
     const res = await $.ajax({
         url: "/api/admin/get-info-survey",
         type: "POST",
-        data: {
-            surveyID: value
-        }
+        data: { surveyID: value }
     });
+
     if (res.success) {
         const item = res.data;
         $("#TieuDe").val(item.surveyTitle);
@@ -61,12 +60,17 @@ async function load_chi_tiet_update() {
         $("#TrangThai").val(item.surveyStatus);
         $("#DotKhaoSat").val(item.id_dot_khao_sat);
         $("#EnableThongKe").val(item.mo_thong_ke);
-        const startDate = new Date(item.surveyTimeStart * 1000).toISOString().slice(0, 16);
-        $("#NgayBatDau").val(startDate);
-        const endDate = new Date(item.surveyTimeEnd * 1000).toISOString().slice(0, 16);
-        $("#NgayKetThuc").val(endDate);
+        function convertUnixToLocalDateTime(unixTimestamp) {
+            let date = new Date(unixTimestamp * 1000);
+            date.setHours(date.getHours() + 7);
+            return date.toISOString().slice(0, 16);
+        }
+
+        $("#NgayBatDau").val(convertUnixToLocalDateTime(item.surveyTimeStart));
+        $("#NgayKetThuc").val(convertUnixToLocalDateTime(item.surveyTimeEnd));
     }
 }
+
 
 async function update_survey() {
     const tieuDe = $('#TieuDe').val();
@@ -79,10 +83,12 @@ async function update_survey() {
     const dotkhaosat = $("#DotKhaoSat").val();
     const mothongke = $("#EnableThongKe").val();
     const maNamHoc = $("#MaNamHoc").val();
-    const ngayBatDau = new Date(ngayBatDauInput + 'Z'); 
-    const ngayKetThuc = new Date(ngayKetThucInput + 'Z')
-    const unixNgayBatDau = Math.floor(ngayBatDau.getTime() / 1000);
-    const unixNgayKetThuc = Math.floor(ngayKetThuc.getTime() / 1000);
+    function convertToUnixTime(dateTimeStr) {
+        let date = new Date(dateTimeStr);
+        return Math.floor(date.getTime() / 1000);
+    }
+    const unixNgayBatDau = convertToUnixTime(ngayBatDauInput);
+    const unixNgayKetThuc = convertToUnixTime(ngayKetThucInput);
     const res = await $.ajax({
         url: '/api/admin/update-phieu-khao-sat',
         type: 'POST',
@@ -100,41 +106,28 @@ async function update_survey() {
             mo_thong_ke: mothongke,
         }
     });
+
     if (res.success) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
+        Swal.fire({
             icon: "success",
-            title: res.message
-        });
-    }
-    else {
-        const Toast = Swal.mixin({
+            title: res.message,
             toast: true,
             position: "top-end",
             showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
+            timer: 3000
         });
-        Toast.fire({
+    } else {
+        Swal.fire({
             icon: "error",
-            title: res.message
+            title: res.message,
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000
         });
     }
 }
+
 
 async function delete_phieu_khao_sat() {
     const res = await $.ajax({
@@ -168,7 +161,7 @@ async function load_chi_tiet_cau_tra_loi() {
         url: '/api/admin/danh-sach-cau-tra-loi-phieu',
         type: 'POST',
         data: {
-            surveyID: value 
+            surveyID: value
         }
     });
     const body = $("#bodycontent");
@@ -189,6 +182,9 @@ async function load_chi_tiet_cau_tra_loi() {
                 html += form_load_chi_tiet_program(items);
             }
             else if (res.is_cbvc) {
+                html += form_load_chi_tiet_cbvc(items);
+            }
+            else if (res.is_gv) {
                 html += form_load_chi_tiet_giang_vien(items);
             }
         })
@@ -207,11 +203,13 @@ function form_load_chi_tiet_subject(data) {
                 <th scope="col">STT</th>
                 <th scope="col">Mã KQ</th>
                 <th scope="col">Email khảo sát</th>
-                <th scope="col">Môn học</th>
+                <th scope="col">Học phần</th>
+                <th scope="col">Mã môn học</th>
+                <th scope="col">Tên môn học</th>
+                <th scope="col">Lớp</th>
                 <th scope="col">Giảng viên giảng dạy</th>
-                <th scope="col">Người học</th>
-                <th scope="col">MSNH</th>
-                <th scope="col">Thuộc CTĐT</th>
+                <th scope="col">Mã người học</th>
+                <th scope="col">Tên người học</th>
                 <th scope="col">Thời gian thực hiện khảo sát</th>
                 <th scope="col">Chi tiết câu trả lời</th>
             </tr>
@@ -224,11 +222,13 @@ function form_load_chi_tiet_subject(data) {
                 <td class="formatSo">${index + 1}</td>
                 <td class="formatSo">${item.ma_kq}</td>
                 <td>${item.email}</td>
+                <td>${item.hoc_phan}</td>
+                <td class="formatSo">${item.ma_mh}</td>
                 <td>${item.mon_hoc}</td>
-                <td>${item.giang_vien}</td>
-                <td>${item.sinh_vien}</td>
-                <td class="formatSo">${item.msnh}</td>
-                <td>${item.ctdt}</td>
+                <td class="formatSo">${item.lop}</td>
+                <td>${item.giang_vien_giang_day}</td>
+                <td class="formatSo">${item.ma_nh}</td>
+                <td>${item.ten_nh}</td>
                 <td class="formatSo">${unixTimestampToDate(item.thoi_gian_thuc_hien)}</td>
                 <td>
                     <button class="btn btn-info btnChiTiet" data-id="${item.ma_kq}">Chi tiết</button>
@@ -250,9 +250,10 @@ function form_load_chi_tiet_student(data) {
                 <th scope="col">STT</th>
                 <th scope="col">Mã KQ</th>
                 <th scope="col">Email khảo sát</th>
-                <th scope="col">Người học</th>
-                <th scope="col">MSNH</th>
-                <th scope="col">Thuộc CTĐT</th>
+                <th scope="col">Mã người học</th>
+                <th scope="col">Tên người học</th>
+                <th scope="col">Thuộc Lớp</th>
+                <th scope="col">Thuộc chương trình đào tạo</th>
                 <th scope="col">Thời gian thực hiện khảo sát</th>
                 <th scope="col">Chi tiết câu trả lời</th>
             </tr>
@@ -265,9 +266,10 @@ function form_load_chi_tiet_student(data) {
                 <td class="formatSo">${index + 1}</td>
                 <td class="formatSo">${item.ma_kq}</td>
                 <td>${item.email}</td>
-                <td>${item.sinh_vien}</td>
-                <td class="formatSo">${item.msnh}</td>
-                <td>${item.ctdt}</td>
+                <td class="formatSo">${item.ma_nh}</td>
+                <td>${item.ten_nh}</td>
+                <td>${item.thuoc_lop}</td>
+                <td>${item.thuoc_ctdt}</td>
                 <td class="formatSo">${unixTimestampToDate(item.thoi_gian_thuc_hien)}</td>
                 <td>
                     <button class="btn btn-info btnChiTiet" data-id="${item.ma_kq}">Chi tiết</button>
@@ -326,9 +328,14 @@ function form_load_chi_tiet_giang_vien(data) {
                 <th scope="col">STT</th>
                 <th scope="col">Mã KQ</th>
                 <th scope="col">Email khảo sát</th>
-                <th scope="col">Tên người khảo sát</th>
-                <th scope="col">Thuộc đơn vị</th>
-                <th scope="col">Thuộc CTĐT</th>
+                <th scope="col">Mã cán bộ viên chức</th>
+                <th scope="col">Tên cán bộ viên chức</th>
+                <th scope="col">Chức vụ</th>
+                <th scope="col">Trình độ</th>
+                <th scope="col">Thuộc khoa</th>
+                <th scope="col">Thuộc bộ môn</th>
+                <th scope="col">Khảo sát cho chương trình đào tạo</th>
+                <th scope="col">Ngành đào tạo</th>
                 <th scope="col">Thời gian thực hiện khảo sát</th>
                 <th scope="col">Chi tiết câu trả lời</th>
             </tr>
@@ -341,9 +348,62 @@ function form_load_chi_tiet_giang_vien(data) {
                 <td class="formatSo">${index + 1}</td>
                 <td class="formatSo">${item.ma_kq}</td>
                 <td>${item.email}</td>
-                <td>${item.cbvc}</td>
-                <td>${item.don_vi != null ? item.don_vi : ""}</td>
-                <td>${item.ctdt != null ? item.ctdt : ""}</td>
+                <td class="formatSo">${item.MaCBVC}</td>
+                <td>${item.TenCBVC}</td>
+                <td>${item.name_chucvu}</td>
+                <td>${item.ten_trinh_do}</td>
+                <td>${item.ten_khoa}</td>
+                <td>${item.bo_mo}</td>
+                <td>${item.khao_sat_cho}</td>
+                <td>${item.nganh_dao_tao}</td>
+                <td class="formatSo">${unixTimestampToDate(item.thoi_gian_thuc_hien)}</td>
+                <td>
+                    <button class="btn btn-info btnChiTiet" data-id="${item.ma_kq}">Chi tiết</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    html += `
+        </tbody>
+    `;
+    return html;
+}
+
+
+function form_load_chi_tiet_cbvc(data) {
+    let html = `
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Mã KQ</th>
+                <th scope="col">Email khảo sát</th>
+                <th scope="col">Mã cán bộ viên chức</th>
+                <th scope="col">Tên cán bộ viên chức</th>
+                <th scope="col">Chức vụ</th>
+                <th scope="col">Trình độ</th>
+                <th scope="col">Thuộc khoa</th>
+                <th scope="col">Thuộc bộ môn</th>
+                <th scope="col">Ngành đào tạo</th>
+                <th scope="col">Thời gian thực hiện khảo sát</th>
+                <th scope="col">Chi tiết câu trả lời</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+    data.forEach(function (item, index) {
+        html += `
+            <tr>
+                <td class="formatSo">${index + 1}</td>
+                <td class="formatSo">${item.ma_kq}</td>
+                <td>${item.email}</td>
+                <td class="formatSo">${item.MaCBVC}</td>
+                <td>${item.TenCBVC}</td>
+                <td>${item.name_chucvu}</td>
+                <td>${item.ten_trinh_do}</td>
+                <td>${item.ten_khoa}</td>
+                <td>${item.bo_mo}</td>
+                <td>${item.nganh_dao_tao}</td>
                 <td class="formatSo">${unixTimestampToDate(item.thoi_gian_thuc_hien)}</td>
                 <td>
                     <button class="btn btn-info btnChiTiet" data-id="${item.ma_kq}">Chi tiết</button>
@@ -480,6 +540,6 @@ function unixTimestampToDate(unixTimestamp) {
     var hours = ("0" + date.getHours()).slice(-2);
     var minutes = ("0" + date.getMinutes()).slice(-2);
     var seconds = ("0" + date.getSeconds()).slice(-2);
-    var formattedDate = dayOfWeek + ', ' + day + "-" + month + "-" + year + " " + ', ' + hours + ":" + minutes + ":" + seconds;
+    var formattedDate = dayOfWeek + ', ' + day + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
     return formattedDate;
 }

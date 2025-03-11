@@ -184,9 +184,11 @@ async function update_cbvc(value) {
     const ngaysinh = $("#ngaysinh-val").val();
     const donvi = $("#donvi-val").val();
     const chucvu = $("#chucvu-val").val();
-    const ctdt = $("#ctdt-val").val();
+    const trinhdo = $("#trinhdo-val").val();
+    const bomon = $("#bomon-val").val();
     const nam = $("#nam-val").val();
     const ghichu = $("#ghichu-val").val();
+    const nganhdaotao = $("#nganhdaotao-val").val();
     const res = await $.ajax({
         url: '/api/admin/update-cbvc',
         type: 'POST',
@@ -196,11 +198,13 @@ async function update_cbvc(value) {
             TenCBVC: tencbvc,
             Email: email,
             NgaySinh: ngaysinh,
-            id_donvi: donvi,
+            id_don_vi: donvi,
             id_chucvu: chucvu,
-            id_chuongtrinhdaotao: ctdt,
+            id_bo_mon: bomon,
+            id_trinh_do: trinhdo,
             id_namhoc: nam,
-            description: ghichu
+            description: ghichu,
+            nganh_dao_tao: nganhdaotao
         }
     });
     if (res.success) {
@@ -252,11 +256,13 @@ async function get_info(value) {
     $("#tencbvc-val").val(res.TenCBVC);
     $("#email-val").val(res.Email);
     $("#ngaysinh-val").val(ngaysinh);
-    $("#donvi-val").val(res.id_donvi).trigger("change");
+    $("#donvi-val").val(res.id_don_vi).trigger("change");
+    $("#bomon-val").val(res.id_bo_mon).trigger("change");
     $("#chucvu-val").val(res.id_chucvu).trigger("change");
-    $("#ctdt-val").val(res.id_chuongtrinhdaotao).trigger("change");
+    $("#trinhdo-val").val(res.id_trinh_do).trigger("change");
     $("#nam-val").val(res.id_namhoc).trigger("change");
     $("#ghichu-val").val(res.description);
+    $("#nganhdaotao-val").val(res.nganh_dao_tao);
 };
 async function add_new() {
     const macbvc = $("#macbvc-val").val();
@@ -265,9 +271,11 @@ async function add_new() {
     const ngaysinh = $("#ngaysinh-val").val();
     const donvi = $("#donvi-val").val();
     const chucvu = $("#chucvu-val").val();
-    const ctdt = $("#ctdt-val").val();
+    const trinhdo = $("#trinhdo-val").val();
+    const bomon = $("#bomon-val").val();
     const nam = $("#nam-val").val();
     const ghichu = $("#ghichu-val").val();
+    const nganhdaotao = $("#nganhdaotao-val").val();
     const res = await $.ajax({
         url: '/api/admin/them-moi-cbvc',
         type: 'POST',
@@ -276,11 +284,13 @@ async function add_new() {
             TenCBVC: tencbvc,
             Email: email,
             NgaySinh: ngaysinh,
-            id_donvi: donvi,
+            id_don_vi: donvi,
             id_chucvu: chucvu,
-            id_chuongtrinhdaotao: ctdt,
+            id_bo_mon: bomon,
+            id_trinh_do: trinhdo,
             id_namhoc: nam,
-            description: ghichu
+            description: ghichu,
+            nganh_dao_tao: nganhdaotao
         }
     });
     if (res.success) {
@@ -349,10 +359,12 @@ async function load_data(page = 1, pageSize = $("#pageSizeSelect").val()) {
                 <th scope="col">Mã CBVC</th>
                 <th scope="col">Tên CBVC</th>
                 <th scope="col">Ngày sinh</th>
-                <th scope="col">Email</th>
-                <th scope="col">Thuộc đơn vị</th>
+                <th scope="col">Email</th>             
                 <th scope="col">Chức vụ</th>
-                <th scope="col">Thuộc chương trình đào tạo</th>
+                <th scope="col">Trình độ</th>
+                <th scope="col">Thuộc đơn vị</th>
+                <th scope="col">Thuộc bộ môn</th>
+                <th scope="col">Ngành đào tạo</th>
                 <th scope="col">Năm hoạt động</th>
                 <th scope="col">Ngày tạo</th>
                 <th scope="col">Cập nhật lần cuối</th>
@@ -371,9 +383,11 @@ async function load_data(page = 1, pageSize = $("#pageSizeSelect").val()) {
                     <td>${item.TenCBVC}</td>
                     <td class="formatSo">${item.NgaySinh}</td>
                     <td>${item.Email}</td>
-                    <td>${item.donvi}</td>
                     <td>${item.chucvu}</td>
-                    <td>${item.ctdt}</td>
+                    <td>${item.trinh_do}</td>
+                    <td>${item.donvi}</td>
+                    <td>${item.bo_mon}</td>
+                    <td>${item.nganh_dao_tao}</td>
                     <td class="formatSo">${item.NamHoc}</td>
                     <td class="formatSo">${unixTimestampToDate(item.ngaytao)}</td>
                     <td class="formatSo">${unixTimestampToDate(item.ngaycapnhat)}</td>

@@ -23,6 +23,8 @@ namespace CTDT.Models
     
         public int id_hedaotao { get; set; }
         public string ten_hedaotao { get; set; }
+        public string describe { get; set; }
+        public string image { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ctdt> ctdt { get; set; }

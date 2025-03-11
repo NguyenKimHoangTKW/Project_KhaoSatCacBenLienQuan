@@ -1,5 +1,6 @@
 ﻿using CTDT.Helper;
 using CTDT.Models;
+using GoogleApi.Entities.Maps.AerialView.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -237,7 +238,6 @@ namespace CTDT.Controllers
             {
                 if (check_mail_student == "student.tdmu.edu.vn")
                 {
-                    HttpContext.Current.Session["Surveyid"] = survey.surveyID;
                     // Tách chuỗi học phần survey
                     var check_hoc_vien_co_hoc_phan = await db.nguoi_hoc_dang_co_hoc_phan?.Where(x => x.surveyID == survey.surveyID && x.sinhvien.ma_sv == mssv_by_email).ToListAsync();
                     if (check_hoc_vien_co_hoc_phan != null)
@@ -264,6 +264,11 @@ namespace CTDT.Controllers
             public int check_hoc_phan { get; set; }
             public string ma_vien_chuc { get; set; }
             public string ten_vien_chuc { get; set; }
+            public string ma_nh { get; set; }
+            public string ten_nh { get; set; }
+            public string ngay_sinh { get; set; }
+            public int check_lop { get; set; }
+            public string check_doi_tuong { get; set; }
         }
         [HttpPost]
         [Route("api/save_xac_thuc")]
@@ -273,15 +278,27 @@ namespace CTDT.Controllers
             bool check_giang_vien = new[] { 3 }.Contains(check_survey.id_loaikhaosat);
             if (check_giang_vien)
             {
-                if (!string.IsNullOrEmpty(sv.ma_vien_chuc) && !string.IsNullOrEmpty(sv.ten_vien_chuc))
+                if (sv.check_doi_tuong == null)
                 {
+                    return Ok(new { message = "Vui lòng chọn phương thức xác thực", success = false });
+                }
+                if (sv.check_doi_tuong == "false")
+                {
+                    if (string.IsNullOrEmpty(sv.ma_vien_chuc))
+                    {
+                        return Ok(new { message = "Không được bỏ trống trường mã viên chức", success = false });
+                    }
+                    if (string.IsNullOrEmpty(sv.ten_vien_chuc))
+                    {
+                        return Ok(new { message = "Không được bỏ trống trường tên viên chức", success = false });
+                    }
                     var check_gv = await db.cbvc_khao_sat
                         .FirstOrDefaultAsync(x => x.surveyID == sv.surveyID
                         && x.CanBoVienChuc.MaCBVC.ToLower().Trim() == sv.ma_vien_chuc.ToLower().Trim()
                         && x.CanBoVienChuc.TenCBVC.ToLower().Trim() == sv.ten_vien_chuc.ToLower().Trim());
                     if (check_gv == null)
                     {
-                        return Ok(new { message = "Không tìm thấy thông tin đáp viên, vui lòng kiểm tra lại hoặc liên hệ với người phụ trách", success = false });
+                        return Ok(new { message = "Không tìm thấy thông tin giảng viên, vui lòng kiểm tra lại", success = false });
                     }
                     else
                     {
@@ -301,7 +318,7 @@ namespace CTDT.Controllers
                         }
                     }
                 }
-                else
+                else if(sv.check_doi_tuong == "true")
                 {
                     var check_gv = await db.cbvc_khao_sat
                         .FirstOrDefaultAsync(x => x.surveyID == sv.surveyID
@@ -309,7 +326,7 @@ namespace CTDT.Controllers
 
                     if (check_gv == null)
                     {
-                        return Ok(new { message = "Không tìm thấy thông tin đáp viên, vui lòng kiểm tra lại hoặc liên hệ với người phụ trách", success = false });
+                        return Ok(new { message = "Không tìm thấy thông tin giảng viên, vui lòng kiểm tra lại", success = false });
                     }
                     else
                     {
@@ -346,6 +363,83 @@ namespace CTDT.Controllers
                 {
                     HttpContext.Current.Session["id_nh_co_hp_ks"] = check_nh_co_hoc_phan.id_nguoi_hoc_by_hoc_phan;
                     return Ok(new { url = $"/phieu-khao-sat/{sv.surveyID}", success = true });
+                }
+            }
+            else if(check_survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+            {
+                if(sv.check_doi_tuong == null)
+                {
+                    return Ok(new { message = "Vui lòng chọn phương thức xác thực", success = false });
+                }
+                if (sv.check_doi_tuong == "true")
+                {
+                    if (string.IsNullOrEmpty(sv.ma_nh))
+                    {
+                        return Ok(new { message = "Không được bỏ trống trường mã người học", success = false });
+                    }
+                    var check_nh = await db.nguoi_hoc_khao_sat
+                       .Where(x => x.surveyID == sv.surveyID && x.sinhvien.ma_sv == sv.ma_nh)
+                       .FirstOrDefaultAsync();
+                    if (check_nh != null)
+                    {
+                        var check_answer = await db.answer_response.FirstOrDefaultAsync(x => x.id_users == user.id_users
+                            && x.id_nguoi_hoc_khao_sat == check_nh.id_nguoi_hoc_khao_sat
+                            && x.surveyID == sv.surveyID);
+                        if (check_answer != null)
+                        {
+                            return Ok(new { message = "", url = $"/phieu-khao-sat/dap-an/{check_answer.id}/{check_answer.surveyID}", is_answer = true });
+                        }
+                        else
+                        {
+                            HttpContext.Current.Session["id_nghoc_ks"] = check_nh.id_nguoi_hoc_khao_sat;
+                            return Ok(new { url = $"/phieu-khao-sat/{sv.surveyID}", success = true });
+                        }
+                    }
+                    else
+                    {
+                        return Ok(new { message = "Không tìm thấy thông tin người học trong phiếu này", success = false });
+                    }
+                }
+                else if(sv.check_doi_tuong == "false")
+                {
+                    if (string.IsNullOrEmpty(sv.ten_nh))
+                    {
+                        return Ok(new { message = "Không được bỏ trống trường họ và tên", success = false });
+                    }
+                    else if (string.IsNullOrEmpty(sv.ngay_sinh))
+                    {
+                        return Ok(new { message = "Không được bỏ trống trường ngày sinh", success = false });
+                    }
+                    DateTime ngaySinhDate;
+                    if (!DateTime.TryParseExact(sv.ngay_sinh, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out ngaySinhDate))
+                    {
+                        return Ok(new { message = "Ngày sinh sai định dạng, vui lòng nhập đầy đủ", success = false });
+                    }
+                    var check_nh = await db.nguoi_hoc_khao_sat
+                        .Where(x => x.surveyID == sv.surveyID &&
+                                    x.sinhvien.id_lop == sv.check_lop &&
+                                    x.sinhvien.hovaten.ToLower().Trim() == sv.ten_nh.ToLower().Trim() &&
+                                    x.sinhvien.ngaysinh == ngaySinhDate.Date)
+                        .FirstOrDefaultAsync();
+                    if (check_nh != null)
+                    {
+                        var check_answer = await db.answer_response.FirstOrDefaultAsync(x => x.id_users == user.id_users
+                            && x.id_nguoi_hoc_khao_sat == check_nh.id_nguoi_hoc_khao_sat
+                            && x.surveyID == sv.surveyID);
+                        if (check_answer != null)
+                        {
+                            return Ok(new { message = "", url = $"/phieu-khao-sat/dap-an/{check_answer.id}/{check_answer.surveyID}", is_answer = true });
+                        }
+                        else
+                        {
+                            HttpContext.Current.Session["id_nghoc_ks"] = check_nh.id_nguoi_hoc_khao_sat;
+                            return Ok(new { url = $"/phieu-khao-sat/{sv.surveyID}", success = true });
+                        }
+                    }
+                    else
+                    {
+                        return Ok(new { message = "Không tìm thấy thông tin người học trong phiếu này", success = false });
+                    }
                 }
             }
             return Ok(new { message = "Không tìm thấy thông tin biểu mẫu", success = false });

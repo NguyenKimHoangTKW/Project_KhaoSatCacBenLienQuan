@@ -2,11 +2,22 @@
     event.preventDefault();
     save_xac_thuc();
 });
+$(document).on("keydown", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        save_xac_thuc(); 
+    }
+});
+
 async function save_xac_thuc() {
     const ma_vien_chuc = $("#ma-vien-chuc").val();
     const ten_vien_chuc = $("#ten-vien-chuc").val();
     const ctdt = $("#select_ctdt").val();
     const survey = $("#hiddenId").val();
+    const ma_nh = $("#ma-nguoi-hoc").val();
+    const ten_nh = $("#ten-nguoi-hoc").val();
+    const ngay_sinh = $("#bd-nguoi-hoc").val();
+    const lop = $("#select_lop").val();
     const res = await $.ajax({
         url: '/api/save_xac_thuc',
         type: 'POST',
@@ -15,7 +26,12 @@ async function save_xac_thuc() {
             ma_vien_chuc: ma_vien_chuc,
             ten_vien_chuc: ten_vien_chuc,
             id_ctdt: ctdt,
-            surveyID: survey
+            surveyID: survey,
+            ma_nh: ma_nh,
+            ten_nh: ten_nh,
+            ngay_sinh: ngay_sinh,
+            check_lop: lop,
+            check_doi_tuong: check_mail
         })
     });
     if (res.success) {

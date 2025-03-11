@@ -339,7 +339,7 @@ namespace CTDT.Areas.CTDT.Controllers
             else if (check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || check_group_pks.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
             {
                 var query = await db.nguoi_hoc_khao_sat.Where(x => x.surveyID == aw.surveyID).ToListAsync();
-                var TotalDaKhaoSat = await db.answer_response.Where(x => x.surveyID == aw.surveyID && x.time >= aw.from_date && x.time <= aw.to_date && x.sinhvien.lop.id_ctdt == aw.id_ctdt).ToListAsync();
+                var TotalDaKhaoSat = await db.answer_response.Where(x => x.surveyID == aw.surveyID && x.time >= aw.from_date && x.time <= aw.to_date && x.nguoi_hoc_khao_sat.sinhvien.lop.id_ctdt == aw.id_ctdt).ToListAsync();
                 var TotalChuaDaKhaoSat = query.Count - TotalDaKhaoSat.Count;
                 var TotalAll = query.Count;
                 double percentage = TotalAll > 0 ? Math.Round(((double)TotalDaKhaoSat.Count / TotalAll) * 100, 2) : 0;

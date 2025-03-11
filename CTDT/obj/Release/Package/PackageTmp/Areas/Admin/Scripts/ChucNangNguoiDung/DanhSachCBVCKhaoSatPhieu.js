@@ -10,16 +10,26 @@ $(document).on("change", "#surveyid", function () {
 });
 $(document).on("change", "#checkAllRight", function () {
     const isChecked = $(this).prop("checked");
+
     $(".select-row").prop("checked", isChecked);
-    selected = $(".select-row:checked").map(function () {
-        return $(this).attr("data-id");
-    }).get();
+
+    if (isChecked) {
+        selected = $(".select-row").map(function () {
+            return $(this).attr("data-id");
+        }).get();
+    } else {
+        selected = [];
+    }
 });
 $(document).on("change", ".select-row", function () {
-    selected = $(".select-row:checked").map(function () {
-        return $(this).attr("data-id");
-    }).get();
-    $("#checkAllRight").prop("checked", $(".select-row").length === $(".select-row:checked").length);
+    let id = $(this).attr("data-id");
+    let isChecked = $(this).prop("checked");
+
+    if (isChecked) {
+        if (!selected.includes(id)) selected.push(id);
+    } else {
+        selected = selected.filter(item => item !== id);
+    }
 });
 $(document).on("click", "#SaveData", function (event) {
     event.preventDefault();

@@ -130,7 +130,7 @@ namespace CTDT.Areas.Admin.Controllers
             string jsonPages = JsonConvert.SerializeObject(new { pages });
 
             var check_answer_survey = db.answer_response
-                .FirstOrDefault(x => x.surveyID == get_phieu.surveyID && x.id_sv == get_sinhvien.id_sv && x.id_ctdt == get_ctdt.id_ctdt
+                .FirstOrDefault(x => x.surveyID == get_phieu.surveyID  && x.id_ctdt == get_ctdt.id_ctdt
                 && (x.json_answer == null || x.json_answer == jsonPages));
 
             if (check_answer_survey == null)
@@ -138,10 +138,6 @@ namespace CTDT.Areas.Admin.Controllers
                 check_answer_survey = new answer_response
                 {
                     surveyID = get_phieu.surveyID,
-                    id_sv = get_sinhvien.id_sv,
-                    id_hk = get_hoc_ky.id_hk,
-                    id_CBVC = get_cbvc.id_CBVC,
-                    id_mh = get_mon_hoc.id_mon_hoc,
                     id_ctdt = get_ctdt.id_ctdt,
                     json_answer = jsonPages,
                     time = unixTimestamp,
@@ -209,7 +205,7 @@ namespace CTDT.Areas.Admin.Controllers
             string jsonPages = JsonConvert.SerializeObject(new { pages });
 
             var check_answer_survey = db.answer_response
-                .FirstOrDefault(x => x.surveyID == get_phieu.surveyID && x.id_sv == get_sinhvien.id_sv && x.id_ctdt == get_ctdt.id_ctdt
+                .FirstOrDefault(x => x.surveyID == get_phieu.surveyID && x.id_ctdt == get_ctdt.id_ctdt
                 && (x.json_answer == null || x.json_answer == jsonPages));
 
             if (check_answer_survey == null)
@@ -217,7 +213,6 @@ namespace CTDT.Areas.Admin.Controllers
                 check_answer_survey = new answer_response
                 {
                     surveyID = get_phieu.surveyID,
-                    id_sv = get_sinhvien.id_sv,
                     id_ctdt = get_ctdt.id_ctdt,
                     json_answer = jsonPages,
                     time = unixTimestamp,

@@ -71,13 +71,15 @@ namespace CTDT.Areas.Admin.Controllers
                     x.TenCBVC,
                     NgaySinh = x.NgaySinh.HasValue ? x.NgaySinh.Value.ToString("dd-MM-yyyy") : " ",
                     Email = x.Email != null ? x.Email : " ",
-                    donvi = x.id_donvi != null ? x.DonVi.name_donvi : " ",
+                    donvi = x.id_don_vi != null ? x.khoa_vien_truong.ten_khoa : " ",
                     chucvu = x.id_chucvu != null ? x.ChucVu.name_chucvu : " ",
-                    ctdt = x.id_chuongtrinhdaotao != null ? x.ctdt.ten_ctdt : " ",
+                    trinh_do = x.id_trinh_do != null ? x.trinh_do.ten_trinh_do : " ",
+                    bo_mon = x.id_bo_mon != null ? x.bo_mon.ten_bo_mon : " ",
                     NamHoc = x.id_namhoc != null ? x.NamHoc.ten_namhoc : " ",
                     x.ngaycapnhat,
                     x.ngaytao,
-                    descripton = x.description != null ? x.description : " "
+                    descripton = x.description != null ? x.description : " ",
+                    nganh_dao_tao = x.nganh_dao_tao != null ? x.nganh_dao_tao : " "
                 }).ToList();
             if (get_data.Count > 0)
             {
@@ -118,21 +120,9 @@ namespace CTDT.Areas.Admin.Controllers
             {
                 return Ok(new { message = "Cán bộ viên chức/giảng viên này đã tồn tại", success = false });
             }
-            var add_new = new CanBoVienChuc
-            {
-                MaCBVC = cbvc.MaCBVC,
-                TenCBVC = cbvc.TenCBVC,
-                NgaySinh = cbvc.NgaySinh,
-                Email = cbvc.Email,
-                id_donvi = cbvc.id_donvi,
-                id_chucvu = cbvc.id_chucvu,
-                id_chuongtrinhdaotao = cbvc.id_chuongtrinhdaotao,
-                id_namhoc = cbvc.id_namhoc,
-                ngaycapnhat = unixTimestamp,
-                ngaytao = unixTimestamp,
-                description = cbvc.description,
-            };
-            db.CanBoVienChuc.Add(add_new);
+            cbvc.ngaycapnhat = unixTimestamp;
+            cbvc.ngaytao = unixTimestamp;
+            db.CanBoVienChuc.Add(cbvc);
             db.SaveChanges();
             return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
         }
@@ -148,11 +138,13 @@ namespace CTDT.Areas.Admin.Controllers
                     x.TenCBVC,
                     x.NgaySinh,
                     x.Email,
-                    x.id_donvi,
+                    x.id_don_vi,
                     x.id_chucvu,
-                    x.id_chuongtrinhdaotao,
+                    x.id_trinh_do,
+                    x.id_bo_mon,
                     x.id_namhoc,
-                    x.description
+                    x.description,
+                    x.nganh_dao_tao
                 }).FirstOrDefaultAsync();
             return Ok(get_info);
         }
@@ -169,12 +161,14 @@ namespace CTDT.Areas.Admin.Controllers
             update_cbvc.TenCBVC = cbvc.TenCBVC;
             update_cbvc.NgaySinh = cbvc.NgaySinh;
             update_cbvc.Email = cbvc.Email;
-            update_cbvc.id_donvi = cbvc.id_donvi;
+            update_cbvc.id_don_vi = cbvc.id_don_vi;
             update_cbvc.id_chucvu = cbvc.id_chucvu;
-            update_cbvc.id_chuongtrinhdaotao = cbvc.id_chuongtrinhdaotao;
+            update_cbvc.id_trinh_do = cbvc.id_trinh_do;
+            update_cbvc.id_bo_mon = cbvc.id_bo_mon;
             update_cbvc.id_namhoc = cbvc.id_namhoc;
             update_cbvc.ngaycapnhat = unixTimestamp;
             update_cbvc.description = cbvc.description;
+            update_cbvc.nganh_dao_tao = cbvc.nganh_dao_tao;
             await db.SaveChangesAsync();
             return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
         }

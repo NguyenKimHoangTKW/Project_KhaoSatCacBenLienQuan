@@ -77,8 +77,8 @@ namespace CTDT.Areas.CTDT.Controllers
                         .Where(x => x.surveyID == doituong.surveyID && x.id_ctdt == doituong.id_ctdt)
                         .Select(x => new
                         {
-                            id = x.CanBoVienChuc.id_CBVC,
-                            x.CanBoVienChuc.TenCBVC,
+                            id = x.cbvc_khao_sat.CanBoVienChuc.id_CBVC,
+                            x.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
                             ctdt = x.ctdt.ten_ctdt
                         })
                         .ToListAsync();
@@ -200,8 +200,8 @@ namespace CTDT.Areas.CTDT.Controllers
                             .Select(x => new
                             {
                                 value = items.id_thong_ke_theo_yeu_cau,
-                                id = x.CanBoVienChuc.id_CBVC,
-                                x.CanBoVienChuc.TenCBVC,
+                                id = x.cbvc_khao_sat.CanBoVienChuc.id_CBVC,
+                                x.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
                                 ctdt = x.ctdt.ten_ctdt
                             })
                             .ToListAsync();
@@ -461,9 +461,9 @@ namespace CTDT.Areas.CTDT.Controllers
                 {
                     check_answer = db.answer_response
                         .Where(x => x.surveyID == aw.surveyID
-                           && x.id_sv == items.nguoi_hoc_dang_co_hoc_phan.id_sinh_vien
-                           && x.id_CBVC == items.nguoi_hoc_dang_co_hoc_phan.id_giang_vvien
-                           && x.id_mh == items.nguoi_hoc_dang_co_hoc_phan.id_mon_hoc)
+                           && x.nguoi_hoc_dang_co_hoc_phan.id_sinh_vien == items.nguoi_hoc_dang_co_hoc_phan.id_sinh_vien
+                           && x.nguoi_hoc_dang_co_hoc_phan.id_giang_vvien == items.nguoi_hoc_dang_co_hoc_phan.id_giang_vvien
+                           && x.nguoi_hoc_dang_co_hoc_phan.id_mon_hoc == items.nguoi_hoc_dang_co_hoc_phan.id_mon_hoc)
                         .ToList();
                 }
 

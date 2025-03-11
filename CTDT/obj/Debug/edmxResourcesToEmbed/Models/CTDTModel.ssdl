@@ -6,12 +6,7 @@
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="surveyID" Type="int" Nullable="false" />
-    <Property Name="id_donvi" Type="int" />
-    <Property Name="id_CBVC" Type="int" />
-    <Property Name="id_hk" Type="int" />
     <Property Name="id_users" Type="int" />
-    <Property Name="id_mh" Type="int" />
-    <Property Name="id_sv" Type="int" />
     <Property Name="id_cbvc_khao_sat" Type="int" />
     <Property Name="id_nguoi_hoc_khao_sat" Type="int" />
     <Property Name="id_nguoi_hoc_co_hp_khao_sat" Type="int" />
@@ -143,6 +138,8 @@
     </Key>
     <Property Name="id_hedaotao" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ten_hedaotao" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="describe" Type="nvarchar(max)" />
+    <Property Name="image" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="hoc_ky">
     <Key>
@@ -325,6 +322,16 @@
     <Property Name="version" Type="int" />
     <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
+  <EntityType Name="thong_bao_loi">
+    <Key>
+      <PropertyRef Name="id_ma_loi" />
+    </Key>
+    <Property Name="id_ma_loi" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tieu_de_ma_loi" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="noi_dung_ma_loi" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ngay_gui_loi" Type="int" Nullable="false" />
+    <Property Name="ngay_khac_phuc" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="thong_ke_theo_yeu_cau">
     <Key>
       <PropertyRef Name="id_thong_ke_theo_yeu_cau" />
@@ -381,18 +388,6 @@
     <Property Name="avatarUrl" Type="nvarchar(max)" />
     <Property Name="status" Type="tinyint" />
   </EntityType>
-  <Association Name="FK_answer_response_CanBoVienChuc">
-    <End Role="CanBoVienChuc" Type="Self.CanBoVienChuc" Multiplicity="0..1" />
-    <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CanBoVienChuc">
-        <PropertyRef Name="id_CBVC" />
-      </Principal>
-      <Dependent Role="answer_response">
-        <PropertyRef Name="id_CBVC" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_answer_response_cbvc_khao_sat">
     <End Role="cbvc_khao_sat" Type="Self.cbvc_khao_sat" Multiplicity="0..1" />
     <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
@@ -414,42 +409,6 @@
       </Principal>
       <Dependent Role="answer_response">
         <PropertyRef Name="id_ctdt" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_answer_response_DonVi">
-    <End Role="DonVi" Type="Self.DonVi" Multiplicity="0..1" />
-    <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DonVi">
-        <PropertyRef Name="id_donvi" />
-      </Principal>
-      <Dependent Role="answer_response">
-        <PropertyRef Name="id_donvi" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_answer_response_hoc_ky">
-    <End Role="hoc_ky" Type="Self.hoc_ky" Multiplicity="0..1" />
-    <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="hoc_ky">
-        <PropertyRef Name="id_hk" />
-      </Principal>
-      <Dependent Role="answer_response">
-        <PropertyRef Name="id_hk" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_answer_response_mon_hoc">
-    <End Role="mon_hoc" Type="Self.mon_hoc" Multiplicity="0..1" />
-    <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="mon_hoc">
-        <PropertyRef Name="id_mon_hoc" />
-      </Principal>
-      <Dependent Role="answer_response">
-        <PropertyRef Name="id_mh" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -486,18 +445,6 @@
       </Principal>
       <Dependent Role="answer_response">
         <PropertyRef Name="id_nguoi_hoc_khao_sat" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_answer_response_sinhvien">
-    <End Role="sinhvien" Type="Self.sinhvien" Multiplicity="0..1" />
-    <End Role="answer_response" Type="Self.answer_response" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="sinhvien">
-        <PropertyRef Name="id_sv" />
-      </Principal>
-      <Dependent Role="answer_response">
-        <PropertyRef Name="id_sv" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1243,33 +1190,18 @@
     <EntitySet Name="sinhvien" EntityType="Self.sinhvien" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="survey" EntityType="Self.survey" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="thong_bao_loi" EntityType="Self.thong_bao_loi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="thong_ke_theo_yeu_cau" EntityType="Self.thong_ke_theo_yeu_cau" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tieu_de_phieu_khao_sat" EntityType="Self.tieu_de_phieu_khao_sat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="trinh_do" EntityType="Self.trinh_do" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="typeusers" EntityType="Self.typeusers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_answer_response_CanBoVienChuc" Association="Self.FK_answer_response_CanBoVienChuc">
-      <End Role="CanBoVienChuc" EntitySet="CanBoVienChuc" />
-      <End Role="answer_response" EntitySet="answer_response" />
-    </AssociationSet>
     <AssociationSet Name="FK_answer_response_cbvc_khao_sat" Association="Self.FK_answer_response_cbvc_khao_sat">
       <End Role="cbvc_khao_sat" EntitySet="cbvc_khao_sat" />
       <End Role="answer_response" EntitySet="answer_response" />
     </AssociationSet>
     <AssociationSet Name="FK_answer_response_ctdt" Association="Self.FK_answer_response_ctdt">
       <End Role="ctdt" EntitySet="ctdt" />
-      <End Role="answer_response" EntitySet="answer_response" />
-    </AssociationSet>
-    <AssociationSet Name="FK_answer_response_DonVi" Association="Self.FK_answer_response_DonVi">
-      <End Role="DonVi" EntitySet="DonVi" />
-      <End Role="answer_response" EntitySet="answer_response" />
-    </AssociationSet>
-    <AssociationSet Name="FK_answer_response_hoc_ky" Association="Self.FK_answer_response_hoc_ky">
-      <End Role="hoc_ky" EntitySet="hoc_ky" />
-      <End Role="answer_response" EntitySet="answer_response" />
-    </AssociationSet>
-    <AssociationSet Name="FK_answer_response_mon_hoc" Association="Self.FK_answer_response_mon_hoc">
-      <End Role="mon_hoc" EntitySet="mon_hoc" />
       <End Role="answer_response" EntitySet="answer_response" />
     </AssociationSet>
     <AssociationSet Name="FK_answer_response_NamHoc" Association="Self.FK_answer_response_NamHoc">
@@ -1282,10 +1214,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_answer_response_nguoi_hoc_khao_sat" Association="Self.FK_answer_response_nguoi_hoc_khao_sat">
       <End Role="nguoi_hoc_khao_sat" EntitySet="nguoi_hoc_khao_sat" />
-      <End Role="answer_response" EntitySet="answer_response" />
-    </AssociationSet>
-    <AssociationSet Name="FK_answer_response_sinhvien" Association="Self.FK_answer_response_sinhvien">
-      <End Role="sinhvien" EntitySet="sinhvien" />
       <End Role="answer_response" EntitySet="answer_response" />
     </AssociationSet>
     <AssociationSet Name="FK_answer_response_survey" Association="Self.FK_answer_response_survey">

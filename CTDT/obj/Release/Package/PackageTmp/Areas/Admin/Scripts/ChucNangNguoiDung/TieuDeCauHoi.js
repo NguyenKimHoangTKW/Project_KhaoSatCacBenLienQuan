@@ -1,4 +1,6 @@
-﻿
+﻿$(".select2").select2();
+let _value_title = "";
+let _value_children_tittle = "";
 // Các sự kiện
 $(document).ready(function () {
     $("#hedaotao, #year").on("change", load_pks_by_nam);
@@ -100,6 +102,7 @@ $(document).on("click", "#btnDeleteTitleSurvey", function () {
 })
 $(document).on("click", "#btnEditTitleSurvey", function () {
     const value = $(this).data("id");
+    _value_title = value;
     const footer = $("#showfootermodaltitlesurvey");
     const titleHeaderModal = $("#exampleModalLabelTitleSurvey")
     let footer_html = "";
@@ -114,10 +117,10 @@ $(document).on("click", "#btnEditTitleSurvey", function () {
     titleHeaderModal.text("Chỉnh sửa tiêu đề câu hỏi");
     footer.html(footer_html);
     $("#exampleModal").modal('show');
-    $("#btnSaveChangesEditTittle").click(function (events) {
-        events.preventDefault();
-        update_tieu_de_pks(value);
-    })
+});
+$(document).on("click", "#btnSaveChangesEditTittle", function (event) {
+    event.preventDefault();
+    update_tieu_de_pks(_value_title);
 });
 $(document).on("click", "#btnAddChilTitle", function (event) {
     event.preventDefault();
@@ -132,277 +135,17 @@ $(document).on("click", "#btnAddChilTitle", function (event) {
 });
 $(document).on("click", "#AddNewChildrenTitle", function (event) {
     event.preventDefault();
-    const value_title = $("#edtSelectedTitle").val();
-    const thu_tu = $("#edtThuTuChilTitle").val();
-    const ten_cau_hoi = $("#edtNameChilTitle").val();
-    const id_dang_cau_hoi = $("#edtSelectedDangCauHoi").val();
-    const is_required = $("#ckIsRequired").prop('checked') ? 1 : 0;
-    const is_orderitem = $("#ckIsOrderItem").prop('checked') ? 1 : 0;
-
-
-    if (id_dang_cau_hoi == "3" || id_dang_cau_hoi == "4" || id_dang_cau_hoi == "5") {
-        const inputText = $('#optionsTextarea').val();
-        const options = inputText.split('\n')
-            .map(option => option.trim())
-            .filter(option => option !== '');
-
-        const requestData = {
-            thu_tu: thu_tu,
-            id_tieu_de_phieu: value_title,
-            ten_cau_hoi: ten_cau_hoi,
-            id_dang_cau_hoi: id_dang_cau_hoi,
-            bat_buoc: is_required,
-            is_ykienkhac: is_orderitem,
-            ten_rd_cau_hoi_khac: options.join('\n')
-        };
-        $.ajax({
-            url: '/api/admin/save-children-title',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(requestData),
-            success: function (response) {
-                if (response.success) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "success",
-                        title: response.message
-                    });
-                    load_tieu_de_pks()
-                }
-                else {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "error",
-                        title: res.message
-                    });
-                }
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
-                alert('Có lỗi xảy ra khi lưu dữ liệu.');
-            }
-        });
-    }
-    else {
-        const requestData = {
-            thu_tu: thu_tu,
-            id_tieu_de_phieu: value_title,
-            ten_cau_hoi: ten_cau_hoi,
-            id_dang_cau_hoi: id_dang_cau_hoi,
-            bat_buoc: is_required,
-            is_ykienkhac: is_orderitem,
-            ten_rd_cau_hoi_khac: null
-        };
-        $.ajax({
-            url: '/api/admin/save-children-title',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(requestData),
-            success: function (response) {
-                if (response.success) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "success",
-                        title: response.message
-                    });
-                    load_tieu_de_pks()
-                }
-                else {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "error",
-                        title: response.message
-                    });
-                }
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
-                alert('Có lỗi xảy ra khi lưu dữ liệu.');
-            }
-        });
-    }
+    add_chilren_title();
 })
 $(document).on('input', '#edtThuTuChilTitle', function () {
     let value = $(this).val();
     value = value.replace(/\D/g, '');
     $(this).val(value);
 });
-$(document).on("click", "#EditChildrenTitle", function (event) {
-    event.preventDefault();
-    const value = $("#btnEditChilTitle").data("id");
-    const value_title = $("#edtSelectedTitle").val();
-    const thu_tu = $("#edtThuTuChilTitle").val();
-    const ten_cau_hoi = $("#edtNameChilTitle").val();
-    const id_dang_cau_hoi = $("#edtSelectedDangCauHoi").val();
-    const is_required = $("#ckIsRequired").prop('checked') ? 1 : 0;
-    const is_orderitem = $("#ckIsOrderItem").prop('checked') ? 1 : 0;
-    if (id_dang_cau_hoi == "3" || id_dang_cau_hoi == "4" || id_dang_cau_hoi == "5") {
-        const inputText = $('#optionsTextarea').val();
-        const options = inputText.split('\n')
-            .map(option => option.trim())
-            .filter(option => option !== '');
-
-        const requestData = {
-            id_chi_tiet_cau_hoi_tieu_de: value,
-            thu_tu: thu_tu,
-            id_tieu_de_phieu: value_title,
-            ten_cau_hoi: ten_cau_hoi,
-            id_dang_cau_hoi: id_dang_cau_hoi,
-            bat_buoc: is_required,
-            is_ykienkhac: is_orderitem,
-            ten_rd_cau_hoi_khac: options.join('\n')
-        };
-        $.ajax({
-            url: '/api/admin/edit-children-title',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(requestData),
-            success: function (response) {
-                if (response.success) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "success",
-                        title: response.message
-                    });
-                    load_tieu_de_pks()
-                }
-                else {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "error",
-                        title: res.message
-                    });
-                }
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
-                alert('Có lỗi xảy ra khi lưu dữ liệu.');
-            }
-        });
-    }
-    else {
-        const requestData = {
-            id_chi_tiet_cau_hoi_tieu_de: value,
-            thu_tu: thu_tu,
-            id_tieu_de_phieu: value_title,
-            ten_cau_hoi: ten_cau_hoi,
-            id_dang_cau_hoi: id_dang_cau_hoi,
-            bat_buoc: is_required,
-            is_ykienkhac: is_orderitem,
-            ten_rd_cau_hoi_khac: null
-        };
-        $.ajax({
-            url: '/api/admin/edit-children-title',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(requestData),
-            success: function (response) {
-                if (response.success) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "success",
-                        title: response.message
-                    });
-                    load_tieu_de_pks()
-                }
-                else {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "error",
-                        title: response.message
-                    });
-                }
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
-                alert('Có lỗi xảy ra khi lưu dữ liệu.');
-            }
-        });
-    }
-})
 $(document).on("click", "#btnEditChilTitle", function (event) {
     event.preventDefault();
     const value = $(this).data("id");
+    _value_children_tittle = value;
     const body_footer = $("#modalfooterchildrentitle");
     let html = ``;
     html += `
@@ -411,6 +154,10 @@ $(document).on("click", "#btnEditChilTitle", function (event) {
     `;
     body_footer.html(html);
     load_option_info_children_title(value);
+})
+$(document).on("click", "#EditChildrenTitle", function (event) {
+    event.preventDefault();
+    edit_children_tiltle(_value_children_tittle);
 })
 $(document).on("click", "#btnDeleteChilTitle", function (event) {
     event.preventDefault();
@@ -490,51 +237,10 @@ $(document).on("click", "#btnXuatBanPhieu", function (event) {
         });
     }
 });
-async function save_final_survey() {
-    const value = $("#surveyid").val();
-    const res = await $.ajax({
-        url: '/api/admin/save-final-survey',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            surveyID: value
-        })
-    });
-    if (res.success) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "success",
-            title: res.message
-        });
-    }
-    else {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "error",
-            title: res.message
-        });
-    }
-}
+$(document).on("click", "#btnSortTitle", function (event) {
+    event.preventDefault();
+    sort();
+});
 // Hàm xử lý
 async function delete_children_title(value) {
     const res = await $.ajax({
@@ -595,10 +301,6 @@ async function load_option_info_children_title(value) {
             html += `</select>
                 </div>
                 <div class="form-group">
-                    <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
-                    <input type="text" class="form-control" autocomplete="off" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số" value="${item.thu_tu}">
-                </div>
-                <div class="form-group">
                     <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
                     <input type="text" class="form-control" autocomplete="off" id="edtNameChilTitle" placeholder="Nhập tên chi tiết" value="${item.ten_cau_hoi}">
                 </div>
@@ -639,6 +341,11 @@ async function load_option_info_children_title(value) {
             html += `</div>`;
             body.html(html);
             $("#chitietModal").modal("show");
+            $(".select2").each(function () {
+                if (!$(this).data('select2')) {
+                    $(this).select2();
+                }
+            });
             $("#edtSelectedDangCauHoi").on("change", function () {
                 const selectedValue = $(this).val();
                 const conditionalBlock = $("#conditionalBlock");
@@ -675,16 +382,13 @@ async function load_option_info_children_title(value) {
 }
 async function update_tieu_de_pks(value) {
     const value_s = $("#surveyid").val();
-    const thutu = $("#edtThuTuHienThiTitle").val();
     const tieude = $("#edttieudeTitle").val();
-
     const res = await $.ajax({
         url: "/api/admin/update-title-survey",
         type: "POST",
         data: {
             id_tieu_de_phieu: value,
             surveyID: value_s,
-            thu_tu: thutu,
             ten_tieu_de: tieude
         }
     });
@@ -743,7 +447,6 @@ async function get_info_title_survey(value) {
         }
     });
     $("#edttieudeTitle").val(res.ten_tieu_de);
-    $("#edtThuTuHienThiTitle").val(res.thu_tu);
 }
 async function load_option_children_title() {
     const value_sv = $("#surveyid").val();
@@ -766,10 +469,6 @@ async function load_option_children_title() {
         });
 
         html += `</select>
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">Thứ tự hiển thị</label>
-                <input type="text" autocomplete="off" class="form-control" id="edtThuTuChilTitle" placeholder="Nhập thứ tự hiển thị bằng số">
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">Tên chi tiết câu hỏi</label>
@@ -800,6 +499,11 @@ async function load_option_children_title() {
 
         body.html(html);
         $("#chitietModal").modal("show");
+        $(".select2").each(function () {
+            if (!$(this).data('select2')) {
+                $(this).select2();
+            }
+        });
         $("#edtSelectedDangCauHoi").on("change", function () {
             const selectedValue = $(this).val();
             const conditionalBlock = $("#conditionalBlock");
@@ -835,14 +539,12 @@ async function load_option_children_title() {
 }
 async function add_tittle() {
     const value = $("#surveyid").val();
-    const thutu = $("#edtThuTuHienThiTitle").val();
     const tieude = $("#edttieudeTitle").val();
     const res = await $.ajax({
         url: "/api/admin/add-new-title-survey",
         type: "POST",
         data: {
             surveyID: value,
-            thu_tu: thutu,
             ten_tieu_de: tieude
         }
     })
@@ -1022,4 +724,327 @@ async function load_tieu_de_pks() {
         body.html(html);
     }
 }
-$(".select2").select2();
+async function save_final_survey() {
+    const value = $("#surveyid").val();
+    const res = await $.ajax({
+        url: '/api/admin/save-final-survey',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            surveyID: value
+        })
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}
+async function add_chilren_title() {
+    const value = $("#surveyid").val();
+    const value_title = $("#edtSelectedTitle").val();
+    const ten_cau_hoi = $("#edtNameChilTitle").val();
+    const id_dang_cau_hoi = $("#edtSelectedDangCauHoi").val();
+    const is_required = $("#ckIsRequired").prop('checked') ? 1 : 0;
+    const is_orderitem = $("#ckIsOrderItem").prop('checked') ? 1 : 0;
+    if (id_dang_cau_hoi == "3" || id_dang_cau_hoi == "4" || id_dang_cau_hoi == "5") {
+        const inputText = $('#optionsTextarea').val();
+        const options = inputText.split('\n')
+            .map(option => option.trim())
+            .filter(option => option !== '');
+
+        const requestData = {
+            surveyID: value,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: options.join('\n')
+        };
+        const res = await $.ajax({
+            url: '/api/admin/save-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData)
+        })
+        if (res.success) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: res.message
+            });
+            load_tieu_de_pks()
+        }
+        else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "error",
+                title: res.message
+            });
+        }
+    }
+    else {
+        const requestData = {
+            surveyID: value,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: null
+        };
+        const res = await $.ajax({
+            url: '/api/admin/save-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData)
+        });
+        if (res.success) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: res.message
+            });
+            load_tieu_de_pks()
+        }
+        else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "error",
+                title: res.message
+            });
+        }
+    }
+}
+async function edit_children_tiltle(value) {
+    const value_title = $("#edtSelectedTitle").val();
+    const ten_cau_hoi = $("#edtNameChilTitle").val();
+    const id_dang_cau_hoi = $("#edtSelectedDangCauHoi").val();
+    const is_required = $("#ckIsRequired").prop('checked') ? 1 : 0;
+    const is_orderitem = $("#ckIsOrderItem").prop('checked') ? 1 : 0;
+    if (id_dang_cau_hoi == "3" || id_dang_cau_hoi == "4" || id_dang_cau_hoi == "5") {
+        const inputText = $('#optionsTextarea').val();
+        const options = inputText.split('\n')
+            .map(option => option.trim())
+            .filter(option => option !== '');
+
+        const requestData = {
+            id_chi_tiet_cau_hoi_tieu_de: value,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: options.join('\n')
+        };
+        const res = await $.ajax({
+            url: '/api/admin/edit-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData)
+        });
+        if (res.success) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: res.message
+            });
+            load_tieu_de_pks()
+        }
+        else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "error",
+                title: res.message
+            });
+        }
+    }
+    else {
+        const requestData = {
+            id_chi_tiet_cau_hoi_tieu_de: value,
+            id_tieu_de_phieu: value_title,
+            ten_cau_hoi: ten_cau_hoi,
+            id_dang_cau_hoi: id_dang_cau_hoi,
+            bat_buoc: is_required,
+            is_ykienkhac: is_orderitem,
+            ten_rd_cau_hoi_khac: null
+        };
+        const res = await $.ajax({
+            url: '/api/admin/edit-children-title',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData)
+        });
+        if (res.success) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: res.message
+            });
+            load_tieu_de_pks()
+        }
+        else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "error",
+                title: res.message
+            });
+        }
+    }
+}
+async function sort() {
+    const value = $("#surveyid").val();
+    const res = await $.ajax({
+        url: '/api/admin/sort-title-survey',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            surveyID: value
+        })
+    });
+    if (res.success) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: res.message
+        });
+        load_tieu_de_pks();
+    }
+    else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: res.message
+        });
+    }
+}

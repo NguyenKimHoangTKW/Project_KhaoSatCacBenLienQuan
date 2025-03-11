@@ -1,7 +1,8 @@
-﻿$(document).ready(function () {
-    load_select_xac_thuc()
+﻿let check_mail = null;
+$(document).ready(function () {
+    load_select_xac_thuc();
 });
-let check_mail = false;
+
 
 async function load_select_xac_thuc() {
     const value = $('#hiddenId').val();
@@ -16,7 +17,6 @@ async function load_select_xac_thuc() {
 
     let body = $('#showdata');
     body.empty();
-
     if (res.success) {
         const data = res.data[0];
         if (data.is_giang_vien) {
@@ -36,20 +36,54 @@ async function load_select_xac_thuc() {
             $(document).off("click", "#btnYesEmail").on("click", "#btnYesEmail", function (event) {
                 event.preventDefault();
                 check_mail = true;
-                updateUI(data);
+                updateUIGV(data);
             });
 
             $(document).off("click", "#btnNoEmail").on("click", "#btnNoEmail", function (event) {
                 event.preventDefault();
                 check_mail = false;
-                updateUI(data);
+                updateUIGV(data);
             });
         }
+        else if (data.is_nh) {
+            let html = `
+                <div class="d-flex justify-content-center mt-4" style="gap: 20px;">
+                    <button class="btn btn-info" id="btnYesID">
+                        Bấm vào đây để xác thực bằng mã người học
+                    </button>
+                    <button class="btn btn-info" id="btnNoIDl">
+                        Trường hợp quên mã quên học, bấm vào đây để xác thực
+                    </button> 
+                </div>
+                <div id="emailResult"></div> <!-- Thêm div chứa kết quả -->
+            `;
+            body.html(html);
+
+            $(document).off("click", "#btnYesEmail").on("click", "#btnYesID", function (event) {
+                event.preventDefault();
+                check_mail = true;
+                console.log(check_mail)
+                updateUINH(data);
+            });
+
+            $(document).off("click", "#btnNoEmail").on("click", "#btnNoIDl", function (event) {
+                event.preventDefault();
+                check_mail = false;
+                console.log(check_mail)
+                updateUINH(data);
+            });
+        }   
     }
+    
 }
-function updateUI(data) {
+function updateUIGV(data) {
     let resultContainer = $("#emailResult");
     resultContainer.html(check_mail ? gv_success_email(data) : gv_failed_email(data));
+    $(".select2").select2();
+}
+function updateUINH(data) {
+    let resultContainer = $("#emailResult");
+    resultContainer.html(check_mail ? nh_success_id(data) : nh_failed_id(data));
     $(".select2").select2();
 }
 
@@ -142,5 +176,138 @@ function gv_failed_email(data) {
                     </div>
                 </div>
             `;
+  
+    return html;
+}
+function nh_failed_id(data) {
+    let html = `
+        <ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-top: 20px;">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Xác thực Người học</a>
+            </li>
+        </ul>
+        <div class="tab-content mt-4" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="card">
+                    <div class="card-body">                                       
+                        <div class="form-group">
+                            <label for="select_ctdt" class="form-label" style="font-weight:bold;">Chọn chương trình đào tạo muốn khảo sát</label>
+                            <select class="form-control select2" id="select_ctdt" name="state">
+    `;
+
+    data.ctdt.forEach(function (ctdt) {
+        html += `<option value="${ctdt.value}">${ctdt.name}</option>`;
+    });
+
+    html += `
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="select_lop" class="form-label" style="font-weight:bold;">Chọn lớp muốn khảo sát</label>
+                            <select class="form-control select2" id="select_lop" name="state">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="selectElement" class="form-label" style="font-weight:bold;">Nhập tên người học</label>
+                            <input type="text" class="form-control" id="ten-nguoi-hoc" autocomplete="off" placeholder="Nhập tên người học tại đây" />
+                        </div>
+                        <div class="form-group">
+                            <label for="selectElement" class="form-label" style="font-weight:bold;">Nhập ngày tháng năm sinh (dd/mm/yyyy)</label>
+                            <p style="font-size:15px;font-style: italic;color:red">Nhập số hệ thống sẽ tự động định dạng</p>
+                            <input type="text" class="form-control" id="bd-nguoi-hoc" autocomplete="off" placeholder="Nhập ngày tháng năm sinh tại đây" />
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-center mt-4" style="gap: 20px;">
+                            <button class="btn btn-primary" id="btnSave">
+                                <i class="bi bi-check-lg"></i>
+                                Xác thực
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="goBack()">
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Quay trở lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    setTimeout(() => {
+        $("#select_ctdt").change(function () {
+            let selectedCtdt = $(this).val();
+            let lopOptions = "";
+
+            data.lop.forEach(function (lop) {
+                if (lop.value_ctdt == selectedCtdt) {
+                    lopOptions += `<option value="${lop.value}">${lop.name}</option>`;
+                }
+            });
+
+            $("#select_lop").html(lopOptions);
+        });
+        $("#select_ctdt").trigger("change");
+        $("#bd-nguoi-hoc").on("input", function (event) {
+            let value = $(this).val();
+            let newValue = value.replace(/\D/g, ""); 
+
+            if (newValue.length > 2) {
+                newValue = newValue.substring(0, 2) + "/" + newValue.substring(2);
+            }
+            if (newValue.length > 5) {
+                newValue = newValue.substring(0, 5) + "/" + newValue.substring(5);
+            }
+            if (newValue.length > 10) {
+                newValue = newValue.substring(0, 10);
+            }
+
+            $(this).val(newValue);
+        });
+
+    }, 100);
+    return html;
+}
+function nh_success_id(data) {
+    let html = `
+        <ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-top: 20px;">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Xác thực Người học</a>
+            </li>
+        </ul>
+        <div class="tab-content mt-4" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="card">
+                    <div class="card-body">                                       
+                       <div class="form-group">
+                            <label for="selectElement" class="form-label" style="font-weight:bold;">Nhập mã người học</label>
+                            <input type="text" class="form-control" id="ma-nguoi-hoc" autocomplete="off" placeholder="Nhập mã người học tại đây" />
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-center mt-4" style="gap: 20px;">
+                            <button class="btn btn-primary" id="btnSave">
+                                <i class="bi bi-check-lg"></i>
+                                Xác thực
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="goBack()">
+                                <i class="bi bi-arrow-left-circle"></i>
+                                Quay trở lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    setTimeout(() => {
+        $("#ma-nguoi-hoc").on("input", function (event) {
+            let value = $(this).val();
+            let newValue = value.replace(/\D/g, "");
+            if (newValue.length > 14) {
+                newValue = newValue.substring(0, 14);
+            }
+            $(this).val(newValue);
+        });
+
+    }, 100);
     return html;
 }

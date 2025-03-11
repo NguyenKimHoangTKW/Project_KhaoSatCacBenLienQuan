@@ -121,9 +121,10 @@ namespace CTDT.Areas.Admin.Controllers
         }
         public ActionResult danh_sach_cbvc()
         {
-            ViewBag.DonviList = new SelectList(db.DonVi.OrderBy(x => x.id_donvi), "id_donvi", "name_donvi");
+            ViewBag.DonviList = new SelectList(db.khoa_vien_truong.OrderBy(x => x.id_khoa), "id_khoa", "ten_khoa");
             ViewBag.ChucvuList = new SelectList(db.ChucVu.OrderBy(x => x.id_chucvu), "id_chucvu", "name_chucvu");
-            ViewBag.CtdtList = new SelectList(db.ctdt.OrderBy(x => x.id_ctdt), "id_ctdt", "ten_ctdt");
+            ViewBag.BoMon = new SelectList(db.bo_mon.OrderBy(x => x.id_bo_mon), "id_bo_mon", "ten_bo_mon");
+            ViewBag.TrinhDo = new SelectList(db.trinh_do.OrderBy(x => x.ten_trinh_do), "id_trinh_do", "ten_trinh_do");
             ViewBag.Year = new SelectList(db.NamHoc.OrderBy(x => x.id_namhoc), "id_namhoc", "ten_namhoc");
             return View();
         }

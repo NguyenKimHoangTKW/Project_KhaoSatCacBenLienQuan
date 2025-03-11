@@ -17,7 +17,6 @@ namespace CTDT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CanBoVienChuc()
         {
-            this.answer_response = new HashSet<answer_response>();
             this.cbvc_khao_sat = new HashSet<cbvc_khao_sat>();
             this.nguoi_hoc_dang_co_hoc_phan = new HashSet<nguoi_hoc_dang_co_hoc_phan>();
         }
@@ -40,8 +39,6 @@ namespace CTDT.Models
         public Nullable<int> ngaycapnhat { get; set; }
         public string description { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<answer_response> answer_response { get; set; }
         public virtual bo_mon bo_mon { get; set; }
         public virtual ChucVu ChucVu { get; set; }
         public virtual ctdt ctdt { get; set; }

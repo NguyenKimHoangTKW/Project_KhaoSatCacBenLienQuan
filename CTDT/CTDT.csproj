@@ -465,6 +465,9 @@
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\thong_bao_loi.cs">
+      <DependentUpon>CTDTModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\thong_ke_theo_yeu_cau.cs">
       <DependentUpon>CTDTModel.tt</DependentUpon>
     </Compile>
@@ -506,6 +509,7 @@
     <Content Include="Areas\assets\css\app.min.css" />
     <Content Include="Areas\assets\css\buttons.dataTables.min.css" />
     <Content Include="Areas\assets\css\sweetalert2.min.css" />
+    <Content Include="Areas\assets\css\tieude.min.css" />
     <Content Include="Areas\assets\es6\app.js" />
     <Content Include="Areas\assets\es6\constant\theme-constant.js" />
     <Content Include="Areas\assets\es6\core\core.js" />

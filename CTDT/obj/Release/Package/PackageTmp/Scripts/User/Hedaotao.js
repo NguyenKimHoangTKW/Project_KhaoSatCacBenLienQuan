@@ -50,11 +50,11 @@ function form_no_login(check) {
             `
                         <div class="col-md-6 d-flex">
                             <div class="course align-self-stretch">
-                                <a href="javascript:void(0)" class="img" style="background-image: url(/Style/assets/survey.png)"></a>
+                                <a href="javascript:void(0)" class="img" style="background-image: url(/Style/assets/${chil.img})"></a>
                                 <div class="text p-4">
                                     <p class="category"><span>KHẢO SÁT CÁC BÊN LIÊN QUAN</span></p>
-                                    <h3 class="mb-3"><a href="javascript:void(0)">DÀNH CHO HỆ ${chil.TenHDT}</a></h3>
-                                    <p>Khảo sát ý kiến, đánh giá, góp ý của Cán Bộ Viên Chức Giảng viên, Sinh viên, Cựu Sinh Viên, Doanh Nghiệp,...</p>
+                                    <h3 class="mb-3"><a href="javascript:void(0)">DÀNH CHO ${chil.TenHDT}</a></h3>
+                                    <p>${chil.mo_ta}</p>
                                 </div>
                             </div>
                         </div>
@@ -84,11 +84,11 @@ function form_client(check) {
             `
                         <div class="col-md-6 d-flex">
                             <div class="course align-self-stretch">
-                                <a href="javascript:void(0)" onclick='window.location.href="bo-phieu-khao-sat/${chil.TenHDT}"' class="img" style="background-image: url(/Style/assets/survey.png)"></a>
+                                <a href="javascript:void(0)" onclick='window.location.href="bo-phieu-khao-sat/${chil.TenHDT}"' class="img" style="background-image: url(/Style/assets/${chil.img})"></a>
                                 <div class="text p-4">
                                     <p class="category"><span>KHẢO SÁT CÁC BÊN LIÊN QUAN</span></p>
-                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"'>DÀNH CHO HỆ ${chil.TenHDT}</a></h3>
-                                    <p>Khảo sát ý kiến, đánh giá, góp ý của Cán Bộ Viên Chức Giảng viên, Sinh viên, Cựu Sinh Viên, Doanh Nghiệp,...</p>
+                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"'>DÀNH CHO ${chil.TenHDT}</a></h3>
+                                    <p>${chil.mo_ta}</p>
                                     <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"' class="btn btn-primary">Đi đến</a></p>
                                 </div>
                             </div>
@@ -118,11 +118,11 @@ function form_ctdt(check) {
             `
                         <div class="col-md-6 d-flex">
                             <div class="course align-self-stretch">
-                                <a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"' class="img" style="background-image: url(/Style/assets/survey.png)"></a>
+                                <a href="javascript:void(0)" onclick='window.location.href="bo-phieu-khao-sat/${chil.TenHDT}"' class="img" style="background-image: url(/Style/assets/${chil.img})"></a>
                                 <div class="text p-4">
                                     <p class="category"><span>KHẢO SÁT CÁC BÊN LIÊN QUAN</span></p>
-                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"'>DÀNH CHO HỆ ${chil.TenHDT}</a></h3>
-                                    <p>Khảo sát ý kiến, đánh giá, góp ý của Cán Bộ Viên Chức Giảng viên, Sinh viên, Cựu Sinh Viên, Doanh Nghiệp,...</p>
+                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"'>DÀNH CHO ${chil.TenHDT}</a></h3>
+                                    <p>${chil.mo_ta}</p>
                                     <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"' class="btn btn-primary">Đi đến</a></p>
                                 </div>
                             </div>
@@ -168,12 +168,12 @@ function form_khoa(check) {
             `
                         <div class="col-md-6 d-flex">
                             <div class="course align-self-stretch">
-                                <a href="javascript:void(0)" onclick='window.location.href="bo-phieu-khao-sat/${chil.TenHDT}"' class="img" style="background-image: url(/Style/assets/survey.png)"></a>
+                                <a href="javascript:void(0)" onclick='window.location.href="bo-phieu-khao-sat/${chil.TenHDT}"' class="img" style="background-image: url(/Style/assets/${chil.img})"></a>
                                 <div class="text p-4">
                                     <p class="category"><span>KHẢO SÁT CÁC BÊN LIÊN QUAN</span></p>
-                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='window.location.href="bo-phieu-khao-sat/${chil.TenHDT}"'>DÀNH CHO HỆ ${chil.TenHDT}</a></h3>
-                                    <p>Khảo sát ý kiến, đánh giá, góp ý của Cán Bộ Viên Chức Giảng viên, Sinh viên, Cựu Sinh Viên, Doanh Nghiệp,...</p>
-                                    <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick='window.location.href="bo-phieu-khao-sat/${chil.TenHDT}"' class="btn btn-primary">Đi đến</a></p>
+                                    <h3 class="mb-3"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"'>DÀNH CHO ${chil.TenHDT}</a></h3>
+                                    <p>${chil.mo_ta}</p>
+                                    <p class="d-flex justify-content-end"><a href="javascript:void(0)" onclick='window.location.href="/bo-phieu-khao-sat/${chil.TenHDT}"' class="btn btn-primary">Đi đến</a></p>
                                 </div>
                             </div>
                         </div>

@@ -178,7 +178,6 @@ namespace CTDT.Areas.Admin.Controllers
         {
             var check_danh_sach_khao_sat = db.nguoi_hoc_khao_sat.Where(x => x.id_sv == sv.id_sv).ToList();
             var check_danh_sach_nguoi_hoc = db.nguoi_hoc_dang_co_hoc_phan.Where(x => x.id_sinh_vien == sv.id_sv).ToList();
-            var check_answer = db.answer_response.Where(x => x.id_sv == sv.id_sv).ToList();
             if (check_danh_sach_khao_sat.Any())
             {
                 db.nguoi_hoc_khao_sat.RemoveRange(check_danh_sach_khao_sat);
@@ -187,11 +186,6 @@ namespace CTDT.Areas.Admin.Controllers
             if (check_danh_sach_nguoi_hoc.Any())
             {
                 db.nguoi_hoc_dang_co_hoc_phan.RemoveRange(check_danh_sach_nguoi_hoc);
-                db.SaveChanges();
-            }
-            if (check_answer.Any())
-            {
-                db.answer_response.RemoveRange(check_answer);
                 db.SaveChanges();
             }
             var check_nguoi_hoc = db.sinhvien.SingleOrDefault(x => x.id_sv == sv.id_sv);

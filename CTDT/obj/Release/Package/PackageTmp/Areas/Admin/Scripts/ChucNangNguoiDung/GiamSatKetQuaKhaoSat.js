@@ -33,7 +33,6 @@ $(document).ready(function () {
         $("#lop-fil-mh, #mh-fil-mh, #gv-fil-mh").empty().append('<option value="">Chọn</option>');
         $("#lop-fil-gv, #gv-fil-gv, #mh-fil-gv").empty().append('<option value="">Chọn</option>');
     });
-
     $("#exportExcel").click(function () {
         let timerInterval;
         Swal.fire({
@@ -60,7 +59,6 @@ $(document).ready(function () {
             }
         });
     });
-
     $("#exportExcelTho").click(function () {
         XuatExcel();
     })
@@ -68,6 +66,23 @@ $(document).ready(function () {
 
 
 
+
+
+
+$(document).on("click", "#fildata", async function () {
+
+    var body = $('#tan_xuat_table');
+    await test();
+    if (check_tan_xuat) {
+        body.show();
+    } else {
+        body.hide();
+    }
+
+    
+
+    check_tan_xuat = !check_tan_xuat;
+});
 async function load_pks_by_nam() {
     const hedaotao = $("#hedaotao").val();
     const year = $("#year").val();
@@ -98,8 +113,6 @@ async function load_pks_by_nam() {
         $("#ctdt").empty().html(html).trigger("change");
     }
 }
-
-
 async function load_gv_by_mh() {
     const surveyid = $("#surveyid").val();
     const ctdtid = $("#ctdt").val();
@@ -169,8 +182,6 @@ async function load_gv_by_mh() {
         });
     }
 }
-
-
 async function load_mh_by_gv() {
     const surveyid = $("#surveyid").val();
     const ctdtid = $("#ctdt").val();
@@ -240,21 +251,6 @@ async function load_mh_by_gv() {
         });
     }
 }
-
-$(document).on("click", "#fildata", async function () {
-
-    var body = $('#tan_xuat_table');
-    await test();
-    if (check_tan_xuat) {
-        body.show();
-    } else {
-        body.hide();
-    }
-
-    
-
-    check_tan_xuat = !check_tan_xuat;
-});
 async function test() {
     const hdtid = $("#hedaotao").val();
     const surveyid = $("#surveyid").val();
@@ -323,7 +319,6 @@ async function test() {
     }
 
 }
-
 function form_ty_le(ty_le) {
     if (ty_le) {
         let container = $("#ThongKeTyLeSurvey");
@@ -633,7 +628,6 @@ function form_y_kien_khac(ty_le) {
         Ykienkhac.empty();
     }
 }
-
 function getFormattedDateTime() {
     const now = new Date();
     const year = now.getFullYear();
@@ -645,7 +639,6 @@ function getFormattedDateTime() {
 
     return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
 }
-
 function LayThoiGian() {
     const now = new Date();
     const year = now.getFullYear();
@@ -1047,25 +1040,15 @@ function ExportExcelKetQuaKhaoSat() {
         saveAs(new Blob([buffer], { type: "application/octet-stream" }), filename);
     });
 }
-
 async function XuatExcel() {
-    const hdtid = $("#hedaotao").val();
     const surveyid = $("#surveyid").val();
-    const ctdt = $("#ctdt").val();
-    const lop = $("#lop-fil-mh").val() || $("#lop-fil-gv").val();
-    const mh = $("#mh-fil-mh").val() || $("#mh-fil-gv").val();
-    const gv = $("#gv-fil-mh").val() || $("gv-fil-gv").val();
     const res = await $.ajax({
         url: '/api/admin/export-du-lieu-tho',
         type: 'POST',
-        data: {
-            surveyID: surveyid,
-            id_hdt: hdtid,
-            id_ctdt: ctdt,
-            id_lop: lop,
-            id_mh: mh,
-            id_CBVC: gv
-        }
+        contentType: 'application/json',
+        data: JSON.stringify({
+            surveyID: surveyid
+        })
     });
     if (res.success) {
         let timerInterval;
@@ -1098,22 +1081,24 @@ async function XuatExcel() {
         });
     }
 };
-
 function exportToExcel(check, data) {
     var surveytitle = $("#surveyid option:selected").text();
     var workbook = XLSX.utils.book_new();
     var worksheet = XLSX.utils.aoa_to_sheet([]);
-
     var excelData = [];
     var titleRow = [surveytitle];
     var headerRow;
     if (check.is_subject) {
-        headerRow = ["Dấu thời gian", "Email", "Môn học", "Giảng viên", "MSSV", "Họ và tên", "Ngày sinh", "Thuộc lớp", "Thuộc CTĐT", "Thuộc Khoa", "Số điện thoại"];
+        headerRow = ["Dấu thời gian", "Email", "Học phần","Mã môn học","Tên môn học", "Lớp", "Giảng viên giảng dạy","Mã NH", "Tên NH"];
     } else if (check.is_program) {
         headerRow = ["Dấu thời gian", "Email", "Thuộc CTĐT"];
     } else if (check.is_staff) {
-        headerRow = ["Dấu thời gian", "Email", "Họ và tên","Khảo sát CTĐT", "Thuộc đơn vị", "Thuộc chức danh"];
-    }
+        headerRow = ["Dấu thời gian", "Email","Mã viên chức", "Tên viên chức","Chức vụ","Trình độ","Thuộc đơn vị","Thuộc bộ môn","Ngành đào tạo"];
+    } else if (check.is_gv) {
+        headerRow = ["Dấu thời gian", "Email", "Mã viên chức", "Tên viên chức", "Chức vụ", "Trình độ", "Thuộc đơn vị", "Thuộc bộ môn", "Ngành đào tạo", "Khảo sát CTĐT"];
+    } else if (check.is_student) {
+        headerRow = ["Dấu thời gian", "Email", "Thuộc CTĐT", "Thuộc Lớp", "Mã người học", "Tên người học"];
+    } 
 
     if (data.length > 0 && data[0].pages && data[0].pages.length > 0) {
         data[0].pages.forEach(function (page) {
@@ -1131,15 +1116,13 @@ function exportToExcel(check, data) {
             rowData = [
                 unixTimestampToDate(survey.DauThoiGian) || "",
                 survey.Email || "",
-                survey.MonHoc || "",
-                survey.GiangVien || "",
-                survey.MSSV || "",
-                survey.HoTen || "",
-                survey.NgaySinh || "",
+                survey.HocPhan || "",
+                survey.MaMH || "",
+                survey.TenMH || "",
                 survey.Lop || "",
-                survey.CTDT || "",
-                survey.Khoa || "",
-                survey.SDT || ""
+                survey.GiangVienGiangDay || "",
+                survey.MaNH || "",
+                survey.TenNH || ""
             ];
         } else if (check.is_program) {
             rowData = [
@@ -1151,13 +1134,37 @@ function exportToExcel(check, data) {
             rowData = [
                 unixTimestampToDate(survey.DauThoiGian) || "",
                 survey.Email || "",
-                survey.HoTen || "",
-                survey.KhaoSatCTDT || "",
+                survey.MaVienChuc || "",
+                survey.TenVienChuc || "",
+                survey.ChucVu || "",
+                survey.TrinhDo || "",
                 survey.DonVi || "",
-                survey.ChucDanh || ""
+                survey.BoMon || "",
+                survey.NganhDaoTao || "",
+            ];
+        } else if (check.is_gv) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.MaVienChuc || "",
+                survey.TenVienChuc || "",
+                survey.ChucVu || "",
+                survey.TrinhDo || "",
+                survey.DonVi || "",
+                survey.BoMon || "",
+                survey.NganhDaoTao || "",
+                survey.KhaoSatCTDT || ""
+            ];
+        } else if (check.is_student) {
+            rowData = [
+                unixTimestampToDate(survey.DauThoiGian) || "",
+                survey.Email || "",
+                survey.ThuocCTDT || "",
+                survey.ThuocLop || "",
+                survey.MaNH || "",
+                survey.TenNH || ""
             ];
         }
-
         survey.pages.forEach(function (page) {
             page.elements.forEach(function (element) {
                 if (element.type === "text" || element.type === "comment") {
@@ -1174,10 +1181,8 @@ function exportToExcel(check, data) {
                 }
             });
         });
-
         excelData.push(rowData);
     });
-
     excelData.forEach(function (row) {
         XLSX.utils.sheet_add_aoa(worksheet, [row], { origin: -1 });
     });
@@ -1210,6 +1215,6 @@ function unixTimestampToDate(unixTimestamp) {
     var hours = ("0" + date.getHours()).slice(-2);
     var minutes = ("0" + date.getMinutes()).slice(-2);
     var seconds = ("0" + date.getSeconds()).slice(-2);
-    var formattedDate = dayOfWeek + ', ' + day + "-" + month + "-" + year + " " + ', ' + hours + ":" + minutes + ":" + seconds;
+    var formattedDate = dayOfWeek + ', ' + day + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
     return formattedDate;
 }

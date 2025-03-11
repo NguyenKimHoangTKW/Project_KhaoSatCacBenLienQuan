@@ -20,10 +20,14 @@ namespace CTDT.Controllers
     public class SurveyAPIController : ApiController
     {
         dbSurveyEntities db = new dbSurveyEntities();
-        public users user;
+        private users user;
+        private int unixTimestamp;
+
         public SurveyAPIController()
         {
             user = SessionHelper.GetUser();
+            DateTime now = DateTime.UtcNow;
+            unixTimestamp = (int)(now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
         public class SaveXacThuc
         {
@@ -168,6 +172,7 @@ namespace CTDT.Controllers
                             surveyID = survey.surveyID,
                             json_answer = saveForm.json_answer
                         };
+                        cbvc.is_khao_sat = 1;
                     }
                 }
                 else if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học" || survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
@@ -184,6 +189,7 @@ namespace CTDT.Controllers
                         surveyID = survey.surveyID,
                         json_answer = saveForm.json_answer
                     };
+                    nguoi_hoc.is_khao_sat = 1;
                 }
                 else if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
                 {
@@ -199,6 +205,7 @@ namespace CTDT.Controllers
                         surveyID = survey.surveyID,
                         json_answer = saveForm.json_answer
                     };
+                    get_nhchp.da_khao_sat = 1;
                 }
                 db.answer_response.Add(aw);
                 await db.SaveChangesAsync();
@@ -297,7 +304,6 @@ namespace CTDT.Controllers
                 };
                 list_info.Add(new
                 {
-                    test = answer_responses.id_nguoi_hoc_co_hp_khao_sat,
                     ma_nh = answer_responses.nguoi_hoc_dang_co_hoc_phan.sinhvien.ma_sv,
                     ten_nh = answer_responses.nguoi_hoc_dang_co_hoc_phan.sinhvien.hovaten,
                     hoc_phan = answer_responses.nguoi_hoc_dang_co_hoc_phan.mon_hoc.hoc_phan.ten_hoc_phan,
@@ -359,19 +365,20 @@ namespace CTDT.Controllers
                     .AsQueryable();
                 var bo_phieu = new List<dynamic>();
                 var check_loai = new List<dynamic>();
-                var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                if (item.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu học viên")
+                if (item.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học")
                 {
                     bo_phieu.AddRange(query
+                        .AsEnumerable()
                         .Select(x => new
                         {
                             email = user.email,
-                            nguoi_hoc = x.sinhvien.hovaten,
-                            ma_nguoi_hoc = x.sinhvien.ma_sv,
-                            ctdt = x.ctdt.ten_ctdt,
-                            nam_hoc = x.NamHoc.ten_namhoc,
+                            ma_nh = x.id_nguoi_hoc_khao_sat != null ? x.nguoi_hoc_khao_sat.sinhvien.ma_sv : "",
+                            ten_nh = x.id_nguoi_hoc_khao_sat != null ? x.nguoi_hoc_khao_sat.sinhvien.hovaten:"",
+                            thuoc_lop = x.id_nguoi_hoc_khao_sat != null ? x.nguoi_hoc_khao_sat.sinhvien.lop.ma_lop:"",
+                            thuoc_ctdt = x.id_nguoi_hoc_khao_sat != null ? x.nguoi_hoc_khao_sat.sinhvien.lop.ctdt.ten_ctdt:"",
                             thoi_gian_khao_sat = x.time,
-                            page = currentTime > x.time ? "/phieu-khao-sat/dap-an/" + x.id + "/" + x.surveyID : "Ngoài thời gian thực hiện khảo sát"
+                            page = unixTimestamp > item.surveyTimeEnd ? "Ngoài thời gian thực hiện khảo sát" : "Chỉnh sửa lại câu trả lời",
+                            value_page = unixTimestamp > item.surveyTimeEnd ? "javascript:void(0)" : $"/phieu-khao-sat/dap-an/{x.id}/{x.surveyID}"
                         }).ToList());
 
                     surveyList.Add(new
@@ -384,13 +391,14 @@ namespace CTDT.Controllers
                 else if (item.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu doanh nghiệp")
                 {
                     bo_phieu.AddRange(query
+                        .AsEnumerable()
                         .Select(x => new
                         {
                             email = user.email,
                             ctdt = x.ctdt.ten_ctdt,
                             nam_hoc = x.NamHoc.ten_namhoc,
                             thoi_gian_khao_sat = x.time,
-                            page = currentTime > x.time ? "/phieu-khao-sat/dap-an/" + x.id + "/" + x.surveyID : "Ngoài thời gian thực hiện khảo sát"
+                            page = unixTimestamp > item.surveyTimeEnd ? "Ngoài thời gian thực hiện khảo sát" : $"/phieu-khao-sat/dap-an/{x.id}/{x.surveyID}"
                         }).ToList());
                     surveyList.Add(new
                     {
@@ -401,21 +409,82 @@ namespace CTDT.Controllers
                 }
                 else if (item.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
                 {
-                    bo_phieu.AddRange(query
+                    if (item.id_loaikhaosat == 8)
+                    {
+                        bo_phieu.AddRange(query
+                        .AsEnumerable()
                         .Select(x => new
                         {
                             email = user.email,
-                            ten_cbcv = x.CanBoVienChuc.TenCBVC,
-                            ctdt = x.ctdt.ten_ctdt,
-                            nam_hoc = x.NamHoc.ten_namhoc,
+                            MaCBVC = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.MaCBVC : "",
+                            TenCBVC = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.TenCBVC : "",
+                            ten_trinh_do = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.trinh_do?.ten_trinh_do : "",
+                            name_chucvu = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.ChucVu?.name_chucvu : "",
+                            ten_khoa = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong?.ten_khoa : "",
+                            nganh_dao_tao = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao : "",
                             thoi_gian_khao_sat = x.time,
-                            page = currentTime > x.time ? "/phieu-khao-sat/dap-an/" + x.id + "/" + x.surveyID : "Ngoài thời gian thực hiện khảo sát"
+                            page = unixTimestamp > item.surveyTimeEnd ? "Ngoài thời gian thực hiện khảo sát" : "Chỉnh sửa lại câu trả lời",
+                            value_page = unixTimestamp > item.surveyTimeEnd ? "javascript:void(0)" : $"/phieu-khao-sat/dap-an/{x.id}/{x.surveyID}"
                         }).ToList());
+
+                        surveyList.Add(new
+                        {
+                            ten_phieu = item.surveyTitle,
+                            bo_phieu = bo_phieu,
+                            is_cbvc = true
+                        });
+                    }
+                    else if (item.id_loaikhaosat == 3)
+                    {
+                        bo_phieu.AddRange(query
+                        .AsEnumerable()
+                        .Select(x => new
+                        {
+                            email = user.email,
+                            MaCBVC = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.MaCBVC : "",
+                            TenCBVC = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.TenCBVC : "",
+                            ten_trinh_do = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.trinh_do?.ten_trinh_do : "",
+                            name_chucvu = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.ChucVu?.name_chucvu : "",
+                            ten_khoa = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong?.ten_khoa : "",
+                            nganh_dao_tao = x.id_cbvc_khao_sat != null ? x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao : "",
+                            khao_sat_cho = x.ctdt?.ten_ctdt,
+                            thoi_gian_khao_sat = x.time,
+                            page = unixTimestamp > item.surveyTimeEnd ? "Ngoài thời gian thực hiện khảo sát" : "Chỉnh sửa lại câu trả lời",
+                            value_page = unixTimestamp > item.surveyTimeEnd ? "javascript:void(0)" : $"/phieu-khao-sat/dap-an/{x.id}/{x.surveyID}"
+                        }).ToList());
+
+                        surveyList.Add(new
+                        {
+                            ten_phieu = item.surveyTitle,
+                            bo_phieu = bo_phieu,
+                            is_gv = true
+                        });
+                    }
+                }
+                else if (item.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu người học có học phần")
+                {
+                    bo_phieu.AddRange(query
+                        .AsEnumerable()
+                        .Select(x => new
+                        {
+                            email = user.email,
+                            ma_nh = x.id_nguoi_hoc_co_hp_khao_sat != null ? x.nguoi_hoc_dang_co_hoc_phan.sinhvien.ma_sv : "",
+                            ten_nh = x.id_nguoi_hoc_co_hp_khao_sat != null ? x.nguoi_hoc_dang_co_hoc_phan.sinhvien.hovaten : "",
+                            hoc_phan = x.id_nguoi_hoc_co_hp_khao_sat != null ? x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.hoc_phan.ten_hoc_phan : "",
+                            ma_mh = x.id_nguoi_hoc_co_hp_khao_sat != null ? x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ma_mon_hoc : "",
+                            mon_hoc = x.id_nguoi_hoc_co_hp_khao_sat != null ? x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ten_mon_hoc : "",
+                            lop = (x.id_nguoi_hoc_co_hp_khao_sat != null && x.nguoi_hoc_dang_co_hoc_phan?.mon_hoc?.id_lop != null) ? x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.lop?.ma_lop ?? "" : "",
+                            giang_vien_giang_day = x.id_nguoi_hoc_co_hp_khao_sat != null ? x.nguoi_hoc_dang_co_hoc_phan.CanBoVienChuc.TenCBVC : "",
+                            thoi_gian_khao_sat = x.time,
+                            page = unixTimestamp > item.surveyTimeEnd ? "Ngoài thời gian thực hiện khảo sát" : "Chỉnh sửa lại câu trả lời",
+                            value_page = unixTimestamp > item.surveyTimeEnd ? "javascript:void(0)" : $"/phieu-khao-sat/dap-an/{x.id}/{x.surveyID}"
+                        }).ToList());
+
                     surveyList.Add(new
                     {
                         ten_phieu = item.surveyTitle,
                         bo_phieu = bo_phieu,
-                        is_cbvc = true
+                        is_nh_hp = true
                     });
                 }
             }

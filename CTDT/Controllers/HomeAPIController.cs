@@ -35,7 +35,9 @@ namespace CTDT.Controllers
                 .Select(c => new
                 {
                     MaHDT = c.id_hedaotao,
-                    TenHDT = c.ten_hedaotao
+                    TenHDT = c.ten_hedaotao,
+                    mo_ta = c.describe,
+                    img = c.image
                 }).ToListAsync();
 
             if (!isUserLoggedIn)
@@ -122,7 +124,7 @@ namespace CTDT.Controllers
             }
             else
             {
-                return Ok(new { message = "Không có dữ liệu biểu mẫu khảo sát", success = false });
+                return Ok(new { message = "Ngoài thời gian thực hiện khảo sát", success = false });
             }
         }
 

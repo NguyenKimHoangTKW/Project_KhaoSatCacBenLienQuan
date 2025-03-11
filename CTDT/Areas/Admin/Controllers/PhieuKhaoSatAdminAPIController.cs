@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.UI.WebControls.WebParts;
 
 namespace CTDT.Areas.Admin.Controllers
 {
@@ -85,6 +86,7 @@ namespace CTDT.Areas.Admin.Controllers
             bool is_student = false;
             bool is_cbvc = false;
             bool is_program = false;
+            bool is_gv = false;
             // Nếu phiếu là phiếu có môn học
             if (get_data.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 3)
             {
@@ -95,12 +97,15 @@ namespace CTDT.Areas.Admin.Controllers
                     {
                         ma_kq = x.id,
                         email = x.users.email,
-                        mon_hoc = x.mon_hoc.ten_mon_hoc,
-                        giang_vien = x.CanBoVienChuc.TenCBVC,
-                        sinh_vien = x.sinhvien.hovaten,
-                        thoi_gian_thuc_hien = x.time,
-                        ctdt = x.ctdt.ten_ctdt,
-                        msnh = x.sinhvien.ma_sv,
+                        ma_nh = x.nguoi_hoc_dang_co_hoc_phan.sinhvien.ma_sv,
+                        ten_nh = x.nguoi_hoc_dang_co_hoc_phan.sinhvien.hovaten,
+                        hoc_phan = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.hoc_phan.ten_hoc_phan,
+                        ma_mh = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ma_mon_hoc,
+                        mon_hoc = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.ten_mon_hoc,
+                        lop = x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.id_lop != null ? x.nguoi_hoc_dang_co_hoc_phan.mon_hoc.lop.ma_lop : "",
+                        giang_vien_giang_day = x.nguoi_hoc_dang_co_hoc_phan.CanBoVienChuc.TenCBVC,
+                        thoi_gian_thuc_hien = x.time
+
                     }).ToListAsync();
                 list_data.Add(get_answer);
             }
@@ -114,10 +119,11 @@ namespace CTDT.Areas.Admin.Controllers
                     {
                         ma_kq = x.id,
                         email = x.users.email,
-                        sinh_vien = x.sinhvien.hovaten,
-                        thoi_gian_thuc_hien = x.time,
-                        ctdt = x.ctdt.ten_ctdt,
-                        msnh = x.sinhvien.ma_sv,
+                        ten_nh = x.nguoi_hoc_khao_sat.sinhvien.hovaten,
+                        ma_nh = x.nguoi_hoc_khao_sat.sinhvien.ma_sv,
+                        thuoc_lop = x.nguoi_hoc_khao_sat.sinhvien.lop.ma_lop,
+                        thuoc_ctdt = x.nguoi_hoc_khao_sat.sinhvien.lop.ctdt.ten_ctdt,
+                        thoi_gian_thuc_hien = x.time
                     }).ToListAsync();
                 list_data.Add(get_answer);
             }
@@ -139,19 +145,47 @@ namespace CTDT.Areas.Admin.Controllers
             // Nếu phiếu là phiếu giảng viên hoặc cán bộ viên chức trong trường
             else if (get_data.LoaiKhaoSat.group_loaikhaosat.id_gr_loaikhaosat == 2)
             {
-                is_cbvc = true;
-                var get_answer = await db.answer_response
-                    .Where(x => x.surveyID == aw.surveyID)
-                    .Select(x => new
-                    {
-                        ma_kq = x.id,
-                        don_vi = x.DonVi.name_donvi,
-                        email = x.users.email,
-                        cbvc = x.CanBoVienChuc.TenCBVC,
-                        ctdt = x.ctdt.ten_ctdt,
-                        thoi_gian_thuc_hien = x.time,
-                    }).ToListAsync();
-                list_data.Add(get_answer);
+                if (get_data.id_loaikhaosat == 3)
+                {
+                    is_gv = true;
+                    var get_answer = await db.answer_response
+                        .Where(x => x.surveyID == aw.surveyID)
+                        .Select(x => new
+                        {
+                            ma_kq = x.id,
+                            email = x.users.email,
+                            MaCBVC = x.cbvc_khao_sat.CanBoVienChuc.MaCBVC,
+                            TenCBVC = x.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
+                            ten_trinh_do = x.cbvc_khao_sat.CanBoVienChuc.trinh_do.ten_trinh_do,
+                            name_chucvu = x.cbvc_khao_sat.CanBoVienChuc.ChucVu.name_chucvu,
+                            ten_khoa = x.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong.ten_khoa,
+                            nganh_dao_tao = x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao,
+                            bo_mo = x.cbvc_khao_sat.CanBoVienChuc.id_bo_mon != null ? x.cbvc_khao_sat.CanBoVienChuc.bo_mon.ten_bo_mon : "",
+                            khao_sat_cho = x.ctdt.ten_ctdt,
+                            thoi_gian_thuc_hien = x.time,
+                        }).ToListAsync();
+                    list_data.Add(get_answer);
+                }
+                else if (get_data.id_loaikhaosat == 8)
+                {
+                    is_cbvc = true;
+                    var get_answer = await db.answer_response
+                        .Where(x => x.surveyID == aw.surveyID)
+                        .Select(x => new
+                        {
+                            ma_kq = x.id,
+                            MaCBVC = x.cbvc_khao_sat.CanBoVienChuc.MaCBVC,
+                            TenCBVC = x.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
+                            ten_trinh_do = x.cbvc_khao_sat.CanBoVienChuc.trinh_do.ten_trinh_do,
+                            name_chucvu = x.cbvc_khao_sat.CanBoVienChuc.ChucVu.name_chucvu,
+                            ten_khoa = x.cbvc_khao_sat.CanBoVienChuc.khoa_vien_truong.ten_khoa,
+                            nganh_dao_tao = x.cbvc_khao_sat.CanBoVienChuc.nganh_dao_tao,
+                            bo_mo = x.cbvc_khao_sat.CanBoVienChuc.id_bo_mon != null ? x.cbvc_khao_sat.CanBoVienChuc.bo_mon.ten_bo_mon : "",
+                            thoi_gian_thuc_hien = x.time,
+                        }).ToListAsync();
+                    list_data.Add(get_answer);
+                }
+
             }
             if (list_data.Count > 0)
             {
@@ -170,6 +204,10 @@ namespace CTDT.Areas.Admin.Controllers
                 else if (is_cbvc)
                 {
                     return Ok(new { data = list_data, success = true, is_cbvc = true });
+                }
+                else if (is_gv)
+                {
+                    return Ok(new { data = list_data, success = true, is_gv = true });
                 }
 
             }
@@ -666,29 +704,36 @@ namespace CTDT.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("api/admin/add-new-title-survey")]
-        public IHttpActionResult them_moi_tieu_de_pks(tieu_de_phieu_khao_sat td)
+        public async Task<IHttpActionResult> them_moi_tieu_de_pks(tieu_de_phieu_khao_sat td)
         {
-            if (string.IsNullOrEmpty(td.thu_tu))
-            {
-                return Ok(new { message = "Số thứ tự không được bỏ trống", success = false });
-            }
             if (string.IsNullOrEmpty(td.ten_tieu_de))
             {
                 return Ok(new { message = "Tên tiêu đề không được bỏ trống", success = false });
             }
-            if (db.tieu_de_phieu_khao_sat.FirstOrDefault(x => x.surveyID == td.surveyID && x.thu_tu == td.thu_tu) != null)
-            {
-                return Ok(new { message = "Số thứ tự này đã tồn tại, vui lòng điền số khác", success = false });
-            }
+            var titles = await db.tieu_de_phieu_khao_sat
+                .Where(x => x.surveyID == td.surveyID)
+                .Select(x => x.thu_tu)
+                .ToListAsync();
 
-            if (db.tieu_de_phieu_khao_sat.FirstOrDefault(x => x.surveyID == td.surveyID && x.thu_tu == td.thu_tu) != null)
+            var thuTuNumbers = titles
+                .Select(x => RomanToInt(x))
+                .Where(x => x > 0)
+                .ToList();
+
+            int newThuTuNum = thuTuNumbers.Count > 0 ? thuTuNumbers.Max() + 1 : 1;
+            td.thu_tu = IntToRoman(newThuTuNum);
+
+            if (db.tieu_de_phieu_khao_sat.Any(x => x.surveyID == td.surveyID && x.ten_tieu_de == td.ten_tieu_de))
             {
                 return Ok(new { message = "Tiêu đề này đã tồn tại, vui lòng nhập tiêu đề khác", success = false });
             }
+
             db.tieu_de_phieu_khao_sat.Add(td);
             db.SaveChanges();
-            return Ok(new { message = "Thêm mới dữ liệu thành công", success = true });
+            return Ok(new { message = "Thêm mới dữ liệu thành công", success = true, thu_tu_moi = td.thu_tu });
         }
+
+
         [HttpPost]
         [Route("api/admin/delete-title-survey")]
         public IHttpActionResult delete_tieu_de_pks(tieu_de_phieu_khao_sat td)
@@ -725,7 +770,6 @@ namespace CTDT.Areas.Admin.Controllers
                 .Where(x => x.id_tieu_de_phieu == td.id_tieu_de_phieu)
                 .Select(x => new
                 {
-                    x.thu_tu,
                     x.ten_tieu_de
                 }).FirstOrDefaultAsync();
             return Ok(get_info);
@@ -736,7 +780,6 @@ namespace CTDT.Areas.Admin.Controllers
         {
             var check_title = db.tieu_de_phieu_khao_sat.FirstOrDefault(x => td.id_tieu_de_phieu == x.id_tieu_de_phieu);
             check_title.surveyID = td.surveyID;
-            check_title.thu_tu = td.thu_tu;
             check_title.ten_tieu_de = td.ten_tieu_de;
             db.SaveChanges();
             return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
@@ -779,22 +822,37 @@ namespace CTDT.Areas.Admin.Controllers
                 return Ok(new { message = "Chưa có tiêu đề câu hỏi chính nào cho phiếu này, vui lòng tạo mới tiêu đề và quay lại để tiếp tục", success = false });
             }
         }
-
+        public class save_children_title_survey
+        {
+            public int id_chi_tiet_cau_hoi_tieu_de { get; set; }
+            public int surveyID { get; set; }
+            public Nullable<int> thu_tu { get; set; }
+            public Nullable<int> id_tieu_de_phieu { get; set; }
+            public string ten_cau_hoi { get; set; }
+            public Nullable<int> id_dang_cau_hoi { get; set; }
+            public Nullable<int> bat_buoc { get; set; }
+            public Nullable<int> is_ykienkhac { get; set; }
+            public string dieu_kien_hien_thi { get; set; }
+            public int id_rd_cau_hoi_khac { get; set; }
+            public string ten_rd_cau_hoi_khac { get; set; }
+        }
         [HttpPost]
         [Route("api/admin/save-children-title")]
-        public IHttpActionResult save_option([FromBody] ChildrenTitleSurvey rd)
+        public async Task<IHttpActionResult> save_option(save_children_title_survey rd)
         {
-            if (db.chi_tiet_cau_hoi_tieu_de.FirstOrDefault(x => x.id_tieu_de_phieu == rd.id_tieu_de_phieu && x.thu_tu == rd.thu_tu) != null)
-            {
-                return Ok(new { message = "Số thứ tự này đã tồn tại, vùi lòng nhập số thứ tự khác", success = false });
-            }
             if (string.IsNullOrEmpty(rd.ten_cau_hoi))
             {
                 return Ok(new { message = "Không được bỏ trống tên tiêu đề con", success = false });
             }
+
+            var titles = await db.chi_tiet_cau_hoi_tieu_de
+                .Where(x => x.tieu_de_phieu_khao_sat.surveyID == rd.surveyID)
+                .Select(x => x.thu_tu)
+                .ToListAsync();
+            int newThuTuNum = (titles.Max() ?? 0) + 1;
             var chil_title = new chi_tiet_cau_hoi_tieu_de
             {
-                thu_tu = rd.thu_tu,
+                thu_tu = newThuTuNum,
                 id_tieu_de_phieu = rd.id_tieu_de_phieu,
                 ten_cau_hoi = rd.ten_cau_hoi,
                 id_dang_cau_hoi = rd.id_dang_cau_hoi,
@@ -802,8 +860,9 @@ namespace CTDT.Areas.Admin.Controllers
                 is_ykienkhac = rd.is_ykienkhac,
                 dieu_kien_hien_thi = null,
             };
+
             db.chi_tiet_cau_hoi_tieu_de.Add(chil_title);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             if (!string.IsNullOrEmpty(rd.ten_rd_cau_hoi_khac))
             {
                 var options = rd.ten_rd_cau_hoi_khac
@@ -811,7 +870,9 @@ namespace CTDT.Areas.Admin.Controllers
                     .Select(o => o.Trim())
                     .Where(o => !string.IsNullOrEmpty(o))
                     .ToList();
+
                 var newOptions = new List<radio_cau_hoi_khac>();
+
                 foreach (var option in options)
                 {
                     var parts = option.Split(new[] { '.' }, 2);
@@ -827,8 +888,9 @@ namespace CTDT.Areas.Admin.Controllers
                         });
                     }
                 }
+
                 db.radio_cau_hoi_khac.AddRange(newOptions);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
         }
@@ -841,7 +903,6 @@ namespace CTDT.Areas.Admin.Controllers
                 .Select(x => new
                 {
                     x.id_chi_tiet_cau_hoi_tieu_de,
-                    x.thu_tu,
                     x.id_tieu_de_phieu,
                     x.ten_cau_hoi,
                     x.id_dang_cau_hoi,
@@ -866,15 +927,10 @@ namespace CTDT.Areas.Admin.Controllers
         public IHttpActionResult edit_children_title(ChildrenTitleSurvey chil)
         {
             var check_chil_title = db.chi_tiet_cau_hoi_tieu_de.FirstOrDefault(x => x.id_chi_tiet_cau_hoi_tieu_de == chil.id_chi_tiet_cau_hoi_tieu_de);
-            if (chil.thu_tu == null)
-            {
-                return Ok(new { message = "Vui lòng không để trống thứ tự", success = false });
-            }
             if (string.IsNullOrEmpty(chil.ten_cau_hoi))
             {
                 return Ok(new { message = "Vui lòng không để trống tên tiêu đề", success = false });
             }
-            check_chil_title.thu_tu = chil.thu_tu;
             check_chil_title.id_tieu_de_phieu = chil.id_tieu_de_phieu;
             check_chil_title.ten_cau_hoi = chil.ten_cau_hoi;
             check_chil_title.id_dang_cau_hoi = chil.id_dang_cau_hoi;
@@ -919,7 +975,6 @@ namespace CTDT.Areas.Admin.Controllers
             }
             return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
         }
-
         [HttpPost]
         [Route("api/admin/delete-children-title")]
         public IHttpActionResult delete_children_title(ChildrenTitleSurvey chil)
@@ -1258,7 +1313,10 @@ namespace CTDT.Areas.Admin.Controllers
                 .ToListAsync())
                 .OrderBy(x => RomanToInt(x.thu_tu))
                 .ToList();
-
+            if (!get_tieu_de_pks.Any())
+            {
+                return Ok(new { message = "Chưa có dữ liệu câu hỏi phiếu khảo sát cần xuất bản", success = false });
+            }
             var list_data = new List<dynamic>();
             int pageCounter = 1;
             int elementCounter = 1;
@@ -1551,8 +1609,61 @@ namespace CTDT.Areas.Admin.Controllers
             var check_survey = await db.survey.FirstOrDefaultAsync(x => x.surveyID == items.surveyID);
             check_survey.surveyData = JsonConvert.SerializeObject(result);
             await db.SaveChangesAsync();
-            return Ok(new {message ="Cập nhật dữ liệu thành công",success = true});
+            return Ok(new { message = "Cập nhật dữ liệu thành công", success = true });
         }
+        [HttpPost]
+        [Route("api/admin/sort-title-survey")]
+        public async Task<IHttpActionResult> Sort_Title(survey items)
+        {
+            if (items.surveyID == 0)
+            {
+                return Ok(new { message = "Vui lòng chọn phiếu khảo sát", success = false });
+            }
+            var get_title = await db.tieu_de_phieu_khao_sat
+                .Where(x => x.surveyID == items.surveyID)
+                .ToListAsync();
+
+            if (!get_title.Any())
+            {
+                return Ok(new { message = "Chưa có câu hỏi trong bộ phiếu cần sắp xếp", success = false });
+            }
+            var sortedTitles = get_title
+                .Select(x => new { x, thu_tu_num = RomanToInt(x.thu_tu) })
+                .OrderBy(x => x.thu_tu_num)
+                .ToList();
+
+            for (int i = 0; i < sortedTitles.Count; i++)
+            {
+                sortedTitles[i].x.thu_tu = IntToRoman(i + 1);
+            }
+            var get_children_title = await db.chi_tiet_cau_hoi_tieu_de
+                .Where(x => x.tieu_de_phieu_khao_sat.surveyID == items.surveyID)
+                .ToListAsync();
+            var sortedChildren = get_children_title
+                .OrderBy(x => RomanToInt(x.tieu_de_phieu_khao_sat.thu_tu))
+                .ThenBy(x => x.thu_tu) 
+                .ToList();
+            for (int i = 0; i < sortedChildren.Count; i++)
+            {
+                sortedChildren[i].thu_tu = i + 1;
+            }
+            await db.SaveChangesAsync();
+            return Ok(new { message = "Sắp xếp thứ tự phiếu thành công", success = true });
+        }
+
+        public string IntToRoman(int num)
+        {
+            string[] thousands = { "", "M", "MM", "MMM" };
+            string[] hundreds = { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" };
+            string[] tens = { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" };
+            string[] ones = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" };
+
+            return thousands[num / 1000] +
+                   hundreds[(num % 1000) / 100] +
+                   tens[(num % 100) / 10] +
+                   ones[num % 10];
+        }
+
         public int RomanToInt(string roman)
         {
             var romanMap = new Dictionary<char, int>

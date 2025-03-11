@@ -14,18 +14,9 @@ namespace CTDT.Models
     
     public partial class hoc_ky
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public hoc_ky()
-        {
-            this.answer_response = new HashSet<answer_response>();
-        }
-    
         public int id_hk { get; set; }
         public string ten_hk { get; set; }
         public int ngay_tao { get; set; }
         public int ngay_cap_nhat { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<answer_response> answer_response { get; set; }
     }
 }
