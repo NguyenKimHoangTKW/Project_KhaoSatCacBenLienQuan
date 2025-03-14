@@ -441,7 +441,7 @@ async function load_chi_tiet_cau_hoi(id) {
     let html = "";
 
     if (res.success) {
-        const data = JSON.parse(res.data);
+        const data = res.data;
         html += `
                 <thead>
                     <tr>
@@ -454,16 +454,31 @@ async function load_chi_tiet_cau_hoi(id) {
             `;
 
         let questionIndex = 1;
-        data.pages.forEach((page) => {
-            page.elements.forEach((element) => {
-                html += `
-                        <tr>
-                            <td>${questionIndex}</td>
-                            <td>${element.title}</td>
-                            <td>${element.response ? element.response.text : "Không có câu trả lời"}</td>
-                        </tr>
-                    `;
-                questionIndex++;
+        const survey = JSON.parse(data.surveyData);
+        const answer = JSON.parse(data.json_answer);
+        survey.pages.forEach((page) => {
+            page.elements.forEach((element) => {             
+                if (element.choices && Array.isArray(element.choices)) {
+                    let value = ""; 
+                    let _answer = answer.pages[0]?.elements.find(x => x.name === element.name);
+
+                    if (_answer && _answer.response) {
+                        let responseName = _answer.response.name;
+                        let dapan = element.choices.find(choice => choice.name === responseName);
+                        if (dapan) {
+                            value = dapan.text;
+                        }
+                    }
+                    html += `
+                                    <tr>
+                                        <td>${questionIndex}</td>
+                                        <td>${element.title}</td>
+                                        <td>${value}</td>
+                                    </tr>
+                                `;
+                    questionIndex++;
+                }
+               
             });
         });
 

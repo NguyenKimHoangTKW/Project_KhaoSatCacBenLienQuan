@@ -48,7 +48,7 @@ namespace CTDT.Controllers
                         }).ToListAsync();
                     select_list_data.Add(new { ctdt = get_ctdt, is_giang_vien = true });
                 }
-                else if(survey.id_loaikhaosat == 2)
+                else if (survey.id_loaikhaosat == 2)
                 {
                     var get_ctdt = await db.ctdt
                         .Where(x => x.id_hdt == survey.id_hedaotao)
@@ -213,6 +213,11 @@ namespace CTDT.Controllers
             // Check phiếu thuộc giảng viên
             else if (check_group_loaikhaosat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
             {
+                if (survey.id_loaikhaosat == 3)
+                {
+                    url = $"/xac_thuc/{survey.surveyID}";
+                    return Ok(new { data = url, non_survey = true });
+                }
                 var check_mail_cbvc = await db.cbvc_khao_sat.FirstOrDefaultAsync(x => x.surveyID == survey.surveyID && x.CanBoVienChuc.Email == user.email);
                 if (check_mail_cbvc != null)
                 {
@@ -220,12 +225,12 @@ namespace CTDT.Controllers
                     {
                         HttpContext.Current.Session["id_cbvc_ks"] = check_mail_cbvc.id_cbvc_khao_sat;
                     }
-                    url = survey.id_loaikhaosat == 3 ? $"/xac_thuc/{survey.surveyID}" : $"/phieu-khao-sat/{survey.surveyID}";
+                    url = $"/phieu-khao-sat/{survey.surveyID}";
                     return Ok(new { data = url, non_survey = true });
                 }
                 else
                 {
-                    return Ok(new { message = survey.id_loaikhaosat == 3 ? "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho giảng viên" : "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
+                    return Ok(new { message = "Bạn không thể thực hiện khảo sát phiếu này, phiếu này dành cho cán bộ viên chức" });
                 }
 
             }
@@ -318,7 +323,7 @@ namespace CTDT.Controllers
                         }
                     }
                 }
-                else if(sv.check_doi_tuong == "true")
+                else if (sv.check_doi_tuong == "true")
                 {
                     var check_gv = await db.cbvc_khao_sat
                         .FirstOrDefaultAsync(x => x.surveyID == sv.surveyID
@@ -365,9 +370,9 @@ namespace CTDT.Controllers
                     return Ok(new { url = $"/phieu-khao-sat/{sv.surveyID}", success = true });
                 }
             }
-            else if(check_survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
+            else if (check_survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu cựu người học")
             {
-                if(sv.check_doi_tuong == null)
+                if (sv.check_doi_tuong == null)
                 {
                     return Ok(new { message = "Vui lòng chọn phương thức xác thực", success = false });
                 }
@@ -400,7 +405,7 @@ namespace CTDT.Controllers
                         return Ok(new { message = "Không tìm thấy thông tin người học trong phiếu này", success = false });
                     }
                 }
-                else if(sv.check_doi_tuong == "false")
+                else if (sv.check_doi_tuong == "false")
                 {
                     if (string.IsNullOrEmpty(sv.ten_nh))
                     {

@@ -174,6 +174,7 @@ namespace CTDT.Areas.Admin.Controllers
                         .Select(x => new
                         {
                             ma_kq = x.id,
+                            email = x.users.email,
                             MaCBVC = x.cbvc_khao_sat.CanBoVienChuc.MaCBVC,
                             TenCBVC = x.cbvc_khao_sat.CanBoVienChuc.TenCBVC,
                             ten_trinh_do = x.cbvc_khao_sat.CanBoVienChuc.trinh_do.ten_trinh_do,
@@ -217,10 +218,17 @@ namespace CTDT.Areas.Admin.Controllers
         [Route("api/admin/chi-tiet-cau-tra-loi")]
         public async Task<IHttpActionResult> answer_survey(answer_response aw)
         {
-            var get_answer = await db.answer_response.FirstOrDefaultAsync(x => x.id == aw.id);
+            var get_answer = await db.answer_response
+                .Where(x => x.id == aw.id)
+                .Select(x => new
+                {
+                    x.json_answer,
+                    x.survey.surveyData
+                })
+                .FirstOrDefaultAsync();
             if (get_answer != null)
             {
-                return Ok(new { data = get_answer.json_answer, success = true });
+                return Ok(new { data = get_answer, success = true });
             }
             else
             {
