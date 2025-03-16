@@ -59,14 +59,14 @@ async function load_select_xac_thuc() {
             `;
             body.html(html);
 
-            $(document).off("click", "#btnYesEmail").on("click", "#btnYesID", function (event) {
+            $(document).off("click", "#btnYesID").on("click", "#btnYesID", function (event) {
                 event.preventDefault();
                 check_mail = true;
                 console.log(check_mail)
                 updateUINH(data);
             });
 
-            $(document).off("click", "#btnNoEmail").on("click", "#btnNoIDl", function (event) {
+            $(document).off("click", "#btnNoIDl").on("click", "#btnNoIDl", function (event) {
                 event.preventDefault();
                 check_mail = false;
                 console.log(check_mail)

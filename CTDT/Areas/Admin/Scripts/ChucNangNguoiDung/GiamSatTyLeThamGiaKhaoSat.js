@@ -1,5 +1,7 @@
 ﻿$(".select2").select2();
+let check_option = null;
 $(document).ready(function () {
+    load_pks_by_nam();
     $("#hedaotao, #year").on("change", load_pks_by_nam);
 
     $("#fildata").click(function () {
@@ -11,26 +13,225 @@ async function load_pks_by_nam() {
     const hedaotao = $("#hedaotao").val();
     const year = $("#year").val();
     const res = await $.ajax({
-        url: '/api/load_phieu_by_nam',
+        url: '/api/admin/load-option-giam-sat-ty-le-tham-gia-khao-sat',
         type: 'POST',
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             id_namhoc: year,
-            id_hedaotao: hedaotao
-        }
+            id_hedaotao: hedaotao,
+            check_option: check_option
+        })
     });
+
     let html = "";
-    let html_ctdt = `<option value="">Tất cả</option>`;
-
+    const body = $("#load-option");
+    body.empty();
     if (res.success) {
+        if (res.is_cbvc_gv) {
+            $("#Result").empty();
+            html += render_option_cbvc(body, res.data);
+        }
+        else if (res.is_nguoi_hoc) {
+            html += `
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="d-flex gap-3">
+                            <button class="btn  btn-tone m-r-5 px-4" id="btnYes" style="margin-right: 33px;">
+                                Lọc 3 bước (Đơn vị => Khoa => Bộ môn)
+                            </button>
+                            <button class="btn  btn-tone m-r-5 px-4" id="btnNo">
+                                Lọc theo chương trình đào tạo
+                            </button>
+                        </div>
+                    </div>
+                `;
+                    body.html(html);
 
-        res.ctdt.forEach(function (ctdt) {
-            html_ctdt += `<option value="${ctdt.id_ctdt}">${ctdt.ten_ctdt}</option>`;
-        });
-        $("#ctdt").empty().html(html_ctdt).trigger("change");
-    } else {
-        $("#ctdt").empty().html(`<option value="">${res.message}</option>`).trigger('change');
+            if (res.data.length > 0) {
+                updateUINH(res.data);
+            }
+        }
+    }
+    else {
+
     }
 }
+$(document).on("click", "#btnYes", function (event) {
+    event.preventDefault();
+    check_option = true;
+    load_pks_by_nam();
+});
+
+$(document).on("click", "#btnNo", function (event) {
+    event.preventDefault();
+    check_option = false;
+    load_pks_by_nam();
+});
+function updateUINH(data) {
+    let resultContainer = $("#emailResult");
+    resultContainer.html(check_option ? render_option_nguoi_hoc_checked(data) : render_option_nguoi_hoc_no_checked(data));
+}
+async function render_option_cbvc(body, data) {
+    let html = "";
+    html += `
+            <div class="col-md-6">
+                <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn đơn vị</label>
+                <select class="form-control select2" id="don_vi">
+                    <option value="">Tất cả</option>
+                    ${data.map(donvi => `<option value="${donvi.don_vi.value}">${donvi.don_vi.name}</option>`).join("")}
+                </select>
+            </div>
+        `;
+
+    html += `
+            <div class="col-md-6">
+                <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn khoa</label>
+                <select class="form-control select2" id="khoa">
+                   <option value="">Chọn khoa</option>
+                </select>
+            </div>
+        `;
+
+    html += `
+            <div class="col-md-6">
+                <label class="form-label" style="font-size: 16px; font-weight: bold; color: #333;">Chọn bộ môn</label>
+                <select class="form-control select2" id="bo_mon">
+                    <option value="">Chọn bộ môn</option>
+                </select>
+            </div>
+        `;
+
+    body.append(html);
+    $("#don_vi").change(function () {
+        const selectedDonVi = $(this).val();
+        const khoaDropdown = $("#khoa");
+        khoaDropdown.empty().append(` <option value="">Tất cả</option>`);
+
+        if (selectedDonVi) {
+            const selectedData = data.find(d => d.don_vi.value == selectedDonVi);
+            if (selectedData) {
+                selectedData.khoa_data.forEach(khoa => {
+                    khoaDropdown.append(`<option value="${khoa.khoa.value}">${khoa.khoa.name}</option>`);
+                });
+            }
+        }
+        khoaDropdown.trigger("change");
+    });
+
+    $("#khoa").change(function () {
+        const selectedKhoa = $(this).val();
+        const boMonDropdown = $("#bo_mon");
+        boMonDropdown.empty().append(` <option value="">Tất cả</option>`);
+
+        if (selectedKhoa) {
+            const selectedDonVi = $("#don_vi").val();
+            const selectedData = data.find(d => d.don_vi.value == selectedDonVi);
+
+            if (selectedData) {
+                const selectedKhoaData = selectedData.khoa_data.find(k => k.khoa.value == selectedKhoa);
+                if (selectedKhoaData) {
+                    selectedKhoaData.bo_mon.forEach(bm => {
+                        boMonDropdown.append(`<option value="${bm.value}">${bm.name}</option>`);
+                    });
+                }
+            }
+        }
+    });
+    setTimeout(() => {
+        $("#don_vi,#khoa,#bo_mon").select2();
+    }, 500);
+    return html;
+}
+async function render_option_nguoi_hoc_checked(data) {
+    let html = `
+        <div class="col-md-6">
+            <label class="form-label"><b>Chọn đơn vị</b></label>
+            <select class="form-control select2" id="don_vi">
+                <option value="">Tất cả</option>
+                ${data.map(donvi => `<option value="${donvi.don_vi.value}">${donvi.don_vi.name}</option>`).join("")}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label"><b>Chọn khoa</b></label>
+            <select class="form-control select2" id="khoa">
+                <option value="">Chọn khoa</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label"><b>Chọn bộ môn</b></label>
+            <select class="form-control select2" id="bo_mon">
+                <option value="">Chọn bộ môn</option>
+            </select>
+        </div>
+    `;
+
+    $("#Result").html(html);
+
+    setTimeout(() => {
+        $("#don_vi, #khoa, #bo_mon").select2();
+    }, 300);
+
+    $("#don_vi").change(function () {
+        const selectedDonVi = $(this).val();
+        const khoaDropdown = $("#khoa").empty().append(`<option value="">Tất cả</option>`);
+
+        if (selectedDonVi) {
+            const selectedData = data.find(d => d.don_vi.value == selectedDonVi);
+            if (selectedData) {
+                selectedData.khoa_data.forEach(khoa => {
+                    khoaDropdown.append(`<option value="${khoa.khoa.value}">${khoa.khoa.name}</option>`);
+                });
+            }
+        }
+        khoaDropdown.trigger("change");
+    });
+
+    $("#khoa").change(function () {
+        const selectedKhoa = $(this).val();
+        const boMonDropdown = $("#bo_mon").empty().append(`<option value="">Tất cả</option>`);
+
+        if (selectedKhoa) {
+            const selectedDonVi = $("#don_vi").val();
+            const selectedData = data.find(d => d.don_vi.value == selectedDonVi);
+            if (selectedData) {
+                const selectedKhoaData = selectedData.khoa_data.find(k => k.khoa.value == selectedKhoa);
+                if (selectedKhoaData) {
+                    selectedKhoaData.bo_mon.forEach(bm => {
+                        boMonDropdown.append(`<option value="${bm.value}">${bm.name}</option>`);
+                    });
+                }
+            }
+        }
+    });
+
+    return html;
+}
+
+async function render_option_nguoi_hoc_no_checked(data) {
+    let html = ``;
+    const itemsList = Array.isArray(data) && Array.isArray(data[0]) ? data[0] : [];
+    html += `
+        <div class="col-md-6">
+            <label class="form-label"><b>Chọn chương trình đào tạo</b></label>
+            <select class="form-control select2" id="ctdt">
+                <option value="">Tất cả</option>`;
+
+    itemsList.forEach(items => {
+        html += `<option value="${items.value}">${items.text}</option>`;
+    });
+
+    html += `</select>
+        </div>
+    `;
+
+    $("#Result").html(html);
+
+    setTimeout(() => {
+        $("#ctdt").select2();
+    }, 300);
+
+    return html;
+}
+
 
 async function LoadChartSurvey() {
     const hedaotao = $("#hedaotao").val();
@@ -154,3 +355,4 @@ async function LoadChartSurvey() {
         $('#survey-list').append(card);
     }
 }
+

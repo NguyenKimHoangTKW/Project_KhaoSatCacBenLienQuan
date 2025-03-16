@@ -20,9 +20,15 @@ namespace CTDT.Areas.Admin.Controllers
         {
             user = SessionHelper.GetUser();
         }
+        public class option_giam_sat_ty_le_tham_gia_khao_sat
+        {
+            public int id_hedaotao { get; set; }
+            public int id_namhoc { get; set; }
+            public string check_option { get; set; }
+        }
         [HttpPost]
         [Route("api/admin/load-option-giam-sat-ty-le-tham-gia-khao-sat")]
-        public async Task<IHttpActionResult> load_pks_by_year(survey survey)
+        public async Task<IHttpActionResult> load_pks_by_year(option_giam_sat_ty_le_tham_gia_khao_sat survey)
         {
             var pks = await db.survey
                 .Where(x => x.id_namhoc == survey.id_namhoc && x.id_hedaotao == survey.id_hedaotao && x.mo_thong_ke == 1)
@@ -32,10 +38,11 @@ namespace CTDT.Areas.Admin.Controllers
                     ten_phieu = x.dot_khao_sat.ten_dot_khao_sat != null ? x.surveyTitle + " - " + x.dot_khao_sat.ten_dot_khao_sat : x.surveyTitle,
                 })
                 .ToListAsync();
+
             var list_data = new List<dynamic>();
-            if (survey.LoaiKhaoSat.group_loaikhaosat.name_gr_loaikhaosat == "Phiếu giảng viên")
+
+            if (survey.id_hedaotao == 3)
             {
-               
                 var get_don_vi = await db.khoa_vien_truong
                     .Where(x => x.id_namhoc == survey.id_namhoc)
                     .Select(x => new
@@ -44,6 +51,7 @@ namespace CTDT.Areas.Admin.Controllers
                         name = x.ten_khoa
                     })
                     .ToListAsync();
+
                 foreach (var donvi in get_don_vi)
                 {
                     var get_khoa = await db.khoa_children
@@ -55,7 +63,10 @@ namespace CTDT.Areas.Admin.Controllers
                             name = x.ten_khoa_children
                         })
                         .ToListAsync();
-                    foreach(var khoa in get_khoa)
+
+                    var khoa_data = new List<dynamic>();
+
+                    foreach (var khoa in get_khoa)
                     {
                         var bo_mon = await db.bo_mon
                             .Where(x => x.id_khoa_children == khoa.value)
@@ -66,30 +77,95 @@ namespace CTDT.Areas.Admin.Controllers
                                 name = x.ten_bo_mon
                             })
                             .ToListAsync();
-                        list_data.Add(new
+
+                        khoa_data.Add(new
                         {
-                            don_vi = get_don_vi,
-                            khoa = get_khoa,
+                            khoa = khoa,
                             bo_mon = bo_mon
                         });
                     }
-                }
-            }
-            var sortedPks = pks.OrderBy(p =>
-            {
-                var match = System.Text.RegularExpressions.Regex.Match(p.ten_phieu, @"Phiếu (\d+)");
-                return match.Success ? int.Parse(match.Groups[1].Value) : int.MaxValue;
-            }).ToList();
 
-            if (sortedPks.Count > 0)
-            {
-                return Ok(new { data = sortedPks, ctdt = list_data, success = true });
+                    list_data.Add(new
+                    {
+                        don_vi = donvi,
+                        khoa_data = khoa_data
+                    });
+                }
+
+                return Ok(new { data = list_data, is_cbvc_gv = true, success = true });
             }
-            else
+            else if (survey.id_hedaotao == 1 || survey.id_hedaotao == 2)
             {
-                return Ok(new { message = "Không có dữ liệu phiếu khảo sát", success = false });
+                if (survey.check_option == "true")
+                {
+                    var get_don_vi = await db.khoa_vien_truong
+                    .Where(x => x.id_namhoc == survey.id_namhoc)
+                    .Select(x => new
+                    {
+                        value = x.id_khoa,
+                        name = x.ten_khoa
+                    })
+                    .ToListAsync();
+
+                    foreach (var donvi in get_don_vi)
+                    {
+                        var get_khoa = await db.khoa_children
+                            .Where(x => x.id_khoa_vien_truong == donvi.value)
+                            .Select(x => new
+                            {
+                                value_dv = x.id_khoa_vien_truong,
+                                value = x.id_khoa_children,
+                                name = x.ten_khoa_children
+                            })
+                            .ToListAsync();
+
+                        var khoa_data = new List<dynamic>();
+
+                        foreach (var khoa in get_khoa)
+                        {
+                            var bo_mon = await db.bo_mon
+                                .Where(x => x.id_khoa_children == khoa.value)
+                                .Select(x => new
+                                {
+                                    value_k = x.id_khoa_children,
+                                    value = x.id_bo_mon,
+                                    name = x.ten_bo_mon
+                                })
+                                .ToListAsync();
+
+                            khoa_data.Add(new
+                            {
+                                khoa = khoa,
+                                bo_mon = bo_mon
+                            });
+                        }
+
+                        list_data.Add(new
+                        {
+                            don_vi = donvi,
+                            khoa_data = khoa_data
+                        });
+                    }
+                    return Ok(new { data = list_data, is_nguoi_hoc = true, success = true });
+
+                }
+                else if(survey.check_option == "false")
+                {
+                    var get_ctdt = await db.ctdt
+                        .Select(x => new
+                        {
+                            value = x.id_ctdt,
+                            text = x.ten_ctdt
+                        }).ToListAsync();
+                    list_data.Add(get_ctdt);
+                }
+                return Ok(new { data = list_data, is_nguoi_hoc = true, success = true });
+
+
             }
+            return Ok(new { message = "Không có dữ liệu phiếu khảo sát", success = false });
         }
+
         [HttpPost]
         [Route("api/admin/giam-sat-ty-le-tham-gia-khao-sat")]
         public async Task<IHttpActionResult> load_charts_nguoi_hoc(GiamSatThongKeKetQua find)
